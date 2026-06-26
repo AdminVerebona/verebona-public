@@ -24,11 +24,11 @@ const NAV = [
 const BIENS = [
   {
     label: "Appartement Lyon", sub: "Immobilier • T3", docs: 7, events: 0,
-    img: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/5da8aa09-2540-4b03-96bf-bb17130a3250/generated_images/modern-apartment-interior-t3-in-lyon-fra-5c1f421b-20251205150149.jpg",
+    img: "/images/appartement-lyon.jpg",
   },
   {
     label: "Vélo Cargo", sub: "Véhicule • Électrique", docs: 6, events: 2,
-    img: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/5da8aa09-2540-4b03-96bf-bb17130a3250/generated_images/electric-cargo-bike-with-large-front-box-42f241c8-20251205150148.jpg",
+    img: "/images/velo-cargo.jpg",
   },
   {
     label: "Planche de Surf", sub: "Sport / Loisir", docs: 3, events: 0,

@@ -36,7 +36,7 @@ export default function CGSUPage() {
               Conditions Générales d'Utilisation et de Services de Verebona
             </h1>
             <p className="text-sm text-gray-500">
-              Dernière mise à jour : 20/12/2025
+              Dernière mise à jour : 20/06/2026
             </p>
           </div>
 
@@ -70,10 +70,10 @@ export default function CGSUPage() {
               <div className="text-[color:var(--text-muted)] leading-relaxed space-y-3">
                 <p>Aux fins des présentes, les termes suivants ont la signification ci-dessous :</p>
                 <div className="space-y-3 ml-4">
-                  <p><strong className="text-[color:var(--text-primary)]">« Site » :</strong> le site internet édité par Verebona et accessible à l'adresse [URL du site] ainsi que l'ensemble de ses sous-domaines et versions mobiles.</p>
+                  <p><strong className="text-[color:var(--text-primary)]">« Site » :</strong> le site internet édité par Verebona et accessible à l'adresse https://verebona.app ainsi que l'ensemble de ses sous-domaines et versions mobiles.</p>
                   <p><strong className="text-[color:var(--text-primary)]">« Service » :</strong> l'ensemble des fonctionnalités proposées par Verebona via le Site, permettant notamment à l'Utilisateur de créer un compte, d'enregistrer certaines informations et documents relatifs à ses biens patrimoniaux, de les organiser et de les consulter.</p>
                   <p><strong className="text-[color:var(--text-primary)]">« Compte » :</strong> l'espace personnel de l'Utilisateur accessible après authentification, à partir duquel celui-ci peut utiliser le Service.</p>
-                  <p><strong className="text-[color:var(--text-primary)]">« Offre Gratuite » :</strong> version du Service accessible sans contrepartie financière, avec des fonctionnalités et/ou un volume limité, telles que décrites sur le Site.</p>
+                  <p><strong className="text-[color:var(--text-primary)]">« Offre » ou « Offre Standard » :</strong> version du Service accessible sans contrepartie financière, avec des fonctionnalités et/ou un volume limité, telles que décrites sur le Site.</p>
                   <p><strong className="text-[color:var(--text-primary)]">« Offres Payantes » :</strong> offres d'abonnement (notamment « Premium » et/ou « Pro ») donnant accès à des fonctionnalités et/ou capacités supplémentaires, telles que décrites sur le Site, moyennant le paiement d'un prix.</p>
                   <p><strong className="text-[color:var(--text-primary)]">« Données » :</strong> l'ensemble des informations, fichiers, contenus et documents, y compris les données à caractère personnel, que l'Utilisateur renseigne ou téléverse dans le cadre du Service.</p>
                   <p><strong className="text-[color:var(--text-primary)]">« Documents » :</strong> tout fichier ou contenu documentaire (factures, contrats, certificats, photos, etc.) téléversé par l'Utilisateur dans le Service.</p>
@@ -316,7 +316,7 @@ export default function CGSUPage() {
               <div className="space-y-4 text-[color:var(--text-muted)] leading-relaxed">
                 <div>
                   <p className="font-medium text-[color:var(--text-primary)] mb-2">9.1. Offres</p>
-                  <p>Les différentes Offres (Gratuite, Payantes) et leurs caractéristiques (fonctionnalités, limites, durée, prix) sont décrites sur le Site.</p>
+                  <p>Les différentes Offres (Standard, Payantes) et leurs caractéristiques (fonctionnalités, limites, durée, prix) sont décrites sur le Site.</p>
                   <p className="mt-2">Verebona peut modifier ou retirer certaines Offres, sous réserve du respect des engagements en cours et des dispositions applicables aux Utilisateurs ayant déjà souscrit.</p>
                 </div>
                 <div>
@@ -426,8 +426,7 @@ export default function CGSUPage() {
                     <li>Verebona ne pourra en aucun cas être tenue responsable des dommages indirects, immatériels ou consécutifs, tels que perte de chance, perte de profit, perte de données ou préjudice moral, même si elle a été informée de la possibilité de tels dommages ;</li>
                     <li>la responsabilité totale cumulée de Verebona, toutes causes confondues, envers un Utilisateur, est limitée :
                       <ul className="list-circle list-inside space-y-1 ml-6 mt-2">
-                        <li>pour un Utilisateur d'Offre Payante : au montant des sommes effectivement versées par l'Utilisateur à Verebona au titre du Service au cours des douze (12) derniers mois précédant le fait générateur ;</li>
-                        <li>pour un Utilisateur de l'Offre Gratuite : à la somme maximale de cent (100) euros.</li>
+                        <li>pour tout Utilisateur : au montant des sommes effectivement versées par l'Utilisateur à Verebona au titre du Service au cours des douze (12) derniers mois précédant le fait générateur.</li>
                       </ul>
                     </li>
                   </ul>
@@ -472,7 +471,7 @@ export default function CGSUPage() {
                 </div>
                 <div>
                   <p className="font-medium text-[color:var(--text-primary)] mb-2">13.2. Résiliation par l'Utilisateur</p>
-                  <p>L'Utilisateur peut résilier son abonnement à une Offre Payante à tout moment depuis son Compte, la résiliation prenant effet à la fin de la période en cours, sauf disposition contraire spécifique.</p>
+                  <p>L'Utilisateur peut résilier son abonnement à une Offre à tout moment depuis son Compte, la résiliation prenant effet à la fin de la période en cours, sauf disposition contraire spécifique.</p>
                   <p className="mt-2">En cas de modification tarifaire notifiée conformément à l’article 9.2, l’Utilisateur peut résilier avant le renouvellement, la résiliation prenant effet à la fin de la période en cours.</p>
                   <p className="mt-2">L'Utilisateur peut également demander la suppression définitive de son Compte, ce qui entraîne la suppression ou l'anonymisation des Données dans les conditions prévues à l'article 14.</p>
                 </div>
@@ -507,7 +506,7 @@ export default function CGSUPage() {
                 <p>Verebona traite des données à caractère personnel dans le cadre du Service, en qualité de responsable de traitement au sens du RGPD.</p>
                 <p>Les traitements de données à caractère personnel couvrent notamment :</p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>la gestion des Comptes Utilisateurs et des Offres (Gratuite et Payantes) ;</li>
+                  <li>la gestion des Comptes Utilisateurs et des Offres (Standard et Payantes) ;</li>
                   <li>la fourniture du Service, y compris le stockage et le traitement technique des Documents (cf. article 8) ;</li>
                   <li>la gestion de la facturation et du paiement ;</li>
                   <li>la sécurité et la maintenance du Service ;</li>

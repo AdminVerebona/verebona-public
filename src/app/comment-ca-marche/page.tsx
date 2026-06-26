@@ -47,7 +47,10 @@ const STEPS = [
 
 export default function CommentCaMarchePage() {
   return (
-    <div className="public-page min-h-screen flex flex-col bg-gradient-to-b from-[#111827] via-[#020617] to-[#000] pt-[72px] md:pt-0">
+    <div className="public-page min-h-screen flex flex-col bg-gradient-to-b from-[#111827] via-[#020617] to-[#000] overflow-x-hidden pt-[72px] md:pt-0 relative isolate">
+      {/* Fixed ambient glow effects — stay visible while scrolling */}
+      <div className="fixed top-[-15%] left-[-10%] w-[500px] md:w-[800px] h-[500px] md:h-[800px] bg-[#3b82f6]/15 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="fixed top-[-10%] right-[-10%] w-[350px] md:w-[600px] h-[350px] md:h-[600px] bg-[#22c55e]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
       <ForceTheme theme="blue" />
       <ScrollRevealInit />
       <Header />

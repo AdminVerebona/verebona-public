@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
               Politique de confidentialité de Verebona
             </h1>
             <p className="text-sm text-[color:var(--text-muted)]">
-              Dernière mise à jour : 26/04/2026
+              Dernière mise à jour : 20/06/2026
             </p>
           </div>
 
@@ -231,7 +231,7 @@ export default function PrivacyPolicyPage() {
                 <p>Les données peuvent être traitées par :</p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
                   <li>Équipes internes Verebona</li>
-                  <li>Hébergement : [OVH / à compléter]</li>
+                  <li>Hébergement : Vercel (app), Supabase (base de données), OVH (fichiers)</li>
                   <li>Paiement : Stripe</li>
                   <li>Emailing : Resend</li>
                   <li>Outils techniques (monitoring, OCR, etc.)</li>

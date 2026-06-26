@@ -73,9 +73,9 @@ export function Header() {
                 const isAnchor = href.startsWith('/#');
                 const resolvedHref = isAnchor && !isLanding ? `/${href.slice(1)}` : href;
                 return isAnchor ? (
-                  <a key={href} href={resolvedHref} className="text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>{label}</a>
+                  <a key={href} href={resolvedHref} className="text-sm text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] hover:bg-white/5 transition-colors rounded-lg px-4 py-3" onClick={() => setMobileMenuOpen(false)}>{label}</a>
                 ) : (
-                  <Link key={href} href={resolvedHref} className="text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>{label}</Link>
+                  <Link key={href} href={resolvedHref} className="text-sm text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] hover:bg-white/5 transition-colors rounded-lg px-4 py-3" onClick={() => setMobileMenuOpen(false)}>{label}</Link>
                 );
               })}
               <div className="flex flex-col gap-2 pt-4 border-t border-[rgba(31,41,55,0.5)]">

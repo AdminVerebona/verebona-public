@@ -112,7 +112,7 @@ export function PricingSection() {
               <ul className="space-y-2 text-sm text-[color:var(--text-muted)]">
                 <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span><strong>Tout Standard +</strong></span></li>
                 <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>10 biens actifs</span></li>
-                <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>200 documents analysés par an</span></li>
+                <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>100 documents analysés par an</span></li>
                 <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>Synchronisation avec votre agenda personnel</span></li>
                 <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>Exports documentaires prêts à utiliser</span></li>
                 <li className="flex items-start gap-2"><Check className="w-3 h-3 text-[#3b82f6] mt-1" /><span>Support prioritaire</span></li>

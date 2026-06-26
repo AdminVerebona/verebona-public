@@ -63,9 +63,9 @@ export default function LegalPage() {
                 2. Hébergement
               </h2>
               <div className="space-y-2 text-[color:var(--text-muted)]">
-                <p><strong className="text-[color:var(--text-primary)]">Hébergeur :</strong> [Nom de l'hébergeur]</p>
-                <p><strong className="text-[color:var(--text-primary)]">Adresse :</strong> [Adresse de l'hébergeur]</p>
-                <p><strong className="text-[color:var(--text-primary)]">Téléphone :</strong> [Téléphone de l'hébergeur]</p>
+                <p><strong className="text-[color:var(--text-primary)]">Hébergeur :</strong> Vercel Inc.</p>
+                <p><strong className="text-[color:var(--text-primary)]">Adresse :</strong> 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</p>
+                <p><strong className="text-[color:var(--text-primary)]">Téléphone :</strong> +1 859 373 3247</p>
               </div>
             </section>
 
