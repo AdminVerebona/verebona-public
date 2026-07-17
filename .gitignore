@@ -5,3 +5,9 @@ dist-ssr
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# VS Code Local History
+.history/
+
+# Logs / debug éventuels
+*.log
