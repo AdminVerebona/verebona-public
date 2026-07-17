@@ -15,7 +15,7 @@
         <h3 style="font-size:18px;font-weight:600;color:#0F1B33;margin-bottom:6px">Standard</h3>
         <p style="font-size:13px;color:#5B6577;line-height:1.5;margin-bottom:16px;min-height:56px">Pour découvrir Verebona et centraliser vos premiers biens et documents.</p>
         <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:#0F1B33;margin-bottom:16px">19 €<span style="font-size:15px;font-weight:400;color:#8A93A6"> / an</span></div>
-        <a href="#" style="text-align:center;font-size:14px;font-weight:600;color:#0F1B33;padding:11px;border-radius:10px;border:1px solid #D3DBE8;margin-bottom:18px">Choisir Standard</a>
+        <a :href="signupUrl()" style="text-align:center;font-size:14px;font-weight:600;color:#0F1B33;padding:11px;border-radius:10px;border:1px solid #D3DBE8;margin-bottom:18px">Choisir Standard</a>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:#5B6577">
           <div style="display:flex;gap:9px"><span style="color:#2563EB;font-weight:700">✓</span>Jusqu'à 2 biens actifs</div>
           <div style="display:flex;gap:9px"><span style="color:#2563EB;font-weight:700">✓</span>Analyse de 50 documents / an</div>
@@ -31,7 +31,7 @@
         <h3 style="font-size:18px;font-weight:600;color:#fff;margin-bottom:6px">Premium</h3>
         <p style="font-size:13px;color:#9DB0CE;line-height:1.5;margin-bottom:16px;min-height:56px">Pour des dossiers impeccables à présenter à un acheteur ou un assureur.</p>
         <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:#fff;margin-bottom:16px">59 €<span style="font-size:15px;font-weight:400;color:#8DA0BE"> / an</span></div>
-        <a href="#" style="text-align:center;font-size:14px;font-weight:600;color:#fff;padding:11px;border-radius:10px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);margin-bottom:18px;box-shadow:0 12px 26px rgba(37,99,235,.4)">Choisir Premium</a>
+        <a :href="signupUrl()" style="text-align:center;font-size:14px;font-weight:600;color:#fff;padding:11px;border-radius:10px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);margin-bottom:18px;box-shadow:0 12px 26px rgba(37,99,235,.4)">Choisir Premium</a>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:#9DB0CE">
           <div style="display:flex;gap:9px"><span style="color:#60A5FA;font-weight:700">✓</span><strong style="color:#EAF0FB">Tout Standard +</strong></div>
           <div style="display:flex;gap:9px"><span style="color:#60A5FA;font-weight:700">✓</span>10 biens actifs</div>
@@ -47,7 +47,7 @@
         <h3 style="font-size:18px;font-weight:600;color:#0F1B33;margin-bottom:6px">Premium Duo</h3>
         <p style="font-size:13px;color:#5B6577;line-height:1.5;margin-bottom:16px;min-height:56px">Partagez un espace Verebona à deux pour gérer ensemble biens, documents et échéances.</p>
         <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:#0F1B33;margin-bottom:16px">79 €<span style="font-size:15px;font-weight:400;color:#8A93A6"> / an</span></div>
-        <a href="#" style="text-align:center;font-size:14px;font-weight:600;color:#fff;padding:11px;border-radius:10px;background:linear-gradient(135deg,#34D399,#059669);margin-bottom:18px;box-shadow:0 12px 26px rgba(52,211,153,.32)">Choisir Premium Duo</a>
+        <a :href="signupUrl()" style="text-align:center;font-size:14px;font-weight:600;color:#fff;padding:11px;border-radius:10px;background:linear-gradient(135deg,#34D399,#059669);margin-bottom:18px;box-shadow:0 12px 26px rgba(52,211,153,.32)">Choisir Premium Duo</a>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:#5B6577">
           <div style="display:flex;gap:9px"><span style="color:#059669;font-weight:700">✓</span><strong style="color:#0F1B33">Tout Premium +</strong></div>
           <div style="display:flex;gap:9px"><span style="color:#059669;font-weight:700">✓</span>2 membres sur un même compte</div>
@@ -73,3 +73,7 @@
   </div>
 </section>
 </template>
+
+<script setup lang="ts">
+import { signupUrl } from '../config/urls'
+</script>
