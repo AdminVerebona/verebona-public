@@ -73,7 +73,7 @@
         <div style="border-radius:6px;overflow:hidden;background:rgba(15,23,42,.96)">
         <div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(31,41,55,.9);background:rgba(9,14,28,.98)">
           <div style="display:flex;gap:7px"><span style="width:11px;height:11px;border-radius:50%;background:rgba(239,68,68,.7)"></span><span style="width:11px;height:11px;border-radius:50%;background:rgba(245,158,11,.7)"></span><span style="width:11px;height:11px;border-radius:50%;background:rgba(34,197,94,.7)"></span></div>
-          <div style="flex:1;display:flex;justify-content:center"><div style="padding:3px 14px;border-radius:6px;background:rgba(31,41,55,.8);font-size:11px;color:#64748B">app.verebona.com</div></div>
+          <div style="flex:1;display:flex;justify-content:center"><div style="padding:3px 14px;border-radius:6px;background:rgba(31,41,55,.8);font-size:11px;color:#64748B">app.verebona.fr</div></div>
           <span style="font-size:11px;color:#64748B">{{ slideLabel }}</span>
         </div>
         <div style="display:flex;height:440px;background:#020617">
