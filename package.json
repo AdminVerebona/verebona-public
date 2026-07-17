@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "build:preprod": "vue-tsc -b && vite build --mode preprod",
     "preview": "vite preview",
     "start": "node server.cjs"
   },
