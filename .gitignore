@@ -11,3 +11,12 @@ dist-ssr
 
 # Logs / debug éventuels
 *.log
+
+# Fichiers compilés / caches TS (ne pas versionner)
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+# Fichiers compil�s / caches TS
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
