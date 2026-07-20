@@ -13,8 +13,10 @@
         <span>Voiture</span><span>Appartement</span><span>Garage</span><span>Moto</span><span>Maison</span><span>Terrain</span><span>Vélo</span><span>Local commercial</span><span>Loisir / Sport</span><span>Électronique</span>
       </div>
     </div>
-    <div class="vb-reveal" style="max-width:920px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid rgba(148,163,184,.14);background:rgba(15,23,42,.4)">
-      <template v-for="(item, vi0) in ucItems" :key="vi0">
+    <div v-for="group in ucGroups" :key="group.label" class="vb-reveal" style="max-width:920px;margin:0 auto 30px">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8FBEFF;margin:0 0 14px 4px">{{ group.label }}</div>
+      <div style="border-radius:20px;overflow:hidden;border:1px solid rgba(148,163,184,.14);background:rgba(15,23,42,.4)">
+      <template v-for="(item, vi0) in group.items" :key="vi0">
         <div style="border-bottom:1px solid rgba(148,163,184,.09)">
           <button type="button" :style="item.headerStyle" @click.prevent="item.onClick">
             <span :style="item.badgeStyle">{{ item.badge }}</span>
@@ -42,6 +44,7 @@
           </template>
         </div>
       </template>
+      </div>
     </div>
   </div>
 </section>
@@ -49,5 +52,5 @@
 
 <script setup lang="ts">
 import { useLanding } from '../composables/useLanding'
-const { ucItems } = useLanding()
+const { ucGroups } = useLanding()
 </script>

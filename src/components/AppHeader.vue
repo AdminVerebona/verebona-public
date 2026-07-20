@@ -18,7 +18,7 @@
     </nav>
     <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
       <a :href="loginUrl()" class="r-hide-m" style="font-size:15.5px;font-weight:600;color:#C7D0E0;padding:10px 19px;border:1px solid rgba(148,163,184,.25);border-radius:999px;transition:all .15s" v-hover="{borderColor:'rgba(148,163,184,.5)',color:'#fff'}">Se connecter</a>
-      <a :href="signupUrl()" class="r-hide-m" style="font-size:15.5px;font-weight:600;color:#fff;padding:11px 21px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);box-shadow:0 8px 22px rgba(37,99,235,.4);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Créer votre compte</a>
+      <a :href="signupUrl()" class="r-hide-m" style="font-size:15.5px;font-weight:600;color:#fff;padding:11px 21px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);box-shadow:0 8px 22px rgba(37,99,235,.4);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Essayer gratuitement</a>
       <button type="button" class="r-burger" @click.prevent="toggleMenu" aria-label="Menu" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:rgba(15,23,42,.55);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:4px;flex-shrink:0">
         <span :style="burgerTop"></span>
         <span :style="burgerMid"></span>
@@ -34,7 +34,7 @@
     <a href="#faq" @click.prevent="navFaq" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">FAQ</a>
     <div style="display:flex;gap:10px;margin-top:16px">
       <a :href="loginUrl()" @click="closeMenu" style="flex:1;text-align:center;padding:13px;border:1px solid rgba(148,163,184,.28);border-radius:999px;font-size:15px;font-weight:600;color:#fff">Se connecter</a>
-      <a :href="signupUrl()" @click="closeMenu" style="flex:1;text-align:center;padding:13px;border-radius:999px;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#3B82F6,#1D4ED8)">Créer un compte</a>
+      <a :href="signupUrl()" @click="closeMenu" style="flex:1;text-align:center;padding:13px;border-radius:999px;font-size:15px;font-weight:600;color:#fff;background:linear-gradient(135deg,#3B82F6,#1D4ED8)">Essayer gratuitement</a>
     </div>
   </div>
   </template>
