@@ -14,7 +14,7 @@ const APP_URL: string =
   "https://app.verebona.fr";
 
 /** URL absolue vers une route de l'app. */
-function appUrl(path = "/"): string {
+export function appUrl(path = "/"): string {
   const suffix = path.startsWith("/") ? path : `/${path}`;
   return `${APP_URL}${suffix}`;
 }

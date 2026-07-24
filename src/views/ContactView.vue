@@ -22,13 +22,14 @@
       <template v-if="notContactSent">
       <form @submit.prevent="sendContact" style="display:flex;flex-direction:column;gap:16px">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-          <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Prénom<input type="text" required placeholder="Camille" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
-          <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Nom<input type="text" required placeholder="Durand" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Prénom<input type="text" required placeholder="Camille" v-model="firstName" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Nom<input type="text" required placeholder="Durand" v-model="lastName" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
         </div>
-        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Email<input type="email" required placeholder="camille@email.com" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Email<input type="email" required placeholder="camille@email.com" v-model="email" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
         <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Sujet<select required style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;background:#fff"><option value="">Choisir…</option><option>Question sur les offres</option><option>Aide technique</option><option>Partenariat</option><option>Autre</option></select></label>
-        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Message<textarea required rows="5" placeholder="Votre message…" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;resize:vertical"></textarea></label>
-        <button type="submit" style="margin-top:4px;font-size:15px;font-weight:600;color:#fff;padding:14px 24px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border:0;cursor:pointer;box-shadow:0 12px 26px rgba(37,99,235,.3)">Envoyer le message</button>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Message<textarea required rows="5" placeholder="Votre message…" v-model="message" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;resize:vertical"></textarea></label>
+        <button type="submit" :disabled="sending" style="margin-top:4px;font-size:15px;font-weight:600;color:#fff;padding:14px 24px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border:0;cursor:pointer;box-shadow:0 12px 26px rgba(37,99,235,.3)">Envoyer le message</button>
+        <p v-if="error" style="margin:0;font-size:14px;color:#DC2626">{{ error }}</p>
       </form>
       </template>
     </div>
@@ -44,6 +45,6 @@
 <script setup lang="ts">
 import { useContact } from '../composables/useContact'
 import { useNav } from '../composables/useNav'
-const { contactSent, notContactSent, sendContact, crumbLabel } = useContact()
+const { firstName, lastName, email, message, contactSent, notContactSent, sending, error, sendContact, crumbLabel } = useContact()
 const { goHome, goAide } = useNav()
 </script>
