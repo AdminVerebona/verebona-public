@@ -1,12 +1,12 @@
 <template>
-<section id="pricing" style="background:#F5F8FD;color:#0F1B33;padding:88px 24px">
+<section id="pricing" style="background:#E9F0FA;color:#0F1B33;padding:88px 24px">
   <div style="max-width:1280px;margin:0 auto">
 
     <!-- Titre -->
     <div class="vb-reveal" style="margin-bottom:14px">
       <div style="font-size:13.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:#2563EB;margin-bottom:10px">Tarifs</div>
       <h2 style="font-size:44px;font-weight:600;letter-spacing:-.02em;color:#0F1B33;margin-bottom:10px;max-width:680px;line-height:1.12">Essayez Verebona gratuitement pendant 7 jours.</h2>
-      <p style="font-size:15.5px;color:#5B6577;max-width:620px">Sans carte bancaire, sans engagement.</p>
+      <p style="font-size:15.5px;line-height:1.6;color:#5B6577;max-width:700px">Commencez par 7 jours d'essai Premium, sans carte bancaire. L'essai est limité à 2 biens et 30 documents. À son terme, vous choisissez librement une offre ; sans action de votre part, aucun abonnement ne démarre.</p>
     </div>
 
     <!-- Toggle mensuel / annuel + CTA -->
@@ -20,6 +20,7 @@
       </div>
       <div v-if="isYearly" style="font-size:12.5px;color:#8A93A6">Paiement annuel en une fois.</div>
       <a :href="signupUrl()" style="margin-top:6px;font-size:16px;font-weight:600;color:#fff;padding:14px 30px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.35);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement</a>
+      <div style="font-size:13.5px;color:#5B6577;font-style:italic">« Vous choisirez votre offre après l'essai »</div>
     </div>
 
     <!-- Cartes -->

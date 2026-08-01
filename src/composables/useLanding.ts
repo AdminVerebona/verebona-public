@@ -40,11 +40,9 @@ const caseGroups = [
     { badge: "Revente", title: "Revendre un bien facilement", scenario: "Vous souhaitez vendre un véhicule, un équipement ou un objet avec toutes les informations utiles.", without: ["Factures, références et caractéristiques difficiles à retrouver", "Annonce préparée à partir d'informations incomplètes", "Échanges répétés avec l'acheteur pour fournir les justificatifs"], withSteps: ["Informations et documents du bien déjà centralisés", "Caractéristiques, historique et justificatifs immédiatement disponibles", "Dossier de vente prêt à utiliser en Premium"] },
     { badge: "Sinistre", title: "Faire face à un vol ou à un sinistre", scenario: "Vous devez déclarer un sinistre et prouver ce que vous possédiez, dans quel état et à quelle valeur.", without: ["Reconstitution de mémoire longue et incertaine", "Factures et preuves d'achat introuvables au moment critique", "Dossier incomplet pouvant compliquer l'indemnisation"], withSteps: ["Biens, photos et justificatifs déjà centralisés", "Informations filtrables par bien, pièce ou catégorie", "Dossier d'indemnisation prêt à transmettre en Premium"] },
     { badge: "Déménagement", title: "Préparer un déménagement", scenario: "Vous changez de logement et devez organiser vos biens, vos documents et vos échéances.", without: ["Inventaire réalisé au dernier moment", "Contrats et justificatifs répartis entre plusieurs dossiers", "Risque d'oublier un équipement, une échéance ou une formalité"], withSteps: ["Inventaire des biens déjà disponible et structuré", "Documents et contrats regroupés par logement ou équipement", "Informations utiles accessibles pendant toute la transition"] },
-    { badge: "Succession", title: "Préparer une succession ou une transmission", scenario: "Vous devez transmettre une vision claire des biens, des documents et des informations utiles.", without: ["Patrimoine difficile à reconstituer", "Documents dispersés ou inconnus des proches", "Démarches ralenties par des informations manquantes"], withSteps: ["Inventaire centralisé des biens et justificatifs", "Informations structurées et facilement transmissibles", "Export complet permettant de préparer les démarches"] },
+    { badge: "Succession", title: "Préparer une succession ou une transmission", scenario: "Vous devez transmettre une vision claire des biens, des documents et des informations utiles.", without: ["Ensemble des biens difficile à reconstituer", "Documents dispersés ou inconnus des proches", "Démarches ralenties par des informations manquantes"], withSteps: ["Inventaire centralisé des biens et justificatifs", "Informations structurées et facilement transmissibles", "Export complet permettant de préparer les démarches"] },
   ]},
-  { label: "Pour les professionnels", cases: [
-    { badge: "Pro", title: "Créer un inventaire professionnel valorisé", scenario: "Vous devez suivre le matériel, les équipements et les justificatifs nécessaires à votre activité.", without: ["Inventaire incomplet ou tenu dans plusieurs fichiers", "Factures et références difficiles à relier aux équipements", "Justification complexe en cas de vente, de sinistre ou de contrôle"], withSteps: ["Matériel et justificatifs centralisés dans un même espace", "Informations structurées par équipement", "Inventaire valorisé prêt à être exploité ou transmis"] },
-  ]},
+
 ]
 
 const ucPill = (on: boolean) =>
@@ -71,6 +69,7 @@ export function useLanding() {
       return {
         q: f.q,
         a: f.a,
+        panelId: 'faq-panel-' + i,
         open,
         onClick: () => { faq.value = faq.value === i ? -1 : i },
         chevron: `display:inline-block;font-size:18px;transition:transform .25s;transform:rotate(${open ? '180deg' : '0deg'})`,
@@ -89,6 +88,7 @@ export function useLanding() {
         return {
           badge: u.badge,
           title: u.title,
+          panelId: 'uc-panel-' + idx,
           scenario: u.scenario,
           without: u.without,
           withSteps: u.withSteps,

@@ -11,8 +11,8 @@
       <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.01em;color:#fff">Verebona</span>
     </a>
     <nav class="r-nav" style="display:flex;align-items:center;gap:32px;font-size:16px;color:#9BA6BC;font-weight:500">
-      <a href="#pourquoi" @click.prevent="navPourquoi" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Pourquoi Verebona ?</a>
-      <a href="#features" @click.prevent="navFeatures" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Fonctionnalités</a>
+      <a href="#how" @click.prevent="navHow" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Comment ça marche</a>
+      <a href="#cas-usage" @click.prevent="navCasUsage" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Cas d'usage</a>
       <a href="#pricing" @click.prevent="navPricing" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Tarifs</a>
       <a href="#faq" @click.prevent="navFaq" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">FAQ</a>
     </nav>
@@ -28,8 +28,8 @@
   </div>
   <template v-if="menuOpen">
   <div class="r-mobile-menu" style="flex-direction:column;gap:2px;padding:8px 20px 20px;border-top:1px solid rgba(148,163,184,.14);background:rgba(7,14,32,.98);backdrop-filter:blur(14px)">
-    <a href="#pourquoi" @click.prevent="navPourquoi" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">Pourquoi Verebona ?</a>
-    <a href="#features" @click.prevent="navFeatures" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">Fonctionnalités</a>
+    <a href="#how" @click.prevent="navHow" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">Comment ça marche</a>
+    <a href="#cas-usage" @click.prevent="navCasUsage" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">Cas d'usage</a>
     <a href="#pricing" @click.prevent="navPricing" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">Tarifs</a>
     <a href="#faq" @click.prevent="navFaq" style="padding:14px 6px;font-size:16px;font-weight:600;color:#C7D0E0;border-bottom:1px solid rgba(148,163,184,.08)">FAQ</a>
     <div style="display:flex;gap:10px;margin-top:16px">
@@ -46,7 +46,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { useNav } from '../composables/useNav'
 import { loginUrl, signupUrl } from '../config/urls'
 
-const { menuOpen, toggleMenu, closeMenu, goHome, navPourquoi, navFeatures, navPricing, navFaq, burgerTop, burgerMid, burgerBot } = useNav()
+const { menuOpen, toggleMenu, closeMenu, goHome, navHow, navCasUsage, navPricing, navFaq, burgerTop, burgerMid, burgerBot } = useNav()
 
 // Header goes from transparent (at the very top) to a blurred solid bar as
 // soon as the page is scrolled — ported from the prototype.

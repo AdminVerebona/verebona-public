@@ -8,7 +8,7 @@
       </div>
       <p style="font-size:12px;color:#64748B;margin-top:18px">© 2026 Verebona. Tous droits réservés.</p>
     </div>
-    <div><div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:14px">Produit</div><div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#96A2B8"><a href="#pourquoi" @click.prevent="navPourquoi" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Pourquoi Verebona ?</a><a href="#cas-usage" @click.prevent="navCasUsage" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Cas d'usage</a><a href="#pricing" @click.prevent="navPricing" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Tarifs</a></div></div>
+    <div><div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:14px">Produit</div><div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#96A2B8"><a href="#how" @click.prevent="navHow" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Comment ça marche</a><a href="#cas-usage" @click.prevent="navCasUsage" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Cas d'usage</a><a href="#pricing" @click.prevent="navPricing" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Tarifs</a></div></div>
     <div><div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:14px">Support</div><div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#96A2B8"><a href="#faq" @click.prevent="navFaq" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">FAQ</a><a href="#" @click.prevent="goAide" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Centre d'aide</a><a href="#" @click.prevent="goContact" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Contact</a></div></div>
     <div><div style="font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:14px">Légal</div><div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#96A2B8"><a href="#" @click.prevent="goMentions" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Mentions légales</a><a href="#" @click.prevent="goCGU" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">CGSU</a><a href="#" @click.prevent="goConfid" style="cursor:pointer;transition:color .15s" v-hover="{color:'#fff'}">Confidentialité</a></div></div>
   </div>
@@ -17,5 +17,5 @@
 
 <script setup lang="ts">
 import { useNav } from '../composables/useNav'
-const { goHome, goAide, goContact, goMentions, goCGU, goConfid, navPourquoi, navFeatures, navPricing, navFaq, navCasUsage } = useNav()
+const { goHome, goAide, goContact, goMentions, goCGU, goConfid, navHow, navFeatures, navPricing, navFaq, navCasUsage } = useNav()
 </script>

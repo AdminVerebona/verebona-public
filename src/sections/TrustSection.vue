@@ -9,6 +9,7 @@
       <div>
         <div style="font-size:13.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:#8FBEFF;margin-bottom:10px">Sécurité des données</div>
         <h2 style="font-size:44px;font-weight:600;letter-spacing:-.02em;color:#fff;max-width:680px;line-height:1.12">Vos données sont protégées, hébergées en France et sauvegardées chaque jour.</h2>
+        <p style="font-size:15.5px;line-height:1.65;color:#95A1B8;max-width:680px;margin-top:14px">Verebona protège l'accès à vos informations et ne revend pas vos données. Vous restez propriétaire des contenus déposés et pouvez les récupérer ou les supprimer.</p>
       </div>
     </div>
     <div class="vb-rgroup r-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">

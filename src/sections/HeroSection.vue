@@ -15,8 +15,8 @@
           <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Valorisez-les le moment venu</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Vente, assurance ou transmission mieux documentées.</div></div></div>
         </div>
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <a :href="signupUrl()" style="font-size:16px;font-weight:600;color:#fff;padding:14px 26px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.4);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement</a>
-          <span style="font-size:13px;color:#8390A8;max-width:210px;line-height:1.4">7 jours gratuits,<br>sans carte bancaire.</span>
+          <a :href="signupUrl()" style="font-size:16px;font-weight:600;color:#fff;padding:14px 26px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.4);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement pendant 7 jours</a>
+          <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">Essai Premium sans carte bancaire · 2 biens et 30 documents · aucun abonnement déclenché automatiquement</span>
         </div>
       </div>
       <!-- Right : mascotte welcome-wave -->
@@ -62,9 +62,8 @@
     <!-- App mockup -->
     <template v-if="showMockup">
     <div class="vb-reveal" style="margin-top:64px">
-      <div style="text-align:center;max-width:660px;margin:0 auto 30px">
-        <h2 style="font-size:29px;font-weight:600;letter-spacing:-.02em;color:#fff;line-height:1.15;margin-bottom:11px">Emmenez Verebona partout avec vous</h2>
-        <p style="font-size:16px;line-height:1.6;color:#95A1B8">Sur ordinateur ou sur mobile, retrouvez vos biens, vos documents et vos échéances où que vous soyez — toujours synchronisés.</p>
+      <div style="text-align:center;max-width:660px;margin:0 auto 22px">
+        <p style="font-size:15px;line-height:1.6;color:#95A1B8">L'application Verebona, sur le web et sur mobile <span style="color:#C7D0E0;font-weight:600">(iOS &amp; Android)</span> — vos biens, documents et échéances toujours synchronisés.</p>
       </div>
       <div class="r-mock" style="display:flex;gap:22px;align-items:flex-end">
       <div class="r-browser" style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center">

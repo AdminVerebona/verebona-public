@@ -4,7 +4,7 @@
   <div style="max-width:1180px;margin:0 auto;position:relative">
     <nav aria-label="Fil d'Ariane" style="margin-bottom:24px"><ol style="display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:13.5px"><li style="display:flex;align-items:center"><a href="#" @click.prevent="goHome" style="display:inline-flex;align-items:center;gap:7px;color:#9FB4D8;font-weight:500;padding:6px 11px;border-radius:9px;cursor:pointer;transition:color .15s,background .15s" v-hover="{color:'#fff',background:'rgba(255,255,255,.06)'}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg>Accueil</a></li><li aria-hidden="true" style="display:flex;color:#42557A"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></li><li aria-current="page" style="color:#EAF0FB;font-weight:600;padding:6px 4px">{{ crumbLabel }}</li></ol></nav>
     <div style="font-size:13.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:#8FBEFF;margin-bottom:16px">Contact</div>
-    <h1 style="font-size:46px;line-height:1.06;font-weight:600;letter-spacing:-.025em;color:#fff;max-width:640px">Parlons de votre patrimoine</h1>
+    <h1 style="font-size:46px;line-height:1.06;font-weight:600;letter-spacing:-.025em;color:#fff;max-width:640px">Parlons de vos biens</h1>
     <p style="font-size:17px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-top:16px">Une question, une suggestion, un partenariat ? Écrivez-nous, nous revenons vers vous rapidement.</p>
   </div>
 </section>
@@ -36,7 +36,7 @@
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="background:#fff;border:1px solid #E6EBF3;border-radius:18px;padding:22px 24px"><div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563EB;margin-bottom:8px">Email</div><div style="font-size:16px;font-weight:600;color:#0F1B33">contact@verebona.com</div><div style="font-size:14px;color:#64748B;margin-top:4px">Réponse sous 24&nbsp;h ouvrées</div></div>
       <div style="background:#fff;border:1px solid #E6EBF3;border-radius:18px;padding:22px 24px"><div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563EB;margin-bottom:8px">Support</div><div style="font-size:15px;color:#475569;line-height:1.6">Consultez d'abord notre <a href="#" @click.prevent="goAide" style="color:#1D4ED8;font-weight:600">Centre d'aide</a> : la plupart des réponses s'y trouvent déjà.</div></div>
-      <div style="background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:18px;padding:24px;color:#fff"><div style="font-size:16px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif">Verebona</div><div style="font-size:14px;color:#9BA6BC;margin-top:6px;line-height:1.6">L'inventaire administré de votre patrimoine, centralisé et prêt le moment venu.</div></div>
+      <div style="background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:18px;padding:24px;color:#fff"><div style="font-size:16px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif">Verebona</div><div style="font-size:14px;color:#9BA6BC;margin-top:6px;line-height:1.6">L'inventaire administré de vos biens, centralisé et prêt le moment venu.</div></div>
     </div>
   </div>
 </section>

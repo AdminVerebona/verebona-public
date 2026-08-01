@@ -22,6 +22,8 @@ a:hover { color: inherit; }
 @keyframes vb-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
 @keyframes vb-float-s { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
 @keyframes vb-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes vb-pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes vb-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
 
 section[id] { scroll-margin-top: 82px; }
 
@@ -38,10 +40,14 @@ section[id] { scroll-margin-top: 82px; }
 @media (prefers-reduced-motion: reduce) {
   .vb-reveal,
   .vb-rgroup > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+  /* Animations non indispensables : démo produit, flottement mascotte, marquee. */
+  .vb-demoanim { animation: none !important; opacity: 1 !important; transform: none !important; }
+  img[style*="vb-float"], div[style*="vb-marquee"] { animation: none !important; }
 }
 
 /* Responsive */
 .r-burger, .r-mobile-menu { display: none; }
+.r-fixedcta { display: none; }
 @media (max-width: 860px) {
   h1 { font-size: 37px !important; line-height: 1.08 !important; }
   h2 { font-size: 26px !important; line-height: 1.22 !important; }
@@ -56,4 +62,5 @@ section[id] { scroll-margin-top: 82px; }
   .r-uc-panel { min-width: 0 !important; padding: 22px 20px !important; }
   .r-2 { grid-template-columns: 1fr !important; }
   .r-tri { grid-template-columns: 1fr !important; }
+  .r-fixedcta { display: block !important; }
 }
