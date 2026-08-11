@@ -75,15 +75,20 @@
     <div class="vb-reveal" style="margin-top:20px;display:flex;align-items:center;gap:30px;flex-wrap:wrap;padding:30px 34px;border-radius:20px;background:linear-gradient(120deg,#0E1B36,#0B2A66);border:1px solid rgba(59,130,246,.4);box-shadow:0 24px 50px rgba(15,27,51,.22);position:relative;overflow:hidden">
       <div style="position:absolute;right:-40px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.28),transparent 65%);pointer-events:none"></div>
       <div style="position:relative;flex-shrink:0;display:flex;align-items:flex-end;justify-content:center">
-        <img src="/assets/mascot/welcome-wave.webp" alt="Parrain Verebona" style="width:92px;height:auto;transform:scaleX(-1);z-index:2;filter:drop-shadow(0 18px 30px rgba(4,10,26,.5))">
-        <img src="/assets/mascot/welcome-wave.webp" alt="Filleul Verebona" style="width:92px;height:auto;margin-left:-18px;z-index:1;filter:drop-shadow(0 18px 30px rgba(4,10,26,.5))">
+        <!-- Une seule mascotte : deux figures côte à côte suggéraient un
+             avantage partagé. Le pouce levé dit le remerciement, non le
+             cadeau reçu. -->
+        <img src="/assets/mascot/thumbs-up.webp" alt="" aria-hidden="true" style="width:96px;height:auto;filter:drop-shadow(0 18px 30px rgba(4,10,26,.5))">
       </div>
       <div style="flex:1;min-width:280px;position:relative">
         <div style="font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#8FBEFF;margin-bottom:9px">Parrainage</div>
-        <h3 style="font-size:24px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:9px;font-family:'Bricolage Grotesque',sans-serif;line-height:1.2">Parrainez un proche, profitez chacun d'un mois offert</h3>
-        <p style="font-size:14.5px;line-height:1.6;color:#B7C4DC;max-width:640px">Votre filleul crée un <strong style="color:#EAF0FB">nouveau compte</strong> avec votre lien et souscrit une offre <strong style="color:#EAF0FB">annuelle</strong>. Après le délai de rétractation, <strong style="color:#EAF0FB">un mois d'abonnement est offert à chacun</strong>.</p>
+        <h3 style="font-size:24px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:9px;font-family:'Bricolage Grotesque',sans-serif;line-height:1.2">Parrainez un proche, gagnez un mois d'abonnement</h3>
+        <p style="font-size:14.5px;line-height:1.6;color:#B7C4DC;max-width:640px">Votre filleul crée un <strong style="color:#EAF0FB">nouveau compte</strong> avec votre lien et souscrit une offre <strong style="color:#EAF0FB">annuelle</strong>. Après le délai de rétractation, <strong style="color:#EAF0FB">un mois d'abonnement vous est offert</strong>. Sans limite de filleuls.</p>
       </div>
-      <a :href="signupUrl()" style="flex-shrink:0;position:relative;font-size:14.5px;font-weight:600;color:#0B2A66;background:#fff;padding:13px 24px;border-radius:999px;box-shadow:0 12px 26px rgba(4,10,26,.3);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Parrainer depuis mon compte</a>
+      <!-- `loginUrl` et non `signupUrl` : parrainer suppose un compte, et le
+           libellé le disait déjà. Un visiteur sans compte arrive sur la
+           connexion, d'où il peut s'inscrire. -->
+      <a :href="loginUrl()" style="flex-shrink:0;position:relative;font-size:14.5px;font-weight:600;color:#0B2A66;background:#fff;padding:13px 24px;border-radius:999px;box-shadow:0 12px 26px rgba(4,10,26,.3);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Obtenir mon lien de parrainage</a>
     </div>
   </div>
 </section>
@@ -91,7 +96,7 @@
 
 <script setup lang="ts">
 import { usePricing } from '../composables/usePricing'
-import { signupUrl } from '../config/urls'
+import { signupUrl, loginUrl } from '../config/urls'
 
 const { isYearly, setPeriod, pricePer, priceOf, equivalentOf } = usePricing()
 
