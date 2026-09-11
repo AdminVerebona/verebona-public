@@ -134,13 +134,17 @@ const cards: PlanCard[] = [
     badge: '', badgeStyle: '',
     cardStyle: 'display:flex;flex-direction:column;padding:24px;border-radius:18px;background:#fff;border:1px solid #E6EBF3;position:relative',
     titleColor: '#0F1B33', textColor: '#5B6577', mutedColor: '#8A93A6', checkColor: '#2563EB', strongColor: '#0F1B33',
+    // ⚠️ Ces listes doivent rester identiques à celles de `verebona-app`,
+    // dans `src/app/(dashboard)/mon-compte/offres/page.tsx`. Les deux dépôts
+    // étant séparés, rien ne le garantit automatiquement : une modification
+    // ici sans l'autre fait mentir l'une des deux pages.
     features: [
-      { label: '2 biens · 30 documents' },
+      { label: "Jusqu'à 2 biens" },
+      { label: "Jusqu'à 30 documents" },
       { label: '1 utilisateur' },
-      { label: 'Analyse & organisation automatiques' },
-      { label: 'Échéances & incohérences détectées' },
-      { label: 'Agenda Verebona' },
-      { label: 'Export ZIP complet & transmission' },
+      { label: 'Analyse et organisation automatiques de vos documents' },
+      { label: 'Agenda et rappels de vos échéances' },
+      { label: 'Export complet et transmission de vos biens' },
     ],
   },
   {
@@ -152,11 +156,12 @@ const cards: PlanCard[] = [
     titleColor: '#fff', textColor: '#9DB0CE', mutedColor: '#8DA0BE', checkColor: '#60A5FA', strongColor: '#EAF0FB',
     features: [
       { label: 'Tout Standard +', strong: true },
-      { label: '10 biens · 150 documents' },
+      { label: "Jusqu'à 10 biens" },
+      { label: "Jusqu'à 150 documents" },
       { label: '1 utilisateur' },
-      { label: 'Posez vos questions à Verebona', note: 'Sur vos biens, vos documents ou vos échéances.' },
-      { label: 'Synchronisation avec votre agenda personnel' },
-      { label: 'Dossiers prêts à utiliser' },
+      { label: 'Interrogez Verebona sur vos biens, documents et échéances' },
+      { label: 'Synchronisation de vos échéances avec votre agenda personnel' },
+      { label: "Dossiers prêts à l'emploi" },
     ],
   },
   {
@@ -168,10 +173,10 @@ const cards: PlanCard[] = [
     titleColor: '#0F1B33', textColor: '#5B6577', mutedColor: '#8A93A6', checkColor: '#059669', strongColor: '#0F1B33',
     features: [
       { label: 'Tout Premium +', strong: true },
-      { label: '15 biens · 225 documents' },
+      { label: "Jusqu'à 15 biens" },
+      { label: "Jusqu'à 225 documents" },
       { label: '2 utilisateurs' },
-      { label: 'Compte entièrement partagé' },
-      { label: 'Gestion commune des biens et échéances' },
+      { label: 'Gestion partagée de vos biens, documents et échéances' },
     ],
   },
 ]
