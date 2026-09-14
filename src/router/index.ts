@@ -5,6 +5,9 @@ import { captureReferralCode, signupUrl } from '../config/urls'
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/aide', name: 'help', component: () => import('../views/HelpView.vue') },
+  // Article du centre d'aide. L'application ouvre `/aide/<id>` depuis sa
+  // modale : sans cette route, chaque lien répondait 404.
+  { path: '/aide/:slug', name: 'help-article', component: () => import('../views/HelpArticleView.vue') },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue') },
   { path: '/mentions-legales', name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
   { path: '/cgu', name: 'legal-cgu', component: () => import('../views/LegalView.vue') },
