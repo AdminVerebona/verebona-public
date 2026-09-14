@@ -160,6 +160,7 @@ const cards: PlanCard[] = [
       { label: "Jusqu'à 150 documents" },
       { label: '1 utilisateur' },
       { label: 'Interrogez Verebona sur vos biens, documents et échéances' },
+      { label: 'Gestion des équipements et des pièces' },
       { label: 'Synchronisation de vos échéances avec votre agenda personnel' },
       { label: "Dossiers prêts à l'emploi" },
     ],
