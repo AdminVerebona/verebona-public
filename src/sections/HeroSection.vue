@@ -14,7 +14,12 @@
           <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Suivez l'histoire de vos biens</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Un historique clair qui se construit dans le temps.</div></div></div>
           <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Valorisez-les le moment venu</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Vente, assurance ou transmission mieux documentées.</div></div></div>
         </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <!-- PRELAUNCH : seule la zone d'action change (CDC pré-lancement §6.4) -->
+        <div v-if="isPrelaunch" data-testid="prelaunch-hero" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:#EAF0FB;padding:13px 24px;border-radius:999px;background:rgba(35,196,168,.10);border:1px solid rgba(35,196,168,.35);cursor:default;user-select:none"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#23C4A8;box-shadow:0 0 0 4px rgba(35,196,168,.18)"></span>{{ labels.heroTitle }}</span>
+          <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">{{ labels.heroText }}</span>
+        </div>
+        <div v-else style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
           <a :href="signupUrl()" style="font-size:16px;font-weight:600;color:#fff;padding:14px 26px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.4);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement pendant 7 jours</a>
           <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">Essai Premium sans carte bancaire · 2 biens et 30 documents · aucun abonnement déclenché automatiquement</span>
         </div>
@@ -228,5 +233,7 @@
 <script setup lang="ts">
 import { useLanding } from '../composables/useLanding'
 import { signupUrl } from '../config/urls'
+import { useSiteMode } from '../config/site'
+const { isPrelaunch, labels } = useSiteMode()
 const { showMascot, showMockup, slideLabel, nav, dots, isDashboard, isBiens, isEvents, isDocs, prev, next } = useLanding()
 </script>

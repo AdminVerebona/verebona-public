@@ -64,3 +64,8 @@ section[id] { scroll-margin-top: 82px; }
   .r-tri { grid-template-columns: 1fr !important; }
   .r-fixedcta { display: block !important; }
 }
+
+/* Sélecteur de prévisualisation (préprod) : au-dessus de la barre CTA fixe mobile. */
+@media (max-width: 860px) {
+  .vb-preview-switch { bottom: 86px !important; }
+}

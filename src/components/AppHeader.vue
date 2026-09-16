@@ -27,8 +27,8 @@
       "
     >
       <a
-        href="#top"
-        @click.prevent="goHome"
+        v-bind="link('/')"
+        aria-label="Verebona — accueil"
         style="
           display: flex;
           align-items: center;
@@ -165,6 +165,32 @@
       <div
         style="display: flex; align-items: center; gap: 12px; flex-shrink: 0"
       >
+        <!-- PRELAUNCH : information non cliquable (CDC pré-lancement §6.2) -->
+        <span
+          v-if="isPrelaunch"
+          class="r-hide-m"
+          data-testid="prelaunch-header"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #9ba6bc;
+            padding: 9px 16px;
+            border: 1px dashed rgba(148, 163, 184, 0.3);
+            border-radius: 999px;
+            cursor: default;
+            user-select: none;
+            white-space: nowrap;
+          "
+          ><span
+            aria-hidden="true"
+            style="width: 7px; height: 7px; border-radius: 50%; background: #23c4a8"
+          ></span
+          >{{ labels.header }}</span
+        >
+        <template v-else>
         <a
           :href="loginUrl()"
           class="r-hide-m"
@@ -196,6 +222,7 @@
           v-hover="{ transform: 'translateY(-1px)' }"
           >Essayer gratuitement</a
         >
+        </template>
         <button
           type="button"
           class="r-burger"
@@ -281,7 +308,33 @@
           "
           >FAQ</a
         >
-        <div style="display: flex; gap: 10px; margin-top: 16px">
+        <!-- PRELAUNCH : mêmes règles que le header desktop (CDC §6.3) -->
+        <div
+          v-if="isPrelaunch"
+          data-testid="prelaunch-mobile-menu"
+          style="
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 10px;
+            border: 1px dashed rgba(148, 163, 184, 0.3);
+            border-radius: 999px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #9ba6bc;
+            cursor: default;
+            user-select: none;
+          "
+        >
+          <span
+            aria-hidden="true"
+            style="width: 7px; height: 7px; border-radius: 50%; background: #23c4a8"
+          ></span
+          >{{ labels.header }}
+        </div>
+        <div v-else style="display: flex; gap: 10px; margin-top: 16px">
           <a
             :href="loginUrl()"
             @click="closeMenu"
@@ -330,12 +383,15 @@
 import { onMounted, onUnmounted } from "vue";
 import { useNav } from "../composables/useNav";
 import { loginUrl, signupUrl } from "../config/urls";
+import { useSiteMode } from "../config/site";
+
+const { isPrelaunch, labels } = useSiteMode();
 
 const {
   menuOpen,
   toggleMenu,
   closeMenu,
-  goHome,
+  link,
   navHow,
   navCasUsage,
   navPricing,

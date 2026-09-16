@@ -2,10 +2,10 @@
 <section style="position:relative;padding:128px 24px 56px;overflow:hidden;background:radial-gradient(1100px 620px at 15% -10%,rgba(59,130,246,.22),transparent 60%),#070E20">
   <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(148,163,184,.09) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent 85%);mask-image:linear-gradient(to bottom,#000,transparent 85%);pointer-events:none"></div>
   <div style="max-width:1180px;margin:0 auto;position:relative">
-    <nav aria-label="Fil d'Ariane" style="margin-bottom:24px"><ol style="display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:13.5px"><li style="display:flex;align-items:center"><a href="#" @click.prevent="goHome" style="display:inline-flex;align-items:center;gap:7px;color:#9FB4D8;font-weight:500;padding:6px 11px;border-radius:9px;cursor:pointer;transition:color .15s,background .15s" v-hover="{color:'#fff',background:'rgba(255,255,255,.06)'}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg>Accueil</a></li><li aria-hidden="true" style="display:flex;color:#42557A"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></li><li aria-current="page" style="color:#EAF0FB;font-weight:600;padding:6px 4px">{{ crumbLabel }}</li></ol></nav>
+    <nav aria-label="Fil d'Ariane" style="margin-bottom:24px"><ol style="display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0;font-size:13.5px"><li style="display:flex;align-items:center"><a v-bind="link('/')" style="display:inline-flex;align-items:center;gap:7px;color:#9FB4D8;font-weight:500;padding:6px 11px;border-radius:9px;cursor:pointer;transition:color .15s,background .15s" v-hover="{color:'#fff',background:'rgba(255,255,255,.06)'}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/></svg>Accueil</a></li><li aria-hidden="true" style="display:flex;color:#42557A"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></li><li aria-current="page" style="color:#EAF0FB;font-weight:600;padding:6px 4px">{{ crumbLabel }}</li></ol></nav>
     <div style="font-size:13.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:#8FBEFF;margin-bottom:16px">Centre d'aide</div>
     <h1 style="font-size:46px;line-height:1.06;font-weight:600;letter-spacing:-.025em;color:#fff;max-width:640px">Comment pouvons-nous vous aider ?</h1>
-    <p style="font-size:17px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-top:16px">Parcourez les questions les plus fréquentes. Vous ne trouvez pas ? <a href="#" @click.prevent="goContact" style="color:#8FBEFF;font-weight:600">Contactez-nous</a>.</p>
+    <p style="font-size:17px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-top:16px">Parcourez les questions les plus fréquentes. Vous ne trouvez pas ? <a v-bind="link('/contact')" style="color:#8FBEFF;font-weight:600">Contactez-nous</a>.</p>
   </div>
 </section>
 <section style="background:#F6F8FC;padding:56px 24px 72px">
@@ -33,5 +33,5 @@
 import { useHelp } from '../composables/useHelp'
 import { useNav } from '../composables/useNav'
 const { aideItems, crumbLabel } = useHelp()
-const { goHome, goContact } = useNav()
+const { link, goContact } = useNav()
 </script>

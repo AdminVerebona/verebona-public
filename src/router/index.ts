@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { captureReferralCode, signupUrl } from '../config/urls'
+import { installSiteModeGuard, useSiteMode } from '../config/site'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -22,11 +23,17 @@ const routes = [
   //
   // L'inscription se fait sur l'application (app.verebona.fr) : cette route est
   // donc une simple redirection, avec propagation explicite du code (§4.4).
+  //
+  // PRE-LANCEMENT (CDC pre-lancement §7) : aucun chemin du site public ne doit
+  // mener a l'inscription. En PRELAUNCH, le visiteur est renvoye sur l'accueil.
   // ══════════════════════════════════════════════════════════════════════════
   {
     path: '/inscription',
     name: 'signup-redirect',
     beforeEnter: (to: { fullPath: string }) => {
+      if (useSiteMode().isPrelaunch.value) {
+        return { name: 'home', replace: true }
+      }
       // Le code est lu depuis l'URL d'arrivee avant la redirection.
       captureReferralCode(to.fullPath.split('?')[1] ?? '')
       window.location.replace(signupUrl())
@@ -46,6 +53,13 @@ const router = createRouter({
     return { top: 0 }
   },
 })
+
+/**
+ * Previsualisation FULL / PRELAUNCH (preprod uniquement) : le parametre
+ * `?mode=` est conserve sur toutes les navigations internes. Sans effet en
+ * production. Voir `src/config/site.ts`.
+ */
+installSiteModeGuard(router)
 
 /**
  * Le code de parrainage est relu a chaque navigation.

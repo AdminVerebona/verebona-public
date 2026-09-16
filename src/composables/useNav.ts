@@ -1,5 +1,6 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { siteModeQuery } from '../config/site'
 
 // Shared across header + footer + mobile menu.
 const menuOpen = ref(false)
@@ -35,6 +36,28 @@ export function useNav() {
     }
   }
 
+  /**
+   * Lien interne réel, à poser avec `v-bind="link('/aide')"`.
+   *
+   * Remplace les `href="#"` (CDC pré-lancement §10) : le lien a une vraie
+   * cible (nouvel onglet, copie, lecteurs d'écran), conserve `?mode=` en
+   * préprod, et un clic simple reste une navigation vue-router. Les clics
+   * avec modificateur (Ctrl/Cmd/Maj/Alt) sont laissés au navigateur.
+   */
+  function link(path: string) {
+    const to = { path, query: siteModeQuery() }
+    return {
+      href: router.resolve(to).href,
+      onClick: (event: MouseEvent) => {
+        if (event.defaultPrevented || event.button !== 0) return
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+        event.preventDefault()
+        closeMenu()
+        router.push(to)
+      },
+    }
+  }
+
   const goHome = () => { closeMenu(); router.push('/') }
   const goAide = () => { closeMenu(); router.push('/aide') }
   const goContact = () => { closeMenu(); router.push('/contact') }
@@ -54,7 +77,7 @@ export function useNav() {
   const burgerBot = computed(() => burgerBase + 'transform:' + (menuOpen.value ? 'translateY(-6px) rotate(-45deg)' : 'none'))
 
   return {
-    menuOpen, toggleMenu, closeMenu,
+    menuOpen, toggleMenu, closeMenu, link,
     goHome, goAide, goContact, goMentions, goCGU, goConfid,
     navHow, navFeatures, navPricing, navFaq, navCasUsage,
     burgerTop, burgerMid, burgerBot,

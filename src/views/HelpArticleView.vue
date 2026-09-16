@@ -3,9 +3,9 @@
   <div style="max-width:880px;margin:0 auto;position:relative">
     <nav aria-label="Fil d'Ariane" style="margin-bottom:24px">
       <ol style="display:flex;align-items:center;gap:8px;list-style:none;margin:0;padding:0;font-size:13.5px;flex-wrap:wrap">
-        <li><a href="#" @click.prevent="$router.push('/')" style="color:#9FB4D8;font-weight:500">Accueil</a></li>
+        <li><a v-bind="link('/')" style="color:#9FB4D8;font-weight:500">Accueil</a></li>
         <li aria-hidden="true" style="color:#42557A">›</li>
-        <li><a href="#" @click.prevent="$router.push('/aide')" style="color:#9FB4D8;font-weight:500">Centre d'aide</a></li>
+        <li><a v-bind="link('/aide')" style="color:#9FB4D8;font-weight:500">Centre d'aide</a></li>
         <li aria-hidden="true" style="color:#42557A">›</li>
         <li aria-current="page" style="color:#EAF0FB;font-weight:600">{{ article ? article.title : 'Article introuvable' }}</li>
       </ol>
@@ -41,7 +41,7 @@
       <div v-if="memeCategorie.length" style="margin-top:44px;padding-top:28px;border-top:1px solid #E6EBF3">
         <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#64748B;margin-bottom:16px">Dans la même catégorie</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <a v-for="a in memeCategorie" :key="a.id" href="#" @click.prevent="$router.push('/aide/' + a.id)"
+          <a v-for="a in memeCategorie" :key="a.id" v-bind="link('/aide/' + a.id)"
              style="display:block;padding:16px 18px;background:#fff;border:1px solid #E6EBF3;border-radius:14px;text-decoration:none">
             <div style="font-size:15.5px;font-weight:600;color:#0F1B33">{{ a.title }}</div>
             <div style="font-size:14px;color:#64748B;margin-top:3px">{{ a.excerpt }}</div>
@@ -68,6 +68,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { HELP_ARTICLES, HELP_CATS } from '../content/help-articles'
+import { useNav } from '../composables/useNav'
 
 /**
  * Article du centre d'aide.
@@ -80,6 +81,7 @@ import { HELP_ARTICLES, HELP_CATS } from '../content/help-articles'
  * d'afficher une page vide.
  */
 const route = useRoute()
+const { link } = useNav()
 
 const article = computed(() =>
   HELP_ARTICLES.find((a) => a.id === route.params.slug) ?? null,

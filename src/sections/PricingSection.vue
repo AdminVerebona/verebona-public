@@ -19,8 +19,10 @@
         <span style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#2563EB;white-space:nowrap">En annuel, économisez l'équivalent de 2 mois.</span>
       </div>
       <div v-if="isYearly" style="font-size:12.5px;color:#8A93A6">Paiement annuel en une fois.</div>
-      <a :href="signupUrl()" style="margin-top:6px;font-size:16px;font-weight:600;color:#fff;padding:14px 30px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.35);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement</a>
-      <div style="font-size:13.5px;color:#5B6577;font-style:italic">« Vous choisirez votre offre après l'essai »</div>
+      <!-- PRELAUNCH : offres visibles, souscription indisponible (CDC pré-lancement §6.5) -->
+      <span v-if="isPrelaunch" data-testid="prelaunch-pricing" style="margin-top:6px;display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:600;color:#5B6577;padding:13px 28px;border-radius:999px;background:#F3F5F9;border:1px dashed #C9D2E0;cursor:default;user-select:none"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#00A882"></span>{{ labels.pricing }}</span>
+      <a v-else :href="signupUrl()" style="margin-top:6px;font-size:16px;font-weight:600;color:#fff;padding:14px 30px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.35);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement</a>
+      <div v-if="!isPrelaunch" style="font-size:13.5px;color:#5B6577;font-style:italic">« Vous choisirez votre offre après l'essai »</div>
     </div>
 
     <!-- Cartes -->
@@ -88,7 +90,8 @@
       <!-- `loginUrl` et non `signupUrl` : parrainer suppose un compte, et le
            libellé le disait déjà. Un visiteur sans compte arrive sur la
            connexion, d'où il peut s'inscrire. -->
-      <a :href="loginUrl()" style="flex-shrink:0;position:relative;font-size:14.5px;font-weight:600;color:#0B2A66;background:#fff;padding:13px 24px;border-radius:999px;box-shadow:0 12px 26px rgba(4,10,26,.3);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Obtenir mon lien de parrainage</a>
+      <span v-if="isPrelaunch" data-testid="prelaunch-referral" style="flex-shrink:0;position:relative;display:inline-flex;align-items:center;gap:9px;font-size:14.5px;font-weight:600;color:#B7C4DC;padding:12px 22px;border-radius:999px;border:1px dashed rgba(183,196,220,.45);cursor:default;user-select:none"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:#23C4A8"></span>{{ labels.pricing }}</span>
+      <a v-else :href="loginUrl()" style="flex-shrink:0;position:relative;font-size:14.5px;font-weight:600;color:#0B2A66;background:#fff;padding:13px 24px;border-radius:999px;box-shadow:0 12px 26px rgba(4,10,26,.3);transition:transform .15s" v-hover="{transform:'translateY(-1px)'}">Obtenir mon lien de parrainage</a>
     </div>
   </div>
 </section>
@@ -97,6 +100,9 @@
 <script setup lang="ts">
 import { usePricing } from '../composables/usePricing'
 import { signupUrl, loginUrl } from '../config/urls'
+import { useSiteMode } from '../config/site'
+
+const { isPrelaunch, labels } = useSiteMode()
 
 const { isYearly, setPeriod, pricePer, priceOf, equivalentOf } = usePricing()
 

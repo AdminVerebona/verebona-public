@@ -3,15 +3,23 @@
     <AppHeader />
     <router-view />
     <AppFooter />
+    <PreviewModeSwitch v-if="PreviewModeSwitch" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch, nextTick } from 'vue'
+import { onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import { useScrollReveal } from './composables/useScrollReveal'
+import { CAN_PREVIEW_SITE_MODE } from './config/site'
+
+// Sélecteur FULL / PRELAUNCH : chargé à la demande, et seulement là où la
+// prévisualisation est autorisée. En production, il n'est jamais téléchargé.
+const PreviewModeSwitch = CAN_PREVIEW_SITE_MODE
+  ? defineAsyncComponent(() => import('./components/PreviewModeSwitch.vue'))
+  : null
 
 const route = useRoute()
 const { scan } = useScrollReveal()
