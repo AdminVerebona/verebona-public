@@ -52,7 +52,31 @@ if (process.env.BASIC_AUTH_ENABLED === "true") {
 
 app.use(express.static(distDir));
 
-app.get("/{*splat}", (_, res) => {
+/**
+ * Fichiers destines aux robots d'exploration (CDC Sitemap §7).
+ *
+ * ══════════════════════════════════════════════════════════════════════════
+ * LE REPLI SPA REPONDAIT DU HTML SUR /sitemap.xml
+ *
+ * Le catch-all ci-dessous renvoie `index.html` pour tout chemin non servi
+ * par `express.static`. Aucun sitemap n'etant genere jusqu'ici,
+ * `/sitemap.xml` repondait donc 200 avec un document HTML : exactement ce
+ * que Search Console signalait.
+ *
+ * Le build de production emet desormais le fichier, et `express.static` le
+ * sert en `application/xml`. Mais le repli reste dangereux : hors production
+ * (§10) aucun sitemap n'est emis, et sans cette garde le meme faux 200 HTML
+ * reviendrait. Un 404 franc est la reponse honnete — et empeche l'anomalie
+ * de se reinstaller silencieusement si l'emission casse un jour.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+const CRAWLER_FILES = new Set(["/sitemap.xml", "/robots.txt"]);
+
+app.get("/{*splat}", (req, res) => {
+  if (CRAWLER_FILES.has(req.path)) {
+    res.status(404).type("text/plain").send("Not found\n");
+    return;
+  }
   res.sendFile(path.join(distDir, "index.html"));
 });
 

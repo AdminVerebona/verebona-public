@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { captureReferralCode, signupUrl } from '../config/urls'
 import { installSiteModeGuard, useSiteMode } from '../config/site'
+import { installCanonicalGuard } from '../config/canonical'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -60,6 +61,15 @@ const router = createRouter({
  * production. Voir `src/config/site.ts`.
  */
 installSiteModeGuard(router)
+
+/**
+ * Balise canonical propre à chaque route — CDC Sitemap §7.
+ *
+ * Sans cela, `/aide` hérite du canonical de `index.html` et se déclare
+ * elle-même comme une copie de l'accueil : la déclarer dans le sitemap
+ * n'aurait alors servi à rien. Voir `src/config/canonical.ts`.
+ */
+installCanonicalGuard(router)
 
 /**
  * Le code de parrainage est relu a chaque navigation.

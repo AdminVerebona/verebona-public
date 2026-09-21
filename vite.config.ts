@@ -5,6 +5,7 @@ import {
   parseEnvironment,
   resolveDefaultMode,
 } from './src/config/site-mode.rules'
+import { buildRobotsTxt, buildSitemapXml } from './src/config/sitemap.rules'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -49,10 +50,30 @@ function siteModePlugin(): Plugin {
       this.emitFile({
         type: 'asset',
         fileName: 'robots.txt',
-        source: indexable
-          ? 'User-agent: *\nAllow: /\n'
-          : 'User-agent: *\nDisallow: /\n',
+        source: buildRobotsTxt(indexable),
       })
+
+      // ══════════════════════════════════════════════════════════════════
+      // SITEMAP — CDC Sitemap §5, §6 et §10
+      //
+      // Émis comme un asset du build, donc servi par `express.static` avec
+      // le bon type MIME. C'est ce qui corrige l'anomalie d'origine : sans
+      // fichier à ce chemin, `/sitemap.xml` tombait dans le repli SPA de
+      // `server.cjs` et répondait 200 `text/html` — d'où le « le sitemap
+      // est un fichier HTML » de Search Console.
+      //
+      // Hors production, aucun sitemap n'est produit : le §10 interdit
+      // qu'un environnement de préproduction expose un sitemap, et celui-ci
+      // ne contiendrait de toute façon que des URLs de production.
+      // ══════════════════════════════════════════════════════════════════
+      if (indexable) {
+        this.emitFile({
+          type: 'asset',
+          fileName: 'sitemap.xml',
+          source: buildSitemapXml(),
+        })
+      }
+
       this.emitFile({
         type: 'asset',
         fileName: '.site-env.json',

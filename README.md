@@ -56,19 +56,63 @@ src/
 
 ## Routes (`src/router/index.ts`)
 
-| Chemin | Vue | Note |
-| --- | --- | --- |
-| `/` | HomeView | landing complète |
-| `/aide` | HelpView | Centre d'aide |
-| `/contact` | ContactView | formulaire (front-only) |
-| `/mentions-legales` | LegalView | onglet Mentions légales |
-| `/cgu` | LegalView | onglet CGSU |
-| `/confidentialite` | LegalView | onglet Confidentialité |
-| `/:pathMatch(.*)*` | NotFoundView | 404 |
+| Chemin              | Vue          | Note                    |
+| ------------------- | ------------ | ----------------------- |
+| `/`                 | HomeView     | landing complète        |
+| `/aide`             | HelpView     | Centre d'aide           |
+| `/contact`          | ContactView  | formulaire (front-only) |
+| `/mentions-legales` | LegalView    | onglet Mentions légales |
+| `/cgu`              | LegalView    | onglet CGSU             |
+| `/confidentialite`  | LegalView    | onglet Confidentialité  |
+| `/:pathMatch(.*)*`  | NotFoundView | 404                     |
 
 - Les liens **header/footer** utilisent `useNav()` : les pages passent par `router.push`, et les 4 liens de section de la home (Pourquoi / Fonctionnalités / Tarifs / FAQ) routent vers `/` puis défilent vers l'ancre.
 - Le **fil d'Ariane** des sous-pages et le lien « Accueil » naviguent via le router.
 - La page **légale** est unique : les 3 onglets sont 3 routes distinctes (bon pour le SEO / partage de liens), l'onglet actif est déduit du chemin dans `useLegal()`.
+
+## Sitemap et indexation
+
+`https://www.verebona.fr/sitemap.xml` déclare aux moteurs les pages publiques à indexer. CDC _Sitemap XML du site public Verebona_ (V1).
+
+### Où ça vit
+
+| Fichier                       | Rôle                                                                                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `src/config/sitemap.rules.ts` | **source unique** : domaine canonique, liste des pages indexables, génération du XML et de `robots.txt` |
+| `vite.config.ts`              | émet `dist/sitemap.xml` (production uniquement) et `dist/robots.txt`                                    |
+| `src/config/canonical.ts`     | pose la balise `<link rel="canonical">` de chaque route                                                 |
+| `server.cjs`                  | sert les fichiers statiques et refuse le repli SPA sur `/sitemap.xml` et `/robots.txt`                  |
+| `tests/sitemap.test.ts`       | recette automatisée du contenu produit                                                                  |
+
+Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre.
+
+Aucun `lastmod`, `changefreq` ni `priority` en V1 (§7). Aucun sitemap n'est produit hors production, et `robots.txt` y passe en `Disallow: /` (§10).
+
+### Maintenir la liste (§11)
+
+Tout se joue dans `INDEXABLE_PATHS` de `src/config/sitemap.rules.ts`. Une page n'y entre **qu'au moment de sa mise en production**, jamais par anticipation, et seulement si elle est : publique, sans authentification, en HTTP 200, non `noindex`, et destinée à être indexée (§3.2).
+
+| Évènement                                | Geste                                    |
+| ---------------------------------------- | ---------------------------------------- |
+| nouvelle page publique indexable         | ajouter son chemin à `INDEXABLE_PATHS`   |
+| sous-page du centre d'aide mise en ligne | ajouter `/aide/<id>` au même déploiement |
+| page supprimée ou passée en `noindex`    | retirer son chemin                       |
+
+Après modification : `npm run test` (la recette verrouille le contenu attendu) puis `npm run build`, et vérifier `dist/sitemap.xml`.
+
+### Recette sur l'environnement déployé
+
+Ce que les tests ne peuvent pas couvrir depuis le poste de développement :
+
+```bash
+curl -sI https://www.verebona.fr/sitemap.xml   # 200 + Content-Type: application/xml
+curl -s  https://www.verebona.fr/robots.txt    # doit contenir la ligne Sitemap:
+curl -sI https://www.verebona.fr/aide          # 200, sans redirection
+```
+
+Puis, dans Google Search Console : soumettre `https://www.verebona.fr/sitemap.xml` et vérifier la disparition de l'erreur « le sitemap est un fichier HTML ».
+
+> **Prérequis d'hébergement.** Le CDC impose le domaine `www.verebona.fr`. Les URLs du sitemap ne doivent pas rediriger (§7) : `www` doit être servi en direct, et c'est l'apex `verebona.fr` qui redirige vers lui — pas l'inverse. Si la configuration actuelle fait le contraire, l'inverser **avant** de soumettre le sitemap.
 
 ## Conventions de style
 
