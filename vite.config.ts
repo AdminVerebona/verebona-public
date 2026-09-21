@@ -6,6 +6,7 @@ import {
   resolveDefaultMode,
 } from './src/config/site-mode.rules'
 import { buildRobotsTxt, buildSitemapXml } from './src/config/sitemap.rules'
+import { structuredDataScript } from './src/config/structured-data'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -37,14 +38,42 @@ function siteModePlugin(): Plugin {
       )
     },
     transformIndexHtml() {
-      if (indexable) return []
-      return [
-        {
+      const tags = []
+
+      // ══════════════════════════════════════════════════════════════════
+      // JSON-LD Organization + WebSite — CDC Données structurées §6
+      //
+      // Injecté dans `index.html` au build, donc présent dans le HTML servi
+      // par express : le §6 exige un balisage lisible « sans exécuter une
+      // logique métier côté client ». Le site étant une SPA rendue par le
+      // navigateur, c'est le seul point où le balisage existe avant que le
+      // JavaScript ne s'exécute.
+      //
+      // Conséquence assumée : `index.html` servant toutes les routes, le
+      // balisage accompagne aussi /aide et /contact. Ce ne sont pas des
+      // doublons contradictoires — un seul graphe existe, et ses `@id` et
+      // `url` désignent sans ambiguïté l'accueil (§2 : la duplication
+      // n'est pas « nécessaire », elle n'est pas interdite).
+      // ══════════════════════════════════════════════════════════════════
+      const jsonLd = structuredDataScript(indexable)
+      if (jsonLd) {
+        tags.push({
+          tag: 'script',
+          attrs: { type: 'application/ld+json' },
+          children: jsonLd,
+          injectTo: 'head' as const,
+        })
+      }
+
+      if (!indexable) {
+        tags.push({
           tag: 'meta',
           attrs: { name: 'robots', content: 'noindex, nofollow' },
-          injectTo: 'head-prepend',
-        },
-      ]
+          injectTo: 'head-prepend' as const,
+        })
+      }
+
+      return tags
     },
     generateBundle() {
       this.emitFile({

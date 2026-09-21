@@ -114,6 +114,39 @@ Puis, dans Google Search Console : soumettre `https://www.verebona.fr/sitemap.xm
 
 > **Prérequis d'hébergement.** Le CDC impose le domaine `www.verebona.fr`. Les URLs du sitemap ne doivent pas rediriger (§7) : `www` doit être servi en direct, et c'est l'apex `verebona.fr` qui redirige vers lui — pas l'inverse. Si la configuration actuelle fait le contraire, l'inverser **avant** de soumettre le sitemap.
 
+## Données structurées (JSON-LD)
+
+L'accueil déclare à Google un graphe `Organization` + `WebSite`. CDC _Données structurées Google — Organization & WebSite_.
+
+| Fichier                         | Rôle                                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| `src/config/structured-data.ts` | **source unique** : identité, logo, description, construction du graphe                    |
+| `vite.config.ts`                | injecte le `<script type="application/ld+json">` dans `index.html` (production uniquement) |
+| `tests/structured-data.test.ts` | recette automatisée des critères AC-01 à AC-06 et AC-08                                    |
+
+Le domaine et l'URL d'accueil viennent de `sitemap.rules.ts` : une seule constante porte le domaine pour le sitemap, le canonical et le balisage (§6, « centraliser pour éviter une divergence »).
+
+**Injection au build, pas à l'exécution.** Le §6 exige un balisage lisible sans exécuter de logique côté client. Le site étant une SPA, le seul point où il existe avant le JavaScript est `index.html`. Conséquence : `index.html` servant toutes les routes, le balisage accompagne aussi `/aide` et `/contact`. Ce ne sont pas des doublons contradictoires — un seul graphe existe, et ses `@id` et `url` désignent l'accueil. Pour le restreindre strictement à `/`, il faudrait injecter côté `server.cjs` selon le chemin demandé.
+
+**Rien hors production** (§6, AC-08) : `structuredDataScript(indexable)` renvoie `null` en préproduction, où la page conserve son `noindex`.
+
+### Faire évoluer le balisage
+
+- **Description** : la garder courte. Le §10 classe en risque haut le fait d'y déverser le catalogue fonctionnel, et le §3 interdit d'y présenter comme disponible une fonction qui ne l'est pas encore.
+- **`sameAs`** : aujourd'hui vide, donc non émis. Renseigner `SAME_AS` uniquement avec des profils officiels vérifiés, jamais un compte personnel ou non maîtrisé.
+- **Logo** : `public/assets/app-icon.png` (180 × 180). Le remplacer suppose de garder un PNG public, stable et ≥ 112 × 112 — un test le vérifie.
+- **`@id`** : stables et référencés par `publisher`. Ne pas les modifier.
+- **Adresse, téléphone, `legalName`, identifiants légaux** : hors besoin, à n'ajouter que si l'information est publique et vérifiée (§4).
+
+### Recette sur l'environnement déployé
+
+```bash
+curl -s https://www.verebona.fr/ | grep -A1 'application/ld+json'
+curl -sI https://www.verebona.fr/assets/app-icon.png   # 200, image/png, sans auth
+```
+
+Puis : valider le bloc dans le [Schema Markup Validator](https://validator.schema.org/) et le test des résultats enrichis de Google ; dans Search Console, inspecter `https://www.verebona.fr/`, lancer un test en direct, demander une réindexation, et vérifier après recrawl la cohérence du nom de site.
+
 ## Conventions de style
 
 Le design est repris **1:1** du prototype validé : les styles sont **inline** dans les templates (les valeurs exactes de la maquette). Seuls vivent dans `style.css` : polices, resets, keyframes et media-queries responsive. Les styles dynamiques passent par `:style`, les effets de survol par la directive `v-hover`.
