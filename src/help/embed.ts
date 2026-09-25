@@ -56,11 +56,42 @@ export function backToApp(): void {
   window.location.assign(appUrl('/accueil'))
 }
 
+/**
+ * Page affichée dans un cadre (iframe) plutôt qu'en page principale.
+ *
+ * A11Y-01 / A11Y-04 (point d'UX de l'audit) : l'application encadre le site
+ * (`/aide` de l'app, `?integre=app`) sous SA PROPRE barre « Retour à Verebona
+ * · Centre d'aide ». Notre barre s'y ajoutait : deux barres, deux titres, deux
+ * boutons de retour sur mobile. Quand un hôte encadre la page, c'est lui qui
+ * porte le retour ; notre barre ne reste que pour une WebView native, qui
+ * charge le site en page principale et n'a pas d'autre moyen de revenir.
+ *
+ * Lu une fois dans le navigateur ; faux au pré-rendu (pas de `window`).
+ * Comparer `window.top` est permis même entre origines différentes.
+ */
+function detectFramed(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    return window.self !== window.top
+  } catch {
+    // Accès refusé par le navigateur : on est forcément dans un cadre.
+    return true
+  }
+}
+
+const framed = ref(detectFramed())
+
 export function useEmbed() {
-  return { embedded: computed(() => embedded.value), backToApp }
+  return {
+    embedded: computed(() => embedded.value),
+    /** Barre « Retour à Verebona » du site : intégré ET pas déjà sous la barre de l'hôte. */
+    showEmbedBar: computed(() => embedded.value && !framed.value),
+    backToApp,
+  }
 }
 
 /** Réservé aux tests. */
 export function resetEmbed(): void {
   embedded.value = false
+  framed.value = detectFramed()
 }

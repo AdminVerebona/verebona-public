@@ -37,7 +37,7 @@ Verebona regroupe dans un même espace vos biens, leurs documents, les informati
 
 ## Détails et cas particuliers
 
-**Données sous votre contrôle** — Vous pouvez corriger les informations de vos biens et documents. Les valeurs explicitement validées par un utilisateur ne doivent pas être remplacées silencieusement par une automatisation.
+**Données sous votre contrôle** — Vous pouvez corriger les informations de vos biens et documents. Les valeurs que vous avez explicitement validées ne sont pas remplacées silencieusement par une automatisation.
 
 **Fonctions selon l’offre** — Certaines fonctions, comme la synchronisation d’agenda personnel ou les dossiers prêts à l’usage, sont réservées aux offres Premium et Premium Duo.
 

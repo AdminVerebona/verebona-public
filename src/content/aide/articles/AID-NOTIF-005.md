@@ -31,5 +31,5 @@ Une notification peut être bloquée par le réglage Verebona, l’autorisation 
 2. **Vérifiez l’autorisation du navigateur ou du système** — Le push doit être autorisé pour Verebona.
 3. **Vérifiez l’appareil** — Assurez-vous qu’il figure encore parmi les appareils actifs lorsque cette liste est disponible.
 4. **Pour un e-mail** — Contrôlez les indésirables et l’adresse de votre compte.
-5. **Vérifiez le déclencheur** — Par exemple, le rappel d’échéance actuel porte sur J-7 et ne se déclenche pas à toutes les dates.
+5. **Vérifiez le déclencheur** — Par exemple, le rappel d’échéance est envoyé 7 jours avant l’échéance, et non à toutes les dates.
 6. **Contactez le support si nécessaire** — Indiquez le type de notification, la date attendue et l’appareil utilisé.

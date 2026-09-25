@@ -26,10 +26,11 @@
           <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Nom<input type="text" required placeholder="Durand" v-model="lastName" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
         </div>
         <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Email<input type="email" required placeholder="camille@email.com" v-model="email" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none"/></label>
-        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Sujet<select required style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;background:#fff"><option value="">Choisir…</option><option>Question sur les offres</option><option>Aide technique</option><option>Partenariat</option><option>Autre</option></select></label>
+        <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Sujet<select required v-model="subject" data-testid="contact-subject" :aria-invalid="error && !subject ? 'true' : undefined" aria-describedby="contact-error" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;background:#fff"><option value="" disabled>Choisir…</option><option v-for="s in subjects" :key="s" :value="s">{{ s }}</option></select></label>
         <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:#334155">Message<textarea required rows="5" placeholder="Votre message…" v-model="message" style="font-size:15px;padding:12px 14px;border:1px solid #DCE3EF;border-radius:11px;font-family:inherit;color:#0F1B33;outline:none;resize:vertical"></textarea></label>
         <button type="submit" :disabled="sending" style="margin-top:4px;font-size:15px;font-weight:600;color:#fff;padding:14px 24px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border:0;cursor:pointer;box-shadow:0 12px 26px rgba(37,99,235,.3)">Envoyer le message</button>
-        <p v-if="error" style="margin:0;font-size:14px;color:#DC2626">{{ error }}</p>
+        <!-- A11Y-02 : conteneur live toujours present (une region ajoutee en meme temps que son texte n'est pas toujours annoncee) ; role=alert pour une annonce immediate. -->
+        <div id="contact-error" role="alert" aria-live="assertive" aria-atomic="true"><p v-if="error" data-testid="contact-error" style="margin:0;font-size:14px;color:#DC2626">{{ error }}</p></div>
       </form>
       </template>
     </div>
@@ -45,6 +46,6 @@
 <script setup lang="ts">
 import { useContact } from '../composables/useContact'
 import { useNav } from '../composables/useNav'
-const { firstName, lastName, email, message, contactSent, notContactSent, sending, error, sendContact, crumbLabel } = useContact()
+const { firstName, lastName, email, subject, subjects, message, contactSent, notContactSent, sending, error, sendContact, crumbLabel } = useContact()
 const { link, goHome } = useNav()
 </script>

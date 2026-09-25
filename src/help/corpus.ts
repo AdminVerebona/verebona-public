@@ -43,7 +43,30 @@ export interface LoadResult extends Corpus {
 const ID = /^AID-[A-Z]+-\d{3}$/
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/
-const INTERNAL_CODES = /\bT[1-5]\b/
+// CONTENT-02 : insensible à la casse. Un synonyme « t2 » passait le contrôle
+// sensible à la casse puis était publié dans le JSON-LD `keywords` et dans le
+// corpus de l'assistant. Aucun article ne parle de typologie de logement
+// (« T3 ») : le faux positif est accepté plutôt qu'une fuite du jargon interne.
+const INTERNAL_CODES = /\bT[1-5]\b/i
+// GAP-15 (passe éditoriale) : formulations de rédaction interne reprises du
+// CDC (« route d'import actuelle », « l'ancienne aide mentionnait… », « à
+// confirmer à la recette », « dans la cible », codes d'état en MAJUSCULES…).
+// Refusées dans le texte des articles PUBLIÉS : un article bloqué peut encore
+// porter ses notes de travail, invisibles en production.
+const EDITORIAL_NOTES: ReadonlyArray<[RegExp, string]> = [
+  [/\brecette\b/i, '« recette »'],
+  [/\bMEP\b/, '« MEP »'],
+  [/\broute (d[’']import )?actuelle\b/i, '« route actuelle »'],
+  [/\b(dans la cible|règle cible|cible produit)\b/i, '« cible »'],
+  [/\bancienne aide\b/i, '« ancienne aide »'],
+  [/\bmanifeste\b/i, '« manifeste »'],
+  [/\bpasse éditoriale\b/i, '« passe éditoriale »'],
+  [/\bimplémentation actuelle\b/i, '« implémentation actuelle »'],
+  [/\b(catalogue|matrice) actuel(le)?\b/i, '« catalogue / matrice actuel »'],
+  [/\bà confirmer (à|lors de|avec)\b/i, '« à confirmer à… »'],
+  [/\b[A-Z]{2,}_[A-Z_]{2,}\b/, 'code interne en MAJUSCULES'],
+]
+
 // Une adresse d'abonnement réelle (« webcal://hôte… »), pas la simple mention
 // du préfixe dans une consigne (« remplacez webcal:// par https:// »).
 const SECRET_HINTS = /(webcal:\/\/[a-z0-9]|[?&](token|key|signature|sig)=|\bsk_(live|test)_)/i
@@ -159,6 +182,13 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
     if (INTERNAL_CODES.test(everything)) report('content', 'Vocabulaire interne T1–T5 interdit dans un article public (CONTENT-02).', id)
     if (EMAIL.test(everything)) report('content', 'Adresse e-mail interdite dans un article (§6, §7).', id)
     if (SECRET_HINTS.test(everything)) report('content', 'Lien privé, jeton ou secret interdit dans un article (§6, §7).', id)
+    if (meta.status === 'published') {
+      // Corps et métadonnées affichées, pas les IDs (« AID-TODO-001 ») ni les clés.
+      const visible = [body, meta.title, meta.summary, meta.metaDescription, meta.rolesLabel, meta.offersNote ?? ''].join('\n')
+      for (const [re, label] of EDITORIAL_NOTES) {
+        if (re.test(visible)) report('content', `Formulation de rédaction interne ${label} interdite dans un article publié (GAP-15).`, id)
+      }
+    }
 
     articles.push({
       ...meta,

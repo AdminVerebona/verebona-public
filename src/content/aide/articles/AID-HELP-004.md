@@ -27,7 +27,7 @@ L’import peut être refusé pour un format non autorisé, une taille excessive
 
 ## Procédure
 
-1. **Vérifiez la taille** — 25 Mo maximum pour un document non vidéo ; 500 Mo pour une vidéo dans la route actuelle.
+1. **Vérifiez la taille** — 25 Mo maximum pour un document non vidéo ; 500 Mo pour une vidéo.
 2. **Vérifiez le format** — Comparez avec la liste des formats autorisés.
 3. **Vérifiez que le fichier s’ouvre localement** — Un fichier corrompu ou vide est refusé.
 4. **Vérifiez votre quota** — L’offre peut empêcher l’ajout si la limite documentaire est atteinte.

@@ -23,7 +23,7 @@ synonyms: [duo, récupération, impayé, mode, transfert, transmission, envoyer,
 status: published
 ---
 
-Lorsqu’un compte Duo est en état UNPAID_RECOVERY, l’application peut afficher un espace de récupération. Les membres ne disposent plus de l’usage normal du Duo, mais peuvent demander le déplacement de biens vers leur compte personnel selon le mécanisme de récupération prévu.
+Lorsqu’un compte Duo est en récupération après un impayé, l’application peut afficher un espace de récupération. Les membres ne disposent plus de l’usage normal du Duo, mais peuvent demander le déplacement de biens vers leur compte personnel.
 
 ## Procédure
 
@@ -33,4 +33,4 @@ Lorsqu’un compte Duo est en état UNPAID_RECOVERY, l’application peut affich
 4. **Suivez le statut** — Le bien indique « Déplacement en cours » jusqu’à résolution.
 5. **Régularisez si vous souhaitez restaurer le Duo** — Le titulaire peut utiliser le parcours de paiement prévu.
 
-> **Limites et points d’attention** — Les demandes de suppression de biens sont interdites dans le mode récupération actuel.
+> **Limites et points d’attention** — Les demandes de suppression de biens sont impossibles en mode récupération.

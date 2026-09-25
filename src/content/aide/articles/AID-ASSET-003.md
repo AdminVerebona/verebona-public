@@ -37,6 +37,6 @@ La fiche d’un bien contient des informations communes et des sections adaptée
 
 **Valeur issue d’un document** — Verebona peut proposer une valeur détectée dans un document. Selon le niveau de confiance et les règles applicables, elle peut être appliquée automatiquement ou nécessiter votre arbitrage.
 
-**Valeur validée par l’utilisateur** — Une valeur explicitement choisie ou validée par l’utilisateur doit être protégée contre un remplacement automatique silencieux.
+**Valeur validée par l’utilisateur** — Une valeur que vous avez explicitement choisie ou validée est protégée contre un remplacement automatique silencieux.
 
 > **Limites et points d’attention** — Une information absente n’est pas nécessairement une anomalie et ne doit pas systématiquement créer une action « À traiter ».

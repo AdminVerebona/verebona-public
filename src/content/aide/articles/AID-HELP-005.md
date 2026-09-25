@@ -23,7 +23,7 @@ synonyms: [dépannage, analyse, ia, document, est, longue, échoué, problème, 
 status: published
 ---
 
-L’analyse automatique est distincte de l’import. Le fichier peut avoir été correctement enregistré alors que son analyse échoue. Verebona doit afficher un état final clair plutôt que laisser indéfiniment un document en cours de traitement.
+L’analyse automatique est distincte de l’import. Le fichier peut avoir été correctement enregistré alors que son analyse échoue. Le document affiche alors un état final clair plutôt que de rester indéfiniment en cours de traitement.
 
 ## Procédure
 

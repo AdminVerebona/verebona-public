@@ -25,7 +25,7 @@ status: published
 
 Un conflit apparaît lorsque Verebona dispose de valeurs différentes pour la même information et ne peut pas les départager automatiquement selon les règles de confiance et d’autorité. L’écran doit présenter les valeurs et leurs sources de façon compréhensible.
 
-> **À savoir** — Une valeur tranchée explicitement par un utilisateur doit ensuite être considérée comme d’origine humaine et ne plus être écrasée automatiquement.
+> **À savoir** — Une valeur que vous avez tranchée explicitement est ensuite considérée comme d’origine humaine et n’est plus écrasée automatiquement.
 
 ## Procédure
 

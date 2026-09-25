@@ -1,17 +1,68 @@
 # Verebona — Site public (Vue 3 + Vite + TypeScript)
 
-Refonte de la partie publique de Verebona en **Vue 3** (`<script setup>` + Composition API), **Vite** et **TypeScript**. Front uniquement — aucun appel API.
+Partie publique de Verebona en **Vue 3** (`<script setup>` + Composition API), **Vite** et **TypeScript** : accueil pré-rendu, Centre d'aide, contact et pages légales, servis par `server.cjs` (Express). Seuls appels à l'API de l'application : le formulaire de contact (`/api/contact`) et le retour sur un article d'aide.
 
 ## Démarrer
 
 ```bash
 npm install
-npm run dev        # serveur de dev (http://localhost:5173)
-npm run build      # build de production (vue-tsc + vite) -> dist/
-npm run preview    # prévisualise le build
+npm run dev             # serveur de dev (http://localhost:5173), mode FULL, ?mode=prelaunch disponible
+npm run build           # build de PRODUCTION (vue-tsc + vite + pré-rendu) -> dist/
+npm run build:preprod   # build de PRÉPRODUCTION (.env.preprod) -> dist/
+npm test                # tests (vitest), voir « Tests »
+npm start               # sert dist/ avec server.cjs
 ```
 
-> Node 18+ recommandé.
+> Node `^20.19.0 || >=22.12.0` (champ `engines`).
+
+## Modes FULL / PRELAUNCH
+
+CDC _Site public Verebona — pré-lancement_ (§4, §5, §10). Un seul code, deux affichages :
+
+- **FULL** : site définitif (« Se connecter », « Essayer gratuitement », CTA de souscription vers l'application) ;
+- **PRELAUNCH** : mêmes contenus, mais **aucun lien vers `/signup` ni `/login`** : header, menu mobile, hero, tarifs, CTA final et CTA fixe mobile affichent des éléments informatifs non cliquables (« Ouverture prochaine », « Verebona arrive bientôt », « Bientôt disponible »). La route `/inscription` renvoie à l'accueil.
+
+| Variable (figée au build) | Valeurs | Absente ou invalide |
+| --- | --- | --- |
+| `VITE_ENVIRONMENT` | `production` \| `preprod` \| `development` | traitée comme `production` |
+| `VITE_DEFAULT_SITE_MODE` | `full` \| `prelaunch` | `prelaunch` en production, `full` ailleurs |
+| `VITE_APP_URL` | URL de l'application | `https://app.verebona.fr` |
+
+| Environnement | Build | Mode par défaut | `?mode=full\|prelaunch` | Indexation |
+| --- | --- | --- | --- | --- |
+| production | `npm run build` (`.env.production`) | `prelaunch` | **ignoré** | indexable, sitemap, JSON-LD |
+| préproduction | `npm run build:preprod` (`.env.preprod`) | `full` | appliqué et conservé pendant la navigation (sélecteur affiché) | `noindex, nofollow`, pas de sitemap |
+| local | `npm run dev` (`.env.development`) | `full` | appliqué | `noindex` |
+
+Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src/config/site.ts` est le **seul** point d'entrée qui lit ces variables (`useSiteMode()`, libellés `PRELAUNCH_LABELS`). Une variable définie chez l'hébergeur (`process.env`) prime sur les fichiers `.env`.
+
+- **Lancement commercial** : passer `VITE_DEFAULT_SITE_MODE=full` dans la configuration de production, puis rebuild/redéployer. Aucun composant à modifier.
+- **Retour arrière** : remettre `prelaunch`, rebuild/redéployer.
+
+> Ce mécanisme règle l'**affichage** du site public. Ce n'est pas un contrôle d'accès : `app.verebona.fr/signup` reste joignable tant que l'application ne ferme pas elle-même l'inscription.
+
+## Déploiement : variables de l'hébergeur (`server.cjs`)
+
+| Variable | Où | Rôle |
+| --- | --- | --- |
+| `CANONICAL_HOST=www.verebona.fr` | **production uniquement — à définir chez l'hébergeur** (aucun fichier du dépôt ne la porte) | une seule 301 de `http://…` et de l'apex `verebona.fr` vers `https://www.verebona.fr` + chemin + query. Vérifier après déploiement : `curl -sI http://verebona.fr/` → `301 Location: https://www.verebona.fr/`. **Jamais en préproduction** (elle redirigerait vers la production). |
+| `BASIC_AUTH_ENABLED=true`, `BASIC_AUTH_USER`, `BASIC_AUTH_PASSWD` | préproduction | Basic Auth (les JSON d'aide restent lisibles par l'application) |
+| `PORT` | partout | port d'écoute (3000 par défaut) |
+
+## Tests
+
+`npm test` (`vitest run`, fichiers `tests/**/*.test.ts`, hors du type-check du build) :
+
+| Fichier | Couvre |
+| --- | --- |
+| `tests/site-mode.test.ts` | `parseEnvironment`, `parseSiteMode`, `resolveDefaultMode`, `resolveSiteMode`, `isIndexable` ; `site.ts` par environnement (production verrouillée, `?mode=` en préprod, garde du routeur) — CDC pré-lancement §5, §10.1 |
+| `tests/prelaunch-cta.test.ts` | composants réels (`@vue/test-utils`) : header, menu mobile, hero, tarifs, CTA final, CTA fixe mobile sans aucun lien `/signup` ni `/login` en PRELAUNCH (production et préprod `?mode=prelaunch`) ; liens présents en FULL ; titre des tarifs — §6, §7, §11 |
+| `tests/sitemap.test.ts` | contenu du sitemap de production (accueil, `/aide`, thèmes et articles publiés seulement), `canonicalUrl`, `robots.txt` |
+| `tests/structured-data.test.ts` | graphe Organization + WebSite (unicité, `@id`, logo PNG ≥ 112 px, aucun placeholder, rien hors production), `TechArticle` des articles |
+| `tests/server.test.ts` | `server.cjs` lancé sur un `dist/` factice : 301 unique vers l'hôte canonique, `X-Robots-Tag` en préprod, sitemap `application/xml`, 404 sans repli HTML, redirections d'aide, `frame-ancestors` |
+| `tests/help-corpus.test.ts` | validation de build du corpus réel (0 défaut, 100 articles), aucune occurrence T1–T5 quelle que soit la casse, notes de rédaction interne refusées, AID-BILL-010 publié sans avantage filleul |
+| `tests/contact.test.ts` | sujet du formulaire transmis, « Choisir… » refusé, erreurs annoncées (`role="alert"`) — GAP-17, CONTACT-02, A11Y-02 |
+| `tests/embed.test.ts` | mode intégré : une seule barre « Retour à Verebona » (celle de l'application quand elle encadre le site) |
 
 ## Structure
 
@@ -20,7 +71,12 @@ public/
   assets/                 images (mascotte, mockups, vignettes) servies telles quelles
 src/
   main.ts                 point d'entrée : app + router + directive v-hover + styles
-  App.vue                 shell : <AppHeader/> <router-view/> <AppFooter/>
+  entry-prerender.ts      rendu de `/` et des pages d'aide au build (voir « Pré-rendu »)
+  App.vue                 shell : <AppHeader/> <router-view/> <AppFooter/> (ou barre du mode intégré)
+  config/                 site-mode.rules.ts + site.ts (modes), urls.ts, sitemap.rules.ts,
+                          structured-data.ts, head*.ts, canonical.ts
+  content/aide/           corpus du Centre d'aide (articles Markdown + categories.json)
+  help/                   Centre d'aide : validation, recherche, sorties, mode intégré
   style.css               polices, resets, animations de scroll-reveal, règles responsive
   router/
     index.ts              TOUTES les routes (voir ci-dessous)
@@ -29,16 +85,18 @@ src/
   composables/
     useNav.ts             navigation header/footer + menu mobile + burger
     useLanding.ts         état/logique de la home (carrousel mockup, accordéons FAQ & cas d'usage)
-    useHelp.ts            accordéon du Centre d'aide
-    useContact.ts         état du formulaire de contact (front-only)
+    useContact.ts         formulaire de contact : sujet, validation, envoi à l'API
+    usePricing.ts         prix et périodicité des offres
     useLegal.ts           onglets de la page légale (dérivés de la route)
     useScrollReveal.ts    apparition des éléments au scroll (IntersectionObserver)
   components/
     AppHeader.vue         header sticky (transparent en haut -> solide au scroll) + menu mobile
     AppFooter.vue         footer (Produit / Support / Légal)
+    MobileFixedCta.vue    CTA fixe mobile (non rendu en PRELAUNCH)
+    PreviewModeSwitch.vue sélecteur FULL / PRELAUNCH (préprod et local seulement)
+    help/                 composants du Centre d'aide
   sections/               sections de la home, dans l'ordre d'affichage
     HeroSection.vue       hero + triptyque Biens/Documents/Agendas + mockups laptop & mobile
-    WhySection.vue        « Pourquoi Verebona »
     UseCasesSection.vue   cas d'usage (accordéon, 7 situations)
     FeaturesSection.vue   fonctionnalités (aperçus d'UI)
     HowItWorksSection.vue « Comment ça marche »
@@ -48,7 +106,7 @@ src/
     CtaSection.vue        appel à l'action
   views/
     HomeView.vue          assemble les sections de la home
-    HelpView.vue          /aide
+    help/                 /aide, /aide/theme/:category, /aide/:slug
     ContactView.vue       /contact
     LegalView.vue         /mentions-legales, /cgu, /confidentialite
     NotFoundView.vue      404
@@ -59,8 +117,9 @@ src/
 | Chemin              | Vue          | Note                    |
 | ------------------- | ------------ | ----------------------- |
 | `/`                 | HomeView     | landing complète        |
-| `/aide`             | HelpView     | Centre d'aide           |
-| `/contact`          | ContactView  | formulaire (front-only) |
+| `/aide`, `/aide/theme/:category`, `/aide/:slug` | views/help/* | Centre d'aide |
+| `/contact`          | ContactView  | formulaire → `/api/contact` de l'application |
+| `/inscription`      | —            | redirection vers l'inscription de l'app (FULL) ou l'accueil (PRELAUNCH) |
 | `/mentions-legales` | LegalView    | onglet Mentions légales |
 | `/cgu`              | LegalView    | onglet CGSU             |
 | `/confidentialite`  | LegalView    | onglet Confidentialité  |
@@ -83,7 +142,7 @@ src/
 | `src/config/canonical.ts`     | pose la balise `<link rel="canonical">` de chaque route                                                 |
 | `server.cjs`                  | sert les fichiers statiques et refuse le repli SPA sur `/sitemap.xml` et `/robots.txt`                  |
 | `tests/sitemap.test.ts`       | recette automatisée du contenu produit                                                                  |
-| `tests/server.test.ts`        | recette HTTP : `/sitemap.xml` en 200 `application/xml`, 404 (jamais du HTML) pour tout fichier absent   |
+| `tests/server.test.ts`        | recette HTTP : `/sitemap.xml` en 200 `application/xml`, 404 (jamais du HTML) quand il est absent        |
 
 Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre. Seule exception : les pages du Centre d'aide (thèmes et articles publiés), dérivées du corpus au build (CDC Centre d'aide SEO-02) — voir ci-dessous.
 
@@ -167,7 +226,10 @@ Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — te
 
 ### Mode intégré (application mobile)
 
-`?integre=app` masque l'en-tête et le pied du site, affiche « Retour à Verebona » et se conserve pendant la navigation. Dans un cadre, le retour envoie `{ type: 'verebona:help:close' }` à l'application ; seule l'origine de `VITE_APP_URL` peut encadrer le site.
+`?integre=app` masque l'en-tête et le pied du site et se conserve pendant la navigation. Seule l'origine de `VITE_APP_URL` peut encadrer le site.
+
+- **Page principale** (WebView native) : le site affiche sa barre « Retour à Verebona », qui renvoie vers l'application.
+- **Dans un cadre** (page `/aide` de l'application) : l'application affiche déjà sa propre barre de retour ; celle du site n'est pas rendue, pour éviter deux barres superposées sur mobile. Le message `{ type: 'verebona:help:close' }` reste écouté par l'application.
 
 ## Données structurées (JSON-LD)
 
@@ -177,11 +239,12 @@ L'accueil déclare à Google un graphe `Organization` + `WebSite`. CDC _Données
 | ------------------------------- | ------------------------------------------------------------------------------------------ |
 | `src/config/structured-data.ts` | **source unique** : identité, logo, description, construction du graphe                    |
 | `vite.config.ts`                | injecte le `<script type="application/ld+json">` dans `index.html` (production uniquement) |
+| `scripts/prerender.mjs`         | le retire de `spa.html` et des pages d'aide : **accueil seulement**                        |
 | `tests/structured-data.test.ts` | recette automatisée des critères AC-01 à AC-06 et AC-08                                    |
 
 Le domaine et l'URL d'accueil viennent de `sitemap.rules.ts` : une seule constante porte le domaine pour le sitemap, le canonical et le balisage (§6, « centraliser pour éviter une divergence »).
 
-**Injection au build, pas à l'exécution.** Le §6 exige un balisage lisible sans exécuter de logique côté client. Le site étant une SPA, le seul point où il existe avant le JavaScript est `index.html`. Conséquence : `index.html` servant toutes les routes, le balisage accompagne aussi `/aide` et `/contact`. Ce ne sont pas des doublons contradictoires — un seul graphe existe, et ses `@id` et `url` désignent l'accueil. Pour le restreindre strictement à `/`, il faudrait injecter côté `server.cjs` selon le chemin demandé.
+**Injection au build, accueil seulement.** Le §6 exige un balisage lisible sans exécuter de logique côté client : il est injecté dans `index.html`, l'accueil pré-rendu. Le §2 et le §8.1 le placent sur l'accueil canonique, « une seule fois » : le pré-rendu le retire de la coquille `spa.html` (autres routes) et des pages d'aide, qui ne portent que leur `TechArticle` (dont `publisher` référence `#organization`).
 
 **Rien hors production** (§6, AC-08) : `structuredDataScript(indexable)` renvoie `null` en préproduction, où la page conserve son `noindex`.
 
@@ -206,11 +269,10 @@ Puis : valider le bloc dans le [Schema Markup Validator](https://validator.schem
 
 Le design est repris **1:1** du prototype validé : les styles sont **inline** dans les templates (les valeurs exactes de la maquette). Seuls vivent dans `style.css` : polices, resets, keyframes et media-queries responsive. Les styles dynamiques passent par `:style`, les effets de survol par la directive `v-hover`.
 
-## À brancher côté produit (TODO)
+## Reste à valider côté produit
 
-- **Authentification** : les liens « Se connecter » / « Créer votre compte » sont des placeholders (`href="#"` / ancre `#pricing`). Les pointer vers votre flux d'auth (route dédiée ou l'app `app.verebona.com`).
-- **Formulaire de contact** : `useContact().sendContact()` bascule seulement sur l'écran de succès. Y ajouter l'envoi réel (API / service mail) quand disponible.
-- **Contenu légal** : textes de démonstration à faire valider juridiquement.
+- **Contenu légal** : textes à faire valider juridiquement.
+- **Inscription avant le lancement** : à fermer côté application si nécessaire (voir « Modes FULL / PRELAUNCH »).
 
 ## Pré-rendu de l'accueil
 
@@ -225,4 +287,4 @@ L'accueil est livré avec son contenu dans le HTML initial (H1, paragraphe, bén
 
 Le navigateur monte ensuite l'application normalement (`createApp`, pas d'hydratation) : le DOM est identique.
 
-Variable optionnelle **`CANONICAL_HOST`** (production uniquement, ex. `www.verebona.fr`) : redirige en une seule 301 toute requête HTTP ou sur un autre hôte vers `https://www.verebona.fr` + chemin. À ne pas définir en préproduction.
+Hôte canonique : voir **`CANONICAL_HOST`** dans « Déploiement : variables de l'hébergeur ».

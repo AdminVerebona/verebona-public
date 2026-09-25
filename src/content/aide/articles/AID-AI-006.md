@@ -29,7 +29,7 @@ L’automatisation n’a pas pour objectif de remplir tous les champs ou de déc
 
 **Pas d’action sans règle** — L’absence d’un champ facultatif ne doit pas générer une action simplement parce qu’il est vide.
 
-**Pas d’écrasement humain** — Une valeur explicitement validée par l’utilisateur ne doit pas être remplacée automatiquement.
+**Pas d’écrasement humain** — Une valeur que vous avez explicitement validée n’est pas remplacée automatiquement.
 
 **Pas de fusion silencieuse** — Un doublon documentaire ambigu nécessite une décision.
 

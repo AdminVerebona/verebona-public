@@ -23,7 +23,7 @@ synonyms: [notifications, push, appareil, activer, appareils, notification, aler
 status: published
 ---
 
-Le push nécessite l’autorisation du navigateur ou du système. Verebona ne doit pas considérer un appareil comme autorisé tant que l’utilisateur n’a pas accepté la demande de permission.
+Le push nécessite l’autorisation du navigateur ou du système. Un appareil n’est considéré comme autorisé qu’après que vous avez accepté la demande de permission.
 
 ## Procédure
 

@@ -79,11 +79,10 @@ function siteModePlugin(): Plugin {
       // navigateur, c'est le seul point où le balisage existe avant que le
       // JavaScript ne s'exécute.
       //
-      // Conséquence assumée : `index.html` servant toutes les routes, le
-      // balisage accompagne aussi /aide et /contact. Ce ne sont pas des
-      // doublons contradictoires — un seul graphe existe, et ses `@id` et
-      // `url` désignent sans ambiguïté l'accueil (§2 : la duplication
-      // n'est pas « nécessaire », elle n'est pas interdite).
+      // Accueil seulement (§2, §8.1 « une seule fois ») : `scripts/prerender.mjs`
+      // retire ce bloc de `spa.html` et des pages d'aide, qui sont construites
+      // sur cette coquille. En `vite dev`, toutes les routes le portent encore :
+      // sans conséquence, le serveur de dev n'est jamais exploré.
       // ══════════════════════════════════════════════════════════════════
       const jsonLd = structuredDataScript(indexable)
       if (jsonLd) {

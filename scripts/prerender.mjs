@@ -10,7 +10,8 @@
  *                    head de l'accueil (titre, description, canonical) ;
  *   dist/spa.html    coquille SPA servie par server.cjs pour les autres
  *                    routes : #app vide, titre neutre, description générique,
- *                    pas de canonical figé (posé par src/config/canonical.ts).
+ *                    pas de canonical figé (posé par src/config/canonical.ts),
+ *                    pas de JSON-LD Organization/WebSite (accueil seulement).
  *
  * Le navigateur monte ensuite l'application avec `createApp` (pas
  * d'hydratation) : le DOM rendu est identique, il n'y a donc ni saut de mise
@@ -40,6 +41,15 @@ const shell = template
     `$1${ssr.escapeHtmlAttr(ssr.DEFAULT_DESCRIPTION)}$2`,
   )
   .replace(/\s*<link rel="canonical"[^>]*>/, '')
+  // CDC Données structurées §2, §6, §8.1 : Organization et WebSite vont sur
+  // l'accueil canonique seulement. La coquille sert toutes les autres routes
+  // et les pages d'aide : sans ce retrait, le graphe était recopié sur ~100
+  // pages. Les pages d'aide gardent leur `TechArticle`, dont `publisher`
+  // référence `#organization` (un @id que Google résout depuis l'accueil).
+  .replace(/\s*<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g, '')
+if (shell.includes('application/ld+json')) {
+  throw new Error('[prerender] JSON-LD Organization/WebSite encore présent dans spa.html')
+}
 await writeFile(path.join(dist, 'spa.html'), shell)
 
 // 2. Accueil pré-rendu.

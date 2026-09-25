@@ -2,11 +2,11 @@
 <section id="pricing" style="background:#E9F0FA;color:#0F1B33;padding:88px 24px">
   <div style="max-width:1280px;margin:0 auto">
 
-    <!-- Titre -->
+    <!-- Titre — à l'impératif en FULL seulement ; au futur en PRELAUNCH (CDC pré-lancement §6.5, §8.1) -->
     <div class="vb-reveal" style="margin-bottom:14px">
       <div style="font-size:13.5px;letter-spacing:.15em;text-transform:uppercase;font-weight:800;color:#2563EB;margin-bottom:10px">Tarifs</div>
-      <h2 style="font-size:44px;font-weight:600;letter-spacing:-.02em;color:#0F1B33;margin-bottom:10px;max-width:680px;line-height:1.12">Essayez Verebona gratuitement pendant 7 jours.</h2>
-      <p style="font-size:15.5px;line-height:1.6;color:#5B6577;max-width:700px">Commencez par 7 jours d'essai Premium, sans carte bancaire. L'essai est limité à 2 biens et 30 documents. À son terme, vous choisissez librement une offre ; sans action de votre part, aucun abonnement ne démarre.</p>
+      <h2 style="font-size:44px;font-weight:600;letter-spacing:-.02em;color:#0F1B33;margin-bottom:10px;max-width:680px;line-height:1.12" data-testid="pricing-title">{{ isPrelaunch ? labels.pricingTitle : 'Essayez Verebona gratuitement pendant 7 jours.' }}</h2>
+      <p style="font-size:15.5px;line-height:1.6;color:#5B6577;max-width:700px">{{ isPrelaunch ? labels.pricingText : "Commencez par 7 jours d'essai Premium, sans carte bancaire. L'essai est limité à 2 biens et 30 documents. À son terme, vous choisissez librement une offre ; sans action de votre part, aucun abonnement ne démarre." }}</p>
     </div>
 
     <!-- Toggle mensuel / annuel + CTA -->

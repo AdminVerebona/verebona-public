@@ -26,7 +26,7 @@ redirectFrom: [/aide/comprendre-analyse-automatique, /aide/import-analyse]
 
 Après l’import, Verebona peut analyser un document afin de proposer un titre, une classification, un fournisseur, une date, un montant, des informations utiles au bien, un rattachement et des échéances. Le traitement fonctionne en arrière-plan et son résultat dépend du contenu réellement lisible.
 
-> **À savoir** — Une valeur explicitement validée par l’utilisateur ne doit pas être remplacée silencieusement par une nouvelle analyse.
+> **À savoir** — Une valeur que vous avez explicitement validée n’est pas remplacée silencieusement par une nouvelle analyse.
 
 ## Procédure
 
@@ -35,4 +35,4 @@ Après l’import, Verebona peut analyser un document afin de proposer un titre,
 3. **Vérifiez les propositions utiles** — Certaines informations sont appliquées automatiquement selon les règles de confiance ; d’autres nécessitent votre décision.
 4. **Ouvrez « À traiter » si nécessaire** — Arbitrez un conflit, rattachez un document ou confirmez une information lorsque Verebona vous le demande.
 
-> **Limites et points d’attention** — L’analyse peut échouer sur un fichier illisible, corrompu, protégé, trop complexe ou non exploitable. Verebona ne doit pas inventer une valeur absente du document.
+> **Limites et points d’attention** — L’analyse peut échouer sur un fichier illisible, corrompu, protégé, trop complexe ou non exploitable. Verebona n’invente pas de valeur absente du document.

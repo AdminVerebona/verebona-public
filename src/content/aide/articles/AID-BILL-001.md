@@ -23,7 +23,7 @@ synonyms: [abonnement, offres, tarifs, comparer, offre, plan, facture, paiement,
 status: published
 ---
 
-Verebona propose trois offres grand public. Les prix et quotas doivent être affichés de manière identique dans l’application, le site public et le Centre d’aide.
+Verebona propose trois offres grand public. Les prix et quotas sont les mêmes dans l’application, sur le site public et dans le Centre d’aide.
 
 ## Détails et cas particuliers
 

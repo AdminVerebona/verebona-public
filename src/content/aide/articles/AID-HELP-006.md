@@ -23,7 +23,7 @@ synonyms: [dépannage, quota, abonnement, peux, plus, ajouter, bien, document, p
 status: published
 ---
 
-Verebona contrôle les droits d’écriture côté serveur. Un compte peut devenir consultable mais non modifiable après la fin de l’essai, une résiliation ou certaines restrictions. Un quota atteint bloque la création ; un quota dépassé après changement d’offre peut bloquer les modifications selon la règle cible.
+Verebona contrôle vos droits de modification. Un compte peut devenir consultable mais non modifiable après la fin de l’essai, une résiliation ou certaines restrictions. Un quota atteint bloque la création ; un quota dépassé après changement d’offre peut bloquer les modifications.
 
 ## Procédure
 

@@ -2,10 +2,11 @@
   <div style="background:#070E20;color:#EAF0FB;overflow-x:hidden;min-height:100vh">
     <!--
       Mode intégré à l'application (MOB-02) : ni en-tête ni pied de page du
-      site, seulement la barre « Retour à Verebona ».
+      site, seulement la barre « Retour à Verebona » — sauf si l'application
+      encadre la page et affiche déjà la sienne (voir `showEmbedBar`).
     -->
-    <HelpEmbedBar v-if="embedded" />
-    <AppHeader v-else />
+    <HelpEmbedBar v-if="showEmbedBar" />
+    <AppHeader v-if="!embedded" />
     <router-view />
     <AppFooter v-if="!embedded" />
     <PreviewModeSwitch v-if="PreviewModeSwitch && !embedded" />
@@ -23,7 +24,7 @@ import { useEmbed } from './help/embed'
 
 // Chargée à la demande : hors mode intégré, la barre n'est jamais téléchargée.
 const HelpEmbedBar = defineAsyncComponent(() => import('./components/help/HelpEmbedBar.vue'))
-const { embedded } = useEmbed()
+const { embedded, showEmbedBar } = useEmbed()
 
 // Sélecteur FULL / PRELAUNCH : chargé à la demande, et seulement là où la
 // prévisualisation est autorisée. En production, il n'est jamais téléchargé.

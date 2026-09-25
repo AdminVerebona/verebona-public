@@ -37,4 +37,4 @@ Le statut d’un bien permet à Verebona d’adapter son affichage et les action
 
 **Verrouillage temporaire** — Certaines demandes Duo ou de transfert peuvent empêcher des modifications tant qu’elles sont en attente.
 
-> **Limites et points d’attention** — Les libellés exacts affichés doivent être vérifiés lors de la passe éditoriale finale sur la version de production.
+> **Limites et points d’attention** — Les libellés affichés peuvent varier légèrement selon l’écran ; en cas de doute, fiez-vous au statut indiqué sur la fiche du bien.

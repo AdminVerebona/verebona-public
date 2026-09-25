@@ -30,8 +30,8 @@ Premium Duo permet à deux personnes d’utiliser un même espace de gestion ave
 
 **Partagé** — Biens, documents, échéances et actions métier du compte partagé.
 
-**Individuel** — Identifiants, sessions, préférences de notification et conversations de l’assistant dans la cible produit.
+**Individuel** — Identifiants, sessions, préférences de notification et conversations avec l’assistant.
 
-**Facturation** — Le titulaire/BILLING_OWNER gère l’offre et le paiement.
+**Facturation** — Le titulaire de l’abonnement gère l’offre et le paiement.
 
 **Quotas** — 15 biens, 225 documents et 2 utilisateurs pour Premium Duo.

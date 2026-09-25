@@ -26,7 +26,7 @@ redirectFrom: [/aide/gerer-mes-notifications, /aide/rappels]
 
 Les préférences sont enregistrées par utilisateur, pas uniquement par compte. Deux personnes d’un Premium Duo peuvent donc choisir des réglages différents sans modifier ceux de l’autre.
 
-> **À savoir** — Un e-mail obligatoire ne peut pas être désactivé depuis les préférences. L’interface doit afficher le verrou avant l’interaction plutôt que renvoyer une erreur après le clic.
+> **À savoir** — Un e-mail obligatoire ne peut pas être désactivé depuis les préférences. Son interrupteur est affiché verrouillé.
 
 ## Procédure
 

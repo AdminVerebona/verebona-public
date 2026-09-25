@@ -35,7 +35,7 @@ Le parcours public « Renoncer au contrat ici » permet au titulaire d’un abon
 
 ## Détails et cas particuliers
 
-**Délai** — Le parcours actuel applique quatorze jours au contrat payant.
+**Délai** — Le délai de rétractation est de quatorze jours pour un contrat payant.
 
 **Essai gratuit** — Il n’ouvre pas de droit à remboursement puisqu’aucun contrat payant n’a été conclu.
 

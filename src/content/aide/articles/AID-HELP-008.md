@@ -27,7 +27,7 @@ Le flux de calendrier est publié par Verebona mais sa fréquence de lecture dé
 
 ## Procédure
 
-1. **Vérifiez que la synchronisation est active** — L’interrupteur Verebona doit être activé.
+1. **Vérifiez que la synchronisation est active** — L’interrupteur de synchronisation doit être activé dans Verebona.
 2. **Vérifiez le lien abonné** — Si vous avez régénéré le lien, l’ancien flux est invalide.
 3. **Pour Google Agenda** — Vérifiez que vous avez remplacé webcal:// par https:// lors de l’ajout par URL.
 4. **Attendez le rafraîchissement du fournisseur** — Il peut être différé.

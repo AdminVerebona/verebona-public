@@ -7,7 +7,7 @@ summary: Envoyer une invitation au second utilisateur Premium Duo.
 tags: [duo, invitation]
 offers: [premium_duo]
 roles: [billing_owner]
-rolesLabel: Titulaire / BILLING_OWNER
+rolesLabel: Titulaire de l’abonnement
 platforms: [web, mobile]
 authState: [public_help, connected_action]
 screens: [Mon compte > Informations > 2e utilisateur Duo]
@@ -26,7 +26,7 @@ redirectFrom: [/aide/inviter-proche-duo]
 
 Le titulaire Premium Duo dispose d’un emplacement pour une deuxième personne. Il peut envoyer une invitation par e-mail, la renvoyer, copier son lien ou l’annuler tant qu’elle n’a pas été acceptée.
 
-> **À savoir** — Le service d’invitation générique utilise actuellement une expiration de 7 jours ; la durée exacte du parcours Duo doit être confirmée à la recette si un autre service est utilisé.
+> **À savoir** — Une invitation est valable 7 jours. La renvoyer lui redonne 7 jours de validité.
 
 ## Procédure
 

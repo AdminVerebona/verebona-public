@@ -24,7 +24,7 @@ status: published
 redirectFrom: [/aide/dossier-vente]
 ---
 
-Le Dossier de vente sélectionne des informations et pièces pertinentes pour présenter le bien. Le manifeste produit actuel cible principalement des documents de transaction, diagnostics, garanties, entretiens, factures, plans et informations techniques selon la catégorie du bien.
+Le Dossier de vente sélectionne des informations et pièces pertinentes pour présenter le bien. Il réunit principalement des documents de transaction, diagnostics, garanties, entretiens, factures, plans et informations techniques selon la catégorie du bien.
 
 ## Procédure
 

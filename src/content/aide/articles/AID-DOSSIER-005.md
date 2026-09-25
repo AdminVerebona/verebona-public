@@ -23,7 +23,7 @@ synonyms: [dossiers, assurance, estimation, dossier, export, PDF, pack, vente, C
 status: published
 ---
 
-Ce dossier met l’accent sur l’identité du bien, ses caractéristiques, sa valeur et les justificatifs pouvant étayer l’estimation. Le manifeste actuel inclut notamment les informations financières, documents pertinents et photos disponibles.
+Ce dossier met l’accent sur l’identité du bien, ses caractéristiques, sa valeur et les justificatifs pouvant étayer l’estimation. Il inclut notamment les informations financières, documents pertinents et photos disponibles.
 
 ## Procédure
 

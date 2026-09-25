@@ -25,7 +25,7 @@ status: published
 
 La section « Historique des modifications automatiques » présente les enrichissements enregistrés. Une entrée indique le champ, le bien, la nouvelle valeur, l’ancienne valeur lorsqu’elle existe, la date et le document source si cette information est disponible.
 
-> **À savoir** — La page utilisateur actuelle est un historique de consultation ; elle n’expose pas de bouton général de restauration d’une ancienne valeur.
+> **À savoir** — Cette page est un historique de consultation ; elle ne propose pas de bouton général de restauration d’une ancienne valeur.
 
 ## Procédure
 

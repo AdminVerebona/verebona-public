@@ -25,11 +25,11 @@ status: published
 
 Verebona peut utiliser plusieurs canaux : notification push sur un appareil autorisé, e-mail et cloche dans l’application lorsqu’un événement est prévu pour ce canal. Les éléments « À traiter » restent d’abord visibles dans leur page dédiée et ne sont pas ajoutés à la cloche.
 
-> **À savoir** — Certaines catégories contiennent des e-mails obligatoires. Leur interrupteur e-mail est verrouillé pour les événements nécessaires, notamment dans les catégories Duo, Compte et Sécurité selon le catalogue actuel.
+> **À savoir** — Certaines catégories contiennent des e-mails obligatoires. Leur interrupteur e-mail est verrouillé pour les événements nécessaires, notamment dans les catégories Duo, Compte et Sécurité.
 
 ## Détails et cas particuliers
 
-**Échéances** — Rappel 7 jours avant une échéance ; push et e-mail activés par défaut dans la matrice actuelle.
+**Échéances** — Rappel 7 jours avant une échéance ; push et e-mail activés par défaut.
 
 **Documents** — Fin d’analyse réussie ou en échec ; push actif par défaut, e-mail désactivé par défaut.
 

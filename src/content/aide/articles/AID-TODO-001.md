@@ -24,7 +24,7 @@ status: published
 redirectFrom: [/aide/traiter-documents-incomplets]
 ---
 
-« À traiter » est une file unique d’actions. Chaque carte représente une décision concrète : arbitrer une valeur, rattacher un élément, confirmer une proposition ou compléter une donnée lorsqu’une règle métier le justifie. La page ne doit pas devenir une liste de tous les champs manquants.
+« À traiter » est une file unique d’actions. Chaque carte représente une décision concrète : arbitrer une valeur, rattacher un élément, confirmer une proposition ou compléter une donnée lorsqu’une règle métier le justifie. La page ne liste pas tous les champs manquants.
 
 ## Procédure
 

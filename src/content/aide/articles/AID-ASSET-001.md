@@ -33,7 +33,7 @@ Un bien est l’élément central autour duquel Verebona organise les documents,
 ## Procédure
 
 1. **Ouvrez « Mes biens »** — Utilisez ensuite « Ajouter un bien » ou le raccourci d’ajout général.
-2. **Choisissez la catégorie** — Sélectionnez Immobilier, Véhicule ou Objet selon les choix actuellement proposés.
+2. **Choisissez la catégorie** — Sélectionnez Immobilier, Véhicule ou Objet selon les choix proposés.
 3. **Choisissez le type** — Sélectionnez le type ou la sous-catégorie correspondant au bien.
 4. **Donnez un nom clair** — Utilisez un nom qui vous permettra de le reconnaître rapidement.
 5. **Complétez les informations disponibles** — Renseignez les données que vous connaissez ; les autres pourront être ajoutées plus tard.

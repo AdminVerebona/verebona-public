@@ -23,11 +23,11 @@ synonyms: [abonnement, périodicité, changer, mensuelle, annuelle, offre, plan,
 status: published
 ---
 
-La périodicité est une composante de l’abonnement et peut être programmée comme un changement. L’interface doit annoncer clairement quand le nouveau rythme et le nouveau prix s’appliqueront.
+La périodicité est une composante de l’abonnement et peut être programmée comme un changement. Verebona vous indique quand le nouveau rythme et le nouveau prix s’appliqueront.
 
 ## Procédure
 
 1. **Ouvrez les offres** — Sélectionnez la périodicité souhaitée.
-2. **Confirmez la modification** — Le serveur calcule la date de prise d’effet.
-3. **Vérifiez le récapitulatif** — L’offre cible, la périodicité et la date doivent être visibles.
+2. **Confirmez la modification** — Verebona calcule la date de prise d’effet.
+3. **Vérifiez le récapitulatif** — L’offre choisie, la périodicité et la date de prise d’effet sont affichées.
 4. **Annulez le changement programmé si nécessaire** — Avant sa prise d’effet, utilisez l’action prévue.

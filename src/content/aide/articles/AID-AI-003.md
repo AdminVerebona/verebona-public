@@ -23,7 +23,7 @@ synonyms: [ia, confiance, conflit, conflits, protection, valeurs, intelligence a
 status: published
 ---
 
-La confiance seule ne suffit pas à décider. Verebona doit tenir compte de la qualité de la source, de la valeur déjà enregistrée, de son origine et des règles propres aux champs critiques. Une décision humaine explicite a priorité sur une modification automatique silencieuse.
+La confiance seule ne suffit pas à décider. Verebona tient compte de la qualité de la source, de la valeur déjà enregistrée, de son origine et des règles propres aux champs critiques. Une décision humaine explicite a priorité sur une modification automatique silencieuse.
 
 ## Détails et cas particuliers
 

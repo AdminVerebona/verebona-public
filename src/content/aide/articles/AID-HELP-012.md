@@ -31,5 +31,5 @@ Une fonction peut être bloquée si l’abonnement n’est pas actif, si un chan
 2. **Vérifiez un éventuel changement programmé** — La date d’effet est affichée lorsqu’elle est connue.
 3. **Ouvrez le portail Stripe** — Le titulaire peut vérifier le moyen de paiement et les factures.
 4. **En cas d’impayé** — Régularisez depuis le parcours proposé.
-5. **Actualisez Verebona après paiement** — Laissez le webhook de paiement mettre à jour les droits puis reconnectez-vous si nécessaire.
+5. **Actualisez Verebona après paiement** — La mise à jour de vos droits peut prendre quelques instants ; reconnectez-vous si nécessaire.
 6. **Contactez le support si le statut reste incorrect** — Indiquez la date du paiement et la référence de facture, sans envoyer les données complètes de carte.

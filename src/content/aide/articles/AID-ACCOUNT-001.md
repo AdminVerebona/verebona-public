@@ -24,7 +24,7 @@ status: published
 redirectFrom: [/aide/gerer-mon-compte]
 ---
 
-La section Mon compte > Informations permet de modifier les informations de profil actuellement éditables. L’adresse e-mail est affichée mais n’est pas modifiable depuis cet écran dans l’implémentation actuelle.
+La section Mon compte > Informations permet de modifier vos informations de profil. L’adresse e-mail y est affichée mais ne peut pas être modifiée depuis cet écran.
 
 > **À savoir** — Le nom d’utilisateur peut être utilisé dans le message de bienvenue et certaines communications. N’y placez pas d’information sensible.
 

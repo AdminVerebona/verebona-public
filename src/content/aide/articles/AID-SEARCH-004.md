@@ -31,4 +31,4 @@ Verebona comporte deux usages de recherche qu’il ne faut pas confondre. La rec
 
 **Je veux savoir comment modifier un contrat** — Utilisez le Centre d’aide ou demandez à l’assistant comment utiliser Verebona.
 
-**Je pose une question mêlant les deux** — L’assistant doit distinguer les données de votre compte et la documentation produit, puis citer les sources appropriées.
+**Je pose une question mêlant les deux** — L’assistant distingue les données de votre compte et la documentation, puis cite les sources appropriées.

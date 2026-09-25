@@ -48,6 +48,11 @@ export const PRELAUNCH_LABELS = {
   pricing: 'Bientôt disponible',
   finalCta: 'Verebona arrive bientôt',
   finalCtaText: 'Le service ouvrira prochainement.',
+  // CDC §6.5 / §8.1 : en PRELAUNCH, la section tarifs ne doit ni inviter à
+  // une action (« Essayez… ») ni annoncer une disponibilité immédiate. Les
+  // offres restent présentées ; l'essai est décrit au futur.
+  pricingTitle: 'Un essai gratuit de 7 jours dès l\u2019ouverture.',
+  pricingText: 'Dès l\u2019ouverture, vous pourrez commencer par 7 jours d\u2019essai Premium, sans carte bancaire. L\u2019essai sera limité à 2 biens et 30 documents. À son terme, vous choisirez librement une offre ; sans action de votre part, aucun abonnement ne démarrera.',
 } as const
 
 /* ── État de prévisualisation (préprod uniquement) ─────────────────────── */

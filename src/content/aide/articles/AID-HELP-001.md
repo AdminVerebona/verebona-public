@@ -23,9 +23,9 @@ synonyms: [centre aide, besoin aide, centre, aide, besoin, problème, erreur, d�
 status: published
 ---
 
-Le Centre d’aide public est la source canonique de la documentation Verebona. L’entrée « Besoin d’aide » de l’application ne possède pas son propre contenu éditorial : elle affiche une recherche et des raccourcis qui pointent vers les IDs stables des articles du Centre d’aide.
+Le Centre d’aide public est la référence de la documentation Verebona. L’entrée « Besoin d’aide » de l’application n’a pas de contenu propre : elle affiche une recherche et des raccourcis vers les articles du Centre d’aide.
 
-> **À savoir** — Le titre affiché dans « Besoin d’aide » et l’URL ouverte doivent être résolus depuis le catalogue canonique : aucune deuxième nomenclature d’articles ne doit être maintenue dans l’application.
+> **À savoir** — Les titres et les liens affichés dans « Besoin d’aide » sont ceux du Centre d’aide : vous retrouvez les mêmes articles dans l’application et sur le site.
 
 ## Procédure
 

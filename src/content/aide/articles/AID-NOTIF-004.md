@@ -23,7 +23,7 @@ synonyms: [notifications, à traiter, récapitulatif, traiter, notification, ale
 status: published
 ---
 
-La catégorie « À traiter » peut envoyer un récapitulatif quotidien prévu à 8 h 30. Dans la matrice actuelle, l’e-mail de récapitulatif est activé par défaut et le push de récapitulatif désactivé. Les notifications immédiates de cette catégorie sont désactivées par défaut.
+La catégorie « À traiter » peut envoyer un récapitulatif quotidien prévu à 8 h 30. Par défaut, l’e-mail de récapitulatif est activé par défaut et le push de récapitulatif désactivé. Les notifications immédiates de cette catégorie sont désactivées par défaut.
 
 ## Procédure
 

@@ -4,7 +4,7 @@ title: Comment Verebona répond aux questions sur l’application
 slug: assistant-aide-application
 category: ia-automatisations
 summary: Comprendre comment l’assistant utilise le Centre d’aide pour expliquer Verebona.
-tags: [assistant, centre aide, t2]
+tags: [assistant, centre aide]
 offers: [premium, premium_duo]
 offersNote: Premium, Premium Duo pour l’assistant dans le compte ; Centre d’aide public pour tous
 roles: [all]
@@ -20,11 +20,11 @@ metaDescription: Comprendre comment l’assistant utilise le Centre d’aide pou
 canonical: /aide/assistant-aide-application
 indexable: true
 lang: fr-FR
-synonyms: [assistant, centre aide, t2, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
+synonyms: [assistant, centre aide, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
 status: published
 ---
 
-Pour les questions portant sur l’utilisation de Verebona, l’assistant doit utiliser le Centre d’aide canonique comme source documentaire exclusive. Il peut reformuler et combiner plusieurs articles, mais il ne doit pas inventer une règle absente de la documentation.
+Pour les questions portant sur l’utilisation de Verebona, l’assistant s’appuie uniquement sur le Centre d’aide. Il peut reformuler et combiner plusieurs articles, mais il n’invente pas de règle absente de la documentation.
 
 ## Détails et cas particuliers
 

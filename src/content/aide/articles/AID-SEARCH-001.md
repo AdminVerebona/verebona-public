@@ -26,7 +26,7 @@ redirectFrom: [/aide/utiliser-la-recherche]
 
 La recherche générale de l’application évite de dupliquer un champ de recherche dans chaque écran. Elle recherche d’abord dans les données structurées accessibles à votre compte et peut, selon l’offre et le contexte, utiliser un repli intelligent si aucun résultat classique n’est trouvé.
 
-> **À savoir** — La recherche SQL actuelle exige que tous les tokens significatifs de la requête trouvent une correspondance. Une formulation plus courte peut donc être plus efficace.
+> **À savoir** — La recherche exige que tous les mots significatifs de votre requête trouvent une correspondance. Une formulation plus courte peut donc être plus efficace.
 
 ## Procédure
 

@@ -20,17 +20,16 @@ canonical: /aide/parrainage
 indexable: true
 lang: fr-FR
 synonyms: [parrainage, abonnement, offre, plan, facture, paiement, Stripe]
-status: blocked
-blocker: CRITIQUE : l’interface actuelle contient encore des textes différents (éligibilité Premium/Premium Duo annuelle et avantage filleul de « 3 mois d’essai au lieu de 2 »). Ils doivent être supprimés pour respecter la règle cible.
+status: published
 ---
 
-La règle cible est simple : « 1 mois offert pour vous, à chaque abonnement annuel souscrit par un proche. » Seul le parrain reçoit la récompense. Le filleul ne reçoit pas de cadeau de parrainage spécifique.
+Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel souscrit par un proche. » Seul le parrain reçoit la récompense. Le filleul ne reçoit pas de cadeau de parrainage spécifique.
 
 ## Procédure
 
 1. **Ouvrez Parrainage** — Créez votre lien si vous n’en avez pas encore.
 2. **Copiez le code ou le lien** — Ou utilisez l’invitation par e-mail.
-3. **Le proche crée un nouveau compte avec ce parcours** — L’attribution du parrainage doit être conservée jusqu’à la souscription.
+3. **Votre proche crée un nouveau compte depuis votre lien ou avec votre code** — C’est ce qui rattache sa future souscription à votre parrainage.
 4. **Attendez la validation** — La récompense n’est acquise qu’après paiement annuel réussi et expiration du délai de rétractation.
 5. **Consultez vos statistiques** — Le nombre de parrainages validés et les mois acquis sont affichés lorsqu’ils existent.
 
@@ -42,7 +41,7 @@ La règle cible est simple : « 1 mois offert pour vous, à chaque abonnement an
 
 **Récompense** — Un mois du plan courant du parrain par parrainage validé.
 
-**Cumul** — Nombre de filleuls et mois offerts cumulables sans plafond métier prévu.
+**Cumul** — Le nombre de filleuls n’est pas limité et les mois offerts se cumulent.
 
 **Parrain annuel** — Chaque récompense repousse la prochaine échéance d’un mois.
 

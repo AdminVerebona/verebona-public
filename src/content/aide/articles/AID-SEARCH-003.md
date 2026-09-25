@@ -24,7 +24,7 @@ status: published
 redirectFrom: [/aide/assistant]
 ---
 
-Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant doit s’appuyer sur les sources accessibles à votre compte et indiquer les références utilisées.
+Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.
 
 ## Procédure
 
@@ -33,4 +33,4 @@ Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et sy
 3. **Lisez la réponse et ses sources** — Ouvrez les références pour contrôler l’information.
 4. **Reformulez si la question est ambiguë** — Précisez le bien ou le document lorsqu’il existe plusieurs correspondances.
 
-> **Limites et points d’attention** — L’assistant ne doit pas utiliser des données d’un autre compte, inventer une information absente ni transformer une réponse documentaire en conseil juridique, fiscal, médical ou assurantiel personnalisé.
+> **Limites et points d’attention** — L’assistant n’utilise pas les données d’un autre compte, n’invente pas d’information absente et ne transforme pas une réponse documentaire en conseil juridique, fiscal, médical ou assurantiel personnalisé.

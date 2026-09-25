@@ -33,6 +33,6 @@ Le Duo partage les données métier mais pas tous les pouvoirs de gestion. Le ti
 
 **Notifications** — Chaque utilisateur choisit ses propres préférences, enregistrées par user_id.
 
-**Assistant** — Les conversations doivent être privées par utilisateur dans la cible, même si les biens et documents consultés sont ceux du compte partagé.
+**Assistant** — Vos conversations avec l’assistant sont privées : l’autre membre du Duo ne les voit pas, même si les biens et documents consultés sont ceux du compte partagé.
 
 **Mot de passe** — Toujours individuel ; ne partagez pas les identifiants du titulaire.
