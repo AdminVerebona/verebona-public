@@ -16,7 +16,7 @@
  * d'hydratation) : le DOM rendu est identique, il n'y a donc ni saut de mise
  * en page ni avertissement d'hydratation à gérer.
  */
-import { readFile, writeFile, rm } from 'node:fs/promises'
+import { readFile, writeFile, rm, mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
@@ -49,5 +49,36 @@ for (const needle of ['<h1', '<h2', '<h3']) {
 }
 await writeFile(path.join(dist, 'index.html'), template.replace(APP_MARKER, `<div id="app">${appHtml}</div>`))
 
+// 3. Centre d'aide : une page statique par page publiée (SEO-01, SEO-02).
+//
+// Construite sur la coquille SPA (titre et description neutres, sans
+// canonical), dont on remplace l'en-tête par celui de la page. Le navigateur
+// monte ensuite l'application normalement : le HTML servi aux moteurs et celui
+// de la navigation interne viennent des mêmes fonctions (src/help/head.ts).
+const esc = ssr.escapeHtmlAttr
+const pages = ssr.helpPages()
+for (const page of pages) {
+  const html = await ssr.render(page.path)
+  const h = page.head
+  const headTags = [
+    h.canonical ? `<link rel="canonical" href="${esc(h.canonical)}">` : '',
+    h.noindex ? '<meta name="robots" content="noindex, follow" data-help-robots>' : '',
+    h.jsonLd
+      ? `<script type="application/ld+json" id="help-jsonld">${JSON.stringify(h.jsonLd).replace(/</g, '\\u003c')}</script>`
+      : '',
+  ].filter(Boolean).join('\n    ')
+  // Remplacements par fonction : un « $& » ou « $' » dans un titre ou un
+  // article serait sinon interprété comme motif de remplacement.
+  let doc = shell
+    .replace(/<title>[\s\S]*?<\/title>/, () => `<title>${esc(h.title)}</title>`)
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${esc(h.description)}${b}`)
+    .replace(APP_MARKER, () => `<div id="app">${html}</div>`)
+  if (h.canonical) doc = doc.replace(/(<meta\s+property="og:url"\s+content=")[^"]*(")/, (_, a, b) => `${a}${esc(h.canonical)}${b}`)
+  doc = doc.replace('</head>', () => `    ${headTags}\n  </head>`)
+  const target = path.join(dist, page.file)
+  await mkdir(path.dirname(target), { recursive: true })
+  await writeFile(target, doc)
+}
+
 await rm(ssrDir, { recursive: true, force: true })
-console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html`)
+console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html · ${pages.length} pages d'aide`)
