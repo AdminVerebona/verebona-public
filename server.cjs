@@ -88,7 +88,20 @@ app.use(
   })
 );
 
-app.use(express.static(distDir));
+/**
+ * Sitemap servi en `application/xml; charset=utf-8` (CDC Sitemap §7
+ * « Type de contenu » et « Encodage ») : le type par defaut d'express ne
+ * declare pas l'encodage.
+ */
+app.use(
+  express.static(distDir, {
+    setHeaders (res, filePath) {
+      if (path.basename(filePath) === "sitemap.xml") {
+        res.setHeader("Content-Type", "application/xml; charset=utf-8");
+      }
+    },
+  })
+);
 
 /**
  * Fichiers destines aux robots d'exploration (CDC Sitemap §7).
@@ -106,13 +119,19 @@ app.use(express.static(distDir));
  * (§10) aucun sitemap n'est emis, et sans cette garde le meme faux 200 HTML
  * reviendrait. Un 404 franc est la reponse honnete — et empeche l'anomalie
  * de se reinstaller silencieusement si l'emission casse un jour.
+ *
+ * La garde couvre tout chemin qui designe un fichier (derniere section avec
+ * une extension : `/sitemap_index.xml`, `/SITEMAP.XML`, un chunk JS perime
+ * apres deploiement…) : aucune route du router n'en comporte, et repondre
+ * 200 HTML a une URL de fichier est precisement l'anomalie signalee par
+ * Search Console.
  * ══════════════════════════════════════════════════════════════════════════
  */
-const CRAWLER_FILES = new Set(["/sitemap.xml", "/robots.txt"]);
+const FILE_PATH = /\/[^/]*\.[a-z0-9]+$/i;
 const SPA_SHELL = path.join(distDir, "spa.html");
 
 app.get("/{*splat}", (req, res) => {
-  if (CRAWLER_FILES.has(req.path)) {
+  if (FILE_PATH.test(req.path)) {
     res.status(404).type("text/plain").send("Not found\n");
     return;
   }

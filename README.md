@@ -83,6 +83,7 @@ src/
 | `src/config/canonical.ts`     | pose la balise `<link rel="canonical">` de chaque route                                                 |
 | `server.cjs`                  | sert les fichiers statiques et refuse le repli SPA sur `/sitemap.xml` et `/robots.txt`                  |
 | `tests/sitemap.test.ts`       | recette automatisée du contenu produit                                                                  |
+| `tests/server.test.ts`        | recette HTTP : `/sitemap.xml` en 200 `application/xml`, 404 (jamais du HTML) pour tout fichier absent   |
 
 Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre.
 
@@ -105,12 +106,20 @@ Après modification : `npm run test` (la recette verrouille le contenu attendu) 
 Ce que les tests ne peuvent pas couvrir depuis le poste de développement :
 
 ```bash
-curl -sI https://www.verebona.fr/sitemap.xml   # 200 + Content-Type: application/xml
+curl -sI https://www.verebona.fr/sitemap.xml   # 200 + Content-Type: application/xml; charset=utf-8
 curl -s  https://www.verebona.fr/robots.txt    # doit contenir la ligne Sitemap:
 curl -sI https://www.verebona.fr/aide          # 200, sans redirection
 ```
 
 Puis, dans Google Search Console : soumettre `https://www.verebona.fr/sitemap.xml` et vérifier la disparition de l'erreur « le sitemap est un fichier HTML ».
+
+### Search Console signale encore « le sitemap est un fichier HTML »
+
+Le témoin le plus simple est `robots.txt` : **sans ligne `Sitemap:`, la production ne sert pas ce code** (build ancien ou déploiement en échec). Le sitemap tombe alors dans le repli SPA et répond du HTML.
+
+1. Vérifier les logs de build de l'hébergeur. Le dépôt versionne `package-lock.json` : sans lui, `npm install` échoue avec npm 10 (fourni avec Node 20/22) sur `Cannot read properties of null (reading 'edgesOut')`, et l'ancienne version reste en ligne.
+2. Vérifier que le build tourne avec `VITE_ENVIRONMENT=production` (ou sans la variable) : hors production, aucun sitemap n'est émis et `/sitemap.xml` répond 404.
+3. Une fois `curl` conforme, renvoyer le sitemap dans Search Console. Le rapport ne se met à jour qu'à la lecture suivante.
 
 > **Prérequis d'hébergement.** Le CDC impose le domaine `www.verebona.fr`. Les URLs du sitemap ne doivent pas rediriger (§7) : `www` doit être servi en direct, et c'est l'apex `verebona.fr` qui redirige vers lui — pas l'inverse. Si la configuration actuelle fait le contraire, l'inverser **avant** de soumettre le sitemap.
 
