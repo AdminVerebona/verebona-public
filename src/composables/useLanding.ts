@@ -14,7 +14,7 @@ const uc = ref(0) // open use-case index (-1 = none)
 const labels = ['Tableau de bord', 'Mes biens', 'Mes événements', 'Mes documents']
 
 const tabStyle = (a: boolean) =>
-  `display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:left;font-family:'Instrument Sans',sans-serif;border:1px solid ${a ? 'rgba(59,130,246,.35)' : 'transparent'};background:${a ? 'rgba(37,99,235,.14)' : 'transparent'};color:${a ? '#7EB0FF' : '#8892A6'}`
+  `display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:left;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;border:1px solid ${a ? 'rgba(59,130,246,.35)' : 'transparent'};background:${a ? 'rgba(37,99,235,.14)' : 'transparent'};color:${a ? '#7EB0FF' : '#8892A6'}`
 
 const dotStyle = (a: boolean) =>
   `height:6px;border-radius:99px;transition:all .25s;cursor:pointer;border:0;padding:0;width:${a ? '26px' : '6px'};background:${a ? '#2563EB' : 'rgba(148,163,184,.4)'}`
@@ -100,7 +100,7 @@ export function useLanding() {
             (on ? 'rgba(59,130,246,.08)' : 'transparent') +
             ';border:none;border-left:3px solid ' + (on ? '#3B82F6' : 'transparent'),
           titleStyle:
-            "flex:1;font-family:'Instrument Sans',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:-.01em;color:" +
+            "flex:1;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:-.01em;color:" +
             (on ? '#fff' : '#C3CDDE'),
           chevStyle:
             'transition:transform .2s;transform:rotate(' + (on ? '90deg' : '0deg') +

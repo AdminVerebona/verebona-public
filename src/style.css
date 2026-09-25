@@ -5,16 +5,17 @@
    (ported 1:1 from the validated design prototype).
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+/* Polices auto-hébergées (plus aucun appel à fonts.googleapis.com / fonts.gstatic.com). */
+@import './fonts.css';
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-family: 'Instrument Sans', 'Instrument Sans Fallback', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   background: #070E20;
 }
-h1, h2, h3, h4 { font-family: 'Bricolage Grotesque', sans-serif; margin: 0; }
+h1, h2, h3, h4 { font-family: 'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif; margin: 0; }
 p { margin: 0; }
 a { text-decoration: none; color: inherit; }
 a:hover { color: inherit; }

@@ -7,6 +7,7 @@ import {
 } from './src/config/site-mode.rules'
 import { buildRobotsTxt, buildSitemapXml } from './src/config/sitemap.rules'
 import { structuredDataScript } from './src/config/structured-data'
+import { HOME_DESCRIPTIONS, HOME_TITLE, escapeHtmlAttr } from './src/config/head.rules'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -37,7 +38,23 @@ function siteModePlugin(): Plugin {
           `${indexable ? 'indexable' : 'noindex'}${warn}\n`,
       )
     },
-    transformIndexHtml() {
+    transformIndexHtml(html) {
+      // ══════════════════════════════════════════════════════════════════
+      // HEAD DE L'ACCUEIL — ticket SEO accueil
+      //
+      // `index.html` devient le document de l'accueil (pré-rendu, voir
+      // scripts/prerender.mjs) : un seul <title> et une seule meta
+      // description, aux valeurs de `head.rules.ts`. La description suit le
+      // mode par défaut du build (prelaunch → « Disponible bientôt »,
+      // full → version ouverture) sans que ce plugin modifie ce mode.
+      // ══════════════════════════════════════════════════════════════════
+      const homeHtml = html
+        .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtmlAttr(HOME_TITLE)}</title>`)
+        .replace(
+          /(<meta\s+name="description"\s+content=")[^"]*(")/,
+          `$1${escapeHtmlAttr(HOME_DESCRIPTIONS[defaultMode])}$2`,
+        )
+
       const tags = []
 
       // ══════════════════════════════════════════════════════════════════
@@ -73,7 +90,7 @@ function siteModePlugin(): Plugin {
         })
       }
 
-      return tags
+      return { html: homeHtml, tags }
     },
     generateBundle() {
       this.emitFile({

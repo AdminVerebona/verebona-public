@@ -6,7 +6,7 @@
     role="group"
     aria-label="Prévisualisation du mode du site"
     data-testid="preview-mode-switch"
-    style="position:fixed;left:14px;bottom:14px;z-index:70;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:999px;background:rgba(7,14,32,.92);border:1px solid rgba(250,204,21,.45);box-shadow:0 10px 30px rgba(4,10,26,.45);backdrop-filter:blur(10px);font-family:'Instrument Sans',sans-serif;font-size:12px;color:#FDE68A"
+    style="position:fixed;left:14px;bottom:14px;z-index:70;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:999px;background:rgba(7,14,32,.92);border:1px solid rgba(250,204,21,.45);box-shadow:0 10px 30px rgba(4,10,26,.45);backdrop-filter:blur(10px);font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-size:12px;color:#FDE68A"
   >
     <span style="font-weight:700;letter-spacing:.08em;text-transform:uppercase">{{ environment }}</span>
     <button

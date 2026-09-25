@@ -144,7 +144,7 @@ const prev = () => { current.value = (current.value + slides.length - 1) % slide
 const next = () => { current.value = (current.value + 1) % slides.length }
 
 const navStyle = (active: boolean) =>
-  `display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:left;font-family:'Instrument Sans',sans-serif;border:1px solid ${active ? 'rgba(59,130,246,.35)' : 'transparent'};background:${active ? 'rgba(37,99,235,.14)' : 'transparent'};color:${active ? '#7EB0FF' : '#8892A6'}`
+  `display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:left;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;border:1px solid ${active ? 'rgba(59,130,246,.35)' : 'transparent'};background:${active ? 'rgba(37,99,235,.14)' : 'transparent'};color:${active ? '#7EB0FF' : '#8892A6'}`
 
 const dotStyle = (active: boolean) =>
   `height:6px;border-radius:99px;transition:all .25s;cursor:pointer;border:0;padding:0;width:${active ? '26px' : '6px'};background:${active ? '#2563EB' : 'rgba(148,163,184,.4)'}`

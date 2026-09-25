@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "build:preprod": "vue-tsc -b && vite build --mode preprod",
+    "build": "vue-tsc -b && vite build && vite build --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs",
+    "build:preprod": "vue-tsc -b && vite build --mode preprod && vite build --mode preprod --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs",
     "preview": "vite preview",
     "start": "node server.cjs",
     "test": "vitest run",

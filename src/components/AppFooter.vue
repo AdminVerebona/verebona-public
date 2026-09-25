@@ -4,7 +4,7 @@
     <div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
         <svg width="48" height="48" viewBox="0 0 32 32" fill="none" style="overflow:visible"><rect x="0" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="-1.55" width="9.14" height="9.14" rx="1.6" fill="#2F6BFF" transform="rotate(18 27.43 3.02)"/></svg>
-        <div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:27px;letter-spacing:-.01em;color:#fff">Verebona</div></div>
+        <div><div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:700;font-size:27px;letter-spacing:-.01em;color:#fff">Verebona</div></div>
       </div>
       <p style="font-size:12px;color:#64748B;margin-top:18px">© 2026 Verebona. Tous droits réservés.</p>
     </div>

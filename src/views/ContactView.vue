@@ -14,7 +14,7 @@
       <template v-if="contactSent">
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px 10px">
           <div style="width:64px;height:64px;border-radius:50%;background:rgba(34,197,94,.12);display:flex;align-items:center;justify-content:center;margin-bottom:18px"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-          <div style="font-size:21px;font-weight:700;color:#0F1B33;font-family:'Bricolage Grotesque',sans-serif">Message envoyé</div>
+          <div style="font-size:21px;font-weight:700;color:#0F1B33;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Message envoyé</div>
           <div style="font-size:15px;color:#64748B;margin-top:8px;max-width:340px">Merci ! Notre équipe vous répond sous 24&nbsp;h ouvrées à l'adresse indiquée.</div>
           <button type="button" @click.prevent="goHome" style="margin-top:22px;font-size:15px;font-weight:600;color:#1D4ED8;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.25);padding:12px 22px;border-radius:999px;cursor:pointer">Retour à l'accueil</button>
         </div>
@@ -36,7 +36,7 @@
     <div style="display:flex;flex-direction:column;gap:14px">
       <div style="background:#fff;border:1px solid #E6EBF3;border-radius:18px;padding:22px 24px"><div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563EB;margin-bottom:8px">Email</div><div style="font-size:16px;font-weight:600;color:#0F1B33">contact@verebona.com</div><div style="font-size:14px;color:#64748B;margin-top:4px">Réponse sous 24&nbsp;h ouvrées</div></div>
       <div style="background:#fff;border:1px solid #E6EBF3;border-radius:18px;padding:22px 24px"><div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563EB;margin-bottom:8px">Support</div><div style="font-size:15px;color:#475569;line-height:1.6">Consultez d'abord notre <a v-bind="link('/aide')" style="color:#1D4ED8;font-weight:600">Centre d'aide</a> : la plupart des réponses s'y trouvent déjà.</div></div>
-      <div style="background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:18px;padding:24px;color:#fff"><div style="font-size:16px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif">Verebona</div><div style="font-size:14px;color:#9BA6BC;margin-top:6px;line-height:1.6">L'inventaire administré de vos biens, centralisé et prêt le moment venu.</div></div>
+      <div style="background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:18px;padding:24px;color:#fff"><div style="font-size:16px;font-weight:700;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Verebona</div><div style="font-size:14px;color:#9BA6BC;margin-top:6px;line-height:1.6">L'inventaire administré de vos biens, centralisé et prêt le moment venu.</div></div>
     </div>
   </div>
 </section>

@@ -34,7 +34,7 @@
         <h3 :style="`font-size:18px;font-weight:600;color:${card.titleColor};margin-bottom:6px`">{{ card.name }}</h3>
         <p :style="`font-size:13px;color:${card.textColor};line-height:1.5;margin-bottom:16px;min-height:40px`">{{ card.tagline }}</p>
 
-        <div :style="`font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:600;color:${card.titleColor};margin-bottom:2px`">
+        <div :style="`font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:32px;font-weight:600;color:${card.titleColor};margin-bottom:2px`">
           {{ priceOf(card.code) }}<span :style="`font-size:15px;font-weight:400;color:${card.mutedColor}`"> {{ pricePer }}</span>
         </div>
         <div :style="`font-size:12.5px;color:${card.mutedColor};min-height:17px;margin-bottom:18px`">{{ equivalentOf(card.code) }}</div>
@@ -66,7 +66,7 @@
         <span style="align-self:flex-start;font-size:11px;padding:4px 11px;border-radius:999px;background:#E7EBF2;border:1px solid #D3DBE8;color:#8A93A6;margin-bottom:8px">Bientôt</span>
         <h3 style="font-size:18px;font-weight:600;color:#5B6577;margin-bottom:6px">Pro</h3>
         <p style="font-size:13px;color:#8A93A6;line-height:1.5;margin-bottom:16px;min-height:40px">Pour la gestion du matériel, des véhicules ou de l'immobilier professionnel.</p>
-        <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:600;color:#8A93A6;margin-bottom:18px">Bientôt</div>
+        <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:28px;font-weight:600;color:#8A93A6;margin-bottom:18px">Bientôt</div>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:#8A93A6">
           <div v-for="f in proFeatures" :key="f" style="display:flex;gap:9px"><span style="color:#A9B2C2;font-weight:700">✓</span>{{ f }}</div>
         </div>
@@ -84,7 +84,7 @@
       </div>
       <div style="flex:1;min-width:280px;position:relative">
         <div style="font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#8FBEFF;margin-bottom:9px">Parrainage</div>
-        <h3 style="font-size:24px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:9px;font-family:'Bricolage Grotesque',sans-serif;line-height:1.2">Parrainez un proche, gagnez un mois d'abonnement</h3>
+        <h3 style="font-size:24px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:9px;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;line-height:1.2">Parrainez un proche, gagnez un mois d'abonnement</h3>
         <p style="font-size:14.5px;line-height:1.6;color:#B7C4DC;max-width:640px">Votre filleul crée un <strong style="color:#EAF0FB">nouveau compte</strong> avec votre lien et souscrit une offre <strong style="color:#EAF0FB">annuelle</strong>. Après le délai de rétractation, <strong style="color:#EAF0FB">un mois d'abonnement vous est offert</strong>. Sans limite de filleuls.</p>
       </div>
       <!-- `loginUrl` et non `signupUrl` : parrainer suppose un compte, et le
@@ -107,7 +107,7 @@ const { isPrelaunch, labels } = useSiteMode()
 const { isYearly, setPeriod, pricePer, priceOf, equivalentOf } = usePricing()
 
 const segStyle = (active: boolean) =>
-  `padding:9px 20px;border-radius:999px;border:0;cursor:pointer;font-size:14px;font-weight:600;font-family:'Instrument Sans',sans-serif;transition:all .18s;background:${active ? '#fff' : 'transparent'};color:${active ? '#0F1B33' : '#5B6577'};box-shadow:${active ? '0 2px 8px rgba(15,27,51,.10)' : 'none'}`
+  `padding:9px 20px;border-radius:999px;border:0;cursor:pointer;font-size:14px;font-weight:600;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;transition:all .18s;background:${active ? '#fff' : 'transparent'};color:${active ? '#0F1B33' : '#5B6577'};box-shadow:${active ? '0 2px 8px rgba(15,27,51,.10)' : 'none'}`
 
 /** Une ligne de fonctionnalité d'une carte tarifaire. */
 interface Feature {

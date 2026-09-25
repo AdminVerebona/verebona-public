@@ -8,13 +8,13 @@
       <p style="font-size:15.5px;line-height:1.6;color:#95A1B8">Verebona vous aide à retrouver, suivre et documenter vos biens au fil du temps, puis à réunir les bonnes pièces lorsqu'un événement arrive.</p>
     </div>
     <div style="overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);margin-bottom:32px">
-      <div style="display:flex;gap:56px;white-space:nowrap;width:max-content;animation:vb-marquee 34s linear infinite;font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:500;color:rgba(148,163,184,.14)">
+      <div style="display:flex;gap:56px;white-space:nowrap;width:max-content;animation:vb-marquee 34s linear infinite;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:30px;font-weight:500;color:rgba(148,163,184,.14)">
         <span>Voiture</span><span>Appartement</span><span>Garage</span><span>Moto</span><span>Maison</span><span>Terrain</span><span>Vélo</span><span>Local commercial</span><span>Loisir / Sport</span><span>Électronique</span>
         <span>Voiture</span><span>Appartement</span><span>Garage</span><span>Moto</span><span>Maison</span><span>Terrain</span><span>Vélo</span><span>Local commercial</span><span>Loisir / Sport</span><span>Électronique</span>
       </div>
     </div>
     <div v-for="group in ucGroups" :key="group.label" class="vb-reveal" style="max-width:920px;margin:0 auto 30px">
-      <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8FBEFF;margin:0 0 14px 4px">{{ group.label }}</div>
+      <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#8FBEFF;margin:0 0 14px 4px">{{ group.label }}</div>
       <div style="border-radius:20px;overflow:hidden;border:1px solid rgba(148,163,184,.14);background:rgba(15,23,42,.4)">
       <template v-for="(item, vi0) in group.items" :key="vi0">
         <div style="border-bottom:1px solid rgba(148,163,184,.09)">

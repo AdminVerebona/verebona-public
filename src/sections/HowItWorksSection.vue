@@ -8,11 +8,11 @@
         <h2 style="font-size:42px;font-weight:600;letter-spacing:-.02em;color:#0F1B33;line-height:1.14;margin-bottom:14px">Vous déposez. Verebona organise.</h2>
         <p style="font-size:15.5px;line-height:1.65;color:#5B6577;margin-bottom:30px">Ajoutez vos documents. Verebona les comprend, les relie à vos biens, complète vos informations et prépare vos prochaines échéances.</p>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <button v-for="(s, i) in steps" :key="i" type="button" :aria-pressed="demo === i" style="position:relative;display:flex;gap:18px;text-align:left;width:100%;padding:14px 16px;border-radius:14px;cursor:pointer;border:1px solid transparent;background:transparent;font-family:'Instrument Sans',sans-serif" @click.prevent="select(i)">
+          <button v-for="(s, i) in steps" :key="i" type="button" :aria-pressed="demo === i" style="position:relative;display:flex;gap:18px;text-align:left;width:100%;padding:14px 16px;border-radius:14px;cursor:pointer;border:1px solid transparent;background:transparent;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif" @click.prevent="select(i)">
             <template v-if="demo === i">
               <span style="position:absolute;inset:0;border-radius:14px;background:#fff;border:1px solid rgba(37,99,235,.28);box-shadow:0 12px 28px rgba(15,27,51,.08);pointer-events:none"></span>
             </template>
-            <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:34px;font-weight:700;line-height:1;color:rgba(37,99,235,.3);flex-shrink:0;position:relative">{{ s.num }}</span>
+            <span style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:34px;font-weight:700;line-height:1;color:rgba(37,99,235,.3);flex-shrink:0;position:relative">{{ s.num }}</span>
             <span style="display:block;position:relative"><span style="display:block;font-size:18px;font-weight:600;color:#0F1B33;margin-bottom:5px">{{ s.title }}</span><span style="display:block;font-size:14px;line-height:1.6;color:#5B6577">{{ s.desc }}</span></span>
           </button>
         </div>

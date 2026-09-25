@@ -29,6 +29,28 @@ try {
   console.warn("dist/.site-env.json not found: X-Robots-Tag not set");
 }
 
+/**
+ * Hote canonique (ticket SEO accueil, « Indexabilite »).
+ *
+ * `CANONICAL_HOST=www.verebona.fr` (production uniquement) : toute requete
+ * recue en HTTP ou sur un autre hote (apex `verebona.fr`, domaine technique
+ * de l'hebergeur…) est redirigee en UNE seule 301 vers
+ * `https://www.verebona.fr` + chemin + query — jamais de chaine
+ * http -> https -> www. Sans la variable, rien ne change : l'hebergeur peut
+ * deja assurer cette convergence, et la preproduction ne doit pas rediriger
+ * vers la production.
+ */
+const canonicalHost = (process.env.CANONICAL_HOST || "").trim().toLowerCase();
+if (canonicalHost) {
+  app.set("trust proxy", true);
+  app.use((req, res, next) => {
+    const host = (req.hostname || "").toLowerCase();
+    const isHttps = req.secure || req.get("x-forwarded-proto") === "https";
+    if (host === canonicalHost && isHttps) return next();
+    res.redirect(301, `https://${canonicalHost}${req.originalUrl}`);
+  });
+}
+
 if (siteEnv && siteEnv.indexable === false) {
   app.use((_, res, next) => {
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
@@ -49,6 +71,22 @@ if (process.env.BASIC_AUTH_ENABLED === "true") {
 
   console.log("Basic authentication enabled");
 }
+
+/**
+ * Polices auto-hebergees (dist/fonts). Les noms de fichiers portent la
+ * version Fontsource (ex. `-5.3.0.woff2`) : une mise a jour change l'URL,
+ * d'ou un cache long et immuable sans risque de servir une version perimee.
+ * `fallthrough: false` : un fichier absent repond 404 au lieu de tomber
+ * dans le repli SPA (qui renverrait du HTML a la place d'une police).
+ */
+app.use(
+  "/fonts",
+  express.static(path.join(distDir, "fonts"), {
+    maxAge: "1y",
+    immutable: true,
+    fallthrough: false,
+  })
+);
 
 app.use(express.static(distDir));
 
@@ -71,13 +109,19 @@ app.use(express.static(distDir));
  * ══════════════════════════════════════════════════════════════════════════
  */
 const CRAWLER_FILES = new Set(["/sitemap.xml", "/robots.txt"]);
+const SPA_SHELL = path.join(distDir, "spa.html");
 
 app.get("/{*splat}", (req, res) => {
   if (CRAWLER_FILES.has(req.path)) {
     res.status(404).type("text/plain").send("Not found\n");
     return;
   }
-  res.sendFile(path.join(distDir, "index.html"));
+  // `/` est servi par express.static (dist/index.html : accueil pré-rendu).
+  // Toute autre route reçoit la coquille SPA, sans le contenu ni le titre de
+  // l'accueil. Repli sur index.html si le pré-rendu n'a pas été exécuté.
+  res.sendFile(SPA_SHELL, (err) => {
+    if (err) res.sendFile(path.join(distDir, "index.html"));
+  });
 });
 
 app.listen(port, () => {

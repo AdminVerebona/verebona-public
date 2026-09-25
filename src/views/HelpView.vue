@@ -13,7 +13,7 @@
     <template v-for="(item, vi4) in aideItems" :key="vi4">
       <div :style="item.rowStyle">
         <button type="button" @click.prevent="item.onClick" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;background:transparent;border:0;cursor:pointer;text-align:left">
-          <span style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#2563EB">{{ item.c }}</span><span style="font-size:16.5px;font-weight:600;color:#0F1B33;font-family:'Bricolage Grotesque',sans-serif">{{ item.q }}</span></span>
+          <span style="display:flex;flex-direction:column;gap:5px"><span style="font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#2563EB">{{ item.c }}</span><span style="font-size:16.5px;font-weight:600;color:#0F1B33;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">{{ item.q }}</span></span>
           <span :style="item.chevron">⌄</span>
         </button>
         <template v-if="item.open">
@@ -22,7 +22,7 @@
       </div>
     </template>
     <div style="margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid #E6EBF3;border-radius:18px;padding:26px 28px">
-      <div><div style="font-size:18px;font-weight:700;color:#0F1B33;font-family:'Bricolage Grotesque',sans-serif">Toujours besoin d'aide ?</div><div style="font-size:14.5px;color:#64748B;margin-top:4px">Notre équipe vous répond sous 24&nbsp;h ouvrées.</div></div>
+      <div><div style="font-size:18px;font-weight:700;color:#0F1B33;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Toujours besoin d'aide ?</div><div style="font-size:14.5px;color:#64748B;margin-top:4px">Notre équipe vous répond sous 24&nbsp;h ouvrées.</div></div>
       <button type="button" @click.prevent="goContact" style="font-size:15px;font-weight:600;color:#fff;padding:13px 24px;border-radius:999px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);border:0;cursor:pointer;box-shadow:0 12px 26px rgba(37,99,235,.3)">Contacter le support</button>
     </div>
   </div>

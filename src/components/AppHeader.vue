@@ -113,7 +113,7 @@
         </svg>
         <span
           style="
-            font-family: &quot;Bricolage Grotesque&quot;, sans-serif;
+            font-family: &quot;Bricolage Grotesque&quot;, &quot;Bricolage Grotesque Fallback&quot;, sans-serif;
             font-weight: 700;
             font-size: 19px;
             letter-spacing: -0.01em;

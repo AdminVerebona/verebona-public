@@ -4,16 +4,15 @@
   <div style="position:absolute;top:6%;left:-7%;width:540px;height:540px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.20),transparent 62%);filter:blur(20px);pointer-events:none"></div>
   <div style="max-width:1280px;margin:0 auto;position:relative">
     <div class="r-hero" style="display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center">
-      <!-- Left -->
-      <div class="vb-reveal">
-        <h1 style="font-size:57px;line-height:1.04;font-weight:600;letter-spacing:-.03em;color:#fff;margin-bottom:20px">Centralisez,<br><span style="background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">organisez, valorisez.</span></h1>
-        <p style="font-size:18px;line-height:1.6;color:#A5B0C6;max-width:520px;margin-bottom:30px">Verebona organise vos documents, informations et échéances pour les retrouver facilement, anticiper les dates importantes et valoriser vos biens le moment venu.</p>
-        <div class="r-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;max-width:540px;margin-bottom:32px">
-          <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Retrouvez vite ce qui compte</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Contrats, garanties, diagnostics au bon endroit.</div></div></div>
-          <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Anticipez les dates importantes</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Assurances, contrôles et entretiens au bon moment.</div></div></div>
-          <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Suivez l'histoire de vos biens</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Un historique clair qui se construit dans le temps.</div></div></div>
-          <div style="display:flex;gap:10px"><span style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div><div style="font-weight:600;color:#EAF0FB;font-size:14.5px">Valorisez-les le moment venu</div><div style="color:#8390A8;font-size:13px;line-height:1.5">Vente, assurance ou transmission mieux documentées.</div></div></div>
-        </div>
+      <!-- Left
+           Ordre imposé (ticket SEO accueil) : H1 → paragraphe → disponibilité
+           → H2 → quatre bénéfices (H3) → signature. Texte HTML rendu au build
+           (voir scripts/prerender.mjs) : pas de .vb-reveal sur cette colonne,
+           sinon le texte déjà peint disparaîtrait puis réapparaîtrait au
+           démarrage de Vue. -->
+      <div class="r-hero-copy" style="min-width:0">
+        <h1 style="font-size:57px;line-height:1.06;font-weight:600;letter-spacing:-.03em;color:#fff;margin-bottom:20px;overflow-wrap:break-word"><span style="display:block">Profitez de vos biens.</span> <span style="display:block;background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">Passez moins de temps à les gérer.</span></h1>
+        <p style="font-size:18px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-bottom:28px">Verebona est une application pour organiser les documents et suivre les échéances de votre maison, de votre voiture et de vos objets. Retrouvez vos factures et garanties, anticipez les entretiens et conservez l’historique de chaque bien pour simplifier vos démarches, de l’achat à la vente ou à la transmission.</p>
         <!-- PRELAUNCH : seule la zone d'action change (CDC pré-lancement §6.4) -->
         <div v-if="isPrelaunch" data-testid="prelaunch-hero" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
           <span style="display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:#EAF0FB;padding:13px 24px;border-radius:999px;background:rgba(35,196,168,.10);border:1px solid rgba(35,196,168,.35);cursor:default;user-select:none"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#23C4A8;box-shadow:0 0 0 4px rgba(35,196,168,.18)"></span>{{ labels.heroTitle }}</span>
@@ -22,6 +21,18 @@
         <div v-else style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
           <a :href="signupUrl()" style="font-size:16px;font-weight:600;color:#fff;padding:14px 26px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.4);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement pendant 7 jours</a>
           <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">Essai Premium sans carte bancaire · 2 biens et 30 documents · aucun abonnement déclenché automatiquement</span>
+        </div>
+
+        <!-- Bénéfices : séparés du bloc de disponibilité par un filet -->
+        <div style="margin-top:36px;padding-top:30px;border-top:1px solid rgba(148,163,184,.16);max-width:560px">
+          <h2 style="font-size:30px;line-height:1.2;font-weight:600;letter-spacing:-.02em;color:#fff;margin-bottom:20px">Centralisez, organisez, valorisez.</h2>
+          <ul class="r-2" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px 28px">
+          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Retrouvez vite ce qui compte</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Contrats, garanties, diagnostics au bon endroit.</p></div></li>
+          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Anticipez les dates importantes</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Assurances, contrôles et entretiens au bon moment.</p></div></li>
+          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Suivez l’histoire de vos biens</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Un historique clair qui se construit dans le temps.</p></div></li>
+          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Valorisez-les le moment venu</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Vente, assurance ou transmission mieux documentées.</p></div></li>
+          </ul>
+          <p style="margin-top:26px;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:19px;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:#C7D3EA"><span style="background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">Être prêt avant d’en avoir besoin.</span></p>
         </div>
       </div>
       <!-- Right : mascotte welcome-wave -->
@@ -40,7 +51,7 @@
           <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7EB0FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.7 12 3l9 7.7"/><path d="M5 9.6V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.6"/><path d="M9.5 21v-6.2h5V21"/></svg>
         </div>
         <div>
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Biens</div>
+          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Biens</div>
           <div style="font-size:13.5px;color:#8FA0BB">Logements, véhicules, objets</div>
         </div>
       </div>
@@ -49,7 +60,7 @@
           <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#B49BFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h6l4 4v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 16.5h4"/></svg>
         </div>
         <div>
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Documents</div>
+          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Documents</div>
           <div style="font-size:13.5px;color:#8FA0BB">Factures, garanties, contrats…</div>
         </div>
       </div>
@@ -58,7 +69,7 @@
           <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#6EE7A3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/><circle cx="15.5" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/></svg>
         </div>
         <div>
-          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Agendas</div>
+          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Agendas</div>
           <div style="font-size:13.5px;color:#8FA0BB">Échéances, entretiens, rappels…</div>
         </div>
       </div>
@@ -185,9 +196,9 @@
             <div style="padding:6px 16px 14px;display:flex;flex-direction:column;gap:11px;overflow:hidden;flex:1">
               <div style="display:flex;align-items:center;gap:8px">
                 <svg width="18" height="18" viewBox="0 0 32 32" fill="none" style="overflow:visible"><rect x="0" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="-1.55" width="9.14" height="9.14" rx="1.6" fill="#2F6BFF" transform="rotate(18 27.43 3.02)"/></svg>
-                <span style="font-size:13px;font-weight:700;color:#E2E8F0;font-family:'Bricolage Grotesque',sans-serif">Verebona</span>
+                <span style="font-size:13px;font-weight:700;color:#E2E8F0;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Verebona</span>
               </div>
-              <div style="font-size:15px;font-weight:700;color:#fff;font-family:'Bricolage Grotesque',sans-serif">Bonjour, Léa</div>
+              <div style="font-size:15px;font-weight:700;color:#fff;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Bonjour, Léa</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
                 <div style="padding:10px;border-radius:12px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25)"><div style="font-size:9px;color:#93A2BD;text-transform:uppercase;letter-spacing:.05em">Biens</div><div style="font-size:18px;font-weight:700;color:#E2E8F0">3</div></div>
                 <div style="padding:10px;border-radius:12px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25)"><div style="font-size:9px;color:#93A2BD;text-transform:uppercase;letter-spacing:.05em">À traiter</div><div style="font-size:18px;font-weight:700;color:#E2E8F0">1</div></div>

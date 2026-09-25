@@ -156,3 +156,18 @@ Le design est repris **1:1** du prototype validé : les styles sont **inline** d
 - **Authentification** : les liens « Se connecter » / « Créer votre compte » sont des placeholders (`href="#"` / ancre `#pricing`). Les pointer vers votre flux d'auth (route dédiée ou l'app `app.verebona.com`).
 - **Formulaire de contact** : `useContact().sendContact()` bascule seulement sur l'écran de succès. Y ajouter l'envoi réel (API / service mail) quand disponible.
 - **Contenu légal** : textes de démonstration à faire valider juridiquement.
+
+## Pré-rendu de l'accueil
+
+L'accueil est livré avec son contenu dans le HTML initial (H1, paragraphe, bénéfices, signature), sans dépendre de l'exécution du JavaScript.
+
+| Fichier                    | Rôle                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `src/entry-prerender.ts`   | rend la route `/` avec `vue/server-renderer` (build SSR dans `node_modules/.prerender`, supprimé après) |
+| `scripts/prerender.mjs`    | injecte le rendu dans `dist/index.html` et produit `dist/spa.html` (coquille des autres routes)         |
+| `src/config/head.rules.ts` | titre et meta description par route ; description de l'accueil selon le mode `prelaunch` / `full`       |
+| `server.cjs`               | sert `dist/index.html` sur `/` et `dist/spa.html` pour les autres routes                                |
+
+Le navigateur monte ensuite l'application normalement (`createApp`, pas d'hydratation) : le DOM est identique.
+
+Variable optionnelle **`CANONICAL_HOST`** (production uniquement, ex. `www.verebona.fr`) : redirige en une seule 301 toute requête HTTP ou sur un autre hôte vers `https://www.verebona.fr` + chemin. À ne pas définir en préproduction.

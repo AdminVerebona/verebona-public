@@ -14,6 +14,7 @@
     "vite.config.ts",
     "src/config/site-mode.rules.ts",
     "src/config/sitemap.rules.ts",
-    "src/config/structured-data.ts"
+    "src/config/structured-data.ts",
+    "src/config/head.rules.ts"
   ]
 }

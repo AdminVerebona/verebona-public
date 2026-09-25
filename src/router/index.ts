@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { captureReferralCode, signupUrl } from '../config/urls'
 import { installSiteModeGuard, useSiteMode } from '../config/site'
 import { installCanonicalGuard } from '../config/canonical'
+import { installHeadGuard } from '../config/head'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -47,7 +48,9 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  // Hors navigateur (pré-rendu de l'accueil au build, voir
+  // scripts/prerender.mjs) : historique en mémoire, sans accès à `window`.
+  history: typeof window === 'undefined' ? createMemoryHistory() : createWebHistory(),
   routes,
   scrollBehavior(to) {
     if (to.hash) return { el: to.hash, behavior: 'smooth' }
@@ -70,6 +73,12 @@ installSiteModeGuard(router)
  * n'aurait alors servi à rien. Voir `src/config/canonical.ts`.
  */
 installCanonicalGuard(router)
+
+/**
+ * Titre et meta description propres à chaque route : le titre de l'accueil
+ * ne s'applique plus aux autres pages. Voir `src/config/head.rules.ts`.
+ */
+installHeadGuard(router)
 
 /**
  * Le code de parrainage est relu a chaque navigation.
