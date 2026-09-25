@@ -23,6 +23,9 @@ function setDescription(content: string): void {
 
 export function applyHead(routeName: string | undefined): void {
   if (typeof document === 'undefined') return
+  // Les pages du Centre d'aide portent leur propre en-tête, calculé depuis
+  // l'article affiché (src/help/head.ts) : ne pas l'écraser ici.
+  if (routeName?.startsWith('help')) return
   const { siteMode } = useSiteMode()
   const head = headForRoute(routeName, siteMode.value)
   if (document.title !== head.title) document.title = head.title

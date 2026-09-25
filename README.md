@@ -85,7 +85,7 @@ src/
 | `tests/sitemap.test.ts`       | recette automatisée du contenu produit                                                                  |
 | `tests/server.test.ts`        | recette HTTP : `/sitemap.xml` en 200 `application/xml`, 404 (jamais du HTML) pour tout fichier absent   |
 
-Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre.
+Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre. Seule exception : les pages du Centre d'aide (thèmes et articles publiés), dérivées du corpus au build (CDC Centre d'aide SEO-02) — voir ci-dessous.
 
 Aucun `lastmod`, `changefreq` ni `priority` en V1 (§7). Aucun sitemap n'est produit hors production, et `robots.txt` y passe en `Disallow: /` (§10).
 
@@ -122,6 +122,52 @@ Le témoin le plus simple est `robots.txt` : **sans ligne `Sitemap:`, la product
 3. Une fois `curl` conforme, renvoyer le sitemap dans Search Console. Le rapport ne se met à jour qu'à la lecture suivante.
 
 > **Prérequis d'hébergement.** Le CDC impose le domaine `www.verebona.fr`. Les URLs du sitemap ne doivent pas rediriger (§7) : `www` doit être servi en direct, et c'est l'apex `verebona.fr` qui redirige vers lui — pas l'inverse. Si la configuration actuelle fait le contraire, l'inverser **avant** de soumettre le sitemap.
+
+## Centre d'aide
+
+`/aide` est la **source unique** de l'aide Verebona (CDC _Centre d'aide V1_) : le site, « Besoin d'aide » dans l'application et l'assistant lisent le même corpus. L'application ne contient aucun article.
+
+### Où ça vit
+
+| Fichier                                | Rôle                                                                                   |
+| -------------------------------------- | -------------------------------------------------------------------------------------- |
+| `src/content/aide/articles/AID-*.md`   | **un article par fichier**, nommé d'après son ID stable ; frontmatter + Markdown restreint |
+| `src/content/aide/categories.json`     | les 14 thèmes, leur ordre et leur introduction (§11.1)                                  |
+| `src/help/*.ts`                        | parsing, validation de build, recherche, sorties (fonctions pures, testées)             |
+| `help.build.ts`                        | lecture du disque et dates Git (EDITOR-02)                                              |
+| `vite.config.ts` (`helpCenterPlugin`)  | valide le corpus, émet catalogue, corpus assistant, redirections ; échec au 1ᵉʳ défaut   |
+| `scripts/prerender.mjs`                | une page HTML statique par page publiée (SEO-01)                                        |
+| `server.cjs`                           | redirections 301 (§13.1), 404 explicite, CORS des JSON, `frame-ancestors`               |
+
+### Ce que produit chaque build
+
+| Sortie                    | Lecteur                                   | Contenu                                                    |
+| ------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| pages `/aide…`            | visiteurs, moteurs                        | articles **publiés dans l'environnement**                  |
+| `/aide/catalogue.json`    | application (« Besoin d'aide »)           | ID → titre, chemin, catégorie, statut, `published`         |
+| `/aide/corpus-t2.json`    | application (assistant)                   | articles publiés, découpés en sections citables            |
+| `dist/aide/.redirects.json` | `server.cjs` (non servi)                | anciennes URLs → destination, en un saut                   |
+| `sitemap.xml`             | moteurs (production)                      | thèmes et articles publiés et indexables                   |
+
+Toutes portent la même `version` (commit déployé + empreinte du contenu).
+
+### Publication par environnement
+
+- `status: published` : publié partout.
+- `status: blocked` + `blocker:` : l'écart du §14 n'est pas clos. **Visible en préproduction** (bandeau « Publication conditionnée ») pour la recette, **absent de la production** (pas de page, pas de sitemap, pas de catalogue publié, pas d'assistant). Une ancienne URL qui y menait redirige vers `/aide`.
+- Lever un blocage : passer `status` à `published` et retirer `blocker`, dans le même déploiement que le correctif produit.
+
+### Ajouter ou modifier un article
+
+1. Créer `src/content/aide/articles/AID-<DOMAINE>-<NNN>.md` (copier un article voisin). L'ID ne change jamais ; le titre et le slug peuvent changer.
+2. Slug modifié : ajouter l'ancienne URL à `redirectFrom` (obligatoire, §2.2).
+3. `npm run test` puis `npm run build` : le build liste tous les défauts (article lié inexistant, doublon, valeur hors référentiel, vocabulaire interne T1–T5, e-mail, lien privé…).
+
+Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — texte`, encadrés `> **À savoir** — texte` (et « Limites et points d'attention », « Prérequis », « Résultat attendu »), définitions `**Terme** — texte`, **gras** et liens `[texte](/aide/slug)`. Rien d'autre, et jamais de HTML.
+
+### Mode intégré (application mobile)
+
+`?integre=app` masque l'en-tête et le pied du site, affiche « Retour à Verebona » et se conserve pendant la navigation. Dans un cadre, le retour envoie `{ type: 'verebona:help:close' }` à l'application ; seule l'origine de `VITE_APP_URL` peut encadrer le site.
 
 ## Données structurées (JSON-LD)
 

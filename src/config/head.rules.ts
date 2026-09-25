@@ -48,8 +48,6 @@ export const SHELL_TITLE = 'Verebona'
 
 /** Titres complets par nom de route. Toute route absente reçoit `SHELL_TITLE`. */
 export const ROUTE_TITLES: Record<string, string> = {
-  help: 'Centre d’aide | Verebona',
-  'help-article': 'Centre d’aide | Verebona',
   contact: 'Contact | Verebona',
   'legal-mentions': 'Mentions légales | Verebona',
   'legal-cgu': 'Conditions générales | Verebona',

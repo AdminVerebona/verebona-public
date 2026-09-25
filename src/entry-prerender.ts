@@ -27,3 +27,6 @@ export async function render(url: string): Promise<string> {
 
 // Valeurs du head réutilisées par scripts/prerender.mjs pour la coquille SPA.
 export { DEFAULT_DESCRIPTION, SHELL_TITLE, escapeHtmlAttr } from './config/head.rules'
+
+// Pages du Centre d'aide et leur en-tête (voir scripts/prerender.mjs).
+export { helpPages } from './help/pages'

@@ -4,13 +4,20 @@ import { captureReferralCode, signupUrl } from '../config/urls'
 import { installSiteModeGuard, useSiteMode } from '../config/site'
 import { installCanonicalGuard } from '../config/canonical'
 import { installHeadGuard } from '../config/head'
+import { installEmbedGuard } from '../help/embed'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
-  { path: '/aide', name: 'help', component: () => import('../views/HelpView.vue') },
-  // Article du centre d'aide. L'application ouvre `/aide/<id>` depuis sa
-  // modale : sans cette route, chaque lien répondait 404.
-  { path: '/aide/:slug', name: 'help-article', component: () => import('../views/HelpArticleView.vue') },
+  // ══════════════════════════════════════════════════════════════════════════
+  // CENTRE D'AIDE — CDC Centre d'aide V1
+  //
+  // Les articles viennent du corpus `src/content/aide/`, seule source (§2).
+  // `/aide/theme/…` est réservé : aucun article ne peut porter le slug
+  // « theme » (validation de build).
+  // ══════════════════════════════════════════════════════════════════════════
+  { path: '/aide', name: 'help', component: () => import('../views/help/HelpHomeView.vue') },
+  { path: '/aide/theme/:category', name: 'help-category', component: () => import('../views/help/HelpCategoryView.vue') },
+  { path: '/aide/:slug', name: 'help-article', component: () => import('../views/help/HelpArticleView.vue') },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue') },
   { path: '/mentions-legales', name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
   { path: '/cgu', name: 'legal-cgu', component: () => import('../views/LegalView.vue') },
@@ -64,6 +71,12 @@ const router = createRouter({
  * production. Voir `src/config/site.ts`.
  */
 installSiteModeGuard(router)
+
+/**
+ * Mode intégré à l'application (`?integre=app`) : conservé sur toutes les
+ * navigations internes. Voir `src/help/embed.ts`.
+ */
+installEmbedGuard(router)
 
 /**
  * Balise canonical propre à chaque route — CDC Sitemap §7.

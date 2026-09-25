@@ -11,6 +11,7 @@ const username = process.env.BASIC_AUTH_USER || "admin";
 const password = process.env.BASIC_AUTH_PASSWD;
 
 const distDir = path.join(__dirname, "dist");
+const SPA_SHELL = path.join(distDir, "spa.html");
 
 /**
  * Environnement du build servi (CDC pre-lancement §8).
@@ -58,16 +59,23 @@ if (siteEnv && siteEnv.indexable === false) {
   });
 }
 
+/**
+ * Données du Centre d'aide lues par l'application SERVEUR (assistant) et
+ * par son navigateur (« Besoin d'aide ») : hors authentification basique en
+ * préproduction, sans quoi l'assistant de préproduction ne lirait aucun
+ * article et le contrôle CI échouerait. Contenu d'aide uniquement, `noindex`.
+ */
+const HELP_DATA_PATHS = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
+
 if (process.env.BASIC_AUTH_ENABLED === "true") {
-  app.use(
-    basicAuth({
-      users: {
-        [username]: password,
-      },
-      challenge: true,
-      realm: "Protected",
-    })
-  );
+  const auth = basicAuth({
+    users: {
+      [username]: password,
+    },
+    challenge: true,
+    realm: "Protected",
+  });
+  app.use((req, res, next) => (HELP_DATA_PATHS.has(req.path) ? next() : auth(req, res, next)));
 
   console.log("Basic authentication enabled");
 }
@@ -89,13 +97,95 @@ app.use(
 );
 
 /**
+ * ══════════════════════════════════════════════════════════════════════════
+ * CENTRE D'AIDE — CDC Centre d'aide V1 §13.1, REDIR-01 à REDIR-03, MOB-01
+ *
+ * · Anciennes URLs : UNE redirection 301, directement vers la destination
+ *   finale (« sans chaîne de redirections »). La table est produite au build
+ *   depuis le corpus (`dist/aide/.redirects.json`, dotfile non servi).
+ * · Pages : servies depuis leur HTML pré-rendu, sans slash final. Un article
+ *   inconnu répond 404 avec la coquille SPA, qui affiche l'état « Cet article
+ *   n'est plus disponible » (REDIR-02) — jamais une page vide ni un 200.
+ * · Fichiers de données (catalogue, corpus de l'assistant) : lisibles depuis
+ *   l'application de l'environnement, et elle seule.
+ * · Mode intégré : seule l'application peut encadrer le site.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+const helpDir = path.join(distDir, "aide");
+let helpRedirects = {};
+try {
+  helpRedirects = JSON.parse(fs.readFileSync(path.join(helpDir, ".redirects.json"), "utf8"));
+} catch {
+  console.warn("dist/aide/.redirects.json not found: no help redirects");
+}
+
+const appOrigin = siteEnv && typeof siteEnv.appOrigin === "string" ? siteEnv.appOrigin : null;
+
+app.use((req, res, next) => {
+  // Clickjacking : seul le site lui-même et l'application peuvent l'encadrer.
+  res.setHeader(
+    "Content-Security-Policy",
+    `frame-ancestors 'self'${appOrigin ? ` ${appOrigin}` : ""}`,
+  );
+  next();
+});
+
+const HELP_DATA = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
+app.use((req, res, next) => {
+  if (!HELP_DATA.has(req.path)) return next();
+  res.setHeader("Access-Control-Allow-Origin", appOrigin || "*");
+  res.setHeader("Vary", "Origin");
+  // Court : un article publié doit apparaître dans « Besoin d'aide » et dans
+  // l'assistant sans attendre longtemps après le déploiement.
+  res.setHeader("Cache-Control", "public, max-age=300");
+  next();
+});
+
+const notFoundShell = (res) =>
+  res.status(404).sendFile(SPA_SHELL, (e) => {
+    if (e) res.status(404).type("text/plain").send("Not found\n");
+  });
+
+app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
+  const q = req.originalUrl.indexOf("?");
+  const query = q === -1 ? "" : req.originalUrl.slice(q);
+  // Une seule URL par page : ni `.html`, ni `index`, ni remontée de dossier.
+  if (req.path.includes("..") || /\.html$/i.test(req.path) || /^\/aide\/index\/?$/.test(req.path)) {
+    return notFoundShell(res);
+  }
+  if (/\.[a-z0-9]+$/i.test(req.path)) return next();
+  const p = req.path.length > 5 ? req.path.replace(/\/+$/, "") : req.path;
+
+  const target = helpRedirects[p];
+  if (target) {
+    res.redirect(301, target + query);
+    return;
+  }
+  // `/aide/x/` → `/aide/x` : une URL canonique par page, en un saut.
+  if (p !== req.path) {
+    res.redirect(301, p + query);
+    return;
+  }
+
+  // Résultats de recherche interne : jamais indexés (SEO-03).
+  if (p === "/aide" && typeof req.query.q === "string") {
+    res.setHeader("X-Robots-Tag", "noindex, follow");
+  }
+
+  const file = p === "/aide" ? "index.html" : `${p.slice("/aide/".length)}.html`;
+  const full = path.join(helpDir, file);
+  if (!full.startsWith(helpDir + path.sep)) return notFoundShell(res);
+  fs.access(full, fs.constants.R_OK, (err) => (err ? notFoundShell(res) : res.sendFile(full)));
+});
+
+/**
  * Sitemap servi en `application/xml; charset=utf-8` (CDC Sitemap §7
  * « Type de contenu » et « Encodage ») : le type par defaut d'express ne
  * declare pas l'encodage.
  */
 app.use(
   express.static(distDir, {
-    setHeaders (res, filePath) {
+    setHeaders(res, filePath) {
       if (path.basename(filePath) === "sitemap.xml") {
         res.setHeader("Content-Type", "application/xml; charset=utf-8");
       }
@@ -128,7 +218,6 @@ app.use(
  * ══════════════════════════════════════════════════════════════════════════
  */
 const FILE_PATH = /\/[^/]*\.[a-z0-9]+$/i;
-const SPA_SHELL = path.join(distDir, "spa.html");
 
 app.get("/{*splat}", (req, res) => {
   if (FILE_PATH.test(req.path)) {

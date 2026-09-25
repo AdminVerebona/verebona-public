@@ -1,6 +1,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { siteModeQuery } from '../config/site'
+import { embedQuery } from '../help/embed'
 
 // Shared across header + footer + mobile menu.
 const menuOpen = ref(false)
@@ -45,7 +46,7 @@ export function useNav() {
    * avec modificateur (Ctrl/Cmd/Maj/Alt) sont laissés au navigateur.
    */
   function link(path: string) {
-    const to = { path, query: siteModeQuery() }
+    const to = { path, query: { ...siteModeQuery(), ...embedQuery() } }
     return {
       href: router.resolve(to).href,
       onClick: (event: MouseEvent) => {

@@ -8,13 +8,22 @@
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"]
   },
   "include": [
     "vite.config.ts",
     "src/config/site-mode.rules.ts",
     "src/config/sitemap.rules.ts",
     "src/config/structured-data.ts",
-    "src/config/head.rules.ts"
+    "src/config/head.rules.ts",
+    "help.build.ts",
+    "src/help/config.ts",
+    "src/help/corpus.ts",
+    "src/help/frontmatter.ts",
+    "src/help/markdown.ts",
+    "src/help/outputs.ts",
+    "src/help/referentials.ts",
+    "src/help/types.ts"
   ]
 }

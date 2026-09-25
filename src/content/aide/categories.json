@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "bien-demarrer",
+    "name": "Bien démarrer",
+    "intro": "Découvrez les bases de Verebona, créez votre compte et prenez en main la navigation.",
+    "order": 1
+  },
+  {
+    "slug": "biens",
+    "name": "Biens",
+    "intro": "Créez et organisez vos biens, leurs informations, leurs pièces et leurs équipements.",
+    "order": 2
+  },
+  {
+    "slug": "documents",
+    "name": "Documents",
+    "intro": "Ajoutez, classez, consultez et gérez les documents qui décrivent et justifient vos biens.",
+    "order": 3
+  },
+  {
+    "slug": "agenda-echeances",
+    "name": "Agenda et échéances",
+    "intro": "Centralisez les dates utiles, suivez vos échéances et synchronisez-les avec votre agenda personnel.",
+    "order": 4
+  },
+  {
+    "slug": "a-traiter",
+    "name": "À traiter",
+    "intro": "Comprenez les décisions que Verebona vous demande de confirmer et gardez le contrôle sur les propositions automatiques.",
+    "order": 5
+  },
+  {
+    "slug": "recherche",
+    "name": "Recherche",
+    "intro": "Retrouvez rapidement un bien, un document ou une échéance et utilisez Verebona pour interroger vos données.",
+    "order": 6
+  },
+  {
+    "slug": "dossiers-prets-usage",
+    "name": "Dossiers prêts à l’usage",
+    "intro": "Préparez des dossiers structurés à partir des informations et documents déjà présents dans Verebona.",
+    "order": 7
+  },
+  {
+    "slug": "transfert-recuperation",
+    "name": "Transfert et récupération",
+    "intro": "Transmettez un bien à un autre compte, récupérez vos données et comprenez la différence entre transfert et export.",
+    "order": 8
+  },
+  {
+    "slug": "ia-automatisations",
+    "name": "IA et automatisations",
+    "intro": "Comprenez ce que Verebona automatise, ce qui reste sous votre contrôle et comment sont tracées les modifications.",
+    "order": 9
+  },
+  {
+    "slug": "notifications",
+    "name": "Notifications",
+    "intro": "Choisissez comment Verebona vous prévient et gérez les notifications de chaque utilisateur.",
+    "order": 10
+  },
+  {
+    "slug": "compte-securite",
+    "name": "Compte et sécurité",
+    "intro": "Gérez votre profil, vos accès, vos données personnelles et les actions sensibles de votre compte.",
+    "order": 11
+  },
+  {
+    "slug": "abonnement-facturation-parrainage",
+    "name": "Abonnement, facturation et parrainage",
+    "intro": "Comprenez les offres, l’essai, la facturation, les changements d’abonnement, les impayés et le parrainage.",
+    "order": 12
+  },
+  {
+    "slug": "duo-partage",
+    "name": "Duo et partage",
+    "intro": "Partagez un espace Premium Duo avec une deuxième personne tout en conservant les préférences individuelles.",
+    "order": 13
+  },
+  {
+    "slug": "resoudre-probleme",
+    "name": "Résoudre un problème",
+    "intro": "Consultez les solutions aux difficultés les plus fréquentes avant de contacter le support.",
+    "order": 14
+  }
+]
