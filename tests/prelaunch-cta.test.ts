@@ -9,7 +9,7 @@
  * `src/config/site.ts` fige l'environnement à l'import : chaque cas recharge
  * les modules (`vi.resetModules`) après avoir posé ses variables.
  */
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { defineComponent, h } from 'vue'
@@ -50,6 +50,14 @@ const COMPONENTS = {
 
 const appLinks = (w: VueWrapper) =>
   w.findAll('a').map((a) => a.attributes('href') ?? '').filter((href) => /\/(signup|login)\b/.test(href))
+
+// Première compilation des SFC (Vue, à froid) : plusieurs secondes sur une
+// machine chargée, au-delà du délai de 5 s d'un test. Elle est faite une fois
+// ici, avec son propre délai ; `vi.resetModules()` ne fait ensuite que
+// réévaluer les modules déjà transformés.
+beforeAll(async () => {
+  for (const p of Object.values(COMPONENTS)) await import(/* @vite-ignore */ p)
+}, 120_000)
 
 let mounted: VueWrapper[] = []
 afterEach(() => {

@@ -65,12 +65,19 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 | `tests/embed.test.ts` | mode intégré : une seule barre « Retour à Verebona » (celle de l'application quand elle encadre le site) |
 | `tests/help-dates.test.ts` | contrôle `check:help-dates` (EDITOR-02) : lecture du `updatedAt`, analyse du `git log`, commit « updatedAt seul » ignoré, dépôt Git réel (échec puis succès), absence de `.git` ignorée |
 
-### Contrôles hors `vitest run` (à lancer en CI)
+### Contrôles hors `vitest run` (exécutés en CI)
+
+Intégration continue : `.github/workflows/ci.yml` (GitHub Actions, Node 22), à
+chaque push sur `main`/`master` et sur chaque pull request — `npm ci`,
+`npm test`, `npm run check:help-dates` (clone complet, `fetch-depth: 0`),
+`npm run build:preprod`, `npm run build`, installation de Chromium
+(`npx playwright-core install --with-deps --only-shell chromium`) puis
+`npm run test:a11y`. Le build lui-même ne dépend pas de Git (Scalingo).
 
 | Commande | Rôle |
 | --- | --- |
 | `npm run check:help-dates` | EDITOR-02 : échoue si l'`updatedAt` d'un article (date publiée sur l'hébergeur, sans `.git`) est antérieur au dernier commit qui a modifié son contenu (un commit qui ne touche que la ligne `updatedAt` ne compte pas). Ignoré sans `.git` ; en échec sur un clone superficiel (`actions/checkout` : `fetch-depth: 0`). |
-| `npm run build && npm run test:a11y` | A11Y-01 / A11Y-04 : axe-core (WCAG 2.0–2.2 A/AA) dans Chromium sur le `dist/` servi par `server.cjs` — `/aide`, recherche, un thème, un article (+ formulaire de retour ouvert), `/contact` (+ erreur d'envoi affichée), vue intégrée `?integre=app` (accueil et article), en viewport bureau (1280×800) et mobile (390×844). Échec sur toute violation `serious` / `critical`. Navigateur : `npx playwright-core install --with-deps chromium` en CI, ou `A11Y_CHROMIUM=<chemin>`. |
+| `npm run build && npm run test:a11y` | A11Y-01 / A11Y-04 : axe-core (WCAG 2.0–2.2 A/AA) dans Chromium sur le `dist/` servi par `server.cjs` — `/aide`, recherche, un thème, un article (+ formulaire de retour ouvert), `/contact` (+ erreur d'envoi affichée), vue intégrée `?integre=app` (accueil et article), en viewport bureau (1280×800) et mobile (390×844). Échec sur toute violation `serious` / `critical`. Puis navigation au clavier (`scripts/a11y-keyboard.mjs`) : parcours complet au Tab de chaque page (focus visible — `outline` ou `box-shadow` —, élément visible, ordre du document, en-tête → contenu → pied de page, pas de piège), ordre des éléments clés (en-tête, recherche, fil d'Ariane, retour d'article, champs du contact), recherche lancée à Entrée et résultat ouvert, retour « Non » à la barre d'espace, contact envoyé au clavier, menu mobile (`aria-expanded`). Échec sur tout défaut. Navigateur : `npx playwright-core install chromium` une fois (`PLAYWRIGHT_BROWSERS_PATH` respecté), ou `A11Y_CHROMIUM=<chemin vers chrome>`. |
 
 ## Structure
 

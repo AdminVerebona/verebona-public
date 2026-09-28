@@ -1,7 +1,13 @@
+// @vitest-environment node
 /**
  * CDC Données structurées §6 — balises Open Graph / Twitter par page, valeurs
  * centralisées ; CDC pré-lancement §5.3 — prévisualisation `?mode=` avant le
  * montage de Vue.
+ *
+ * Environnement `node` : aucun DOM n'est utilisé (le script de garde reçoit
+ * un `document` factice). Le corpus d'aide (`help.build`, lecture disque et
+ * Git) est chargé à la demande dans le seul test qui en a besoin : le
+ * chargement du fichier se limite à des modules purs.
  */
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -12,9 +18,6 @@ import { SITE_ORIGIN } from '../src/config/sitemap.rules'
 import {
   MODE_PREVIEW_GUARD_CSS, MODE_PREVIEW_GUARD_SCRIPT, MODE_REQUEST_ATTR, PRERENDER_MODE_ATTR,
 } from '../src/config/mode-preview-guard.rules'
-import { readHelpSources } from '../help.build'
-import { loadCorpus } from '../src/help/corpus'
-import { helpArticleHead } from '../src/help/head'
 
 const root = process.cwd()
 
@@ -41,7 +44,10 @@ describe('Open Graph / Twitter (CDC Données structurées §6)', () => {
     expect(socialTags({ title: 'T', description: 'D', url: null }).some((t) => t.key === 'og:url')).toBe(false)
   })
 
-  it('chaque page d’aide reçoit son titre, sa description et son URL (échappés)', () => {
+  it('chaque page d’aide reçoit son titre, sa description et son URL (échappés)', async () => {
+    const [{ readHelpSources }, { loadCorpus }, { helpArticleHead }] = await Promise.all([
+      import('../help.build'), import('../src/help/corpus'), import('../src/help/head'),
+    ])
     const { files, categories } = readHelpSources(root)
     const a = loadCorpus(files, categories).articles.find((x) => x.status === 'published')!
     const h = helpArticleHead(a, undefined)

@@ -233,6 +233,8 @@
           type="button"
           class="r-burger"
           @click.prevent="toggleMenu"
+          :aria-expanded="menuOpen ? 'true' : 'false'"
+          aria-controls="vb-mobile-menu"
           aria-label="Menu"
           style="
             width: 44px;
@@ -256,6 +258,7 @@
     </div>
     <template v-if="menuOpen">
       <div
+        id="vb-mobile-menu"
         class="r-mobile-menu"
         style="
           flex-direction: column;

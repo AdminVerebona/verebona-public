@@ -28,6 +28,10 @@ a:hover { color: inherit; }
 
 section[id] { scroll-margin-top: 82px; }
 
+/* Focus visible des champs du formulaire de contact (A11Y-01, vérifié par
+   `npm run test:a11y`) : jamais d'`outline: none` sans remplaçant. */
+.vb-field:focus-visible { outline: 3px solid #2563EB; outline-offset: 2px; border-color: #2563EB !important; }
+
 /* Scroll reveal */
 .vb-reveal,
 .vb-rgroup > * {

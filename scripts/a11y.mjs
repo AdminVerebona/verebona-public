@@ -14,9 +14,13 @@
  * les violations « minor » / « moderate » sont listées sans faire échouer.
  * Volontairement hors de `vitest run` : il faut un build et un navigateur.
  *
- * Navigateur : celui de `playwright-core` (`npx playwright-core install
- * chromium` en CI), ou `A11Y_CHROMIUM` / `/opt/pw-browsers/chromium` s'il
- * n'est pas installé à la révision attendue.
+ * Puis navigation au clavier (A11Y-01, `scripts/a11y-keyboard.mjs`) : ordre
+ * du focus, focus visible, parcours clés au clavier seul. Tout défaut échoue.
+ *
+ * Navigateur : celui de `playwright-core`, installé une fois par
+ * `npx playwright-core install chromium` (CI : `--with-deps --only-shell`) ;
+ * `PLAYWRIGHT_BROWSERS_PATH` est respecté. `A11Y_CHROMIUM=<chemin>` force un
+ * exécutable Chromium/Chrome déjà présent sur la machine.
  */
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
@@ -25,6 +29,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
 import { AxeBuilder } from '@axe-core/playwright'
+import { runKeyboard } from './a11y-keyboard.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
@@ -96,14 +101,16 @@ async function startServer() {
 }
 
 async function launchBrowser() {
-  const fallback = process.env.A11Y_CHROMIUM || '/opt/pw-browsers/chromium'
-  let executablePath
+  const executablePath = process.env.A11Y_CHROMIUM || undefined
   try {
-    if (!existsSync(chromium.executablePath())) executablePath = fallback
-  } catch {
-    executablePath = fallback
+    return await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) })
+  } catch (e) {
+    if (!executablePath && /Executable doesn't exist/i.test(e.message)) {
+      throw new Error('Chromium de playwright-core absent : lancer `npx playwright-core install chromium` '
+        + '(ou A11Y_CHROMIUM=<chemin vers chrome>).')
+    }
+    throw e
   }
-  return chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) })
 }
 
 function formatViolation(v) {
@@ -122,6 +129,8 @@ async function main() {
   let blocking = 0
   let other = 0
   let audited = 0
+  let kbRun = 0
+  let kbFailed = 0
   try {
     for (const vp of VIEWPORTS) {
       const { name: vpName, ...options } = vp
@@ -174,17 +183,21 @@ async function main() {
         }
         await page.close()
       }
+      const kb = await runKeyboard(context, server.base, vpName)
+      kbRun += kb.run
+      kbFailed += kb.failed
       await context.close()
     }
   } finally {
     await browser.close()
     server.stop()
   }
-  if (blocking > 0) {
-    console.error(`[test:a11y] ${blocking} violation(s) serious/critical sur ${audited} états audités.`)
+  const kbSummary = `clavier : ${kbRun - kbFailed}/${kbRun} parcours sans défaut`
+  if (blocking > 0 || kbFailed > 0) {
+    console.error(`[test:a11y] ${blocking} violation(s) serious/critical sur ${audited} états audités ; ${kbSummary}.`)
     process.exit(1)
   }
-  console.log(`[test:a11y] ${audited} états audités (${PAGES.length} pages × ${VIEWPORTS.length} viewports + états interactifs) : aucune violation serious/critical (${other} mineure(s)/modérée(s)).`)
+  console.log(`[test:a11y] ${audited} états audités (${PAGES.length} pages × ${VIEWPORTS.length} viewports + états interactifs) : aucune violation serious/critical (${other} mineure(s)/modérée(s)) ; ${kbSummary}.`)
 }
 
 main().catch((e) => {
