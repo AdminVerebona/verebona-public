@@ -1,0 +1,408 @@
+{
+  "$comment": "Matrice de couverture fonctionnelle — CDC Centre d'aide V1 §12, COVER-01. Chaque ligne doit avoir au moins un article publié en production ; une exception n'est admise que dans « blockedRows », avec sa raison. Contrôlé au build (vite.config.ts) et par tests/help-coverage.test.ts.",
+  "rows": [
+    {
+      "screen": "Inscription",
+      "actions": "Créer un compte, comprendre l’essai, vérifier l’e-mail",
+      "articles": [
+        "AID-START-002",
+        "AID-START-003",
+        "AID-BILL-002"
+      ]
+    },
+    {
+      "screen": "Connexion",
+      "actions": "Se connecter, mot de passe oublié, problèmes d’accès",
+      "articles": [
+        "AID-ACCOUNT-003",
+        "AID-ACCOUNT-004",
+        "AID-HELP-002"
+      ]
+    },
+    {
+      "screen": "Accueil",
+      "actions": "Comprendre les blocs et naviguer",
+      "articles": [
+        "AID-START-004",
+        "AID-START-005"
+      ]
+    },
+    {
+      "screen": "Mes biens",
+      "actions": "Créer, classer, filtrer, ouvrir un bien",
+      "articles": [
+        "AID-ASSET-001",
+        "AID-ASSET-002",
+        "AID-SEARCH-002"
+      ]
+    },
+    {
+      "screen": "Fiche bien - informations",
+      "actions": "Modifier les champs et comprendre les enrichissements",
+      "articles": [
+        "AID-ASSET-003",
+        "AID-AI-002",
+        "AID-AI-003"
+      ]
+    },
+    {
+      "screen": "Fiche bien - vignette",
+      "actions": "Ajouter ou modifier une image",
+      "articles": [
+        "AID-ASSET-004"
+      ]
+    },
+    {
+      "screen": "Fiche bien - pièces/équipements",
+      "actions": "Créer et rattacher des éléments immobiliers",
+      "articles": [
+        "AID-ASSET-005"
+      ]
+    },
+    {
+      "screen": "Fiche bien - statut/suppression",
+      "actions": "Comprendre l’état et supprimer",
+      "articles": [
+        "AID-ASSET-006",
+        "AID-ASSET-007"
+      ]
+    },
+    {
+      "screen": "Mes documents",
+      "actions": "Ajouter, consulter, trier et filtrer",
+      "articles": [
+        "AID-DOC-001",
+        "AID-DOC-002",
+        "AID-DOC-006",
+        "AID-DOC-009"
+      ]
+    },
+    {
+      "screen": "Import document",
+      "actions": "Formats, taille, quotas, erreurs",
+      "articles": [
+        "AID-DOC-003",
+        "AID-HELP-004"
+      ]
+    },
+    {
+      "screen": "Analyse document",
+      "actions": "Comprendre l’analyse et ses échecs",
+      "articles": [
+        "AID-DOC-004",
+        "AID-HELP-005"
+      ]
+    },
+    {
+      "screen": "Document - classification",
+      "actions": "Classement, rattachement, doublons",
+      "articles": [
+        "AID-DOC-005",
+        "AID-DOC-007"
+      ]
+    },
+    {
+      "screen": "Document - suppression",
+      "actions": "Supprimer un document",
+      "articles": [
+        "AID-DOC-008"
+      ]
+    },
+    {
+      "screen": "Agenda",
+      "actions": "Créer et gérer une échéance",
+      "articles": [
+        "AID-AGENDA-001",
+        "AID-AGENDA-002"
+      ]
+    },
+    {
+      "screen": "Agenda - vues",
+      "actions": "Liste, mensuel, annuel, filtres",
+      "articles": [
+        "AID-AGENDA-003",
+        "AID-AGENDA-004"
+      ]
+    },
+    {
+      "screen": "Agenda - détection",
+      "actions": "Échéances issues des documents",
+      "articles": [
+        "AID-AGENDA-005"
+      ]
+    },
+    {
+      "screen": "Agenda - synchro",
+      "actions": "Configurer, désactiver, dépanner",
+      "articles": [
+        "AID-AGENDA-006",
+        "AID-AGENDA-007",
+        "AID-HELP-008"
+      ]
+    },
+    {
+      "screen": "À traiter",
+      "actions": "Comprendre, ordonner, arbitrer, rattacher, annuler",
+      "articles": [
+        "AID-TODO-001",
+        "AID-TODO-002",
+        "AID-TODO-003",
+        "AID-TODO-004",
+        "AID-TODO-005"
+      ]
+    },
+    {
+      "screen": "Recherche globale",
+      "actions": "Recherche, filtres, dépannage",
+      "articles": [
+        "AID-SEARCH-001",
+        "AID-SEARCH-002",
+        "AID-HELP-007"
+      ]
+    },
+    {
+      "screen": "Assistant données",
+      "actions": "Interroger les données du compte",
+      "articles": [
+        "AID-SEARCH-003",
+        "AID-AI-001"
+      ]
+    },
+    {
+      "screen": "Centre d’aide / T2",
+      "actions": "Recherche d’aide, source canonique, citations",
+      "articles": [
+        "AID-SEARCH-004",
+        "AID-AI-005",
+        "AID-HELP-001"
+      ]
+    },
+    {
+      "screen": "Dossiers/Exports",
+      "actions": "Comprendre et personnaliser",
+      "articles": [
+        "AID-DOSSIER-001",
+        "AID-DOSSIER-002"
+      ]
+    },
+    {
+      "screen": "Dossier complet",
+      "actions": "Générer un dossier complet",
+      "articles": [
+        "AID-DOSSIER-003"
+      ]
+    },
+    {
+      "screen": "Dossier vente",
+      "actions": "Préparer un dossier de vente",
+      "articles": [
+        "AID-DOSSIER-004"
+      ]
+    },
+    {
+      "screen": "Assurance estimation",
+      "actions": "Préparer un dossier estimation",
+      "articles": [
+        "AID-DOSSIER-005"
+      ]
+    },
+    {
+      "screen": "Assurance indemnisation",
+      "actions": "Préparer un dossier indemnisation",
+      "articles": [
+        "AID-DOSSIER-006"
+      ]
+    },
+    {
+      "screen": "CIL",
+      "actions": "Checklist et génération",
+      "articles": [
+        "AID-DOSSIER-007"
+      ]
+    },
+    {
+      "screen": "Historique exports",
+      "actions": "Télécharger, relancer, supprimer",
+      "articles": [
+        "AID-DOSSIER-008",
+        "AID-HELP-009"
+      ]
+    },
+    {
+      "screen": "Transmission expéditeur",
+      "actions": "Envoyer, sélectionner, annuler",
+      "articles": [
+        "AID-TRANSFER-002",
+        "AID-TRANSFER-003"
+      ]
+    },
+    {
+      "screen": "Transmission destinataire",
+      "actions": "Accepter/refuser, compte, doublon",
+      "articles": [
+        "AID-TRANSFER-004",
+        "AID-HELP-010"
+      ]
+    },
+    {
+      "screen": "Export brut",
+      "actions": "Récupérer les données du bien",
+      "articles": [
+        "AID-TRANSFER-005"
+      ]
+    },
+    {
+      "screen": "Compte restreint",
+      "actions": "Récupération après essai, impayé ou rétractation",
+      "articles": [
+        "AID-TRANSFER-006"
+      ]
+    },
+    {
+      "screen": "Historique IA",
+      "actions": "Consulter les enrichissements",
+      "articles": [
+        "AID-AI-004"
+      ]
+    },
+    {
+      "screen": "Notifications",
+      "actions": "Comprendre et régler les préférences",
+      "articles": [
+        "AID-NOTIF-001",
+        "AID-NOTIF-002",
+        "AID-NOTIF-003",
+        "AID-NOTIF-004"
+      ]
+    },
+    {
+      "screen": "Notifications - incident",
+      "actions": "Dépanner push/email",
+      "articles": [
+        "AID-NOTIF-005",
+        "AID-HELP-013"
+      ]
+    },
+    {
+      "screen": "Mon profil",
+      "actions": "Modifier ses informations",
+      "articles": [
+        "AID-ACCOUNT-001"
+      ]
+    },
+    {
+      "screen": "Sécurité",
+      "actions": "Changer/réinitialiser mot de passe, sessions",
+      "articles": [
+        "AID-ACCOUNT-002",
+        "AID-ACCOUNT-003",
+        "AID-ACCOUNT-004"
+      ]
+    },
+    {
+      "screen": "Données personnelles",
+      "actions": "Droits et export RGPD",
+      "articles": [
+        "AID-ACCOUNT-005"
+      ]
+    },
+    {
+      "screen": "Suppression compte",
+      "actions": "Suppression volontaire",
+      "articles": [
+        "AID-ACCOUNT-006"
+      ]
+    },
+    {
+      "screen": "Offres",
+      "actions": "Tarifs, quotas, essai",
+      "articles": [
+        "AID-BILL-001",
+        "AID-BILL-002"
+      ]
+    },
+    {
+      "screen": "Souscription",
+      "actions": "Paiement et activation",
+      "articles": [
+        "AID-BILL-003",
+        "AID-BILL-006"
+      ]
+    },
+    {
+      "screen": "Changement abonnement",
+      "actions": "Offre et périodicité",
+      "articles": [
+        "AID-BILL-004",
+        "AID-BILL-005"
+      ]
+    },
+    {
+      "screen": "Résiliation",
+      "actions": "Fin de reconduction",
+      "articles": [
+        "AID-BILL-007"
+      ]
+    },
+    {
+      "screen": "Impayé",
+      "actions": "Restriction, régularisation, récupération",
+      "articles": [
+        "AID-BILL-008",
+        "AID-TRANSFER-006"
+      ]
+    },
+    {
+      "screen": "Rétractation",
+      "actions": "Demande, remboursement, suppression planifiée",
+      "articles": [
+        "AID-BILL-009"
+      ]
+    },
+    {
+      "screen": "Parrainage",
+      "actions": "Lien, éligibilité, récompenses",
+      "articles": [
+        "AID-BILL-010",
+        "AID-BILL-011"
+      ]
+    },
+    {
+      "screen": "Duo",
+      "actions": "Comprendre, inviter, rejoindre, droits",
+      "articles": [
+        "AID-DUO-001",
+        "AID-DUO-002",
+        "AID-DUO-003",
+        "AID-DUO-004"
+      ]
+    },
+    {
+      "screen": "Duo - sortie/impayé",
+      "actions": "Downgrade, récupération, retrait membre",
+      "articles": [
+        "AID-DUO-005",
+        "AID-DUO-006",
+        "AID-TRANSFER-007"
+      ]
+    },
+    {
+      "screen": "Support",
+      "actions": "Préparer et envoyer une demande",
+      "articles": [
+        "AID-HELP-011"
+      ]
+    },
+    {
+      "screen": "Paiement incorrect",
+      "actions": "Dépanner un statut de paiement",
+      "articles": [
+        "AID-HELP-012"
+      ]
+    }
+  ],
+  "blockedRows": {
+    "Compte restreint": "AID-TRANSFER-006 bloqué jusqu’à la recette du cycle d’impayé de 90 jours (GAP-06).",
+    "Impayé": "AID-BILL-008 et AID-TRANSFER-006 bloqués jusqu’à la recette du cycle d’impayé de 90 jours (GAP-06)."
+  }
+}

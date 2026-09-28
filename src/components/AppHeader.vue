@@ -191,6 +191,12 @@
           >{{ labels.header }}</span
         >
         <template v-else>
+        <!--
+          Écart assumé au CDC Site Public §6.1 (décision produit 2026-09-28) :
+          en mode FULL, le CTA du header reste « Essayer gratuitement » au lieu
+          de « Créer un compte » (même destination : inscription). Même libellé
+          dans le menu mobile ci-dessous. Verrouillé par tests/prelaunch-cta.test.ts.
+        -->
         <a
           :href="loginUrl()"
           class="r-hide-m"
@@ -334,6 +340,8 @@
           ></span
           >{{ labels.header }}
         </div>
+        <!-- CTA « Essayer gratuitement » conservé en FULL : écart assumé au CDC
+             Site Public §6.1 (« Créer un compte »), décision produit 2026-09-28. -->
         <div v-else style="display: flex; gap: 10px; margin-top: 16px">
           <a
             :href="loginUrl()"
