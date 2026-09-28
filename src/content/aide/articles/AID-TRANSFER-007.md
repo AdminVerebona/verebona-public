@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, récupération, impayé, mode, transfert, transmission, envoyer, recevoir, récupérer, export brut]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Lorsqu’un compte Duo est en récupération après un impayé, l’application peut afficher un espace de récupération. Les membres ne disposent plus de l’usage normal du Duo, mais peuvent demander le déplacement de biens vers leur compte personnel.

@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [documents, filtres, tri, trier, filtrer, document, fichier, justificatif, pièce, upload]
 status: published
 redirectFrom: [/aide/organiser-docs]
+updatedAt: 2026-09-25
 ---
 
 La page Documents propose un panneau de tri et de filtres. Ces réglages agissent seulement sur la liste affichée : ils ne reclassent aucun document et ne sont pas mémorisés d’une visite à l’autre.

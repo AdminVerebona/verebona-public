@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, résiliation, résilier, offre, plan, facture, paiement, Stripe, parrainage]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La résiliation est distincte de la suppression du compte et de la rétractation. Elle met fin à l’abonnement selon les conditions et la date affichées dans le parcours de facturation, sans effacer automatiquement toutes les données au moment de la demande.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [support, dépannage, contacter, efficacement, problème, erreur, aide, incident]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Lorsque le Centre d’aide et l’assistant ne permettent pas de résoudre un problème, utilisez le formulaire de contact. Un signalement précis accélère le diagnostic et limite les demandes de précisions.

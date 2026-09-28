@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, garde-fous, verebona, doit, pas, automatiquement, intelligence artificielle, automatique, analyse, enrichissement]
 status: published
+updatedAt: 2026-09-26
 ---
 
 L’automatisation n’a pas pour objectif de remplir tous les champs ou de décider à la place de l’utilisateur. Plusieurs garde-fous sont indispensables pour éviter des modifications silencieuses ou des demandes inutiles.

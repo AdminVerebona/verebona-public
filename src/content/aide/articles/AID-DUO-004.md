@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, droits, notifications, préférences, partage, second utilisateur, membre, invitation]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le Duo partage les données métier mais pas tous les pouvoirs de gestion. Le titulaire de l’abonnement conserve les fonctions de facturation et d’invitation ; le second utilisateur utilise le contenu partagé selon les droits applicables.

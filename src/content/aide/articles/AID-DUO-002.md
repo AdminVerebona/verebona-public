@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [duo, invitation, inviter, deuxième, personne, partage, second utilisateur, membre]
 status: published
 redirectFrom: [/aide/inviter-proche-duo]
+updatedAt: 2026-09-26
 ---
 
 Le titulaire Premium Duo dispose d’un emplacement pour une deuxième personne. Il peut envoyer une invitation par e-mail, la renvoyer, copier son lien ou l’annuler tant qu’elle n’a pas été acceptée.

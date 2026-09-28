@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [navigation, mobile, web, repérer, prise en main, débuter, premiers pas, onboarding]
 status: blocked
 blocker: Le WebView mobile cible doit être validé avant MEP finale.
+updatedAt: 2026-09-25
 ---
 
 Verebona adapte sa navigation à la taille de l’écran. Les fonctions principales restent les mêmes, mais leur emplacement peut différer entre la version Web et la version mobile.

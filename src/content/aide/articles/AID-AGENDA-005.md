@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, documents, ia, échéances, détectées, échéance, calendrier, rappel, date, événement]
 status: published
+updatedAt: 2026-09-26
 ---
 
 L’analyse d’un document peut détecter une date qui mérite un suivi : fin de contrat, garantie, contrôle ou autre échéance pertinente. Verebona ne crée ou ne propose une échéance que lorsque la règle métier correspondante le justifie.

@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [dossiers, exports, prêts, usage, dossier, export, PDF, pack, vente, assurance]
 status: published
 redirectFrom: [/aide/generer-un-export]
+updatedAt: 2026-09-25
 ---
 
 Les dossiers prêts à l’usage regroupent des informations et documents déjà présents dans Verebona pour préparer un besoin concret : vue complète du bien, vente, estimation d’assurance, indemnisation ou Carnet d’Information du Logement. Ils ne créent pas des justificatifs qui n’existent pas.

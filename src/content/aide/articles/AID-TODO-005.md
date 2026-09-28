@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, annulation, annuler, décision, prise, traiter, action, arbitrer, confirmer, rattacher]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Pour les résolutions compatibles, Verebona conserve temporairement la valeur précédente et affiche une action « Annuler » après la mise à jour. Cette possibilité rend l’arbitrage rapide sans ajouter une confirmation supplémentaire à chaque clic.

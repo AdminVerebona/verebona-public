@@ -7,6 +7,7 @@
  */
 import { watch, type WatchSource } from 'vue'
 import type { HelpHead } from './head'
+import { socialTags } from '../config/social.rules'
 
 const JSONLD_ID = 'help-jsonld'
 const ROBOTS_ATTR = 'data-help-robots'
@@ -27,10 +28,19 @@ export function applyHelpHead(h: HelpHead): void {
     const link = canonical ?? Object.assign(document.createElement('link'), { rel: 'canonical' })
     link.href = h.canonical
     if (!canonical) document.head.appendChild(link)
-    document.head.querySelector<HTMLMetaElement>('meta[property="og:url"]')?.setAttribute('content', h.canonical)
   } else {
     canonical?.remove()
   }
+
+  // Open Graph / Twitter : mêmes valeurs qu'au pré-rendu (CDC Données structurées §6).
+  for (const t of socialTags({ title: h.title, description: h.description, url: h.canonical, type: h.jsonLd ? 'article' : 'website' })) {
+    upsertMeta(`meta[${t.attr}="${t.key}"]`, () => {
+      const m = document.createElement('meta')
+      m.setAttribute(t.attr, t.key)
+      return m
+    }, t.content)
+  }
+  if (!h.canonical) document.head.querySelector('meta[property="og:url"]')?.remove()
 
   // Robots propre à l'aide : distinct de la meta globale de préproduction,
   // qu'il ne doit jamais retirer.

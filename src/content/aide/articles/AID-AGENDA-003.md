@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, vues, liste, mensuel, annuel, échéance, calendrier, rappel, date, événement]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les trois vues présentent les mêmes éléments sous des angles différents. Le changement de vue ne modifie aucune donnée.

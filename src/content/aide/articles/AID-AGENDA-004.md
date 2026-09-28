@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, filtres, filtrer, échéance, calendrier, rappel, date, événement]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les filtres permettent de réduire temporairement la liste visible sans supprimer les éléments masqués. Si aucun résultat n’est affiché, vérifiez d’abord les filtres actifs.

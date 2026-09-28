@@ -22,6 +22,7 @@ indexable: true
 lang: fr-FR
 synonyms: [assistant, centre aide, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Pour les questions portant sur l’utilisation de Verebona, l’assistant s’appuie uniquement sur le Centre d’aide. Il peut reformuler et combiner plusieurs articles, mais il n’invente pas de règle absente de la documentation.

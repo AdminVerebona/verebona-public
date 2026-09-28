@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, quota, abonnement, peux, plus, ajouter, bien, document, problème, erreur]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona contrôle vos droits de modification. Un compte peut devenir consultable mais non modifiable après la fin de l’essai, une résiliation ou certaines restrictions. Un quota atteint bloque la création ; un quota dépassé après changement d’offre peut bloquer les modifications.

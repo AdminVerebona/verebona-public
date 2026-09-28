@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, bien, transmettre, autre, compte, verebona, transmission, envoyer, recevoir, récupérer]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La transmission crée une invitation destinée à l’adresse e-mail saisie. Tant que le destinataire n’a pas accepté, le transfert n’est pas définitif et l’expéditeur peut annuler la demande si elle est toujours en attente.

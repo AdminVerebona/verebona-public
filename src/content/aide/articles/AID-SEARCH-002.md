@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, filtres, biens, documents, agenda, chercher, trouver, filtre, résultat]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les filtres et la recherche répondent à deux besoins différents : les filtres réduisent un ensemble connu à partir de critères structurés ; la recherche retrouve un élément à partir de mots.

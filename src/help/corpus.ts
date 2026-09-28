@@ -19,7 +19,7 @@
 import { parseFrontmatter, type FrontmatterValue } from './frontmatter'
 import { linksOf, parseBody } from './markdown'
 import {
-  AUTH_STATES, LANGS, OBJECT_TYPES, OFFERS, PLATFORMS, RESERVED_SLUGS, ROLES, SCREENS, STATUSES,
+  AUTH_STATES, LANGS, OBJECT_TYPES, OFFERS, PERMISSIONS, PLATFORMS, RESERVED_SLUGS, ROLES, SCREENS, STATUSES,
 } from './referentials'
 import type { BuildIssue, HelpArticle, HelpCategory } from './types'
 
@@ -80,8 +80,11 @@ const REQUIRED_LIST = [
   'relatedArticles', 'synonyms',
 ] as const
 const KNOWN = new Set<string>([
-  ...REQUIRED_TEXT, ...REQUIRED_LIST, 'indexable', 'offersNote', 'blocker', 'redirectFrom',
+  ...REQUIRED_TEXT, ...REQUIRED_LIST, 'indexable', 'offersNote', 'blocker', 'redirectFrom', 'updatedAt',
 ])
+
+/** Date de repli (EDITOR-02) : jour calendaire ISO, sans heure. */
+const DATE = /^\d{4}-\d{2}-\d{2}$/
 
 export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadResult {
   const issues: BuildIssue[] = []
@@ -143,6 +146,16 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
       redirectFrom: Array.isArray(data.redirectFrom) ? data.redirectFrom : [],
     }
 
+    // EDITOR-02 : la date technique vient de Git. Sans historique au build
+    // (archive, hébergeur qui ne transmet pas `.git`), elle était absente :
+    // ni `dateModified` ni `updatedAt` au catalogue. Le frontmatter porte
+    // donc une date de repli obligatoire, utilisée seulement dans ce cas.
+    const fallbackDate = optText('updatedAt')
+    if (!fallbackDate) report('updatedAt', 'Obligatoire (date AAAA-MM-JJ, repli quand Git est absent au build).', id)
+    else if (!DATE.test(fallbackDate) || Number.isNaN(Date.parse(fallbackDate))) {
+      report('updatedAt', `Date invalide « ${fallbackDate} » (format AAAA-MM-JJ).`, id)
+    }
+
     if (meta.id && !ID.test(meta.id)) report('id', `Format attendu AID-XXX-000, reçu « ${meta.id} ».`, id)
     if (meta.id && !file.path.endsWith(`/${meta.id}.md`)) {
       report('id', `Le fichier doit s'appeler ${meta.id}.md : l'ID stable nomme le fichier.`, id)
@@ -159,6 +172,7 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
     inRef('authState', meta.authState, AUTH_STATES)
     inRef('screens', meta.screens, SCREENS)
     inRef('objectTypes', meta.objectTypes, OBJECT_TYPES)
+    if (meta.permissions) inRef('permissions', [meta.permissions], PERMISSIONS)
     if (meta.lang && !(LANGS as readonly string[]).includes(meta.lang)) report('lang', `Langue non prise en charge « ${meta.lang} ».`, id)
     if (meta.status && !(STATUSES as readonly string[]).includes(meta.status)) report('status', `Statut inconnu « ${meta.status} ».`, id)
     if (meta.status === 'blocked' && !meta.blocker) report('blocker', 'Un article bloqué doit nommer son blocage.', id)
@@ -199,7 +213,7 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
       status: meta.status as HelpArticle['status'],
       blocks,
       source: file.path,
-      updatedAt: file.updatedAt ?? null,
+      updatedAt: file.updatedAt ?? (fallbackDate && DATE.test(fallbackDate) ? fallbackDate : null),
     })
   }
 

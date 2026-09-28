@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, recherche, retrouve, pas, cherche, problème, erreur, support, aide, incident]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La recherche dépend des informations réellement présentes et indexées dans votre compte. Une requête trop longue ou composée de plusieurs mots qui ne se trouvent pas ensemble peut ne rien retourner dans le moteur classique.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, annulation, annuler, transmission, attente, envoyer, recevoir, récupérer, export brut]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Une transmission en attente apparaît dans l’historique du bien. L’expéditeur peut l’annuler avant son traitement par le destinataire. Le lien public devient alors inutilisable.

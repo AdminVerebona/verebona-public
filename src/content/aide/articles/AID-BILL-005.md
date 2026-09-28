@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, périodicité, changer, mensuelle, annuelle, offre, plan, facture, paiement, Stripe]
 status: published
+updatedAt: 2026-09-26
 ---
 
 La périodicité est une composante de l’abonnement et peut être programmée comme un changement. Verebona vous indique quand le nouveau rythme et le nouveau prix s’appliqueront.

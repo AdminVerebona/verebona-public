@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, essai, gratuit, jours, offre, plan, facture, paiement, Stripe, parrainage]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Tout nouveau compte éligible reçoit automatiquement un essai gratuit unique de 7 jours. Aucune carte bancaire n’est enregistrée et aucun abonnement Stripe n’est créé pour l’essai lui-même.

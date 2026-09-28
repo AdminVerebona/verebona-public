@@ -179,6 +179,26 @@ app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
 });
 
 /**
+ * Préproduction : `/?mode=<autre mode>` (CDC pré-lancement §5.3).
+ *
+ * `dist/index.html` est pré-rendu dans le mode par défaut du build (FULL en
+ * préproduction). Le build produit aussi `dist/index.<autre>.html`, rendu dans
+ * l'autre mode : il est servi ici quand l'URL le demande, pour qu'un onglet
+ * ouvert sur `/?mode=prelaunch` n'affiche jamais les liens d'inscription du
+ * mode FULL avant le montage de Vue. Jamais en production (`indexable`), où
+ * `?mode=` est ignoré et aucune variante n'est produite.
+ */
+const PREVIEW_MODES = new Set(["full", "prelaunch"]);
+app.get("/", (req, res, next) => {
+  if (!siteEnv || siteEnv.indexable !== false) return next();
+  const mode = typeof req.query.mode === "string" ? req.query.mode : null;
+  if (!mode || !PREVIEW_MODES.has(mode) || mode === siteEnv.defaultMode) return next();
+  res.sendFile(path.join(distDir, `index.${mode}.html`), (err) => {
+    if (err) next();
+  });
+});
+
+/**
  * Sitemap servi en `application/xml; charset=utf-8` (CDC Sitemap §7
  * « Type de contenu » et « Encodage ») : le type par defaut d'express ne
  * declare pas l'encodage.

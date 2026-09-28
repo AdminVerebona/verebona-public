@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [documents, ia, analyse, automatique, document, fichier, justificatif, pièce, upload, import]
 status: published
 redirectFrom: [/aide/comprendre-analyse-automatique, /aide/import-analyse]
+updatedAt: 2026-09-26
 ---
 
 Après l’import, Verebona peut analyser un document afin de proposer un titre, une classification, un fournisseur, une date, un montant, des informations utiles au bien, un rattachement et des échéances. Le traitement fonctionne en arrière-plan et son résultat dépend du contenu réellement lisible.

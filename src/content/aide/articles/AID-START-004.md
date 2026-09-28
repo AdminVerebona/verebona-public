@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [accueil, navigation, page, prise en main, débuter, premiers pas, onboarding]
 status: published
 redirectFrom: [/aide/decouvrir-accueil]
+updatedAt: 2026-09-25
 ---
 
 La page d’accueil synthétise l’état de votre espace. Elle ne remplace pas les pages détaillées : elle met en avant ce qui mérite votre attention et vous donne des accès rapides vers vos biens, documents, échéances et actions à traiter.

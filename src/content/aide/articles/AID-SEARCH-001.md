@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [recherche, navigation, globale, chercher, trouver, filtre, résultat]
 status: published
 redirectFrom: [/aide/utiliser-la-recherche]
+updatedAt: 2026-09-26
 ---
 
 La recherche générale de l’application évite de dupliquer un champ de recherche dans chaque écran. Elle recherche d’abord dans les données structurées accessibles à votre compte et peut, selon l’offre et le contexte, utiliser un repli intelligent si aucun résultat classique n’est trouvé.

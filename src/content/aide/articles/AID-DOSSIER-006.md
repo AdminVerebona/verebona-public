@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, assurance, indemnisation, dossier, export, PDF, pack, vente, CIL]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Le dossier Indemnisation met l’accent sur l’identification du bien, les informations financières, l’entretien, les documents, devis, factures, constats et photos disponibles. Vous devez vérifier que chaque élément correspond bien au sinistre concerné.

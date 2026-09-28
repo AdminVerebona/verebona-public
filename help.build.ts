@@ -8,6 +8,8 @@ import { execFileSync } from 'node:child_process'
 import { readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { formatIssues, loadCorpus, type Corpus, type SourceFile } from './src/help/corpus'
+import { checkCoverage, formatCoverage, readCoverageMatrix } from './src/help/coverage'
+import { checkSlugRegistry, type SlugRegistry } from './src/help/slug-registry'
 
 export const HELP_CONTENT_DIR = 'src/content/aide'
 
@@ -58,6 +60,36 @@ export function loadHelpCorpus(root: string): Corpus {
     )
   }
   return corpus
+}
+
+export const COVERAGE_FILE = `${HELP_CONTENT_DIR}/coverage.json`
+export const SLUG_REGISTRY_FILE = `${HELP_CONTENT_DIR}/slug-registry.json`
+
+export function readCoverage(root: string) {
+  return readCoverageMatrix(JSON.parse(readFileSync(path.join(root, COVERAGE_FILE), 'utf8')))
+}
+
+export function readSlugRegistry(root: string): SlugRegistry {
+  return JSON.parse(readFileSync(path.join(root, SLUG_REGISTRY_FILE), 'utf8')) as SlugRegistry
+}
+
+/**
+ * Garde-fous de build au-delà de la validation article par article :
+ *   · COVER-01 — chaque ligne de la matrice §12 a un article publié en
+ *     production, sauf exception motivée (`coverage.json`, `blockedRows`) ;
+ *   · ARCH-05  — aucune URL d'article publiée ne disparaît sans redirection
+ *     (`slug-registry.json`).
+ */
+export function assertHelpGuards(root: string, corpus: Corpus): void {
+  const coverage = checkCoverage(corpus, readCoverage(root), 'production')
+  const registry = checkSlugRegistry(corpus, readSlugRegistry(root))
+  const problems = [
+    ...(coverage.uncovered.length || coverage.errors.length
+      ? [`Matrice de couverture (COVER-01, ${COVERAGE_FILE}) :\n${formatCoverage(coverage)}`]
+      : []),
+    ...(registry.length ? [`Registre des URLs (ARCH-05, ${SLUG_REGISTRY_FILE}) :\n${registry.map((e) => `  · ${e}`).join('\n')}`] : []),
+  ]
+  if (problems.length) throw new Error(`[centre d'aide] build interrompu :\n${problems.join('\n')}`)
 }
 
 /** Commit déployé : Scalingo le fournit dans SOURCE_VERSION. */

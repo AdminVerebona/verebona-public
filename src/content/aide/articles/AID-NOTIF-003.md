@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [notifications, préférences, duo, régler, notification, alerte, push, email, rappel]
 status: published
 redirectFrom: [/aide/gerer-mes-notifications, /aide/rappels]
+updatedAt: 2026-09-26
 ---
 
 Les préférences sont enregistrées par utilisateur, pas uniquement par compte. Deux personnes d’un Premium Duo peuvent donc choisir des réglages différents sans modifier ceux de l’autre.

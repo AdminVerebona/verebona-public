@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [dossiers, vente, dossier, export, PDF, pack, assurance, CIL]
 status: published
 redirectFrom: [/aide/dossier-vente]
+updatedAt: 2026-09-26
 ---
 
 Le Dossier de vente sélectionne des informations et pièces pertinentes pour présenter le bien. Il réunit principalement des documents de transaction, diagnostics, garanties, entretiens, factures, plans et informations techniques selon la catégorie du bien.

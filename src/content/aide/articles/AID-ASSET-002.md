@@ -19,21 +19,31 @@ metaDescription: Choisir la classification correspondant au bien que vous souhai
 canonical: /aide/choisir-categorie-type-bien
 indexable: true
 lang: fr-FR
-synonyms: [biens, classification, choisir, catégorie, type, bien, patrimoine, asset, objet, immobilier]
-status: blocked
-blocker: La taxonomie technique et les listes du formulaire ne sont pas totalement alignées ; harmonisation obligatoire avant publication finale.
+synonyms: [biens, classification, choisir, famille, catégorie, type, bien, patrimoine, immobilier, véhicule, objet]
+status: published
+updatedAt: 2026-09-26
 ---
 
-La catégorie détermine les informations et fonctions proposées dans la fiche du bien. Le formulaire de création n’affiche que les catégories et types disponibles dans la version courante de Verebona.
+Un bien se classe en deux niveaux : sa famille (Véhicule, Immobilier ou Objet), puis sa catégorie. La famille détermine les informations proposées dans la fiche du bien ; la catégorie précise le type de bien et ouvre, pour certains biens immobiliers, des fonctions supplémentaires.
 
 > **À savoir** — Choisissez la catégorie la plus proche de l’usage réel du bien. Vous pourrez compléter sa description et ses caractéristiques ensuite.
 
+## Procédure
+
+1. **Choisissez la famille de bien** — Véhicule, Immobilier ou Objet.
+2. **Choisissez la catégorie de bien** — La liste dépend de la famille choisie. Elle est facultative pour un véhicule ou un bien immobilier, obligatoire pour un objet.
+3. **Complétez la fiche** — Les rubriques proposées suivent la famille du bien.
+
 ## Détails et cas particuliers
 
-**Immobilier** — Le formulaire actuel propose notamment Maison, Appartement, Terrain, Local commercial et Garage.
+**Véhicule** — Voiture, Moto, Vélo, Camping-car, Bateau, Camion.
 
-**Véhicule** — Le formulaire actuel propose Vélo, Voiture, Camion et Moto.
+**Immobilier** — Maison, Appartement, Immeuble, Terrain, Garage/box, Mobil-home, Local professionnel/commercial.
 
-**Objet** — Les objets sont organisés notamment en Tech / IT / Électronique, Loisir / Sport et Maison & équipement, puis par type d’objet lorsque ce niveau est demandé.
+**Objet** — Tech / IT / Électronique, Loisir / Sport, Maison & équipement.
 
-**Matériel professionnel** — La catégorie existe techniquement mais n’est pas à présenter comme disponible tant qu’elle reste désactivée dans le formulaire utilisateur.
+**Fonctions selon la catégorie** — Les pièces et équipements sont proposés pour une maison, un appartement, un immeuble ou un local professionnel/commercial. Le Carnet d’information du logement (CIL) est réservé aux maisons et aux appartements.
+
+**Modifier la classification** — La catégorie d’un véhicule ou d’un bien immobilier se modifie depuis l’onglet « Informations » de la fiche. La famille, elle, ne se modifie pas après la création.
+
+**Catégorie ancienne** — Un bien créé avec une catégorie qui n’est plus proposée la conserve ; elle reste affichée dans la fiche.

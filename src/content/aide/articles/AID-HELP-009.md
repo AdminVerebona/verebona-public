@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, dossier, export, génère, pas, problème, erreur, support, aide, incident]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La génération d’un dossier dépend des données du bien, des documents sélectionnés et du service de génération. Une erreur de génération ne doit pas modifier les sources du bien.

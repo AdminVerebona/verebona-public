@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, import multiple, ajouter, plusieurs, document, fichier, justificatif, pièce, upload, import]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Lorsque l’interface autorise la sélection multiple, chaque fichier devient un document distinct. Les analyses sont ensuite traitées individuellement ; un fichier en erreur ne doit pas empêcher les autres documents valides de poursuivre leur parcours.

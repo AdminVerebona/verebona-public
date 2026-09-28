@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, dossier complet, générer, dossier, complet, bien, export, PDF, pack, vente]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le Dossier complet rassemble les sections principales de la fiche du bien. Il comprend notamment l’identité, les caractéristiques, les données financières, l’entretien, les documents, les photos et l’assurance ; pour l’immobilier compatible, les pièces et équipements peuvent aussi être inclus.

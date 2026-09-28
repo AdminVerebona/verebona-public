@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, destinataire, recevoir, accepter, refuser, bien, transmis, transmission, envoyer, récupérer]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Le lien d’invitation ouvre une page publique qui présente l’identité minimale du bien. Vous pouvez accepter ou refuser. Si vous n’avez pas encore de compte Verebona, le parcours peut vous demander d’en créer un avant de finaliser la réception.

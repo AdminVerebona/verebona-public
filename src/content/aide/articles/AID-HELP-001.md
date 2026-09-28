@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [centre aide, besoin aide, centre, aide, besoin, problème, erreur, dépannage, support, incident]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le Centre d’aide public est la référence de la documentation Verebona. L’entrée « Besoin d’aide » de l’application n’a pas de contenu propre : elle affiche une recherche et des raccourcis vers les articles du Centre d’aide.

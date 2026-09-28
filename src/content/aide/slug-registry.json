@@ -1,0 +1,324 @@
+{
+  "AID-ACCOUNT-001": [
+    "/aide/gerer-mon-compte",
+    "/aide/modifier-profil"
+  ],
+  "AID-ACCOUNT-002": [
+    "/aide/modifier-mot-de-passe"
+  ],
+  "AID-ACCOUNT-003": [
+    "/aide/mot-de-passe-oublie"
+  ],
+  "AID-ACCOUNT-004": [
+    "/aide/connexion-deconnexion-securite",
+    "/aide/securite"
+  ],
+  "AID-ACCOUNT-005": [
+    "/aide/donnees-personnelles-droits"
+  ],
+  "AID-ACCOUNT-006": [
+    "/aide/supprimer-compte"
+  ],
+  "AID-ACCOUNT-007": [
+    "/aide/emails-securite"
+  ],
+  "AID-AGENDA-001": [
+    "/aide/ajouter-evenement-agenda",
+    "/aide/creer-element-agenda"
+  ],
+  "AID-AGENDA-002": [
+    "/aide/gerer-echeance",
+    "/aide/retard"
+  ],
+  "AID-AGENDA-003": [
+    "/aide/vues-agenda"
+  ],
+  "AID-AGENDA-004": [
+    "/aide/filtrer-agenda"
+  ],
+  "AID-AGENDA-005": [
+    "/aide/echeances-detectees-documents"
+  ],
+  "AID-AGENDA-006": [
+    "/aide/synchroniser-agenda-personnel"
+  ],
+  "AID-AGENDA-007": [
+    "/aide/desactiver-regenerer-agenda"
+  ],
+  "AID-AI-001": [
+    "/aide/comment-verebona-utilise-ia"
+  ],
+  "AID-AI-002": [
+    "/aide/enrichissements-automatiques"
+  ],
+  "AID-AI-003": [
+    "/aide/confiance-conflits-valeurs"
+  ],
+  "AID-AI-004": [
+    "/aide/historique-modifications-automatiques"
+  ],
+  "AID-AI-005": [
+    "/aide/assistant-aide-application"
+  ],
+  "AID-AI-006": [
+    "/aide/limites-automatisations"
+  ],
+  "AID-ASSET-001": [
+    "/aide/creer-un-bien",
+    "/aide/premier-bien"
+  ],
+  "AID-ASSET-002": [
+    "/aide/choisir-categorie-type-bien"
+  ],
+  "AID-ASSET-003": [
+    "/aide/completer-fiche-bien",
+    "/aide/modifier-fiche-bien"
+  ],
+  "AID-ASSET-004": [
+    "/aide/gerer-photo-bien"
+  ],
+  "AID-ASSET-005": [
+    "/aide/ajouter-un-equipement",
+    "/aide/ajouter-une-piece",
+    "/aide/gerer-pieces-equipements"
+  ],
+  "AID-ASSET-006": [
+    "/aide/comprendre-statuts-bien"
+  ],
+  "AID-ASSET-007": [
+    "/aide/archiver-bien",
+    "/aide/supprimer-un-bien"
+  ],
+  "AID-BILL-001": [
+    "/aide/offres-tarifs"
+  ],
+  "AID-BILL-002": [
+    "/aide/essai-gratuit-7-jours"
+  ],
+  "AID-BILL-003": [
+    "/aide/souscrire-offre"
+  ],
+  "AID-BILL-004": [
+    "/aide/changer-offre"
+  ],
+  "AID-BILL-005": [
+    "/aide/changer-periodicite"
+  ],
+  "AID-BILL-006": [
+    "/aide/gerer-paiement-factures-stripe"
+  ],
+  "AID-BILL-007": [
+    "/aide/resilier-abonnement"
+  ],
+  "AID-BILL-008": [
+    "/aide/echec-paiement"
+  ],
+  "AID-BILL-009": [
+    "/aide/retractation"
+  ],
+  "AID-BILL-010": [
+    "/aide/parrainage"
+  ],
+  "AID-BILL-011": [
+    "/aide/mois-offerts-parrainage"
+  ],
+  "AID-DOC-001": [
+    "/aide/ajouter-un-document"
+  ],
+  "AID-DOC-002": [
+    "/aide/ajouter-plusieurs-documents"
+  ],
+  "AID-DOC-003": [
+    "/aide/formats-taille-documents"
+  ],
+  "AID-DOC-004": [
+    "/aide/analyse-automatique-document",
+    "/aide/comprendre-analyse-automatique",
+    "/aide/import-analyse"
+  ],
+  "AID-DOC-005": [
+    "/aide/classement-rattachement-document"
+  ],
+  "AID-DOC-006": [
+    "/aide/consulter-corriger-telecharger-document"
+  ],
+  "AID-DOC-007": [
+    "/aide/gerer-doublon-document"
+  ],
+  "AID-DOC-008": [
+    "/aide/supprimer-un-document"
+  ],
+  "AID-DOC-009": [
+    "/aide/organiser-docs",
+    "/aide/trier-filtrer-documents"
+  ],
+  "AID-DOSSIER-001": [
+    "/aide/comprendre-dossiers-prets-usage",
+    "/aide/generer-un-export"
+  ],
+  "AID-DOSSIER-002": [
+    "/aide/preparer-personnaliser-dossier"
+  ],
+  "AID-DOSSIER-003": [
+    "/aide/generer-dossier-complet"
+  ],
+  "AID-DOSSIER-004": [
+    "/aide/dossier-vente",
+    "/aide/preparer-dossier-vente"
+  ],
+  "AID-DOSSIER-005": [
+    "/aide/assurance-estimation"
+  ],
+  "AID-DOSSIER-006": [
+    "/aide/assurance-indemnisation"
+  ],
+  "AID-DOSSIER-007": [
+    "/aide/generer-cil"
+  ],
+  "AID-DOSSIER-008": [
+    "/aide/historique-dossiers-generes"
+  ],
+  "AID-DUO-001": [
+    "/aide/comprendre-premium-duo",
+    "/aide/duo"
+  ],
+  "AID-DUO-002": [
+    "/aide/inviter-membre-duo",
+    "/aide/inviter-proche-duo"
+  ],
+  "AID-DUO-003": [
+    "/aide/accepter-invitation-duo"
+  ],
+  "AID-DUO-004": [
+    "/aide/droits-preferences-duo"
+  ],
+  "AID-DUO-005": [
+    "/aide/downgrade-impaye-duo"
+  ],
+  "AID-DUO-006": [
+    "/aide/quitter-retirer-duo"
+  ],
+  "AID-HELP-001": [
+    "/aide/utiliser-centre-aide"
+  ],
+  "AID-HELP-002": [
+    "/aide/probleme-connexion"
+  ],
+  "AID-HELP-003": [
+    "/aide/email-verification-non-recu"
+  ],
+  "AID-HELP-004": [
+    "/aide/document-import-impossible"
+  ],
+  "AID-HELP-005": [
+    "/aide/analyse-document-echec"
+  ],
+  "AID-HELP-006": [
+    "/aide/ecriture-bloquee"
+  ],
+  "AID-HELP-007": [
+    "/aide/recherche-sans-resultat"
+  ],
+  "AID-HELP-008": [
+    "/aide/agenda-sync-probleme"
+  ],
+  "AID-HELP-009": [
+    "/aide/dossier-export-echec"
+  ],
+  "AID-HELP-010": [
+    "/aide/invitation-transmission-duo-probleme"
+  ],
+  "AID-HELP-011": [
+    "/aide/contacter-support"
+  ],
+  "AID-HELP-012": [
+    "/aide/abonnement-paiement-probleme"
+  ],
+  "AID-HELP-013": [
+    "/aide/depannage-notifications"
+  ],
+  "AID-NOTIF-001": [
+    "/aide/comprendre-notifications"
+  ],
+  "AID-NOTIF-002": [
+    "/aide/activer-push-appareils"
+  ],
+  "AID-NOTIF-003": [
+    "/aide/gerer-mes-notifications",
+    "/aide/rappels",
+    "/aide/regler-preferences-notifications"
+  ],
+  "AID-NOTIF-004": [
+    "/aide/recapitulatif-a-traiter"
+  ],
+  "AID-NOTIF-005": [
+    "/aide/notifications-non-recues"
+  ],
+  "AID-SEARCH-001": [
+    "/aide/utiliser-la-recherche",
+    "/aide/utiliser-recherche-globale"
+  ],
+  "AID-SEARCH-002": [
+    "/aide/utiliser-filtres"
+  ],
+  "AID-SEARCH-003": [
+    "/aide/assistant",
+    "/aide/interroger-verebona-donnees"
+  ],
+  "AID-SEARCH-004": [
+    "/aide/recherche-donnees-vs-aide"
+  ],
+  "AID-START-001": [
+    "/aide/decouvrir-verebona"
+  ],
+  "AID-START-002": [
+    "/aide/creer-un-compte"
+  ],
+  "AID-START-003": [
+    "/aide/verifier-adresse-email"
+  ],
+  "AID-START-004": [
+    "/aide/comprendre-page-accueil",
+    "/aide/decouvrir-accueil"
+  ],
+  "AID-START-005": [
+    "/aide/navigation-web-mobile"
+  ],
+  "AID-TODO-001": [
+    "/aide/comprendre-a-traiter",
+    "/aide/traiter-documents-incomplets"
+  ],
+  "AID-TODO-002": [
+    "/aide/ordonner-actions-a-traiter"
+  ],
+  "AID-TODO-003": [
+    "/aide/arbitrer-deux-valeurs"
+  ],
+  "AID-TODO-004": [
+    "/aide/rattacher-completer-a-traiter"
+  ],
+  "AID-TODO-005": [
+    "/aide/annuler-decision-a-traiter"
+  ],
+  "AID-TRANSFER-001": [
+    "/aide/dossier-transmission-export"
+  ],
+  "AID-TRANSFER-002": [
+    "/aide/transmettre-bien"
+  ],
+  "AID-TRANSFER-003": [
+    "/aide/annuler-transmission"
+  ],
+  "AID-TRANSFER-004": [
+    "/aide/recevoir-bien-transmis"
+  ],
+  "AID-TRANSFER-005": [
+    "/aide/exporter-donnees-brutes-bien"
+  ],
+  "AID-TRANSFER-006": [
+    "/aide/recuperer-donnees-compte-restreint"
+  ],
+  "AID-TRANSFER-007": [
+    "/aide/recuperation-duo"
+  ]
+}

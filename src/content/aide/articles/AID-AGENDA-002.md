@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [agenda, statut, réaliser, annuler, supprimer, échéance, calendrier, rappel, date, événement]
 status: published
 redirectFrom: [/aide/retard]
+updatedAt: 2026-09-25
 ---
 
 Une échéance peut être modifiée lorsqu’une information change, marquée comme réalisée lorsque l’action est terminée, annulée lorsqu’elle n’a plus lieu, ou supprimée lorsqu’elle ne doit plus exister.

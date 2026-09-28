@@ -14,6 +14,7 @@ import { renderToString } from 'vue/server-renderer'
 import App from './App.vue'
 import router from './router'
 import { vHover } from './directives/hover'
+import { resetSiteModePreview, SITE_MODE_PARAM, type SiteMode } from './config/site'
 
 export async function render(url: string): Promise<string> {
   const app = createSSRApp(App)
@@ -24,6 +25,25 @@ export async function render(url: string): Promise<string> {
   await router.isReady()
   return renderToString(app)
 }
+
+/**
+ * Rendu d'une page dans un mode de prévisualisation (préprod : `?mode=`).
+ * Le mode demandé vit dans un état de module : il est remis à zéro ensuite,
+ * pour que les rendus suivants retrouvent le mode par défaut du build.
+ */
+export async function renderInMode(url: string, mode: SiteMode): Promise<string> {
+  try {
+    return await render(`${url}?${SITE_MODE_PARAM}=${mode}`)
+  } finally {
+    resetSiteModePreview()
+  }
+}
+
+// Mode du build et possibilité de prévisualisation (CDC pré-lancement §5.3).
+export { DEFAULT_SITE_MODE, CAN_PREVIEW_SITE_MODE } from './config/site'
+
+// Balises Open Graph / Twitter par page (CDC Données structurées §6).
+export { socialMetaHtml, stripSocialMeta } from './config/social.rules'
 
 // Valeurs du head réutilisées par scripts/prerender.mjs pour la coquille SPA.
 export { DEFAULT_DESCRIPTION, SHELL_TITLE, escapeHtmlAttr } from './config/head.rules'

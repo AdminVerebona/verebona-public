@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [biens, suppression, supprimer, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
 redirectFrom: [/aide/archiver-bien]
+updatedAt: 2026-09-26
 ---
 
 Supprimer un bien supprime **tout ce qui lui est rattaché** : ses documents et photos, ses échéances, ses événements, ses pièces et ses équipements. Rien n’est conservé à part. La suppression est **définitive et irréversible** : vous ne pourrez pas récupérer le bien ni ses données ensuite.

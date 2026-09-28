@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, sécurité, email, mails, profil, connexion, mot de passe, RGPD]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les communications de sécurité peuvent concerner la vérification d’adresse, une demande de réinitialisation ou une modification importante du compte. Elles doivent permettre de comprendre l’action sans demander de communiquer un mot de passe par e-mail.

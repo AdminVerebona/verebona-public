@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [biens, création, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
 redirectFrom: [/aide/premier-bien]
+updatedAt: 2026-09-26
 ---
 
 Un bien est l’élément central autour duquel Verebona organise les documents, les échéances et, selon le type de bien, les pièces ou équipements. La création commence par un nom et une catégorie.

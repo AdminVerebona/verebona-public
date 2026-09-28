@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, rattachement, complétion, rattacher, compléter, élément, action, arbitrer, confirmer]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Certaines actions existent parce qu’un objet ne peut pas être correctement exploité sans relation ou donnée essentielle. C’est le cas, par exemple, d’un document sans bien ou d’un événement qui nécessite une date.

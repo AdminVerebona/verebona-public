@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [parrainage, abonnement, offre, plan, facture, paiement, Stripe]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel souscrit par un proche. » Seul le parrain reçoit la récompense. Le filleul ne reçoit pas de cadeau de parrainage spécifique.

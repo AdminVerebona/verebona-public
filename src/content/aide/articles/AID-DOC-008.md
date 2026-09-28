@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, suppression, supprimer, document, fichier, justificatif, pièce, upload, import]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La suppression d’un document est irréversible du point de vue de l’utilisateur et doit demander une confirmation. Elle concerne le document sélectionné et peut également affecter les informations qui n’avaient pour seule preuve que ce fichier.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, push, appareil, activer, appareils, notification, alerte, email, rappel]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le push nécessite l’autorisation du navigateur ou du système. Un appareil n’est considéré comme autorisé qu’après que vous avez accepté la demande de permission.

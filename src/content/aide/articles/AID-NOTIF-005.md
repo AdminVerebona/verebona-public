@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, dépannage, reçois, pas, notification, alerte, push, email, rappel]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Une notification peut être bloquée par le réglage Verebona, l’autorisation du navigateur, les paramètres du téléphone, un appareil supprimé, l’absence d’événement déclencheur ou le classement d’un e-mail en indésirable.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, export, dossiers, distinguer, dossier, transmission, données, envoyer, recevoir, récupérer]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Ces trois fonctions ont des conséquences différentes. Un dossier prêt à l’usage produit un fichier à consulter ou transmettre. Une transmission déplace un bien vers un autre compte Verebona après acceptation. Un export de données brutes permet de récupérer les données et fichiers sans changer le propriétaire du bien.

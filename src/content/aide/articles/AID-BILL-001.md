@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, offres, tarifs, comparer, offre, plan, facture, paiement, Stripe, parrainage]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona propose trois offres grand public. Les prix et quotas sont les mêmes dans l’application, sur le site public et dans le Centre d’aide.

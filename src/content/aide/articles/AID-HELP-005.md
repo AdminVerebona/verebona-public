@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, analyse, ia, document, est, longue, échoué, problème, erreur, support]
 status: published
+updatedAt: 2026-09-26
 ---
 
 L’analyse automatique est distincte de l’import. Le fichier peut avoir été correctement enregistré alors que son analyse échoue. Le document affiche alors un état final clair plutôt que de rester indéfiniment en cours de traitement.

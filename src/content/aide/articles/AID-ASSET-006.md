@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, statut, statuts, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le statut d’un bien permet à Verebona d’adapter son affichage et les actions disponibles. Un bien peut aussi être temporairement verrouillé pendant une opération de transfert ou une autre action sensible.

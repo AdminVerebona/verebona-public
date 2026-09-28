@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, consultation, modification, téléchargement, corriger, télécharger, document, fichier, justificatif, pièce]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Le détail d’un document réunit le fichier et les informations utilisées par Verebona. Vous pouvez y vérifier son titre, sa date, sa classification, son bien associé et les autres champs affichés.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, doublon, ia, proposition, document, fichier, justificatif, pièce, upload, import]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona peut détecter qu’un nouveau fichier ressemble fortement à un document déjà présent. La détection n’autorise pas une suppression silencieuse : vous voyez les deux éléments et choisissez la bonne action lorsque Verebona vous demande un arbitrage.

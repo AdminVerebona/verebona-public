@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, invitation, accepter, premium, partage, second utilisateur, membre]
 status: published
+updatedAt: 2026-09-25
 ---
 
 L’invitation est personnelle. Le second utilisateur doit utiliser son propre compte ou créer son accès, puis accepter l’invitation encore valide. Il ne récupère pas le mot de passe du titulaire.

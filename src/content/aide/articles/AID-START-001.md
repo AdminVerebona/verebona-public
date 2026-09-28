@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [démarrage, navigation, découvrir, verebona, prise en main, débuter, premiers pas, onboarding]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona regroupe dans un même espace vos biens, leurs documents, les informations utiles qui en sont extraites et les échéances à suivre. L’objectif est de retrouver plus facilement ce que vous possédez et ce qui demande votre attention, sans remplacer votre jugement.

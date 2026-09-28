@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [facturation, stripe, factures, moyens, paiement, abonnement, offre, plan, facture, parrainage]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La gestion des moyens de paiement et des factures est déléguée au portail client Stripe. Verebona crée une session sécurisée liée au compte de facturation puis vous redirige vers Stripe.

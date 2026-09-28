@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, rétractation, remboursement, exercer, droit, offre, plan, facture, paiement, Stripe]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le parcours public « Renoncer au contrat ici » permet au titulaire d’un abonnement payant d’exercer la rétractation lorsqu’il est éligible. Il s’agit d’une rétractation, pas d’une résiliation : le contrat est annulé et les paiements remboursables liés au contrat sont remboursés intégralement selon le traitement prévu.

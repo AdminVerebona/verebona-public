@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, personnalisation, personnaliser, dossier, export, PDF, pack, vente, assurance, CIL]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Verebona prépare automatiquement une sélection à partir des informations et documents disponibles. L’utilisateur garde la main sur la sélection finale : il doit pouvoir ajouter ou retirer les éléments proposés avant de générer le dossier lorsque le type de dossier le permet.

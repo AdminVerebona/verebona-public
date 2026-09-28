@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, classement, rattachement, document, fichier, justificatif, pièce, upload, import]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Le classement décrit la fonction documentaire ; le rattachement indique à quel bien le document se rapporte. Ce sont deux décisions distinctes. Un document peut être correctement classé mais encore nécessiter un rattachement, ou inversement.

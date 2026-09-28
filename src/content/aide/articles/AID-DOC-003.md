@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, formats, limites, acceptés, taille, maximale, document, fichier, justificatif, pièce]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona contrôle le type réel du fichier, son extension, sa taille et son intégrité. Le contrôle ne repose pas uniquement sur le nom du fichier : des vérifications techniques empêchent l’envoi de formats dangereux ou incohérents.

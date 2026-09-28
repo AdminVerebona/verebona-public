@@ -42,6 +42,12 @@ export type ArticleStatus = (typeof STATUSES)[number]
 export const LANGS = ['fr-FR'] as const
 
 /** Encadrés autorisés dans le corps d'un article, et leur rôle visuel. */
+/**
+ * Mentions « Permissions / prérequis » admises (§16.1). Le champ était un
+ * texte libre, non contrôlé : une nouvelle mention s'ajoute ici, relue.
+ */
+export const PERMISSIONS = ['Aucun prérequis pour lire l’article'] as const
+
 export const CALLOUTS: Record<string, 'info' | 'warning' | 'prerequisite' | 'result'> = {
   'À savoir': 'info',
   'Limites et points d’attention': 'warning',

@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [compte, profil, connexion, mot de passe, sécurité, RGPD]
 status: published
 redirectFrom: [/aide/gerer-mon-compte]
+updatedAt: 2026-09-26
 ---
 
 La section Mon compte > Informations permet de modifier vos informations de profil. L’adresse e-mail y est affichée mais ne peut pas être modifiée depuis cet écran.

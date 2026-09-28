@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, abonnement, paiement, est, pas, jour, problème, erreur, support, aide]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Une fonction peut être bloquée si l’abonnement n’est pas actif, si un changement d’offre est programmé mais pas encore effectif, si le paiement a échoué ou si le compte est en mode restreint.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, synchronisation, sécurité, désactiver, régénérer, lien, échéance, calendrier, rappel, date]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Vous pouvez désactiver le flux sans supprimer immédiatement son identifiant, ou régénérer le lien lorsque vous souhaitez invalider l’ancien.

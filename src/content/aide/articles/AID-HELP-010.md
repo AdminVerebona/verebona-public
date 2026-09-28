@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, invitation, duo, transmission, fonctionne, pas, problème, erreur, support, aide]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les invitations sont des liens temporaires et liés à une adresse ou à un parcours précis. Elles peuvent devenir invalides après annulation, expiration, acceptation ou refus.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, confiance, conflit, conflits, protection, valeurs, intelligence artificielle, automatique, analyse, enrichissement]
 status: published
+updatedAt: 2026-09-26
 ---
 
 La confiance seule ne suffit pas à décider. Verebona tient compte de la qualité de la source, de la valeur déjà enregistrée, de son origine et des règles propres aux champs critiques. Une décision humaine explicite a priorité sur une modification automatique silencieuse.

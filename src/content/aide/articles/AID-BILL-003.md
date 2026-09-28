@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, souscription, stripe, souscrire, offre, plan, facture, paiement, parrainage]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La page Offres permet de sélectionner l’offre et la périodicité mensuelle ou annuelle. Le paiement est effectué via Stripe et les droits sont activés après confirmation du paiement et de l’abonnement.

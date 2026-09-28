@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, agenda, synchronisation, personnel, met, pas, jour, problème, erreur, support]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Le flux de calendrier est publié par Verebona mais sa fréquence de lecture dépend de votre application d’agenda. Une modification peut donc être visible dans Verebona avant d’apparaître dans Google Agenda, Apple Agenda ou Outlook.

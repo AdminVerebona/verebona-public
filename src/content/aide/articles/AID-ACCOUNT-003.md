@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, mot de passe, email, réinitialiser, mot, passe, oublié, profil, connexion, sécurité]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Le parcours « Mot de passe oublié » envoie un lien de réinitialisation valable 1 heure à l’adresse e-mail du compte. Le lien permet de choisir un nouveau mot de passe sans connaître l’ancien. Pour éviter d’indiquer si une adresse possède un compte, le message d’envoi reste générique.

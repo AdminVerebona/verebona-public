@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [récupération, compte restreint, récupérer, données, compte, est, restreint, transfert, transmission, envoyer]
 status: blocked
 blocker: Le cycle général d’impayé à 90 jours n’est pas entièrement reflété dans l’implémentation actuelle.
+updatedAt: 2026-09-25
 ---
 
 Lorsqu’un compte ne permet plus l’ajout ou la modification, Verebona doit conserver un accès suffisant pour consulter et récupérer les données pendant la période prévue. Les droits exacts dépendent du motif de restriction : fin d’essai, résiliation, impayé ou rétractation.

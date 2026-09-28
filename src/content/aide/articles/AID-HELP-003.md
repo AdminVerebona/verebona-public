@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, email, mot de passe, reçois, pas, mail, vérification, réinitialisation, problème, erreur]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les messages de vérification et de réinitialisation sont envoyés à l’adresse associée au parcours. Un filtre anti-spam, une erreur d’adresse ou un délai de distribution peut empêcher leur apparition immédiate.

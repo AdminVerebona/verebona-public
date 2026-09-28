@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [à traiter, actions, ia, page, traiter, action, arbitrer, confirmer, rattacher, compléter]
 status: published
 redirectFrom: [/aide/traiter-documents-incomplets]
+updatedAt: 2026-09-26
 ---
 
 « À traiter » est une file unique d’actions. Chaque carte représente une décision concrète : arbitrer une valeur, rattacher un élément, confirmer une proposition ou compléter une donnée lorsqu’une règle métier le justifie. La page ne liste pas tous les champs manquants.

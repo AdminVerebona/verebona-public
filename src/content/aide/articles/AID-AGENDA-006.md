@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, synchronisation, webcal, synchroniser, échéances, personnel, échéance, calendrier, rappel, date]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Les offres Premium et Premium Duo permettent de publier un lien de calendrier auquel votre application d’agenda personnel peut s’abonner. Il s’agit d’un flux de consultation : les modifications se font dans Verebona puis sont reprises par l’application d’agenda selon sa propre fréquence de rafraîchissement.

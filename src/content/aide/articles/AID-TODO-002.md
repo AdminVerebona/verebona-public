@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, priorité, vue, changer, ordre, présentation, actions, action, arbitrer, confirmer]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La page propose deux choix indépendants : l’ordre des actions et leur densité visuelle. Le choix Cartes/Liste est mémorisé ; le choix Par priorité/Par action revient à Par priorité lors d’une nouvelle visite.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, historique, modifications, automatiques, intelligence artificielle, automatique, analyse, enrichissement, confiance]
 status: published
+updatedAt: 2026-09-26
 ---
 
 La section « Historique des modifications automatiques » présente les enrichissements enregistrés. Une entrée indique le champ, le bien, la nouvelle valeur, l’ancienne valeur lorsqu’elle existe, la date et le document source si cette information est disponible.

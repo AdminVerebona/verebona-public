@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [biens, modification, compléter, fiche, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
 redirectFrom: [/aide/completer-fiche-bien]
+updatedAt: 2026-09-26
 ---
 
 La fiche d’un bien contient des informations communes et des sections adaptées à sa catégorie. Certaines valeurs sont saisies manuellement ; d’autres peuvent être proposées ou complétées à partir de documents analysés.

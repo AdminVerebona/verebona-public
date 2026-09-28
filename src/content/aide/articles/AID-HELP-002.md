@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, connexion, arrive, pas, connecter, problème, erreur, support, aide, incident]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Un échec de connexion peut venir d’un mot de passe incorrect, d’une adresse mal saisie, d’un compte non vérifié, d’une session expirée ou d’un compte suspendu. Commencez par les vérifications simples avant de contacter le support.

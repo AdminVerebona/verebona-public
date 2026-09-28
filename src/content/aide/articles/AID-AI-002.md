@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, enrichissement, enrichissements, automatiques, intelligence artificielle, automatique, analyse, confiance]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Un enrichissement automatique est une modification d’une donnée métier effectuée à partir d’une preuve suffisamment fiable et autorisée par les règles de Verebona. Le système conserve l’origine de la valeur et enregistre l’historique lorsque le champ est modifié automatiquement.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, notifications, reçois, pas, problème, erreur, support, aide, incident]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Si une notification attendue n’arrive pas, vérifiez à la fois la préférence Verebona, l’autorisation de l’appareil et le déclencheur métier. Les réglages sont individuels en Premium Duo.

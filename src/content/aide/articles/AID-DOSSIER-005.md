@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, assurance, estimation, dossier, export, PDF, pack, vente, CIL]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Ce dossier met l’accent sur l’identité du bien, ses caractéristiques, sa valeur et les justificatifs pouvant étayer l’estimation. Il inclut notamment les informations financières, documents pertinents et photos disponibles.

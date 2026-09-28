@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, centre aide, assistant, différencier, données, centre, aide, chercher, trouver, filtre]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona comporte deux usages de recherche qu’il ne faut pas confondre. La recherche de l’application porte sur vos biens, documents et échéances. La recherche du Centre d’aide porte sur la documentation du produit et sert aussi de corpus de référence pour les questions d’usage de l’assistant.

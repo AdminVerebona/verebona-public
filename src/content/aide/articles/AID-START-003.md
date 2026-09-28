@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, email, sécurité, vérifier, adresse, mail, prise en main, débuter, premiers pas, onboarding]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Verebona vérifie l’adresse e-mail utilisée pour votre compte afin de sécuriser l’accès et les communications importantes. La vérification se fait depuis le message reçu après l’inscription.

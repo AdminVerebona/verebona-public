@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, import, ajouter, document, fichier, justificatif, pièce, upload]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Vous pouvez ajouter un document depuis la vue globale « Mes documents » ou depuis le contexte d’un bien. Le fichier peut être rattaché immédiatement à un bien ou rester temporairement sans rattachement lorsque le parcours le permet.

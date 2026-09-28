@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [recherche, assistant, ia, interroger, verebona, biens, documents, échéances, chercher, trouver]
 status: published
 redirectFrom: [/aide/assistant]
+updatedAt: 2026-09-26
 ---
 
 Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.

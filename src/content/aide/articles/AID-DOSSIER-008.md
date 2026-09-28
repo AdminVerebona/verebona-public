@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, historique, export, retrouver, télécharger, relancer, supprimer, dossier, généré, PDF]
 status: published
+updatedAt: 2026-09-25
 ---
 
 Verebona conserve un historique des générations réalisées sur la fiche du bien. Chaque entrée indique son type, son état et, lorsqu’elle est prête, un lien de téléchargement. Une génération en erreur peut être relancée lorsque cette action est proposée.

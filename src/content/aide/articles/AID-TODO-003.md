@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, conflit, arbitrage, arbitrer, entre, deux, valeurs, action, confirmer, rattacher]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Un conflit apparaît lorsque Verebona dispose de valeurs différentes pour la même information et ne peut pas les départager automatiquement selon les règles de confiance et d’autorité. L’écran doit présenter les valeurs et leurs sources de façon compréhensible.

@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, photo, vignette, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
+updatedAt: 2026-09-25
 ---
 
 La vignette sert à identifier rapidement un bien dans les listes et sa fiche. Elle est distincte des autres documents ou photos éventuellement associés au bien.

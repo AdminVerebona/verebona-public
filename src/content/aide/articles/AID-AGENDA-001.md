@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [agenda, échéance, création, élément, calendrier, rappel, date, événement]
 status: published
 redirectFrom: [/aide/ajouter-evenement-agenda]
+updatedAt: 2026-09-25
 ---
 
 L’agenda centralise les événements et échéances liés à vos biens. Un élément peut être créé manuellement ou provenir d’une information détectée dans un document ou une donnée du bien.

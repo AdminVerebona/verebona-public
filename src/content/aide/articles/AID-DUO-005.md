@@ -13,25 +13,27 @@ authState: [public_help, connected_action]
 screens: [Mon abonnement, Duo récupération]
 objectTypes: [compte Duo, bien]
 permissions: Aucun prérequis pour lire l’article
-relatedArticles: [AID-TRANSFER-007, AID-BILL-008]
+relatedArticles: [AID-TRANSFER-007, AID-DUO-006, AID-BILL-004]
 seoTitle: Que se passe-t-il lors d’un downgrade ou d’un impayé Duo ? | Aide Verebona
 metaDescription: Comprendre les conséquences d’une sortie de Premium Duo ou d’un défaut de paiement.
 canonical: /aide/downgrade-impaye-duo
 indexable: true
 lang: fr-FR
 synonyms: [duo, downgrade, impayé, passe, lors, partage, second utilisateur, membre, invitation]
-status: blocked
-blocker: Le code comporte deux logiques différentes sur les biens au-delà du quota après downgrade : inactivation historique et blocage d’écriture sans suppression. Harmonisation obligatoire.
+status: published
+updatedAt: 2026-09-26
 ---
 
-Quitter Premium Duo modifie les droits du compte et du second utilisateur. En cas d’impayé, le Duo peut passer par des états de grâce puis de récupération. La conservation des biens et la gestion des dépassements de quota doivent suivre une règle unique et cohérente dans tout le produit.
+Quitter Premium Duo, que ce soit vers Premium ou vers Standard, met fin au partage : le second utilisateur perd l’accès à l’espace du titulaire. En cas d’impayé, le Duo passe d’abord par une période de grâce, puis par un mode de récupération.
 
 ## Détails et cas particuliers
 
-**Sortie du Duo** — Le compte Duo est annulé et le membre supplémentaire perd l’accès partagé selon le mécanisme prévu.
+**Sortie du Duo** — Le second utilisateur est retiré de l’espace partagé et son offre affichée redevient la sienne. Les biens, documents et échéances restent dans l’espace du titulaire : rien n’est supprimé.
 
-**Invitations en attente** — Elles doivent être annulées lorsque l’offre ne permet plus de deuxième utilisateur.
+**Invitation en attente** — Elle est annulée : le lien envoyé ne permet plus de rejoindre le Duo.
 
-**Quota inférieur** — Les données ne doivent pas être supprimées silencieusement ; l’utilisateur doit comprendre ce qui reste accessible et ce qui est bloqué.
+**Quota inférieur** — Aucun bien n’est supprimé ni désactivé. Si l’espace dépasse la limite de biens de la nouvelle offre, tous les biens restent consultables, exportables et transmissibles, mais leur modification est suspendue jusqu’à ce que le titulaire repasse sous la limite, en supprimant des biens ou en choisissant une offre suffisante.
 
-**Mode récupération** — Après impayé selon le cycle Duo, les biens peuvent être récupérés vers un espace personnel au lieu d’être utilisés normalement dans le Duo.
+**Impayé** — Pendant la période de grâce, le second utilisateur reste membre. Si le paiement n’est pas régularisé, le Duo passe en mode récupération : chacun peut alors demander le déplacement de biens vers son espace personnel (voir [Comprendre le mode récupération d’un Duo](/aide/recuperation-duo)).
+
+> **Limites et points d’attention** — Pour réinviter la même personne après une sortie du Duo, le titulaire doit d’abord reprendre Premium Duo, puis lui envoyer une nouvelle invitation.

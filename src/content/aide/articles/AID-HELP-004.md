@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, document, import, importe, pas, problème, erreur, support, aide, incident]
 status: published
+updatedAt: 2026-09-26
 ---
 
 L’import peut être refusé pour un format non autorisé, une taille excessive, un fichier vide, une extension incohérente, un nom dangereux, un quota atteint, un droit d’écriture bloqué ou une erreur de stockage.

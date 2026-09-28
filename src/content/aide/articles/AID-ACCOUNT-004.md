@@ -19,17 +19,27 @@ metaDescription: Réduire le risque d’accès non autorisé à votre compte.
 canonical: /aide/connexion-deconnexion-securite
 indexable: true
 lang: fr-FR
-synonyms: [compte, sécurité, session, connecter, déconnecter, profil, connexion, mot de passe, RGPD]
-status: blocked
-blocker: AUTH-02 : la rotation effective des refresh tokens doit être vérifiée dans la recette sécurité.
+synonyms: [compte, sécurité, session, connecter, déconnecter, profil, connexion, mot de passe, appareils]
+status: published
 redirectFrom: [/aide/securite]
+updatedAt: 2026-09-26
 ---
 
-Utilisez vos propres identifiants et déconnectez-vous sur un appareil partagé. Les sessions et jetons d’accès doivent être gérés par Verebona de manière à empêcher la réutilisation d’un accès révoqué ou expiré.
+Utilisez vos propres identifiants et déconnectez-vous sur un appareil partagé. Verebona limite la durée de validité des accès et révoque ceux qui ne doivent plus servir.
 
 ## Procédure
 
 1. **Utilisez une adresse e-mail que vous contrôlez** — Elle sert aux opérations sensibles et à la récupération du compte.
 2. **Gardez votre mot de passe privé** — Ne le partagez pas avec le second utilisateur d’un Duo : chacun dispose de son propre accès.
-3. **Déconnectez-vous des appareils partagés** — Utilisez la commande de déconnexion de Verebona.
-4. **Réagissez à une activité inhabituelle** — Changez votre mot de passe et contactez le support si vous suspectez un accès non autorisé.
+3. **Déconnectez-vous des appareils partagés** — Utilisez « Se déconnecter » dans le menu de votre compte.
+4. **Réagissez à une activité inhabituelle** — Changez votre mot de passe : tous les autres appareils sont alors déconnectés. Contactez ensuite le support si vous suspectez un accès non autorisé.
+
+## Détails et cas particuliers
+
+**Déconnexion** — Se déconnecter met fin à la session de l’appareil : elle ne peut plus être prolongée, même par une personne qui en aurait conservé une copie.
+
+**Renouvellement de la session** — Tant que vous utilisez Verebona, votre session est renouvelée automatiquement. Chaque renouvellement remplace le précédent, qui ne peut plus être réutilisé.
+
+**Changement ou réinitialisation du mot de passe** — Les sessions ouvertes sur les autres appareils sont révoquées ; il faut s’y reconnecter avec le nouveau mot de passe.
+
+> **Limites et points d’attention** — Sur un ordinateur partagé, n’enregistrez pas votre mot de passe dans le navigateur.

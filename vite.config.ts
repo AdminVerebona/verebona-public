@@ -1,12 +1,14 @@
 import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {
+  allowsModeOverride,
   isIndexable,
   parseEnvironment,
   resolveDefaultMode,
 } from './src/config/site-mode.rules'
-import { INDEXABLE_PATHS, SITE_ORIGIN, buildRobotsTxt, buildSitemapXml } from './src/config/sitemap.rules'
-import { deployedCommit, loadHelpCorpus, HELP_CONTENT_DIR } from './help.build'
+import { MODE_PREVIEW_GUARD_CSS, MODE_PREVIEW_GUARD_SCRIPT } from './src/config/mode-preview-guard.rules'
+import { INDEXABLE_PATHS, SITE_ORIGIN, buildRobotsTxt, buildSitemapXml, canonicalUrl } from './src/config/sitemap.rules'
+import { assertHelpGuards, deployedCommit, loadHelpCorpus, COVERAGE_FILE, HELP_CONTENT_DIR, SLUG_REGISTRY_FILE } from './help.build'
 import type { Corpus } from './src/help/corpus'
 import {
   buildCatalog, buildRedirects, buildT2Corpus, contentVersion, helpSitemapPaths, publishedArticles,
@@ -15,6 +17,7 @@ import {
 import { CATALOG_PATH, REDIRECTS_FILE, T2_CORPUS_PATH } from './src/help/config'
 import { structuredDataScript } from './src/config/structured-data'
 import { HOME_DESCRIPTIONS, HOME_TITLE, escapeHtmlAttr } from './src/config/head.rules'
+import { socialMetaHtml } from './src/config/social.rules'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -61,12 +64,19 @@ function siteModePlugin(): Plugin {
       // mode par défaut du build (prelaunch → « Disponible bientôt »,
       // full → version ouverture) sans que ce plugin modifie ce mode.
       // ══════════════════════════════════════════════════════════════════
+      const homeUrl = canonicalUrl('/')
+      const homeHead = { title: HOME_TITLE, description: HOME_DESCRIPTIONS[defaultMode], url: homeUrl }
+      if (!html.includes('<!--vb:head-meta-->')) throw new Error('[verebona] marqueur <!--vb:head-meta--> absent de index.html')
       const homeHtml = html
         .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtmlAttr(HOME_TITLE)}</title>`)
         .replace(
           /(<meta\s+name="description"\s+content=")[^"]*(")/,
           `$1${escapeHtmlAttr(HOME_DESCRIPTIONS[defaultMode])}$2`,
         )
+        // CDC Données structurées §6 : canonical, og:* et twitter:* depuis les
+        // constantes partagées ; og:title = <title>, og:description = meta description.
+        .replace('<!--vb:head-meta-->', () =>
+          `<link rel="canonical" href="${escapeHtmlAttr(homeUrl)}" />\n    ${socialMetaHtml(homeHead)}`)
 
       const tags = []
 
@@ -100,6 +110,24 @@ function siteModePlugin(): Plugin {
           attrs: { name: 'robots', content: 'noindex, nofollow' },
           injectTo: 'head-prepend' as const,
         })
+      }
+
+      // ══════════════════════════════════════════════════════════════════
+      // PRÉVISUALISATION ?mode= AVANT LE MONTAGE — CDC pré-lancement §5.3
+      //
+      // Le HTML pré-rendu l'est dans le mode par défaut du build (FULL en
+      // préproduction). Ouvert dans un nouvel onglet avec `?mode=prelaunch`,
+      // il affichait les liens d'inscription actifs jusqu'au montage de Vue.
+      // `server.cjs` sert pour `/` l'accueil pré-rendu dans le mode demandé ;
+      // pour les autres pages pré-rendues (aide), ce script masque le HTML
+      // d'un autre mode avant la première peinture. Jamais en production, où
+      // `?mode=` est ignoré.
+      // ══════════════════════════════════════════════════════════════════
+      if (allowsModeOverride(environment)) {
+        tags.push(
+          { tag: 'style', children: MODE_PREVIEW_GUARD_CSS, injectTo: 'head' as const },
+          { tag: 'script', children: MODE_PREVIEW_GUARD_SCRIPT, injectTo: 'head' as const },
+        )
       }
 
       return { html: homeHtml, tags }
@@ -196,8 +224,13 @@ function helpCenterPlugin(): Plugin {
     },
     buildStart() {
       const c = load()
+      // COVER-01 et ARCH-05 : contrôlés sur le build client (le build SSR du
+      // pré-rendu relit le même corpus).
+      if (!isSsr) assertHelpGuards(process.cwd(), c)
       for (const a of c.articles) this.addWatchFile(a.source)
       this.addWatchFile(`${HELP_CONTENT_DIR}/categories.json`)
+      this.addWatchFile(COVERAGE_FILE)
+      this.addWatchFile(SLUG_REGISTRY_FILE)
     },
     resolveId(id) {
       return id === VIRTUAL ? RESOLVED : null

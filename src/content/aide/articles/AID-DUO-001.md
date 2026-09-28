@@ -22,6 +22,7 @@ lang: fr-FR
 synonyms: [duo, partage, premium, second utilisateur, membre, invitation]
 status: published
 redirectFrom: [/aide/duo]
+updatedAt: 2026-09-26
 ---
 
 Premium Duo permet à deux personnes d’utiliser un même espace de gestion avec les biens, documents et échéances du compte. Chacun conserve son propre utilisateur et son propre mot de passe. Le titulaire reste responsable de l’abonnement et de la facturation.

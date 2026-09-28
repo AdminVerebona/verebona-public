@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, push, email, verebona, notification, alerte, rappel]
 status: published
+updatedAt: 2026-09-26
 ---
 
 Verebona peut utiliser plusieurs canaux : notification push sur un appareil autorisé, e-mail et cloche dans l’application lorsqu’un événement est prévu pour ce canal. Les éléments « À traiter » restent d’abord visibles dans leur page dédiée et ne sont pas ajoutés à la cloche.

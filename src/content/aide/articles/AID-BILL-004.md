@@ -20,13 +20,13 @@ canonical: /aide/changer-offre
 indexable: true
 lang: fr-FR
 synonyms: [abonnement, changement offre, changer, offre, plan, facture, paiement, Stripe, parrainage]
-status: blocked
-blocker: Le comportement historique de certains downgrades a inactivé des biens au-delà du quota alors que le service d’entitlements documente une conservation en lecture/export. Harmonisation obligatoire avant MEP.
+status: published
+updatedAt: 2026-09-26
 ---
 
-Le changement d’offre est programmé par le serveur à partir de l’offre cible, de la périodicité et de l’état réel de l’abonnement. L’écran doit afficher la date de prise d’effet renvoyée par le serveur et permettre d’annuler un changement encore programmé.
+Le changement d’offre est programmé par le serveur à partir de l’offre cible, de la périodicité et de l’état réel de l’abonnement. L’écran affiche la date de prise d’effet renvoyée par le serveur et permet d’annuler un changement encore programmé.
 
-> **À savoir** — Si la nouvelle offre possède des quotas inférieurs, vos données ne doivent pas être supprimées simplement parce que le quota baisse. Le comportement de dépassement doit rester cohérent avec les droits effectifs.
+> **À savoir** — Passer à une offre aux quotas inférieurs ne supprime ni ne désactive aucun bien. Si votre compte dépasse alors la limite de biens de la nouvelle offre, tous vos biens restent consultables, exportables et transmissibles, mais leur modification est suspendue jusqu’à ce que vous repassiez sous la limite.
 
 ## Procédure
 
@@ -35,3 +35,13 @@ Le changement d’offre est programmé par le serveur à partir de l’offre cib
 3. **Programmez le changement** — Verebona affiche la date d’effet ou « prochaine échéance ».
 4. **Vérifiez le changement programmé** — Le récapitulatif apparaît dans Mon abonnement.
 5. **Annulez si nécessaire** — Utilisez « Annuler » avant la prise d’effet lorsque cette action est disponible.
+
+## Détails et cas particuliers
+
+**Au-dessus de la limite de biens** — Toute modification d’un bien (informations, vignette, pièces, équipements, valorisation) est refusée avec un message qui rappelle la limite de l’offre. Aucun bien n’est désigné d’office : c’est vous qui choisissez.
+
+**Revenir sous la limite** — Supprimez les biens dont vous n’avez plus besoin, après les avoir exportés ou transmis si nécessaire, ou choisissez une offre suffisante. La modification redevient possible dès que le nombre de biens ne dépasse plus la limite.
+
+**Passage en Standard** — Standard ne permet qu’un seul utilisateur : les membres d’un compte partagé sont retirés et les invitations en attente annulées. Leurs données restent dans le compte.
+
+> **Limites et points d’attention** — Tant que la limite est dépassée, l’ajout de nouveaux biens reste également impossible.
