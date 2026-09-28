@@ -13,7 +13,9 @@
     "preview": "vite preview",
     "start": "node server.cjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:a11y": "node scripts/a11y.mjs",
+    "check:help-dates": "node scripts/check-help-dates.mjs"
   },
   "dependencies": {
     "express": "^5.2.1",
@@ -22,10 +24,12 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@types/node": "^22.20.4",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vue/test-utils": "^2.5.1",
     "jsdom": "^25.0.1",
+    "playwright-core": "~1.56.1",
     "typescript": "^5.4.5",
     "vite": "^7.3.6",
     "vitest": "^4.1.11",

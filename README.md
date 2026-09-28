@@ -63,6 +63,14 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 | `tests/help-corpus.test.ts` | validation de build du corpus réel (0 défaut, 100 articles), aucune occurrence T1–T5 quelle que soit la casse, notes de rédaction interne refusées, AID-BILL-010 publié sans avantage filleul |
 | `tests/contact.test.ts` | sujet du formulaire transmis, « Choisir… » refusé, erreurs annoncées (`role="alert"`) — GAP-17, CONTACT-02, A11Y-02 |
 | `tests/embed.test.ts` | mode intégré : une seule barre « Retour à Verebona » (celle de l'application quand elle encadre le site) |
+| `tests/help-dates.test.ts` | contrôle `check:help-dates` (EDITOR-02) : lecture du `updatedAt`, analyse du `git log`, commit « updatedAt seul » ignoré, dépôt Git réel (échec puis succès), absence de `.git` ignorée |
+
+### Contrôles hors `vitest run` (à lancer en CI)
+
+| Commande | Rôle |
+| --- | --- |
+| `npm run check:help-dates` | EDITOR-02 : échoue si l'`updatedAt` d'un article (date publiée sur l'hébergeur, sans `.git`) est antérieur au dernier commit qui a modifié son contenu (un commit qui ne touche que la ligne `updatedAt` ne compte pas). Ignoré sans `.git` ; en échec sur un clone superficiel (`actions/checkout` : `fetch-depth: 0`). |
+| `npm run build && npm run test:a11y` | A11Y-01 / A11Y-04 : axe-core (WCAG 2.0–2.2 A/AA) dans Chromium sur le `dist/` servi par `server.cjs` — `/aide`, recherche, un thème, un article (+ formulaire de retour ouvert), `/contact` (+ erreur d'envoi affichée), vue intégrée `?integre=app` (accueil et article), en viewport bureau (1280×800) et mobile (390×844). Échec sur toute violation `serious` / `critical`. Navigateur : `npx playwright-core install --with-deps chromium` en CI, ou `A11Y_CHROMIUM=<chemin>`. |
 
 ## Structure
 
@@ -192,6 +200,8 @@ Le témoin le plus simple est `robots.txt` : **sans ligne `Sitemap:`, la product
 | -------------------------------------- | -------------------------------------------------------------------------------------- |
 | `src/content/aide/articles/AID-*.md`   | **un article par fichier**, nommé d'après son ID stable ; frontmatter + Markdown restreint |
 | `src/content/aide/categories.json`     | les 14 thèmes, leur ordre et leur introduction (§11.1)                                  |
+| `src/content/aide/coverage.json`       | matrice de couverture §12 ; lignes exemptées motivées dans `blockedRows` (COVER-01)     |
+| `src/content/aide/slug-registry.json`  | toutes les URLs publiées par article ; aucune ne disparaît sans redirection (ARCH-05)   |
 | `src/help/*.ts`                        | parsing, validation de build, recherche, sorties (fonctions pures, testées)             |
 | `help.build.ts`                        | lecture du disque et dates Git (EDITOR-02)                                              |
 | `vite.config.ts` (`helpCenterPlugin`)  | valide le corpus, émet catalogue, corpus assistant, redirections ; échec au 1ᵉʳ défaut   |
@@ -219,8 +229,10 @@ Toutes portent la même `version` (commit déployé + empreinte du contenu).
 ### Ajouter ou modifier un article
 
 1. Créer `src/content/aide/articles/AID-<DOMAINE>-<NNN>.md` (copier un article voisin). L'ID ne change jamais ; le titre et le slug peuvent changer.
-2. Slug modifié : ajouter l'ancienne URL à `redirectFrom` (obligatoire, §2.2).
-3. `npm run test` puis `npm run build` : le build liste tous les défauts (article lié inexistant, doublon, valeur hors référentiel, vocabulaire interne T1–T5, e-mail, lien privé…).
+2. Slug modifié : ajouter l'ancienne URL à `redirectFrom` (obligatoire, §2.2) **et** la nouvelle URL à `slug-registry.json`, sans retirer l'ancienne. Un article supprimé doit voir toutes ses URLs reprises en `redirectFrom` d'un autre article (ARCH-05).
+3. Mettre à jour `updatedAt: AAAA-MM-JJ` (obligatoire) : date de repli quand le build n'a pas l'historique Git (archive, hébergeur sans `.git`) ; la date du dernier commit reste prioritaire (EDITOR-02).
+4. Publier ou bloquer un article cité par la matrice : le build échoue si une ligne de `coverage.json` n'a plus d'article publié en production, ou si une exception de `blockedRows` est devenue inutile (COVER-01).
+5. `npm run test` puis `npm run build` : le build liste tous les défauts (article lié inexistant, doublon, valeur hors référentiel, vocabulaire interne T1–T5, e-mail, lien privé…).
 
 Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — texte`, encadrés `> **À savoir** — texte` (et « Limites et points d'attention », « Prérequis », « Résultat attendu »), définitions `**Terme** — texte`, **gras** et liens `[texte](/aide/slug)`. Rien d'autre, et jamais de HTML.
 
