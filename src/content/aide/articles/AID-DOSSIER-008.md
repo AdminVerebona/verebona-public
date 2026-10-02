@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, historique, export, retrouver, télécharger, relancer, supprimer, dossier, généré, PDF]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

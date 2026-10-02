@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, email, mot de passe, reçois, pas, mail, vérification, réinitialisation, problème, erreur]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

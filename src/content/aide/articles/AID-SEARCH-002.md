@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, filtres, biens, documents, agenda, chercher, trouver, filtre, résultat]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

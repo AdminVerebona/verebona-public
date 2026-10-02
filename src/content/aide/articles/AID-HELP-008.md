@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, agenda, synchronisation, personnel, met, pas, jour, problème, erreur, support]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, personnalisation, personnaliser, dossier, export, PDF, pack, vente, assurance, CIL]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

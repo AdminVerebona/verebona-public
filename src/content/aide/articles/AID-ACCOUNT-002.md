@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, sécurité, mot de passe, mot, passe, profil, connexion, déconnexion, appareils]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, abonnement, paiement, est, pas, jour, problème, erreur, support, aide]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

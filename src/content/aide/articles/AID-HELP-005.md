@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, analyse, ia, document, est, longue, échoué, problème, erreur, support]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

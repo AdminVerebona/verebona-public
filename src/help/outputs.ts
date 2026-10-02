@@ -70,6 +70,11 @@ export interface CatalogEntry {
   published: boolean
   offers: HelpArticle['offers']
   updatedAt: string | null
+  /** Contrat de publication (CDC Assistant §10.3, D-O). */
+  validatedAt: string | null
+  allowedRoutes: string[]
+  allowedActions: string[]
+  appVersion: string | null
 }
 
 export interface HelpCatalog {
@@ -105,6 +110,10 @@ export function buildCatalog(
       published: isPublishedIn(a, env),
       offers: a.offers,
       updatedAt: a.updatedAt,
+      validatedAt: a.validatedAt,
+      allowedRoutes: a.allowedRoutes,
+      allowedActions: a.allowedActions,
+      appVersion: a.appVersion,
     })),
     redirects: Object.fromEntries(
       corpus.articles.flatMap((a) => a.redirectFrom.map((r) => [r, a.id] as const)).sort(),
@@ -130,6 +139,15 @@ export interface T2Article {
   objectTypes: string[]
   synonyms: string[]
   sections: HelpSection[]
+  /**
+   * Contrat de publication lu par l'assistant (CDC Assistant §10.3, D-O) :
+   * l'application ne cite qu'un article `published` qui porte `validatedAt`.
+   */
+  status: HelpArticle['status']
+  validatedAt: string | null
+  allowedRoutes: string[]
+  allowedActions: string[]
+  appVersion: string | null
 }
 
 export interface T2Corpus {
@@ -174,6 +192,11 @@ export function buildT2Corpus(corpus: Corpus, env: HelpEnvironment, version: str
       objectTypes: a.objectTypes,
       synonyms: a.synonyms,
       sections: toSections(a.blocks),
+      status: a.status,
+      validatedAt: a.validatedAt,
+      allowedRoutes: a.allowedRoutes,
+      allowedActions: a.allowedActions,
+      appVersion: a.appVersion,
     })),
   }
 }

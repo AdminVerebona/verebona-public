@@ -57,6 +57,18 @@ export interface HelpArticleMeta {
   blocker: string | null
   /** Anciennes URLs redirigées de façon permanente vers cet article (§13.1). */
   redirectFrom: string[]
+  /**
+   * Contrat de publication (CDC Assistant §10.3 ; décision PO D-O) : date de
+   * validation éditoriale (AAAA-MM-JJ), OBLIGATOIRE pour un article publié —
+   * l'assistant ignore un article publié sans elle.
+   */
+  validatedAt: string | null
+  /** Routes de l'application mentionnées par l'article (§10.3, §10.4). */
+  allowedRoutes: string[]
+  /** Actions de l'assistant que l'article autorise (§10.3, catalogue §22.4). */
+  allowedActions: string[]
+  /** Version de l'application décrite par l'article (§10.3). */
+  appVersion: string | null
 }
 
 export interface HelpArticle extends HelpArticleMeta {

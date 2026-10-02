@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, navigation, globale, chercher, trouver, filtre, résultat]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/utiliser-la-recherche]
 updatedAt: 2026-09-26
 ---

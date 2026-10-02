@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, bien, transmettre, autre, compte, verebona, transmission, envoyer, recevoir, récupérer]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

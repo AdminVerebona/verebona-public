@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [parrainage, récompense, application, mois, offerts, abonnement, offre, plan, facture, paiement]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

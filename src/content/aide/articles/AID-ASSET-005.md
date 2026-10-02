@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, immobilier, pièces, équipements, bien, patrimoine, maison, appartement, immeuble, local]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/ajouter-un-equipement, /aide/ajouter-une-piece]
 updatedAt: 2026-09-26
 ---

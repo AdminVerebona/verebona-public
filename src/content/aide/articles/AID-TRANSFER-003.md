@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, annulation, annuler, transmission, attente, envoyer, recevoir, récupérer, export brut]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, doublon, ia, proposition, document, fichier, justificatif, pièce, upload, import]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -37,6 +37,20 @@ export type AuthState = (typeof AUTH_STATES)[number]
  *               visible en préproduction pour recette, absent de la production.
  */
 export const STATUSES = ['published', 'blocked'] as const
+
+/**
+ * Actions de l'assistant qu'un article peut autoriser (CDC Assistant §10.3 :
+ * « routes ou actions autorisées » ; catalogue fermé §22.4). Reprises du
+ * catalogue de l'application : une action hors liste fait échouer le build.
+ */
+export const ASSISTANT_ACTIONS = [
+  'OPEN_ASSET', 'OPEN_DOCUMENT', 'OPEN_DOCUMENTS_PAGE', 'OPEN_SEARCH_RESULTS', 'OPEN_AGENDA', 'OPEN_AGENDA_ITEM',
+  'OPEN_TO_PROCESS', 'OPEN_SUPPLIERS', 'OPEN_SUPPLIER', 'OPEN_ACCOUNT', 'OPEN_PRICING', 'OPEN_HELP', 'OPEN_CONTACT',
+  'START_ADD_ASSET', 'START_ADD_DOCUMENT', 'START_ADD_AGENDA_ITEM', 'OPEN_EXPORT_AREA',
+] as const
+
+/** Route de l'application mentionnée par un article (chemin interne). */
+export const APP_ROUTE = /^\/[a-z0-9-]+(\/[a-z0-9-[\]]+)*$/
 export type ArticleStatus = (typeof STATUSES)[number]
 
 export const LANGS = ['fr-FR'] as const

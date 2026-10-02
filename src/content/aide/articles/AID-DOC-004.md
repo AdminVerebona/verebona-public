@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, ia, analyse, automatique, document, fichier, justificatif, pièce, upload, import]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/comprendre-analyse-automatique, /aide/import-analyse]
 updatedAt: 2026-09-26
 ---

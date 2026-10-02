@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, exports, prêts, usage, dossier, export, PDF, pack, vente, assurance]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 redirectFrom: [/aide/generer-un-export]
 updatedAt: 2026-09-25
 ---

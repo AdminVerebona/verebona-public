@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, mot de passe, email, réinitialiser, mot, passe, oublié, profil, connexion, sécurité]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

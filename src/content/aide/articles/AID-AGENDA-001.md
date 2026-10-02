@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, échéance, création, élément, calendrier, rappel, date, événement]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 redirectFrom: [/aide/ajouter-evenement-agenda]
 updatedAt: 2026-09-25
 ---

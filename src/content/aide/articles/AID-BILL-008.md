@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [facturation, impayé, récupération, passe, après, échec, paiement, abonnement, offre, plan]
 status: blocked
+appVersion: V1
 blocker: CRITIQUE : ce cycle général à 90 jours n’est pas complètement implémenté aujourd’hui ; publication interdite tant que le comportement réel n’est pas aligné.
 updatedAt: 2026-09-25
 ---

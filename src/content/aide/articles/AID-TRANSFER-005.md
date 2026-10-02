@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [export, récupération, données, exporter, brutes, bien, transfert, transmission, envoyer, recevoir]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, suppression, sécurité, supprimer, définitivement, profil, connexion, mot de passe, RGPD, clôturer, fermer, annuler la suppression]
 status: published
+validatedAt: 2026-09-28
+appVersion: V1
 updatedAt: 2026-09-28
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, invitation, accepter, premium, partage, second utilisateur, membre]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

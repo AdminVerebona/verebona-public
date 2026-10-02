@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, statut, réaliser, annuler, supprimer, échéance, calendrier, rappel, date, événement]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 redirectFrom: [/aide/retard]
 updatedAt: 2026-09-25
 ---

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, automatisation, transparence, verebona, utilise, intelligence artificielle, automatique, analyse, enrichissement, confiance]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

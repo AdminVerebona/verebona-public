@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, modification, compléter, fiche, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/completer-fiche-bien]
 updatedAt: 2026-09-26
 ---

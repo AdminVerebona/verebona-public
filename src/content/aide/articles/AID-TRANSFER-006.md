@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [récupération, compte restreint, récupérer, données, compte, est, restreint, transfert, transmission, envoyer]
 status: blocked
+appVersion: V1
 blocker: Le cycle général d’impayé à 90 jours n’est pas entièrement reflété dans l’implémentation actuelle.
 updatedAt: 2026-09-25
 ---

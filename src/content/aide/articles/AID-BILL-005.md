@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, périodicité, changer, mensuelle, annuelle, offre, plan, facture, paiement, Stripe]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

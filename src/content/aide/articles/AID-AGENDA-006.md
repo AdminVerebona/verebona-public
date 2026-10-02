@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, synchronisation, webcal, synchroniser, échéances, personnel, échéance, calendrier, rappel, date]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

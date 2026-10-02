@@ -19,6 +19,7 @@
 import { parseFrontmatter, type FrontmatterValue } from './frontmatter'
 import { linksOf, parseBody } from './markdown'
 import {
+  APP_ROUTE, ASSISTANT_ACTIONS,
   AUTH_STATES, LANGS, OBJECT_TYPES, OFFERS, PERMISSIONS, PLATFORMS, RESERVED_SLUGS, ROLES, SCREENS, STATUSES,
 } from './referentials'
 import type { BuildIssue, HelpArticle, HelpCategory } from './types'
@@ -81,6 +82,8 @@ const REQUIRED_LIST = [
 ] as const
 const KNOWN = new Set<string>([
   ...REQUIRED_TEXT, ...REQUIRED_LIST, 'indexable', 'offersNote', 'blocker', 'redirectFrom', 'updatedAt',
+  // Contrat de publication (CDC Assistant §10.3, D-O).
+  'validatedAt', 'allowedRoutes', 'allowedActions', 'appVersion',
 ])
 
 /** Date de repli (EDITOR-02) : jour calendaire ISO, sans heure. */
@@ -144,6 +147,26 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
       status: text('status'),
       blocker: optText('blocker'),
       redirectFrom: Array.isArray(data.redirectFrom) ? data.redirectFrom : [],
+      validatedAt: optText('validatedAt'),
+      allowedRoutes: Array.isArray(data.allowedRoutes) ? data.allowedRoutes : [],
+      allowedActions: Array.isArray(data.allowedActions) ? data.allowedActions : [],
+      appVersion: optText('appVersion'),
+    }
+
+    // Contrat de publication (CDC Assistant §10.3, décision PO D-O) : un
+    // article PUBLIÉ porte sa date de validation — sans elle, l'assistant
+    // l'ignorerait ; le build échoue plutôt que de publier un article muet.
+    if (meta.validatedAt !== null && (!DATE.test(meta.validatedAt) || Number.isNaN(Date.parse(meta.validatedAt)))) {
+      report('validatedAt', `Date invalide « ${meta.validatedAt} » (format AAAA-MM-JJ).`, id)
+    } else if (meta.status === 'published' && !meta.validatedAt) {
+      report('validatedAt', 'Obligatoire pour un article publié (date de validation AAAA-MM-JJ, CDC Assistant §10.3).', id)
+    }
+    for (const r of meta.allowedRoutes) {
+      if (typeof r !== 'string' || !APP_ROUTE.test(r)) report('allowedRoutes', `Route invalide « ${String(r)} » (chemin interne de l’application).`, id)
+    }
+    inRef('allowedActions', meta.allowedActions, ASSISTANT_ACTIONS)
+    if (meta.appVersion !== null && !/^[A-Za-z0-9._-]{1,20}$/.test(meta.appVersion)) {
+      report('appVersion', `Version invalide « ${meta.appVersion} ».`, id)
     }
 
     // EDITOR-02 : la date technique vient de Git. Sans historique au build
@@ -154,6 +177,21 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
     if (!fallbackDate) report('updatedAt', 'Obligatoire (date AAAA-MM-JJ, repli quand Git est absent au build).', id)
     else if (!DATE.test(fallbackDate) || Number.isNaN(Date.parse(fallbackDate))) {
       report('updatedAt', `Date invalide « ${fallbackDate} » (format AAAA-MM-JJ).`, id)
+    }
+
+    // Cohérence de la date de validation (revue lot 21, D-O) : jamais dans le
+    // futur, jamais antérieure à la dernière mise à jour éditoriale déclarée
+    // (`updatedAt` du frontmatter) — un article modifié après sa validation
+    // doit être revalidé. La date technique Git n'entre pas en compte : un
+    // simple commit (typo, mise en forme) ne doit pas casser le build. Ces
+    // dates sont saisies par la rédaction, jamais fabriquées par le code.
+    if (meta.validatedAt && DATE.test(meta.validatedAt) && !Number.isNaN(Date.parse(meta.validatedAt))) {
+      const aujourdHui = new Date().toISOString().slice(0, 10)
+      if (meta.validatedAt > aujourdHui) {
+        report('validatedAt', `Date de validation future « ${meta.validatedAt} » (aujourd’hui : ${aujourdHui}).`, id)
+      } else if (fallbackDate && DATE.test(fallbackDate) && meta.validatedAt < fallbackDate) {
+        report('validatedAt', `Validation (${meta.validatedAt}) antérieure à la dernière mise à jour (${fallbackDate}) : article à revalider.`, id)
+      }
     }
 
     if (meta.id && !ID.test(meta.id)) report('id', `Format attendu AID-XXX-000, reçu « ${meta.id} ».`, id)

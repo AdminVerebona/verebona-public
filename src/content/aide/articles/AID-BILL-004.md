@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, changement offre, changer, offre, plan, facture, paiement, Stripe, parrainage]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, profil, connexion, mot de passe, sécurité, RGPD]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/gerer-mon-compte]
 updatedAt: 2026-09-26
 ---

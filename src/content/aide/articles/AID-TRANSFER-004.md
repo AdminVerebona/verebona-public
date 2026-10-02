@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, destinataire, recevoir, accepter, refuser, bien, transmis, transmission, envoyer, récupérer]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

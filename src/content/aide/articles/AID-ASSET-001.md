@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, création, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/premier-bien]
 updatedAt: 2026-09-26
 ---

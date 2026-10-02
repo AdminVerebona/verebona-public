@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, assistant, ia, interroger, verebona, biens, documents, échéances, chercher, trouver]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/assistant]
 updatedAt: 2026-09-26
 ---

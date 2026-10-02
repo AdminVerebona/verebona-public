@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [facturation, stripe, factures, moyens, paiement, abonnement, offre, plan, facture, parrainage]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

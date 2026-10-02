@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, classification, choisir, famille, catégorie, type, bien, patrimoine, immobilier, véhicule, objet]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

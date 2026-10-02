@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, partage, premium, second utilisateur, membre, invitation]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/duo]
 updatedAt: 2026-09-26
 ---

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, priorité, vue, changer, ordre, présentation, actions, action, arbitrer, confirmer]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

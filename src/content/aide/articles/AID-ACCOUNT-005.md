@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, rgpd, données, exercer, droits, export, archive, portabilité, données personnelles, profil]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

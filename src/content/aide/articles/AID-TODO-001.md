@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, actions, ia, page, traiter, action, arbitrer, confirmer, rattacher, compléter]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/traiter-documents-incomplets]
 updatedAt: 2026-09-26
 ---

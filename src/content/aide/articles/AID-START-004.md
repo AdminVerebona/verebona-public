@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [accueil, navigation, page, prise en main, débuter, premiers pas, onboarding]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 redirectFrom: [/aide/decouvrir-accueil]
 updatedAt: 2026-09-25
 ---

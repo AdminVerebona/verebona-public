@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, sécurité, email, mails, profil, connexion, mot de passe, RGPD]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 

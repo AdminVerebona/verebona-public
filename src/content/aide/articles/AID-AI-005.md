@@ -22,6 +22,8 @@ indexable: true
 lang: fr-FR
 synonyms: [assistant, centre aide, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

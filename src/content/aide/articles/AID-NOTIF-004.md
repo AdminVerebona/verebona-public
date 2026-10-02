@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, à traiter, récapitulatif, traiter, notification, alerte, push, email, rappel]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, invitation, inviter, deuxième, personne, partage, second utilisateur, membre]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/inviter-proche-duo]
 updatedAt: 2026-09-26
 ---

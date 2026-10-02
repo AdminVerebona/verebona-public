@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, assurance, estimation, dossier, export, PDF, pack, vente, CIL]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

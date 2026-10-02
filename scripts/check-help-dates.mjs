@@ -8,7 +8,8 @@
  * modifié son contenu : un article retouché sans avancer sa date serait
  * publié avec une date fausse.
  *
- * « Contenu » : toute ligne du fichier sauf la ligne `updatedAt:` elle-même.
+ * « Contenu » : toute ligne du fichier sauf les lignes `updatedAt:`,
+ * `validatedAt:` et `appVersion:` (métadonnées de publication, D-O).
  * Un commit qui ne fait qu'ajouter ou corriger `updatedAt` (ex. : lot3, qui a
  * introduit le champ sur tout le corpus) ne rend donc pas l'article « modifié ».
  *
@@ -26,6 +27,11 @@ export const ARTICLES_DIR = 'src/content/aide/articles'
 const COMMIT_MARK = '\u001ecommit '
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 const UPDATED_AT_LINE = /^updatedAt:\s*\S*\s*$/
+/**
+ * Métadonnées de PUBLICATION (CDC Assistant §10.3, D-O) : leur ajout ou leur
+ * modification ne change pas le contenu de l'article — comme `updatedAt`.
+ */
+const PUBLICATION_LINE = /^(validatedAt|appVersion):\s*\S*\s*$/
 
 /** `updatedAt` du frontmatter (AAAA-MM-JJ), ou null. */
 export function frontmatterUpdatedAt(raw) {
@@ -60,7 +66,7 @@ export function lastContentCommitDates(log) {
       inHunk = true
     } else if (inHunk && file && !out.has(file) && (line.startsWith('+') || line.startsWith('-'))) {
       const content = line.slice(1)
-      if (!UPDATED_AT_LINE.test(content)) out.set(file, date)
+      if (!UPDATED_AT_LINE.test(content) && !PUBLICATION_LINE.test(content)) out.set(file, date)
     }
   }
   return out

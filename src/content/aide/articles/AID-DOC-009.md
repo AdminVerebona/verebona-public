@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, filtres, tri, trier, filtrer, document, fichier, justificatif, pièce, upload]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 redirectFrom: [/aide/organiser-docs]
 updatedAt: 2026-09-25
 ---

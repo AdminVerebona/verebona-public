@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, préférences, duo, régler, notification, alerte, push, email, rappel]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 redirectFrom: [/aide/gerer-mes-notifications, /aide/rappels]
 updatedAt: 2026-09-26
 ---

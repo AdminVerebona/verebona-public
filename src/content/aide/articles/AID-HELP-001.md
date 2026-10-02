@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [centre aide, besoin aide, centre, aide, besoin, problème, erreur, dépannage, support, incident]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

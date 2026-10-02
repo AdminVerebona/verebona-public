@@ -21,6 +21,7 @@ indexable: true
 lang: fr-FR
 synonyms: [navigation, mobile, web, repérer, prise en main, débuter, premiers pas, onboarding]
 status: blocked
+appVersion: V1
 blocker: Le WebView mobile cible doit être validé avant MEP finale.
 updatedAt: 2026-09-25
 ---

@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, push, email, verebona, notification, alerte, rappel]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

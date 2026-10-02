@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, dépannage, reçois, pas, notification, alerte, push, email, rappel]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

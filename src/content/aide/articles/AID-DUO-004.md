@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, droits, notifications, préférences, partage, second utilisateur, membre, invitation]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

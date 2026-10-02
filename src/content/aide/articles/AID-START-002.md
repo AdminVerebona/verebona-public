@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, inscription, essai, invitation, ouverture, prise en main, débuter, premiers pas, onboarding]
 status: published
+validatedAt: 2026-09-26
+appVersion: V1
 updatedAt: 2026-09-26
 ---
 

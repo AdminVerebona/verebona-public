@@ -21,6 +21,8 @@ indexable: true
 lang: fr-FR
 synonyms: [dépannage, invitation, duo, transmission, fonctionne, pas, problème, erreur, support, aide]
 status: published
+validatedAt: 2026-09-25
+appVersion: V1
 updatedAt: 2026-09-25
 ---
 
