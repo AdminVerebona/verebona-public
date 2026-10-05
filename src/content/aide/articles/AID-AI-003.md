@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, confiance, conflit, conflits, protection, valeurs, intelligence artificielle, automatique, analyse, enrichissement]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 La confiance seule ne suffit pas à décider. Verebona tient compte de la qualité de la source, de la valeur déjà enregistrée, de son origine et des règles propres aux champs critiques. Une décision humaine explicite a priorité sur une modification automatique silencieuse.
@@ -37,5 +37,3 @@ La confiance seule ne suffit pas à décider. Verebona tient compte de la qualit
 **Nouvelle preuve contradictoire** — Verebona peut créer une action « À arbitrer » pour proposer la nouvelle valeur sans l’appliquer silencieusement.
 
 **Champ critique** — Des garde-fous supplémentaires peuvent empêcher une écriture automatique même si la confiance est élevée.
-
-> **Limites et points d’attention** — Le Centre d’aide ne doit pas exposer de seuils internes comme une garantie universelle si le moteur utilise plusieurs critères de décision.

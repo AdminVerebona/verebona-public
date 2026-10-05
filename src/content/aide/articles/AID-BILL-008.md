@@ -23,7 +23,7 @@ synonyms: [facturation, impayé, récupération, passe, après, échec, paiement
 status: blocked
 appVersion: V1
 blocker: CRITIQUE : ce cycle général à 90 jours n’est pas complètement implémenté aujourd’hui ; publication interdite tant que le comportement réel n’est pas aligné.
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 La règle cible validée pour Verebona est la suivante : dès l’échec de paiement, les fonctions normales et payantes sont suspendues, mais le compte reste accessible. Pendant 90 jours, l’utilisateur peut régulariser, transmettre ses biens et récupérer/exporter ses données. Une régularisation pendant ce délai réactive l’usage normal.
@@ -37,5 +37,3 @@ La règle cible validée pour Verebona est la suivante : dès l’échec de paie
 **Régularisation** — Les droits normaux reprennent après confirmation du paiement.
 
 **J+90** — Sans régularisation, accès retiré et suppression des données métier/utilisateur par défaut, hors données à conserver légalement et sauvegardes suivant leur rotation normale.
-
-> **Limites et points d’attention** — Ne pas confondre ce délai de 90 jours avec les 30 jours d’export après une rétractation.

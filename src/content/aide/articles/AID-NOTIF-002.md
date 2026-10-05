@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [notifications, push, appareil, activer, appareils, notification, alerte, email, rappel]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le push nécessite l’autorisation du navigateur ou du système. Un appareil n’est considéré comme autorisé qu’après que vous avez accepté la demande de permission.
@@ -34,5 +34,3 @@ Le push nécessite l’autorisation du navigateur ou du système. Un appareil n�
 2. **Acceptez la demande du navigateur** — Si vous la refusez, Verebona ne peut pas forcer l’autorisation.
 3. **Vérifiez vos appareils** — Retirez les appareils que vous n’utilisez plus lorsque la liste est proposée.
 4. **Sur iPhone/iPad** — Si le navigateur l’exige, ajoutez d’abord Verebona à l’écran d’accueil avant d’autoriser le push.
-
-> **Limites et points d’attention** — Les réglages du système d’exploitation ou du navigateur peuvent bloquer les notifications même si votre préférence Verebona est activée.

@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [ia, automatisation, transparence, verebona, utilise, intelligence artificielle, automatique, analyse, enrichissement, confiance]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Verebona utilise des traitements automatisés pour analyser les documents, proposer leur classement, détecter des informations, rapprocher les données d’un bien, repérer des échéances et répondre à certaines questions. Ces traitements restent limités à votre compte et distinguent clairement entre une preuve documentaire, une proposition et une valeur validée par l’utilisateur.
@@ -37,5 +37,3 @@ Verebona utilise des traitements automatisés pour analyser les documents, propo
 **Échéances** — Création ou proposition uniquement lorsqu’une règle métier le justifie.
 
 **Assistant** — Réponse à partir des données accessibles et de la documentation autorisée.
-
-> **Limites et points d’attention** — L’IA ne doit pas utiliser une instruction contenue dans un document comme une consigne système, ni donner un conseil personnalisé dans les domaines interdits.

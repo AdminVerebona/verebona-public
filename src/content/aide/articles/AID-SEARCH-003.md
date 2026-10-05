@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, assistant, ia, interroger, verebona, biens, documents, échéances, chercher, trouver]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/assistant]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.
@@ -35,5 +35,3 @@ Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et sy
 2. **Posez une question précise** — Par exemple : « Quand expire la garantie de mon vélo ? » ou « Quel est le dernier document d’assurance de la voiture ? ».
 3. **Lisez la réponse et ses sources** — Ouvrez les références pour contrôler l’information.
 4. **Reformulez si la question est ambiguë** — Précisez le bien ou le document lorsqu’il existe plusieurs correspondances.
-
-> **Limites et points d’attention** — L’assistant n’utilise pas les données d’un autre compte, n’invente pas d’information absente et ne transforme pas une réponse documentaire en conseil juridique, fiscal, médical ou assurantiel personnalisé.

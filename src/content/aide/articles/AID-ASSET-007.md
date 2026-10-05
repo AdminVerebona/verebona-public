@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, suppression, supprimer, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/archiver-bien]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Supprimer un bien supprime **tout ce qui lui est rattaché** : ses documents et photos, ses échéances, ses événements, ses pièces et ses équipements. Rien n’est conservé à part. La suppression est **définitive et irréversible** : vous ne pourrez pas récupérer le bien ni ses données ensuite.
@@ -41,5 +41,3 @@ Supprimer un bien supprime **tout ce qui lui est rattaché** : ses documents et 
 **Fichiers stockés** — Les fichiers des documents et des photos sont effacés de nos serveurs de stockage peu après la confirmation.
 
 **Plutôt que supprimer** — Si vous ne voulez plus voir le bien au quotidien mais souhaitez garder son historique, changez plutôt son statut (par exemple « Vendu » ou « Inactif »).
-
-> **Limites et points d’attention** — Une fois confirmée, la suppression ne peut pas être annulée. En cas de doute, téléchargez d’abord les documents importants.

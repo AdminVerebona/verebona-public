@@ -103,6 +103,16 @@ describe('production PRELAUNCH (parcours 1)', () => {
     expect(all.mobileCta.html()).not.toContain('<a')
   })
 
+  it('affiche l’accroche et le texte d’introduction de l’accueil', async () => {
+    const all = await renderAll({ VITE_ENVIRONMENT: 'production', VITE_DEFAULT_SITE_MODE: 'prelaunch' })
+    expect(all.hero.find('[data-testid="hero-lead"]').text()).toBe('Moins de temps à chercher. Moins de choses à retenir.')
+    const text = all.hero.find('[data-testid="hero-text"]').text()
+    expect(text).toMatch(/^Maison, voiture, vélo, équipements… Retrouvez vos documents/)
+    expect(text).toContain('Verebona en extrait les informations utiles et vous aide à suivre vos échéances.')
+    expect(text).toContain('de l’achat à la vente ou à la transmission.')
+    expect(all.hero.html()).not.toContain('Verebona est une application pour organiser')
+  })
+
   it("le titre des tarifs n'invite pas à essayer immédiatement (§6.5, §8.1)", async () => {
     const all = await renderAll({ VITE_ENVIRONMENT: 'production', VITE_DEFAULT_SITE_MODE: 'prelaunch' })
     const title = all.pricing.find('[data-testid="pricing-title"]').text()

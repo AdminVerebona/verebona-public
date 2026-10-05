@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, cil, immobilier, générer, carnet, information, logement, dossier, export, PDF]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le Carnet d’information du logement (CIL) Verebona rassemble les informations et les documents utiles d’un logement, et indique le niveau de complétude du dossier au regard du référentiel de Verebona. Cette fonction est proposée pour les maisons et les appartements uniquement.
@@ -48,5 +48,3 @@ Le Carnet d’information du logement (CIL) Verebona rassemble les informations 
 **Complétude** — Le pourcentage compte les blocs complets ou marqués non applicables. Le dernier CIL généré est rappelé avec sa date et figure dans « Historique des exports ».
 
 **Changement de catégorie** — Si le bien n’est plus une maison ou un appartement, un CIL ne peut plus être généré ni relancé pour lui.
-
-> **Limites et points d’attention** — Le pourcentage de complétude Verebona n’est pas une certification juridique de conformité du CIL.

@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, inscription, essai, invitation, ouverture, prise en main, débuter, premiers pas, onboarding]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Verebona ouvre bientôt. D’ici l’ouverture, les inscriptions ne sont pas ouvertes à tous : seules les personnes invitées peuvent créer un compte. Une invitation vous est envoyée par e-mail par un utilisateur de Verebona, par exemple pour rejoindre son espace Premium Duo, rejoindre un compte partagé ou recevoir un bien qu’il vous transmet.
@@ -46,7 +46,5 @@ Verebona ouvre bientôt. D’ici l’ouverture, les inscriptions ne sont pas ouv
 **Essai gratuit** — La création du compte ouvre un essai gratuit unique de 7 jours, sans carte bancaire et sans choix d’offre. Pendant l’essai, les fonctions Premium sont accessibles dans la limite de 2 biens et 30 documents.
 
 **À l’ouverture** — L’inscription sera ouverte à tous, depuis le site et l’application, avec le même formulaire.
-
-> **Limites et points d’attention** — Un même e-mail ne bénéficie que d’un seul essai, même après suppression puis recréation d’un compte.
 
 > **Résultat attendu** — Après vérification de l’adresse e-mail, le compte est actif et vous pouvez vous connecter.

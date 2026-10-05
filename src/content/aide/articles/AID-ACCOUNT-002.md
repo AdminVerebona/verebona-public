@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, sécurité, mot de passe, mot, passe, profil, connexion, déconnexion, appareils]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 La modification du mot de passe demande le mot de passe actuel puis le nouveau mot de passe deux fois. Les règles de complexité sont affichées directement dans le formulaire et doivent être satisfaites avant validation.
@@ -44,5 +44,3 @@ La modification du mot de passe demande le mot de passe actuel puis le nouveau m
 **Cet appareil** — Sans l’option « Rester connecté sur cet appareil », vous êtes aussi déconnecté ici et redirigé vers l’écran de connexion.
 
 **Information de sécurité** — Verebona vous signale la modification du mot de passe par une notification et par e-mail.
-
-> **Limites et points d’attention** — Si vous ne connaissez plus votre mot de passe actuel, utilisez « Mot de passe oublié » depuis l’écran de connexion.

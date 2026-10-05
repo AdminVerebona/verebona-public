@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [export, récupération, données, exporter, brutes, bien, transfert, transmission, envoyer, recevoir]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 L’export de données brutes sert à la récupération et à la portabilité. Il est distinct des dossiers prêts à l’usage : son objectif est de vous remettre les fichiers et les informations d’un bien, pas de produire un dossier présenté pour un tiers. Il est disponible avec toutes les offres.
@@ -49,5 +49,3 @@ L’export de données brutes sert à la récupération et à la portabilité. I
 **Liens web** — Ils sont cités dans le récapitulatif avec leur adresse ; les pages ne sont pas téléchargées.
 
 **Historique** — L’export apparaît dans « Historique des exports » de l’onglet : vous pouvez le télécharger à nouveau, le relancer en cas d’échec ou le supprimer.
-
-> **Limites et points d’attention** — Le ZIP ne contient ni PDF de présentation ni fichier de données structurées : pour un dossier mis en forme, utilisez un dossier prêt à l’usage ; pour toutes vos données de compte, utilisez l’export de « Mes données ».

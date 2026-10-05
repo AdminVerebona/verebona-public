@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, formats, limites, acceptés, taille, maximale, document, fichier, justificatif, pièce]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Verebona contrôle le type réel du fichier, son extension, sa taille et son intégrité. Le contrôle ne repose pas uniquement sur le nom du fichier : des vérifications techniques empêchent l’envoi de formats dangereux ou incohérents.
@@ -43,5 +43,3 @@ Verebona contrôle le type réel du fichier, son extension, sa taille et son int
 **Fichiers vides** — Les fichiers de 0 octet sont refusés.
 
 **Extensions dangereuses** — Les exécutables, scripts et plusieurs formats actifs comme HTML, SVG ou XML sont bloqués.
-
-> **Limites et points d’attention** — La liste doit être revalidée lors de la passe finale, car les formats autorisés sont une règle technique susceptible d’évoluer.

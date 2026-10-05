@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, downgrade, impayé, passe, lors, partage, second utilisateur, membre, invitation]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Quitter Premium Duo, que ce soit vers Premium ou vers Standard, met fin au partage : le second utilisateur perd l’accès à l’espace du titulaire. En cas d’impayé, le Duo passe d’abord par une période de grâce, puis par un mode de récupération.
@@ -37,5 +37,3 @@ Quitter Premium Duo, que ce soit vers Premium ou vers Standard, met fin au parta
 **Quota inférieur** — Aucun bien n’est supprimé ni désactivé. Si l’espace dépasse la limite de biens de la nouvelle offre, tous les biens restent consultables, exportables et transmissibles, mais leur modification est suspendue jusqu’à ce que le titulaire repasse sous la limite, en supprimant des biens ou en choisissant une offre suffisante.
 
 **Impayé** — Pendant la période de grâce, le second utilisateur reste membre. Si le paiement n’est pas régularisé, le Duo passe en mode récupération : chacun peut alors demander le déplacement de biens vers son espace personnel (voir [Comprendre le mode récupération d’un Duo](/aide/recuperation-duo)).
-
-> **Limites et points d’attention** — Pour réinviter la même personne après une sortie du Duo, le titulaire doit d’abord reprendre Premium Duo, puis lui envoyer une nouvelle invitation.

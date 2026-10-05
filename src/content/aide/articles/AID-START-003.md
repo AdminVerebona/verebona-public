@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, email, sécurité, vérifier, adresse, mail, prise en main, débuter, premiers pas, onboarding]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Verebona vérifie l’adresse e-mail utilisée pour votre compte afin de sécuriser l’accès et les communications importantes. La vérification se fait depuis le message reçu après l’inscription.
@@ -39,5 +39,3 @@ Verebona vérifie l’adresse e-mail utilisée pour votre compte afin de sécuri
 **Lien déjà utilisé** — Si l’adresse est déjà vérifiée, Verebona l’indique et vous pouvez simplement vous connecter.
 
 **Message introuvable ou lien expiré** — Le lien de vérification est valable 24 heures. Utilisez « Renvoyer le lien de vérification » depuis l’écran de vérification ; le message de confirmation reste volontairement identique que le compte existe ou non.
-
-> **Limites et points d’attention** — Ne transférez pas un lien de vérification à une autre personne.

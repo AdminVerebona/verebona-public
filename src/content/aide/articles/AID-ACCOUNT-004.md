@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, sécurité, session, connecter, déconnecter, profil, connexion, mot de passe, appareils]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/securite]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Utilisez vos propres identifiants et déconnectez-vous sur un appareil partagé. Verebona limite la durée de validité des accès et révoque ceux qui ne doivent plus servir.
@@ -43,5 +43,3 @@ Utilisez vos propres identifiants et déconnectez-vous sur un appareil partagé.
 **Renouvellement de la session** — Tant que vous utilisez Verebona, votre session est renouvelée automatiquement. Chaque renouvellement remplace le précédent, qui ne peut plus être réutilisé.
 
 **Changement ou réinitialisation du mot de passe** — Les sessions ouvertes sur les autres appareils sont révoquées ; il faut s’y reconnecter avec le nouveau mot de passe.
-
-> **Limites et points d’attention** — Sur un ordinateur partagé, n’enregistrez pas votre mot de passe dans le navigateur.

@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [démarrage, navigation, découvrir, verebona, prise en main, débuter, premiers pas, onboarding]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Verebona regroupe dans un même espace vos biens, leurs documents, les informations utiles qui en sont extraites et les échéances à suivre. L’objectif est de retrouver plus facilement ce que vous possédez et ce qui demande votre attention, sans remplacer votre jugement.
@@ -43,5 +43,3 @@ Verebona regroupe dans un même espace vos biens, leurs documents, les informati
 **Données sous votre contrôle** — Vous pouvez corriger les informations de vos biens et documents. Les valeurs que vous avez explicitement validées ne sont pas remplacées silencieusement par une automatisation.
 
 **Fonctions selon l’offre** — Certaines fonctions, comme la synchronisation d’agenda personnel ou les dossiers prêts à l’usage, sont réservées aux offres Premium et Premium Duo.
-
-> **Limites et points d’attention** — Verebona organise vos données et vous assiste dans leur gestion. Les réponses de l’assistant ne constituent pas une certification, un avis juridique, fiscal, médical ou assurantiel personnalisé.

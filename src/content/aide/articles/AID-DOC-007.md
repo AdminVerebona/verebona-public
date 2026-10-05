@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, doublon, ia, proposition, document, fichier, justificatif, pièce, upload, import]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Verebona peut détecter qu’un nouveau fichier ressemble fortement à un document déjà présent. La détection n’autorise pas une suppression silencieuse : vous voyez les deux éléments et choisissez la bonne action lorsque Verebona vous demande un arbitrage.
@@ -34,5 +34,3 @@ Verebona peut détecter qu’un nouveau fichier ressemble fortement à un docume
 2. **Vérifiez les informations utiles** — Nom, date, contenu, bien associé et source peuvent aider à choisir.
 3. **Choisissez l’action proposée** — Selon l’écran, vous pouvez conserver séparément, fusionner ou remplacer conformément aux options réellement affichées.
 4. **Contrôlez le résultat** — Vérifiez que le document conservé possède les bonnes informations et relations.
-
-> **Limites et points d’attention** — Ne fusionnez pas deux fichiers uniquement parce que leur nom est identique ; ils peuvent correspondre à deux périodes ou versions différentes.

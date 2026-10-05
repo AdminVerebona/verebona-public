@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [documents, ia, analyse, automatique, document, fichier, justificatif, pièce, upload, import]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/comprendre-analyse-automatique, /aide/import-analyse]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Après l’import, Verebona peut analyser un document afin de proposer un titre, une classification, un fournisseur, une date, un montant, des informations utiles au bien, un rattachement et des échéances. Le traitement fonctionne en arrière-plan et son résultat dépend du contenu réellement lisible.
@@ -37,5 +37,3 @@ Après l’import, Verebona peut analyser un document afin de proposer un titre,
 2. **Attendez la fin de l’analyse** — Le statut évolue jusqu’à un état final : analysé, validation requise, conflit détecté ou échec.
 3. **Vérifiez les propositions utiles** — Certaines informations sont appliquées automatiquement selon les règles de confiance ; d’autres nécessitent votre décision.
 4. **Ouvrez « À traiter » si nécessaire** — Arbitrez un conflit, rattachez un document ou confirmez une information lorsque Verebona vous le demande.
-
-> **Limites et points d’attention** — L’analyse peut échouer sur un fichier illisible, corrompu, protégé, trop complexe ou non exploitable. Verebona n’invente pas de valeur absente du document.

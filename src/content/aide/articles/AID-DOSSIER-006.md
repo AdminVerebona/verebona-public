@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, assurance, indemnisation, dossier, export, PDF, pack, vente, CIL]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Le dossier Indemnisation met l’accent sur l’identification du bien, les informations financières, l’entretien, les documents, devis, factures, constats et photos disponibles. Vous devez vérifier que chaque élément correspond bien au sinistre concerné.
@@ -34,5 +34,3 @@ Le dossier Indemnisation met l’accent sur l’identification du bien, les info
 2. **Sélectionnez les pièces liées au sinistre** — Constat, devis, factures, photos et autres justificatifs présents.
 3. **Retirez les documents sans rapport** — Évitez de transmettre des informations inutiles.
 4. **Générez** — Téléchargez le dossier puis vérifiez-le avant tout envoi à l’assureur.
-
-> **Limites et points d’attention** — Verebona ne décide pas de l’indemnisation, du montant dû ni de la recevabilité des justificatifs.

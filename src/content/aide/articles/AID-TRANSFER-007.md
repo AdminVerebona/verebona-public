@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, récupération, impayé, mode, transfert, transmission, envoyer, recevoir, récupérer, export brut]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Lorsqu’un compte Duo est en récupération après un impayé, l’application peut afficher un espace de récupération. Les membres ne disposent plus de l’usage normal du Duo, mais peuvent demander le déplacement de biens vers leur compte personnel.
@@ -35,5 +35,3 @@ Lorsqu’un compte Duo est en récupération après un impayé, l’application 
 3. **Cliquez sur « Récupérer »** — Verebona crée une demande de déplacement vers votre espace personnel.
 4. **Suivez le statut** — Le bien indique « Déplacement en cours » jusqu’à résolution.
 5. **Régularisez si vous souhaitez restaurer le Duo** — Le titulaire peut utiliser le parcours de paiement prévu.
-
-> **Limites et points d’attention** — Les demandes de suppression de biens sont impossibles en mode récupération.

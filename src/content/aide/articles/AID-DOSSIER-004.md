@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, vente, dossier, export, PDF, pack, assurance, CIL]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/dossier-vente]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le Dossier de vente sélectionne des informations et pièces pertinentes pour présenter le bien. Il réunit principalement des documents de transaction, diagnostics, garanties, entretiens, factures, plans et informations techniques selon la catégorie du bien.
@@ -36,5 +36,3 @@ Le Dossier de vente sélectionne des informations et pièces pertinentes pour pr
 3. **Passez en revue les documents présélectionnés** — Retirez ce qui n’a pas à être communiqué et ajoutez les pièces nécessaires disponibles.
 4. **Ajoutez les informations optionnelles proposées** — Par exemple un commentaire ou un prix demandé si l’interface le demande.
 5. **Générez le dossier** — Téléchargez le PDF ou le ZIP lorsque cette option est proposée.
-
-> **Limites et points d’attention** — Verebona ne se substitue pas au notaire, au professionnel immobilier ou aux obligations légales de la vente. Vérifiez les pièces réellement obligatoires pour votre situation auprès d’un professionnel compétent.

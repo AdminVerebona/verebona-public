@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [duo, membre, sortie, retirer, second, utilisateur, quitter, espace, partagé, partage]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le titulaire d’un Premium Duo peut retirer le second utilisateur, et le second utilisateur peut quitter le Duo à tout moment. Dans les deux cas, l’accès à l’espace partagé cesse, sans que les biens de cet espace soient supprimés.
@@ -47,5 +47,3 @@ Le titulaire d’un Premium Duo peut retirer le second utilisateur, et le second
 **Place libérée** — Le titulaire peut inviter une nouvelle personne, ou réinviter la même, depuis « 2e utilisateur Duo ».
 
 **Titulaire** — Le titulaire ne peut pas quitter son propre Duo : il reste responsable de l’abonnement. Pour arrêter le partage, il change d’offre ; il peut aussi supprimer son compte.
-
-> **Limites et points d’attention** — L’action est immédiate et ne s’annule pas : pour revenir, la personne doit recevoir et accepter une nouvelle invitation.

@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [transfert, bien, transmettre, autre, compte, verebona, transmission, envoyer, recevoir, récupérer]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 La transmission crée une invitation destinée à l’adresse e-mail saisie. Tant que le destinataire n’a pas accepté, le transfert n’est pas définitif et l’expéditeur peut annuler la demande si elle est toujours en attente.
@@ -39,5 +39,3 @@ La transmission crée une invitation destinée à l’adresse e-mail saisie. Tan
 3. **Choisissez les éléments à transmettre** — Documents, photos, équipements et événements peuvent être sélectionnés selon le contenu du bien.
 4. **Envoyez l’invitation** — Verebona crée la transmission et adresse le parcours au destinataire.
 5. **Suivez son statut** — La demande reste en attente jusqu’à acceptation, refus ou annulation.
-
-> **Limites et points d’attention** — Ne transmettez pas un bien à une personne qui ne doit pas recevoir ses documents. Vérifiez la sélection avant l’envoi.

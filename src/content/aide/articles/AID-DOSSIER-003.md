@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, dossier complet, générer, dossier, complet, bien, export, PDF, pack, vente]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le Dossier complet rassemble les sections principales de la fiche du bien. Il comprend notamment l’identité, les caractéristiques, les données financières, l’entretien, les documents, les photos et l’assurance ; pour l’immobilier compatible, les pièces et équipements peuvent aussi être inclus.
@@ -34,5 +34,3 @@ Le Dossier complet rassemble les sections principales de la fiche du bien. Il co
 2. **Choisissez « Dossier complet du bien »** — Verebona charge les éléments disponibles.
 3. **Vérifiez les documents et photos** — Retirez les éléments que vous ne souhaitez pas transmettre.
 4. **Générez** — Téléchargez le PDF et, si l’option est disponible pour votre offre, le ZIP associé.
-
-> **Limites et points d’attention** — « Complet » signifie complet au regard des informations disponibles dans Verebona, pas complet au regard de toutes les pièces pouvant exister dans le monde réel.

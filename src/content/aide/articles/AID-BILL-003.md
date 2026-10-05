@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, souscription, stripe, souscrire, offre, plan, facture, paiement, parrainage]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 La page Offres permet de sélectionner l’offre et la périodicité mensuelle ou annuelle. Le paiement est effectué via Stripe et les droits sont activés après confirmation du paiement et de l’abonnement.
@@ -35,5 +35,3 @@ La page Offres permet de sélectionner l’offre et la périodicité mensuelle o
 3. **Sélectionnez l’offre** — Verebona ouvre le parcours de paiement Stripe.
 4. **Renseignez le moyen de paiement** — Suivez les instructions sécurisées de Stripe.
 5. **Revenez dans Verebona** — Vérifiez l’offre active et la prochaine échéance.
-
-> **Limites et points d’attention** — Le membre invité d’un Duo ne peut pas gérer l’abonnement ou le paiement du titulaire.

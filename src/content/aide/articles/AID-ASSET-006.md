@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, statut, statuts, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le statut d’un bien permet à Verebona d’adapter son affichage et les actions disponibles. Un bien peut aussi être temporairement verrouillé pendant une opération de transfert ou une autre action sensible.
@@ -39,5 +39,3 @@ Le statut d’un bien permet à Verebona d’adapter son affichage et les action
 **Archivé / Transmis** — Le bien peut devenir consultable en lecture seule selon le parcours réellement appliqué.
 
 **Verrouillage temporaire** — Certaines demandes Duo ou de transfert peuvent empêcher des modifications tant qu’elles sont en attente.
-
-> **Limites et points d’attention** — Les libellés affichés peuvent varier légèrement selon l’écran ; en cas de doute, fiez-vous au statut indiqué sur la fiche du bien.

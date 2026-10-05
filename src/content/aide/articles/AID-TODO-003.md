@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, conflit, arbitrage, arbitrer, entre, deux, valeurs, action, confirmer, rattacher]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Un conflit apparaît lorsque Verebona dispose de valeurs différentes pour la même information et ne peut pas les départager automatiquement selon les règles de confiance et d’autorité. L’écran doit présenter les valeurs et leurs sources de façon compréhensible.
@@ -36,5 +36,3 @@ Un conflit apparaît lorsque Verebona dispose de valeurs différentes pour la m�
 2. **Vérifiez les sources** — Ouvrez les documents ou informations qui justifient chaque valeur lorsque le lien est disponible.
 3. **Choisissez la valeur correcte** — Votre choix est appliqué au champ concerné.
 4. **Utilisez « Annuler » si vous vous êtes trompé** — Après une résolution directe, le toast « Valeur mise à jour » propose une annulation lorsque ce mécanisme est disponible.
-
-> **Limites et points d’attention** — Ne choisissez pas une valeur uniquement parce qu’elle est plus récente si le document plus ancien est la source de référence pour ce champ.

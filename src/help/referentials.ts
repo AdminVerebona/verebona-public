@@ -55,16 +55,20 @@ export type ArticleStatus = (typeof STATUSES)[number]
 
 export const LANGS = ['fr-FR'] as const
 
-/** Encadrés autorisés dans le corps d'un article, et leur rôle visuel. */
 /**
  * Mentions « Permissions / prérequis » admises (§16.1). Le champ était un
  * texte libre, non contrôlé : une nouvelle mention s'ajoute ici, relue.
  */
 export const PERMISSIONS = ['Aucun prérequis pour lire l’article'] as const
 
-export const CALLOUTS: Record<string, 'info' | 'warning' | 'prerequisite' | 'result'> = {
+/**
+ * Encadrés autorisés dans le corps d'un article, et leur rôle visuel.
+ * L'encadré « Limites et points d’attention » est retiré à la demande du PO :
+ * il n'est plus autorisé, et le build échoue (« Encadré inconnu ») si un
+ * article le réintroduit.
+ */
+export const CALLOUTS: Record<string, 'info' | 'prerequisite' | 'result'> = {
   'À savoir': 'info',
-  'Limites et points d’attention': 'warning',
   'Prérequis': 'prerequisite',
   'Résultat attendu': 'result',
 }

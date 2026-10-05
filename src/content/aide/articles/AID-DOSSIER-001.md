@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [dossiers, exports, prêts, usage, dossier, export, PDF, pack, vente, assurance]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/generer-un-export]
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Les dossiers prêts à l’usage regroupent des informations et documents déjà présents dans Verebona pour préparer un besoin concret : vue complète du bien, vente, estimation d’assurance, indemnisation ou Carnet d’Information du Logement. Ils ne créent pas des justificatifs qui n’existent pas.
@@ -40,5 +40,3 @@ Les dossiers prêts à l’usage regroupent des informations et documents déjà
 **Assurance** — Indemnisation — Éléments utiles à la préparation d’un dossier de sinistre.
 
 **CIL** — Compilation structurée des données et documents pertinents pour le logement selon le référentiel produit.
-
-> **Limites et points d’attention** — Un dossier Verebona est une préparation documentaire. Il ne garantit ni l’exhaustivité légale d’un dossier de vente, ni la conformité réglementaire du CIL, ni l’acceptation d’un dossier par un assureur.

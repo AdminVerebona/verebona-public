@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [agenda, synchronisation, webcal, synchroniser, échéances, personnel, échéance, calendrier, rappel, date]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Les offres Premium et Premium Duo permettent de publier un lien de calendrier auquel votre application d’agenda personnel peut s’abonner. Il s’agit d’un flux de consultation : les modifications se font dans Verebona puis sont reprises par l’application d’agenda selon sa propre fréquence de rafraîchissement.
@@ -36,5 +36,3 @@ Les offres Premium et Premium Duo permettent de publier un lien de calendrier au
 2. **Générez le lien** — Verebona crée une URL personnelle de calendrier.
 3. **Ajoutez-le à votre application** — Apple Agenda : abonnement à un calendrier ; Google Agenda : remplacez webcal:// par https:// puis ajoutez « À partir de l’URL » ; Outlook : ajoutez un calendrier « À partir d’Internet ».
 4. **Attendez le rafraîchissement** — Les mises à jour peuvent prendre quelques minutes ou davantage selon le fournisseur.
-
-> **Limites et points d’attention** — La fréquence de rafraîchissement dépend de Google, Apple ou Microsoft et n’est pas contrôlée par Verebona.

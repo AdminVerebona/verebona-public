@@ -5,14 +5,15 @@
   <div style="max-width:1280px;margin:0 auto;position:relative">
     <div class="r-hero" style="display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center">
       <!-- Left
-           Ordre imposé (ticket SEO accueil) : H1 → paragraphe → disponibilité
+           Ordre imposé (ticket SEO accueil) : H1 → accroche et paragraphe → disponibilité
            → H2 → quatre bénéfices (H3) → signature. Texte HTML rendu au build
            (voir scripts/prerender.mjs) : pas de .vb-reveal sur cette colonne,
            sinon le texte déjà peint disparaîtrait puis réapparaîtrait au
            démarrage de Vue. -->
       <div class="r-hero-copy" style="min-width:0">
         <h1 style="font-size:57px;line-height:1.06;font-weight:600;letter-spacing:-.03em;color:#fff;margin-bottom:20px;overflow-wrap:break-word"><span style="display:block">Profitez de vos biens.</span> <span style="display:block;background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">Passez moins de temps à les gérer.</span></h1>
-        <p style="font-size:18px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-bottom:28px">Verebona est une application pour organiser les documents et suivre les échéances de votre maison, de votre voiture et de vos objets. Retrouvez vos factures et garanties, anticipez les entretiens et conservez l’historique de chaque bien pour simplifier vos démarches, de l’achat à la vente ou à la transmission.</p>
+        <p data-testid="hero-lead" style="font-size:20px;line-height:1.45;font-weight:600;color:#EAF0FB;max-width:560px;margin-bottom:12px">Moins de temps à chercher. Moins de choses à retenir.</p>
+        <p data-testid="hero-text" style="font-size:18px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-bottom:28px">Maison, voiture, vélo, équipements… Retrouvez vos documents et les informations de chaque bien au même endroit. Déposez une facture, un contrat ou une garantie : Verebona en extrait les informations utiles et vous aide à suivre vos échéances. Préparez vos démarches avec un historique organisé, de l’achat à la vente ou à la transmission.</p>
         <!-- PRELAUNCH : seule la zone d'action change (CDC pré-lancement §6.4) -->
         <div v-if="isPrelaunch" data-testid="prelaunch-hero" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
           <span style="display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:#EAF0FB;padding:13px 24px;border-radius:999px;background:rgba(35,196,168,.10);border:1px solid rgba(35,196,168,.35);cursor:default;user-select:none"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#23C4A8;box-shadow:0 0 0 4px rgba(35,196,168,.18)"></span>{{ labels.heroTitle }}</span>

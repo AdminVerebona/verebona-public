@@ -241,7 +241,7 @@ Toutes portent la même `version` (commit déployé + empreinte du contenu).
 4. Publier ou bloquer un article cité par la matrice : le build échoue si une ligne de `coverage.json` n'a plus d'article publié en production, ou si une exception de `blockedRows` est devenue inutile (COVER-01).
 5. `npm run test` puis `npm run build` : le build liste tous les défauts (article lié inexistant, doublon, valeur hors référentiel, vocabulaire interne T1–T5, e-mail, lien privé…).
 
-Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — texte`, encadrés `> **À savoir** — texte` (et « Limites et points d'attention », « Prérequis », « Résultat attendu »), définitions `**Terme** — texte`, **gras** et liens `[texte](/aide/slug)`. Rien d'autre, et jamais de HTML.
+Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — texte`, encadrés `> **À savoir** — texte` (et « Prérequis », « Résultat attendu » ; l'encadré « Limites et points d'attention » n'est plus autorisé et fait échouer le build), définitions `**Terme** — texte`, **gras** et liens `[texte](/aide/slug)`. Rien d'autre, et jamais de HTML.
 
 ### Mode intégré (application mobile)
 

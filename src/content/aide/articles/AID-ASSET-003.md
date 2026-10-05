@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, modification, compléter, fiche, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/completer-fiche-bien]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 La fiche d’un bien contient des informations communes et des sections adaptées à sa catégorie. Certaines valeurs sont saisies manuellement ; d’autres peuvent être proposées ou complétées à partir de documents analysés.
@@ -41,5 +41,3 @@ La fiche d’un bien contient des informations communes et des sections adaptée
 **Valeur issue d’un document** — Verebona peut proposer une valeur détectée dans un document. Selon le niveau de confiance et les règles applicables, elle peut être appliquée automatiquement ou nécessiter votre arbitrage.
 
 **Valeur validée par l’utilisateur** — Une valeur que vous avez explicitement choisie ou validée est protégée contre un remplacement automatique silencieux.
-
-> **Limites et points d’attention** — Une information absente n’est pas nécessairement une anomalie et ne doit pas systématiquement créer une action « À traiter ».

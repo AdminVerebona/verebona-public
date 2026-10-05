@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, navigation, globale, chercher, trouver, filtre, résultat]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/utiliser-la-recherche]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 La recherche générale de l’application évite de dupliquer un champ de recherche dans chaque écran. Elle recherche d’abord dans les données structurées accessibles à votre compte et peut, selon l’offre et le contexte, utiliser un repli intelligent si aucun résultat classique n’est trouvé.
@@ -37,5 +37,3 @@ La recherche générale de l’application évite de dupliquer un champ de reche
 2. **Saisissez des mots précis** — Nom d’un bien, titre de document, fournisseur, type, ville, immatriculation ou intitulé d’échéance peuvent être pertinents selon l’objet.
 3. **Ouvrez un résultat** — Un bien ouvre sa fiche ; un document ouvre son détail ; une échéance renvoie vers l’agenda.
 4. **Reformulez si nécessaire** — Essayez moins de mots si une requête très longue ne retourne rien.
-
-> **Limites et points d’attention** — Les fournisseurs ne sont pas proposés comme résultats autonomes tant qu’aucune page fournisseur exploitable n’existe dans l’application.

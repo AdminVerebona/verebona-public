@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, changement offre, changer, offre, plan, facture, paiement, Stripe, parrainage]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le changement d’offre est programmé par le serveur à partir de l’offre cible, de la périodicité et de l’état réel de l’abonnement. L’écran affiche la date de prise d’effet renvoyée par le serveur et permet d’annuler un changement encore programmé.
@@ -45,5 +45,3 @@ Le changement d’offre est programmé par le serveur à partir de l’offre cib
 **Revenir sous la limite** — Supprimez les biens dont vous n’avez plus besoin, après les avoir exportés ou transmis si nécessaire, ou choisissez une offre suffisante. La modification redevient possible dès que le nombre de biens ne dépasse plus la limite.
 
 **Passage en Standard** — Standard ne permet qu’un seul utilisateur : les membres d’un compte partagé sont retirés et les invitations en attente annulées. Leurs données restent dans le compte.
-
-> **Limites et points d’attention** — Tant que la limite est dépassée, l’ajout de nouveaux biens reste également impossible.

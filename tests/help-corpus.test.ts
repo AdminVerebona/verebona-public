@@ -29,6 +29,18 @@ describe('corpus du Centre d\'aide', () => {
     for (const f of files) expect(f.raw, f.path).not.toMatch(/\bT[1-5]\b/i)
   })
 
+  it('ne contient plus aucun encadré « Limites et points d’attention » (décision PO)', () => {
+    for (const f of files) expect(f.raw, f.path).not.toMatch(/Limites et points d.attention/i)
+    for (const a of result.articles) {
+      expect(a.blocks.some((b) => b.kind === 'callout' && /Limites/i.test(b.label)), a.id).toBe(false)
+    }
+  })
+
+  it('refuse un encadré « Limites et points d’attention » réintroduit dans un article', () => {
+    const issues = withRaw('AID-START-001', (raw) => `${raw}\n> **Limites et points d’attention** — Texte.\n`)
+    expect(issues.some((i) => i.message.includes('Encadré inconnu'))).toBe(true)
+  })
+
   it('refuse un synonyme « t2 » en minuscules (CONTENT-02)', () => {
     const issues = withRaw('AID-AI-005', (raw) => raw.replace('synonyms: [assistant,', 'synonyms: [t2, assistant,'))
     expect(issues.some((i) => i.message.includes('CONTENT-02'))).toBe(true)

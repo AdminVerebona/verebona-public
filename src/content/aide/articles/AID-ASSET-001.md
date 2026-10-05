@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, création, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/premier-bien]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Un bien est l’élément central autour duquel Verebona organise les documents, les échéances et, selon le type de bien, les pièces ou équipements. La création commence par un nom et une catégorie.
@@ -41,5 +41,3 @@ Un bien est l’élément central autour duquel Verebona organise les documents,
 4. **Donnez un nom clair** — Utilisez un nom qui vous permettra de le reconnaître rapidement.
 5. **Complétez les informations disponibles** — Renseignez les données que vous connaissez ; les autres pourront être ajoutées plus tard.
 6. **Enregistrez** — Le bien apparaît dans votre portefeuille et peut recevoir des documents et échéances.
-
-> **Limites et points d’attention** — Si le quota est atteint, Verebona bloque la création et indique la limite applicable. Le Centre d’aide ne doit pas promettre de contournement.

@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, annulation, annuler, décision, prise, traiter, action, arbitrer, confirmer, rattacher]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Pour les résolutions compatibles, Verebona conserve temporairement la valeur précédente et affiche une action « Annuler » après la mise à jour. Cette possibilité rend l’arbitrage rapide sans ajouter une confirmation supplémentaire à chaque clic.
@@ -33,5 +33,3 @@ Pour les résolutions compatibles, Verebona conserve temporairement la valeur pr
 1. **Choisissez la proposition** — La carte disparaît immédiatement de la file.
 2. **Repérez le message de confirmation** — « Valeur mise à jour » s’affiche.
 3. **Cliquez sur « Annuler »** — Verebona rétablit la valeur précédente et recharge la file.
-
-> **Limites et points d’attention** — L’annulation est une action immédiate liée au message affiché. Elle ne doit pas être présentée comme un historique de versions illimité.

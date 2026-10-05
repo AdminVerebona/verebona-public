@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [parrainage, récompense, application, mois, offerts, abonnement, offre, plan, facture, paiement]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 Chaque parrainage validé donne un mois offert au parrain sur son abonnement courant. La façon de matérialiser cet avantage dépend de la périodicité de l’abonnement du parrain, pas de celle du filleul au moment où la récompense est appliquée.
@@ -35,5 +35,3 @@ Chaque parrainage validé donne un mois offert au parrain sur son abonnement cou
 **Abonnement mensuel du parrain** — Un mois acquis correspond à une échéance mensuelle offerte ; plusieurs récompenses couvrent des échéances successives.
 
 **Changement d’offre** — La récompense porte sur l’abonnement courant au moment de son utilisation selon les règles de facturation mises en œuvre.
-
-> **Limites et points d’attention** — L’écran de facturation doit présenter une échéance cohérente avec les récompenses effectivement appliquées par Stripe/Verebona.

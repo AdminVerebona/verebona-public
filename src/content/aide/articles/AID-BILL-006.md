@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [facturation, stripe, factures, moyens, paiement, abonnement, offre, plan, facture, parrainage]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 La gestion des moyens de paiement et des factures est déléguée au portail client Stripe. Verebona crée une session sécurisée liée au compte de facturation puis vous redirige vers Stripe.
@@ -34,5 +34,3 @@ La gestion des moyens de paiement et des factures est déléguée au portail cli
 2. **Ouvrez le portail** — Verebona crée une session Stripe pour le compte du titulaire.
 3. **Consultez les factures ou moyens de paiement** — Utilisez les fonctions disponibles dans le portail.
 4. **Revenez dans Verebona** — Utilisez le lien de retour prévu.
-
-> **Limites et points d’attention** — Seul le propriétaire du compte peut ouvrir le portail de facturation. Verebona ne demande jamais d’envoyer un numéro de carte par e-mail au support.

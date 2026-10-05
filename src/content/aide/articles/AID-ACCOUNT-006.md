@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, suppression, sécurité, supprimer, définitivement, profil, connexion, mot de passe, RGPD, clôturer, fermer, annuler la suppression]
 status: published
-validatedAt: 2026-09-28
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-28
+updatedAt: 2026-10-05
 ---
 
 La suppression de votre compte se fait **en deux temps**. Dès votre confirmation, le compte est **clôturé** : vous ne pouvez plus utiliser Verebona normalement. Il est ensuite **supprimé définitivement 30 jours plus tard**, avec toutes vos données. Pendant ces 30 jours, vous pouvez **annuler la suppression** ou **exporter vos données**.
@@ -50,5 +50,3 @@ La suppression de votre compte se fait **en deux temps**. Dès votre confirmatio
 **Ce qui est conservé** — Seules les informations que la loi impose de garder, ou qui prouvent le traitement de votre demande, le sont, détachées de votre compte : les factures, les preuves d’acceptation des conditions générales, vos éventuelles demandes de rétractation et leur suivi, ainsi que la trace de votre demande de suppression et son inscription au registre des demandes relatives aux données personnelles, sans votre adresse e-mail.
 
 **Même adresse e-mail** — Tant que la suppression n’a pas eu lieu, votre adresse reste rattachée au compte clôturé : pour utiliser à nouveau Verebona avec elle, annulez la suppression plutôt que de créer un nouveau compte.
-
-> **Limites et points d’attention** — Une fois la date passée, la suppression est définitive : ni vous ni le support Verebona ne pouvez récupérer le compte ou ses données. Ne confondez pas suppression du compte, résiliation de l’abonnement et rétractation : ces actions ont des conséquences différentes.

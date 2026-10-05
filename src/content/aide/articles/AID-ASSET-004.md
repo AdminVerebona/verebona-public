@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, photo, vignette, bien, patrimoine, asset, objet, immobilier, véhicule]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-10-05
 ---
 
 La vignette sert à identifier rapidement un bien dans les listes et sa fiche. Elle est distincte des autres documents ou photos éventuellement associés au bien.
@@ -34,5 +34,3 @@ La vignette sert à identifier rapidement un bien dans les listes et sa fiche. E
 2. **Cliquez sur la vignette** — Lorsque le bien est modifiable, l’action ouvre le panneau de modification.
 3. **Choisissez une image** — Sélectionnez l’image voulue puis validez.
 4. **Vérifiez le résultat** — La nouvelle vignette apparaît sur la fiche et dans les vues qui l’utilisent.
-
-> **Limites et points d’attention** — Un bien archivé, transmis ou verrouillé peut être en lecture seule. Dans ce cas la modification de la vignette n’est pas proposée.

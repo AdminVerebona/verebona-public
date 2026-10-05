@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [biens, immobilier, pièces, équipements, bien, patrimoine, maison, appartement, immeuble, local]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
 redirectFrom: [/aide/ajouter-un-equipement, /aide/ajouter-une-piece]
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Pour les biens immobiliers concernés, Verebona permet de décrire les pièces du bien et d’y rattacher des équipements. Cette structure facilite le rattachement des documents et le suivi du bien. La gestion des pièces et des équipements est proposée avec Premium et Premium Duo, essai gratuit compris.
@@ -44,5 +44,3 @@ Pour les biens immobiliers concernés, Verebona permet de décrire les pièces d
 **Catégories sans pièces** — Terrain, Garage/box et Mobil-home ne proposent ni pièces ni équipements, pas plus que les véhicules et les objets.
 
 **Catégorie ancienne** — Un bien encore classé sous un ancien libellé (Studio, Villa, Propriété, Local commercial) conserve ses pièces et équipements.
-
-> **Limites et points d’attention** — Avec l’offre Standard, les onglets restent consultables mais l’ajout de pièces et d’équipements ouvre la fenêtre de choix d’une offre Premium.

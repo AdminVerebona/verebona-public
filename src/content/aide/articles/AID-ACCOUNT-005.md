@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [compte, rgpd, données, exercer, droits, export, archive, portabilité, données personnelles, profil]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-10-05
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-10-05
 ---
 
 Le bloc « Mes données » de Mon compte vous permet de télécharger vous-même une copie de toutes vos données personnelles. L’archive rassemble les données de votre utilisateur et de votre espace Verebona, ainsi que les documents que vous avez déposés. Elle est distincte de l’export des données brutes d’un bien, qui ne concerne qu’un seul bien.
@@ -46,5 +46,3 @@ Le bloc « Mes données » de Mon compte vous permet de télécharger vous-même
 **Nouvelle archive** — « Générer une nouvelle archive » en prépare une version à jour. Si une préparation échoue, relancez la demande depuis le même bloc.
 
 **Autres droits** — Pour rectifier vos informations, utilisez Mon compte. Pour tout autre droit sur vos données personnelles (effacement, limitation, opposition…), consultez la politique de confidentialité et écrivez-nous depuis le formulaire de contact.
-
-> **Limites et points d’attention** — L’archive contient des données personnelles et vos documents : conservez-la dans un emplacement sécurisé et ne la partagez pas.
