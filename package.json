@@ -8,14 +8,15 @@
   },
   "scripts": {
     "dev": "vite --config vite.config.ts",
-    "build": "vue-tsc -b && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs",
-    "build:preprod": "vue-tsc -b && vite build --config vite.config.ts --mode preprod && vite build --config vite.config.ts --mode preprod --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs",
+    "build": "vue-tsc -b && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-preview-chunk.mjs",
+    "build:preprod": "vue-tsc -b && vite build --config vite.config.ts --mode preprod && vite build --config vite.config.ts --mode preprod --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-preview-chunk.mjs",
     "preview": "vite preview --config vite.config.ts",
     "start": "node server.cjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:a11y": "node scripts/a11y.mjs",
-    "check:help-dates": "node scripts/check-help-dates.mjs"
+    "check:help-dates": "node scripts/check-help-dates.mjs",
+    "check:preview-chunk": "node scripts/check-preview-chunk.mjs"
   },
   "dependencies": {
     "express": "^5.2.1",

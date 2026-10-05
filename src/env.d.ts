@@ -16,6 +16,13 @@ interface ImportMetaEnv {
   readonly VITE_DEFAULT_SITE_MODE?: string
 }
 
+/**
+ * Prévisualisation `?mode=` autorisée par ce build (préprod, local) —
+ * littéral remplacé à la compilation par `vite.config.ts` (CDC 8, O2).
+ * `null` sous Vitest : `src/config/site.ts` relit alors VITE_ENVIRONMENT.
+ */
+declare const __VB_CAN_PREVIEW_SITE_MODE__: boolean | null
+
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }

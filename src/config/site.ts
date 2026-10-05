@@ -36,8 +36,17 @@ export type { SiteEnvironment, SiteMode } from './site-mode.rules'
 
 export const SITE_ENVIRONMENT = parseEnvironment(import.meta.env.VITE_ENVIRONMENT)
 export const DEFAULT_SITE_MODE = resolveDefaultMode(SITE_ENVIRONMENT, import.meta.env.VITE_DEFAULT_SITE_MODE)
-/** Vrai uniquement en préproduction et en local. */
-export const CAN_PREVIEW_SITE_MODE = allowsModeOverride(SITE_ENVIRONMENT)
+/**
+ * Vrai uniquement en préproduction et en local.
+ *
+ * Littéral figé à la compilation (`__VB_CAN_PREVIEW_SITE_MODE__`, voir
+ * vite.config.ts) : en production, tout le code gardé par cette constante —
+ * sélecteur `PreviewModeSwitch`, lecture de `?mode=`, garde du routeur — est
+ * éliminé du bundle (CDC 8, O2). Sous Vitest seulement, la valeur est `null`
+ * et se déduit de VITE_ENVIRONMENT, avec la même règle.
+ */
+export const CAN_PREVIEW_SITE_MODE: boolean =
+  __VB_CAN_PREVIEW_SITE_MODE__ ?? allowsModeOverride(SITE_ENVIRONMENT)
 
 /* ── Libellés de référence (CDC §13) ───────────────────────────────────── */
 
@@ -66,11 +75,13 @@ export const PRELAUNCH_LABELS = {
 const previewMode = ref<SiteMode | null>(null)
 
 const siteMode = computed<SiteMode>(() =>
-  resolveSiteMode({
-    environment: SITE_ENVIRONMENT,
-    defaultMode: DEFAULT_SITE_MODE,
-    requested: previewMode.value,
-  }),
+  CAN_PREVIEW_SITE_MODE
+    ? resolveSiteMode({
+        environment: SITE_ENVIRONMENT,
+        defaultMode: DEFAULT_SITE_MODE,
+        requested: previewMode.value,
+      })
+    : DEFAULT_SITE_MODE,
 )
 
 function firstValue(value: LocationQueryValue | LocationQueryValue[] | undefined): string | null {
@@ -91,7 +102,7 @@ export function syncSiteModeFromQuery(query: LocationQuery): void {
 }
 
 function syncFromLocation(): void {
-  if (typeof window === 'undefined') return
+  if (!CAN_PREVIEW_SITE_MODE || typeof window === 'undefined') return
   const params = new URLSearchParams(window.location.search)
   if (!params.has(SITE_MODE_PARAM)) return
   syncSiteModeFromQuery({ [SITE_MODE_PARAM]: params.get(SITE_MODE_PARAM) })
@@ -122,6 +133,7 @@ export function installSiteModeGuard(router: Router): void {
  * Lecture réactive : un lien rendu se met à jour quand le mode change.
  */
 export function siteModeQuery(): LocationQueryRaw {
+  if (!CAN_PREVIEW_SITE_MODE) return {}
   return previewMode.value ? { [SITE_MODE_PARAM]: previewMode.value } : {}
 }
 
