@@ -32,8 +32,6 @@ const SEL = {
   searchButton: 'form[role="search"] button[type="submit"]',
   helpCard: 'a.ha-card',
   crumb: '.ha-crumbs a',
-  feedbackYes: '.ha-feedback button:nth-of-type(1)',
-  feedbackNo: '.ha-feedback button:nth-of-type(2)',
   footer: 'footer a',
 }
 
@@ -175,10 +173,10 @@ export const KEYBOARD_SCENARIOS = [
   orderScenario('Recherche d’aide', '/aide?q=document', [SEL.logo, SEL.searchInput, SEL.helpCard, SEL.footer]),
   orderScenario('Thème', '/aide/theme/documents', [SEL.logo, SEL.crumb, SEL.helpCard, SEL.footer]),
   orderScenario('Article', '/aide/ajouter-un-document',
-    [SEL.logo, SEL.crumb, SEL.feedbackYes, SEL.feedbackNo, SEL.footer]),
+    [SEL.logo, SEL.crumb, SEL.footer]),
   orderScenario('Vue intégrée — accueil', '/aide?integre=app', [SEL.embedBack, SEL.searchInput, SEL.helpCard]),
   orderScenario('Vue intégrée — article', '/aide/ajouter-un-document?integre=app',
-    [SEL.embedBack, SEL.crumb, SEL.feedbackNo]),
+    [SEL.embedBack, SEL.crumb]),
   {
     name: 'Contact : champs dans l’ordre, envoi au clavier', url: '/contact',
     run: async (page) => {
@@ -222,30 +220,13 @@ export const KEYBOARD_SCENARIOS = [
       const href = await page.evaluate(() => document.activeElement.getAttribute('href'))
       await page.keyboard.press('Enter')
       await page.waitForURL((u) => u.pathname === href.split('?')[0], { timeout: 5000 })
-      await page.locator('.ha-feedback').waitFor()
+      await page.locator('.ha-crumbs').waitFor()
       // Après la navigation, la tabulation reprend en haut de la nouvelle page.
       const next = await tab(page, [`${SEL.logo}, ${SEL.headerNav}, ${SEL.crumb}, h1, .ha-hero *`])
       if (!next?.matches[0]) problems.push(`après ouverture du résultat, Tab atteint ${next?.desc ?? '(rien)'} au lieu du haut de page`)
       return { problems, info: `recherche « document » → ${href}` }
     },
     viewports: ['bureau'],
-  },
-  {
-    name: 'Article : retour « Non » au clavier', url: '/aide/ajouter-un-document',
-    run: async (page) => {
-      const problems = []
-      await tabTo(page, SEL.feedbackNo)
-      await page.keyboard.press('Space')
-      await page.locator('#ha-feedback-comment').waitFor()
-      let s = await readStop(page, ['#ha-feedback-comment'])
-      if (!s?.matches[0]) s = await tab(page, ['#ha-feedback-comment'])
-      if (!s?.matches[0]) problems.push(`après « Non », le champ de commentaire n’est pas le prochain arrêt (${s?.desc ?? 'focus perdu'})`)
-      else if (!s.indicator) problems.push(`champ de commentaire sans focus visible (${s.style})`)
-      await page.keyboard.type('Test clavier')
-      const send = await tab(page, ['.ha-feedback button[type="submit"]'])
-      if (!send?.matches[0]) problems.push(`bouton « Envoyer » du commentaire non atteint (${send?.desc ?? '(rien)'})`)
-      return { problems, info: 'Espace sur « Non », commentaire, envoi' }
-    },
   },
   {
     name: 'Menu mobile au clavier', url: '/aide',

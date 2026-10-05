@@ -35,20 +35,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 
 /**
- * `then` : état interactif audité en plus de l'état initial (formulaire de
- * retour ouvert, erreurs du formulaire de contact affichées — A11Y-02/04).
+ * `then` : état interactif audité en plus de l'état initial (erreurs du
+ * formulaire de contact affichées — A11Y-02/04).
  */
 export const PAGES = [
   { name: 'Accueil du Centre d’aide', url: '/aide' },
   { name: 'Recherche d’aide', url: '/aide?q=document' },
   { name: 'Thème', url: '/aide/theme/documents' },
-  {
-    name: 'Article', url: '/aide/ajouter-un-document',
-    then: { name: 'retour « Non » ouvert', act: async (page) => {
-      await page.getByRole('button', { name: 'Non', exact: true }).click()
-      await page.locator('#ha-feedback-comment').waitFor()
-    } },
-  },
+  { name: 'Article', url: '/aide/ajouter-un-document' },
   {
     name: 'Contact', url: '/contact',
     then: { name: 'erreur d’envoi affichée', act: async (page) => {
@@ -138,9 +132,8 @@ async function main() {
       // d'emblée, le contraste est mesuré sur l'état final.
       const context = await browser.newContext({ ...options, reducedMotion: 'reduce', locale: 'fr-FR' })
       // Aucun appel réel à l'API de l'application : réponses simulées (CORS
-      // compris, l'application est une autre origine). Le retour d'article
-      // renvoie un reçu (formulaire de commentaire affiché) ; le contact
-      // échoue (message d'erreur affiché, A11Y-02).
+      // compris, l'application est une autre origine). Le contact échoue
+      // (message d'erreur affiché, A11Y-02).
       await context.route(/\/api\//, (route) => {
         const cors = {
           'access-control-allow-origin': '*',
@@ -150,10 +143,7 @@ async function main() {
         if (route.request().method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors })
         const url = route.request().url()
         if (url.includes('/api/contact')) return route.fulfill({ status: 500, headers: cors, body: '' })
-        return route.fulfill({
-          status: 200, headers: cors, contentType: 'application/json',
-          body: JSON.stringify({ feedbackId: 'a11y', commentToken: 'a11y' }),
-        })
+        return route.fulfill({ status: 404, headers: cors, body: '' })
       })
       for (const p of PAGES) {
         const page = await context.newPage()

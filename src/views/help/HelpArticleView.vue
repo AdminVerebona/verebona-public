@@ -45,7 +45,6 @@
           </div>
         </div>
 
-        <div class="ha-section"><HelpFeedback :article-id="article.id" :version="help.version" /></div>
       </template>
 
       <div class="ha-section"><HelpContactBlock /></div>
@@ -74,7 +73,6 @@ import { useNav } from '../../composables/useNav'
 import HelpCrumbs from '../../components/help/HelpCrumbs.vue'
 import HelpBlocks from '../../components/help/HelpBlocks.vue'
 import HelpArticleCard from '../../components/help/HelpArticleCard.vue'
-import HelpFeedback from '../../components/help/HelpFeedback.vue'
 import HelpContactBlock from '../../components/help/HelpContactBlock.vue'
 import HelpSearchBox from '../../components/help/HelpSearchBox.vue'
 

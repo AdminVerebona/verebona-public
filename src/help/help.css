@@ -95,11 +95,6 @@
   color: #fff; background: linear-gradient(135deg, #3B82F6, #1D4ED8);
 }
 .ha-btn-ghost { background: #fff; color: #1D4ED8; border: 1px solid #BFD3F8; }
-.ha-feedback-choices { display: flex; gap: 10px; margin-top: 12px; }
-.ha-feedback textarea {
-  width: 100%; box-sizing: border-box; margin-top: 10px; min-height: 90px; font: inherit; font-size: 15px;
-  padding: 12px 14px; border-radius: 12px; border: 1px solid #CBD5E1; color: #0F1B33;
-}
 /* A11Y-01 : #64748B sur le fond #F6F8FC = 4,47:1 (< 4,5:1 exigé, axe). */
 .ha-muted { font-size: 13.5px; color: #475569; }
 .ha-status { font-size: 15px; color: #065F46; margin-top: 10px; }
