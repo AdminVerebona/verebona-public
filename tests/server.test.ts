@@ -27,6 +27,14 @@ function makeDist(indexable: boolean): string {
   writeFileSync(path.join(dist, 'aide', 'index.html'), '<html>AIDE</html>')
   writeFileSync(path.join(dist, 'aide', 'parrainage.html'), '<html>PARRAINAGE</html>')
   writeFileSync(path.join(dist, 'aide', '.redirects.json'), JSON.stringify({ '/aide/ancien-parrainage': '/aide/parrainage' }))
+  writeFileSync(path.join(dist, 'aide', 'catalogue.json'), '{"articles":[]}')
+  // PUB-PERF-01 : une sortie hachée de Vite et une image à nom fixe dans le même dossier.
+  mkdirSync(path.join(dist, 'assets'))
+  mkdirSync(path.join(dist, 'fonts'))
+  writeFileSync(path.join(dist, 'assets', 'HelpHomeView-BIswMylZ.js'), 'export default 1')
+  writeFileSync(path.join(dist, 'assets', 'surf-personal.webp'), 'IMG')
+  writeFileSync(path.join(dist, 'fonts', 'space-mono-latin-400-5.3.0.woff2'), 'FONT')
+  writeFileSync(path.join(dist, '.immutable-assets.json'), JSON.stringify(['/assets/HelpHomeView-BIswMylZ.js']))
   if (indexable) writeFileSync(path.join(dist, 'sitemap.xml'), '<?xml version="1.0"?><urlset/>')
   else writeFileSync(path.join(dist, 'index.prelaunch.html'), '<html>ACCUEIL PRELAUNCH</html>')
   writeFileSync(path.join(dist, '.site-env.json'), JSON.stringify({
@@ -116,6 +124,60 @@ describe('production avec CANONICAL_HOST', () => {
     expect((await get(srv.port, '/absent.js', https)).status).toBe(404)
   })
 
+  describe('cache HTTP (PUB-PERF-01)', () => {
+    const YEAR = 'public, max-age=31536000, immutable'
+
+    it('sortie hachée de Vite : un an, immutable', async () => {
+      const r = await get(srv.port, '/assets/HelpHomeView-BIswMylZ.js', https)
+      expect(r.status).toBe(200)
+      expect(r.headers['cache-control']).toBe(YEAR)
+      expect(r.headers.etag).toBeTruthy()
+    })
+
+    it('image à nom fixe du même dossier : cache court, jamais un an', async () => {
+      const r = await get(srv.port, '/assets/surf-personal.webp', https)
+      expect(r.status).toBe(200)
+      expect(r.headers['cache-control']).toBe('public, max-age=3600')
+    })
+
+    it('polices versionnées : un an, immutable', async () => {
+      const r = await get(srv.port, '/fonts/space-mono-latin-400-5.3.0.woff2', https)
+      expect(r.headers['cache-control']).toBe(YEAR)
+    })
+
+    it('HTML (accueil, coquille SPA, page d’aide) : revalidé, 304 sur ETag inchangé', async () => {
+      for (const p of ['/', '/contact', '/aide', '/aide/parrainage']) {
+        const r = await get(srv.port, p, https)
+        expect(r.status, p).toBe(200)
+        expect(r.headers['cache-control'], p).toBe('public, no-cache')
+        const etag = String(r.headers.etag)
+        expect(etag, p).toBeTruthy()
+        const again = await get(srv.port, p, { ...https, 'if-none-match': etag })
+        expect(again.status, p).toBe(304)
+        expect(again.body, p).toBe('')
+      }
+    })
+
+    it('données d’aide : politique courte inchangée (suivent les publications)', async () => {
+      const r = await get(srv.port, '/aide/catalogue.json', https)
+      expect(r.status).toBe(200)
+      expect(r.headers['cache-control']).toBe('public, max-age=300')
+    })
+
+    it('chunk d’une ancienne version : 404 texte non mis en cache, jamais la coquille (PUB-PERF-04)', async () => {
+      const r = await get(srv.port, '/assets/HelpHomeView-OLDHASH1.js', https)
+      expect(r.status).toBe(404)
+      expect(String(r.headers['content-type'])).toContain('text/plain')
+      expect(r.headers['cache-control']).toBe('no-store')
+      const shell = await get(srv.port, '/aide/nexiste-pas', https)
+      expect(shell.headers['cache-control']).toBe('no-store')
+    })
+
+    it('liste des fichiers versionnés jamais servie', async () => {
+      expect((await get(srv.port, '/.immutable-assets.json', https)).status).toBe(404)
+    })
+  })
+
   it("seule l'application peut encadrer le site (mode intégré)", async () => {
     const r = await get(srv.port, '/aide', https)
     expect(r.headers['content-security-policy']).toBe("frame-ancestors 'self' https://app.verebona.fr")
@@ -149,5 +211,35 @@ describe('préproduction', () => {
     const r = await get(srv.port, '/sitemap.xml')
     expect(r.status).toBe(404)
     expect(String(r.headers['content-type'])).not.toContain('html')
+  })
+})
+
+describe('préproduction protégée (PUB-PERF-01, CA-03)', () => {
+  let dir: string, srv: { port: number; child: ChildProcess }
+  const auth = { authorization: `Basic ${Buffer.from('admin:secret').toString('base64')}` }
+  beforeAll(async () => {
+    dir = makeDist(false)
+    srv = await start(dir, { CANONICAL_HOST: '', BASIC_AUTH_ENABLED: 'true', BASIC_AUTH_USER: 'admin', BASIC_AUTH_PASSWD: 'secret' })
+  })
+  afterAll(() => { srv?.child.kill(); rmSync(dir, { recursive: true, force: true }) })
+
+  it('sans identifiants : 401', async () => {
+    expect((await get(srv.port, '/assets/HelpHomeView-BIswMylZ.js')).status).toBe(401)
+  })
+
+  it('ressources protégées : jamais en cache partagé (`private`)', async () => {
+    expect((await get(srv.port, '/', auth)).headers['cache-control']).toBe('private, no-cache')
+    expect((await get(srv.port, '/contact', auth)).headers['cache-control']).toBe('private, no-cache')
+    expect((await get(srv.port, '/assets/HelpHomeView-BIswMylZ.js', auth)).headers['cache-control'])
+      .toBe('private, max-age=31536000, immutable')
+    expect((await get(srv.port, '/assets/surf-personal.webp', auth)).headers['cache-control']).toBe('private, max-age=3600')
+    expect((await get(srv.port, '/fonts/space-mono-latin-400-5.3.0.woff2', auth)).headers['cache-control'])
+      .toBe('private, max-age=31536000, immutable')
+  })
+
+  it('données d’aide, publiques par conception : lisibles sans identifiants, cache court', async () => {
+    const r = await get(srv.port, '/aide/catalogue.json')
+    expect(r.status).toBe(200)
+    expect(r.headers['cache-control']).toBe('public, max-age=300')
   })
 })

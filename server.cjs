@@ -67,7 +67,66 @@ if (siteEnv && siteEnv.indexable === false) {
  */
 const HELP_DATA_PATHS = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
 
-if (process.env.BASIC_AUTH_ENABLED === "true") {
+const authEnabled = process.env.BASIC_AUTH_ENABLED === "true";
+
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * CACHE HTTP PAR FAMILLE DE RESSOURCES — PUB-PERF-01
+ *
+ * | Famille                                   | Cache-Control                    |
+ * | ----------------------------------------- | -------------------------------- |
+ * | Sorties hachées de Vite (liste du build)  | max-age=1 an, immutable          |
+ * | Polices `/fonts` (version dans le nom)    | max-age=1 an, immutable          |
+ * | HTML (accueil, coquille SPA, pages aide)  | no-cache : revalidé (ETag → 304) |
+ * | Données d'aide (catalogue, corpus)        | max-age=300 (inchangé)           |
+ * | Autres fichiers à URL fixe (images de     | max-age=3600                     |
+ * |   public/assets, robots.txt, sitemap.xml) |                                  |
+ * | 404                                       | no-store                         |
+ *
+ * · Seules les URLs dont le contenu change avec le nom ont un cache long :
+ *   la liste exacte vient de `dist/.immutable-assets.json` (écrit par
+ *   vite.config.ts). `/assets` contient aussi des images à nom fixe
+ *   (`public/assets`), qui ne doivent pas rester figées un an.
+ * · HTML en `no-cache` : un déploiement (ou un retour arrière) est visible à
+ *   la visite suivante ; ETag / Last-Modified rendent la revalidation
+ *   légère (304 sans corps).
+ * · Préproduction protégée (`BASIC_AUTH_ENABLED`) : `private` — aucun cache
+ *   partagé (CDN, proxy) ne conserve une ressource protégée. Les données
+ *   d'aide, publiques par conception (voir plus bas), restent `public`.
+ * · 404 `no-store` : un fichier absent pendant une bascule ne doit pas le
+ *   rester dans un cache.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+const cacheScope = authEnabled ? "private" : "public";
+const CACHE = {
+  immutable: `${cacheScope}, max-age=31536000, immutable`,
+  html: `${cacheScope}, no-cache`,
+  fixed: `${cacheScope}, max-age=3600`,
+  notFound: "no-store",
+};
+
+let immutableAssets = new Set();
+try {
+  const list = JSON.parse(fs.readFileSync(path.join(distDir, ".immutable-assets.json"), "utf8"));
+  if (Array.isArray(list)) immutableAssets = new Set(list.filter((f) => typeof f === "string"));
+} catch {
+  console.warn("dist/.immutable-assets.json not found: no long-lived cache for /assets");
+}
+
+/** Politique d'un fichier servi depuis `dist/`, d'après son chemin public. */
+function cacheControlFor(urlPath) {
+  if (immutableAssets.has(urlPath)) return CACHE.immutable;
+  if (/\.html$/i.test(urlPath)) return CACHE.html;
+  return CACHE.fixed;
+}
+
+/** Envoie un document HTML (accueil, coquille SPA, page d'aide) revalidable. */
+const sendHtml = (res, file, cb) => {
+  res.setHeader("Cache-Control", CACHE.html);
+  res.sendFile(file, cb);
+};
+
+if (authEnabled) {
   const auth = basicAuth({
     users: {
       [username]: password,
@@ -90,9 +149,10 @@ if (process.env.BASIC_AUTH_ENABLED === "true") {
 app.use(
   "/fonts",
   express.static(path.join(distDir, "fonts"), {
-    maxAge: "1y",
-    immutable: true,
     fallthrough: false,
+    setHeaders(res) {
+      res.setHeader("Cache-Control", CACHE.immutable);
+    },
   })
 );
 
@@ -141,10 +201,12 @@ app.use((req, res, next) => {
   next();
 });
 
-const notFoundShell = (res) =>
+const notFoundShell = (res) => {
+  res.setHeader("Cache-Control", CACHE.notFound);
   res.status(404).sendFile(SPA_SHELL, (e) => {
     if (e) res.status(404).type("text/plain").send("Not found\n");
   });
+};
 
 app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
   const q = req.originalUrl.indexOf("?");
@@ -175,7 +237,7 @@ app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
   const file = p === "/aide" ? "index.html" : `${p.slice("/aide/".length)}.html`;
   const full = path.join(helpDir, file);
   if (!full.startsWith(helpDir + path.sep)) return notFoundShell(res);
-  fs.access(full, fs.constants.R_OK, (err) => (err ? notFoundShell(res) : res.sendFile(full)));
+  fs.access(full, fs.constants.R_OK, (err) => (err ? notFoundShell(res) : sendHtml(res, full)));
 });
 
 /**
@@ -193,7 +255,7 @@ app.get("/", (req, res, next) => {
   if (!siteEnv || siteEnv.indexable !== false) return next();
   const mode = typeof req.query.mode === "string" ? req.query.mode : null;
   if (!mode || !PREVIEW_MODES.has(mode) || mode === siteEnv.defaultMode) return next();
-  res.sendFile(path.join(distDir, `index.${mode}.html`), (err) => {
+  sendHtml(res, path.join(distDir, `index.${mode}.html`), (err) => {
     if (err) next();
   });
 });
@@ -206,6 +268,11 @@ app.get("/", (req, res, next) => {
 app.use(
   express.static(distDir, {
     setHeaders(res, filePath) {
+      // Données d'aide : politique déjà posée plus haut (5 min).
+      if (!res.getHeader("Cache-Control")) {
+        const urlPath = "/" + path.relative(distDir, filePath).split(path.sep).join("/");
+        res.setHeader("Cache-Control", cacheControlFor(urlPath));
+      }
       if (path.basename(filePath) === "sitemap.xml") {
         res.setHeader("Content-Type", "application/xml; charset=utf-8");
       }
@@ -241,14 +308,17 @@ const FILE_PATH = /\/[^/]*\.[a-z0-9]+$/i;
 
 app.get("/{*splat}", (req, res) => {
   if (FILE_PATH.test(req.path)) {
+    // Chunk d'une version précédente compris (PUB-PERF-04) : vrai 404, jamais
+    // la coquille HTML servie comme faux JavaScript, et jamais mis en cache.
+    res.setHeader("Cache-Control", CACHE.notFound);
     res.status(404).type("text/plain").send("Not found\n");
     return;
   }
   // `/` est servi par express.static (dist/index.html : accueil pré-rendu).
   // Toute autre route reçoit la coquille SPA, sans le contenu ni le titre de
   // l'accueil. Repli sur index.html si le pré-rendu n'a pas été exécuté.
-  res.sendFile(SPA_SHELL, (err) => {
-    if (err) res.sendFile(path.join(distDir, "index.html"));
+  sendHtml(res, SPA_SHELL, (err) => {
+    if (err) sendHtml(res, path.join(distDir, "index.html"));
   });
 });
 

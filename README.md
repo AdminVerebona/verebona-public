@@ -49,6 +49,21 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 | `BASIC_AUTH_ENABLED=true`, `BASIC_AUTH_USER`, `BASIC_AUTH_PASSWD` | préproduction | Basic Auth (les JSON d'aide restent lisibles par l'application) |
 | `PORT` | partout | port d'écoute (3000 par défaut) |
 
+### Cache HTTP et versions déployées (PUB-PERF-01, PUB-PERF-04)
+
+| Ressource | `Cache-Control` (préprod protégée : `private` au lieu de `public`) |
+| --- | --- |
+| Sorties hachées de Vite (`/assets/<nom>-<hash>.js\|css`, liste exacte dans `dist/.immutable-assets.json`, non servi) | `public, max-age=31536000, immutable` |
+| Polices `/fonts/*-<version>.woff2` | `public, max-age=31536000, immutable` |
+| HTML (accueil, coquille SPA, pages d'aide) | `public, no-cache` (revalidation ETag / Last-Modified → 304) |
+| `/aide/catalogue.json`, `/aide/corpus-t2.json` | `public, max-age=300` (toujours publics, hors Basic Auth) |
+| Autres fichiers à URL fixe (images de `public/assets`, `robots.txt`, `sitemap.xml`) | `public, max-age=3600` |
+| 404 (dont chunk d'une ancienne version) | `no-store`, `text/plain` — jamais la coquille HTML |
+
+- Une image de `public/` modifiée garde son URL : visible sous 1 h au plus. Pour un effet immédiat, la renommer (ou l'importer depuis `src/`, elle est alors hachée).
+- Un CDN ou proxy placé devant `server.cjs` doit **respecter** ces en-têtes (ne pas les écraser, ne pas mettre le HTML en cache). Vérifier après déploiement : `curl -sI https://www.verebona.fr/` (`no-cache`), `curl -sI https://www.verebona.fr/assets/<fichier haché>` (`immutable`).
+- Chaque déploiement remplace `dist/` : les chunks de la version précédente ne sont plus servis (404). Un onglet ouvert avant le déploiement qui ouvre une page paresseuse est repris par `src/config/stale-chunk.ts` : **un seul** rechargement automatique de l'URL visée (paramètres et code de parrainage conservés), puis un message « Recharger la page » ; jamais de rechargement si une saisie est en cours ou hors ligne. Retour arrière : retirer `installStaleChunkRecovery(router)` de `src/router/index.ts`.
+
 ## Tests
 
 `npm test` (`vitest run`, fichiers `tests/**/*.test.ts`, hors du type-check du build) :
@@ -59,7 +74,8 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 | `tests/prelaunch-cta.test.ts` | composants réels (`@vue/test-utils`) : header, menu mobile, hero, tarifs, CTA final, CTA fixe mobile sans aucun lien `/signup` ni `/login` en PRELAUNCH (production et préprod `?mode=prelaunch`) ; liens présents en FULL ; titre des tarifs — §6, §7, §11 |
 | `tests/sitemap.test.ts` | contenu du sitemap de production (accueil, `/aide`, thèmes et articles publiés seulement), `canonicalUrl`, `robots.txt` |
 | `tests/structured-data.test.ts` | graphe Organization + WebSite (unicité, `@id`, logo PNG ≥ 112 px, aucun placeholder, rien hors production), `TechArticle` des articles |
-| `tests/server.test.ts` | `server.cjs` lancé sur un `dist/` factice : 301 unique vers l'hôte canonique, `X-Robots-Tag` en préprod, sitemap `application/xml`, 404 sans repli HTML, redirections d'aide, `frame-ancestors` |
+| `tests/server.test.ts` | `server.cjs` lancé sur un `dist/` factice : 301 unique vers l'hôte canonique, `X-Robots-Tag` en préprod, sitemap `application/xml`, 404 sans repli HTML, redirections d'aide, `frame-ancestors`, `Cache-Control` par famille (hachés immuables, image à nom fixe courte, HTML revalidé + 304, 404 `no-store`, `private` en préprod protégée) |
+| `tests/stale-chunk.test.ts` | chunks obsolètes (PUB-PERF-04) : une seule reprise automatique, pas de boucle, message ensuite, saisie conservée, paramètres et parrainage conservés, erreurs d'exécution ignorées |
 | `tests/help-corpus.test.ts` | validation de build du corpus réel (0 défaut, 100 articles), aucune occurrence T1–T5 quelle que soit la casse, notes de rédaction interne refusées, AID-BILL-010 publié sans avantage filleul |
 | `tests/contact.test.ts` | sujet du formulaire transmis, « Choisir… » refusé, erreurs annoncées (`role="alert"`) — GAP-17, CONTACT-02, A11Y-02 |
 | `tests/embed.test.ts` | mode intégré : une seule barre « Retour à Verebona » (celle de l'application quand elle encadre le site) |

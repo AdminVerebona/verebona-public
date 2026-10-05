@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {
   allowsModeOverride,
@@ -6,7 +6,7 @@ import {
   parseEnvironment,
   resolveDefaultMode,
 } from './src/config/site-mode.rules'
-import { MODE_PREVIEW_GUARD_CSS, MODE_PREVIEW_GUARD_SCRIPT, PREVIEW_SWITCH_CSS } from './src/config/mode-preview-guard.rules'
+import { MODE_PREVIEW_GUARD_CSS, MODE_PREVIEW_GUARD_SCRIPT } from './src/config/mode-preview-guard.rules'
 import { INDEXABLE_PATHS, SITE_ORIGIN, buildRobotsTxt, buildSitemapXml, canonicalUrl } from './src/config/sitemap.rules'
 import { assertHelpGuards, deployedCommit, loadHelpCorpus, COVERAGE_FILE, HELP_CONTENT_DIR, SLUG_REGISTRY_FILE } from './help.build'
 import type { Corpus } from './src/help/corpus'
@@ -38,26 +38,6 @@ function siteModePlugin(): Plugin {
 
   return {
     name: 'verebona-site-mode',
-    // ══════════════════════════════════════════════════════════════════
-    // PRÉVISUALISATION ABSENTE DU BUNDLE DE PRODUCTION — CDC 8, observation O2
-    //
-    // `__VB_CAN_PREVIEW_SITE_MODE__` est remplacé à la compilation par un
-    // littéral `true`/`false` (lu par `src/config/site.ts`). En production,
-    // Rollup voit donc `false ? import('./PreviewModeSwitch.vue') : null` et
-    // n'émet ni le chunk du sélecteur ni la logique d'override de `?mode=`.
-    //
-    // Le critère est VITE_ENVIRONMENT, jamais `mode` : Scalingo construit la
-    // préproduction avec `vite build` (mode `production`) et
-    // VITE_ENVIRONMENT=preprod. `loadEnv` applique les mêmes priorités que
-    // `config.env` ci-dessous (process.env prioritaire sur les fichiers .env).
-    // Contrôle : `npm run check:preview-chunk` (scripts/check-preview-chunk.mjs).
-    // ══════════════════════════════════════════════════════════════════
-    config(userConfig, { mode }) {
-      const envDir = userConfig.envDir || userConfig.root || process.cwd()
-      const env = loadEnv(mode, envDir, userConfig.envPrefix ?? 'VITE_')
-      const canPreview = allowsModeOverride(parseEnvironment(env.VITE_ENVIRONMENT))
-      return { define: { __VB_CAN_PREVIEW_SITE_MODE__: JSON.stringify(canPreview) } }
-    },
     configResolved(config) {
       const raw = config.env.VITE_ENVIRONMENT as string | undefined
       environment = parseEnvironment(raw)
@@ -145,7 +125,7 @@ function siteModePlugin(): Plugin {
       // ══════════════════════════════════════════════════════════════════
       if (allowsModeOverride(environment)) {
         tags.push(
-          { tag: 'style', children: MODE_PREVIEW_GUARD_CSS + PREVIEW_SWITCH_CSS, injectTo: 'head' as const },
+          { tag: 'style', children: MODE_PREVIEW_GUARD_CSS, injectTo: 'head' as const },
           { tag: 'script', children: MODE_PREVIEW_GUARD_SCRIPT, injectTo: 'head' as const },
         )
       }
@@ -297,7 +277,48 @@ function helpCenterPlugin(): Plugin {
   }
 }
 
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * FICHIERS VERSIONNÉS — PUB-PERF-01
+ *
+ * `dist/assets/` mélange deux familles :
+ *   · les sorties de Vite (JS, CSS, images importées), nommées
+ *     `<nom>-<hash>.<ext>` : l'URL change avec le contenu ;
+ *   · les images de `public/assets/` (`og-image.png`, `surf-personal.webp`…),
+ *     copiées telles quelles : URL FIXE.
+ * Un cache d'un an sur tout `/assets` figerait ces dernières ; un motif de
+ * nom ne suffit pas à les distinguer (`surf-personal.webp` ressemble à un
+ * nom haché). La liste exacte des fichiers émis par Vite est donc écrite au
+ * build dans `.immutable-assets.json` (dotfile, non servi), et `server.cjs`
+ * ne met en cache long immuable QUE ces URLs. Fichier absent : aucun cache
+ * long, tout est revalidé (repli sûr).
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+export const IMMUTABLE_ASSETS_FILE = '.immutable-assets.json'
+/** `assetFileNames` / `chunkFileNames` par défaut de Vite : `assets/[name]-[hash].[ext]`. */
+export const HASHED_ASSET = /^assets\/[^/]+-[A-Za-z0-9_-]{8,}\.[a-z0-9]+$/i
+
+function immutableAssetsPlugin(): Plugin {
+  let isSsr = false
+  return {
+    name: 'verebona-immutable-assets',
+    apply: 'build',
+    enforce: 'post',
+    configResolved(config) {
+      isSsr = Boolean(config.build.ssr)
+    },
+    generateBundle(_, bundle) {
+      if (isSsr) return
+      const files = Object.keys(bundle)
+        .filter((f) => HASHED_ASSET.test(f))
+        .sort()
+        .map((f) => `/${f}`)
+      this.emitFile({ type: 'asset', fileName: IMMUTABLE_ASSETS_FILE, source: JSON.stringify(files, null, 2) + '\n' })
+    },
+  }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), siteModePlugin(), helpCenterPlugin()],
+  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), immutableAssetsPlugin()],
 })

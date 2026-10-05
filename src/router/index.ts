@@ -5,6 +5,7 @@ import { installSiteModeGuard, useSiteMode } from '../config/site'
 import { installCanonicalGuard } from '../config/canonical'
 import { installHeadGuard } from '../config/head'
 import { installEmbedGuard } from '../help/embed'
+import { installStaleChunkRecovery } from '../config/stale-chunk'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -92,6 +93,13 @@ installCanonicalGuard(router)
  * ne s'applique plus aux autres pages. Voir `src/config/head.rules.ts`.
  */
 installHeadGuard(router)
+
+/**
+ * Page paresseuse d'une version précédente, retirée par un déploiement
+ * (PUB-PERF-04) : une seule reprise automatique bornée, puis un message de
+ * reprise explicite. Voir `src/config/stale-chunk.ts`.
+ */
+installStaleChunkRecovery(router)
 
 /**
  * Le code de parrainage est relu a chaque navigation.
