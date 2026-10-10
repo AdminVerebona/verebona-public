@@ -20,6 +20,8 @@ const Stub = defineComponent({ render: () => h('div') })
 
 async function setup(env: Env) {
   vi.resetModules()
+  // Catalogue des tarifs (lot 35C) : jamais de réseau en test.
+  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({ catalog_version: null, status: 'unavailable', purchasable: false, offers: [] }), { status: 200 })))
   vi.stubEnv('VITE_ENVIRONMENT', env.VITE_ENVIRONMENT)
   vi.stubEnv('VITE_DEFAULT_SITE_MODE', env.VITE_DEFAULT_SITE_MODE)
   window.history.replaceState(null, '', `/${env.query ?? ''}`)

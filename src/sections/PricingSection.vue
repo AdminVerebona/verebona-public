@@ -34,8 +34,10 @@
         <h3 :style="`font-size:18px;font-weight:600;color:${card.titleColor};margin-bottom:6px`">{{ card.name }}</h3>
         <p :style="`font-size:13px;color:${card.textColor};line-height:1.5;margin-bottom:16px;min-height:40px`">{{ card.tagline }}</p>
 
-        <div :style="`font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:32px;font-weight:600;color:${card.titleColor};margin-bottom:2px`">
-          {{ priceOf(card.code) }}<span :style="`font-size:15px;font-weight:400;color:${card.mutedColor}`"> {{ pricePer }}</span>
+        <!-- Montant : catalogue de l'application (source unique, CDC lookup_key LK-31) ;
+             jamais figé au prérendu, aucun prix de secours. -->
+        <div :data-testid="`price-${card.code}`" :aria-busy="catalogState === 'loading'" :style="`font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:32px;font-weight:600;color:${card.titleColor};margin-bottom:2px`">
+          {{ priceOf(card.code) }}<span v-if="hasPrice(card.code)" :style="`font-size:15px;font-weight:400;color:${card.mutedColor}`"> {{ pricePer }}<template v-if="mentionOf(card.code)"> {{ mentionOf(card.code) }}</template></span>
         </div>
         <div :style="`font-size:12.5px;color:${card.mutedColor};min-height:17px;margin-bottom:18px`">{{ equivalentOf(card.code) }}</div>
 
@@ -104,7 +106,7 @@ import { useSiteMode } from '../config/site'
 
 const { isPrelaunch, labels } = useSiteMode()
 
-const { isYearly, setPeriod, pricePer, priceOf, equivalentOf } = usePricing()
+const { isYearly, setPeriod, pricePer, priceOf, mentionOf, hasPrice, equivalentOf, catalogState } = usePricing()
 
 const segStyle = (active: boolean) =>
   `padding:9px 20px;border-radius:999px;border:0;cursor:pointer;font-size:14px;font-weight:600;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;transition:all .18s;background:${active ? '#fff' : 'transparent'};color:${active ? '#0F1B33' : '#5B6577'};box-shadow:${active ? '0 2px 8px rgba(15,27,51,.10)' : 'none'}`
