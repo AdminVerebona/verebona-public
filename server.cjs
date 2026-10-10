@@ -191,10 +191,22 @@ app.use((req, res, next) => {
 });
 
 const HELP_DATA = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
+/**
+ * Environnement du build servi, déclaré en en-tête des données d'aide
+ * (lot 34G, ENV-02) : l'application le cite quand elle refuse un corpus d'un
+ * autre environnement, et `curl -I` suffit à vérifier une préproduction
+ * bâtie sans `VITE_ENVIRONMENT=preprod` (le corpus se dirait `production`).
+ * Le corps JSON (`environment`) reste la référence.
+ */
+const helpEnvironment = siteEnv && typeof siteEnv.environment === "string" ? siteEnv.environment : null;
 app.use((req, res, next) => {
   if (!HELP_DATA.has(req.path)) return next();
   res.setHeader("Access-Control-Allow-Origin", appOrigin || "*");
   res.setHeader("Vary", "Origin");
+  if (helpEnvironment) {
+    res.setHeader("X-Verebona-Environment", helpEnvironment);
+    res.setHeader("Access-Control-Expose-Headers", "X-Verebona-Environment");
+  }
   // Court : un article publié doit apparaître dans « Besoin d'aide » et dans
   // l'assistant sans attendre longtemps après le déploiement.
   res.setHeader("Cache-Control", "public, max-age=300");

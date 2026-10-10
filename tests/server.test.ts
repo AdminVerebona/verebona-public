@@ -28,6 +28,7 @@ function makeDist(indexable: boolean): string {
   writeFileSync(path.join(dist, 'aide', 'parrainage.html'), '<html>PARRAINAGE</html>')
   writeFileSync(path.join(dist, 'aide', '.redirects.json'), JSON.stringify({ '/aide/ancien-parrainage': '/aide/parrainage' }))
   writeFileSync(path.join(dist, 'aide', 'catalogue.json'), '{"articles":[]}')
+  writeFileSync(path.join(dist, 'aide', 'corpus-t2.json'), JSON.stringify({ schema: 'verebona-help-t2-v1', environment: indexable ? 'production' : 'preprod', articles: [] }))
   // PUB-PERF-01 : une sortie hachée de Vite et une image à nom fixe dans le même dossier.
   mkdirSync(path.join(dist, 'assets'))
   mkdirSync(path.join(dist, 'fonts'))
@@ -162,6 +163,8 @@ describe('production avec CANONICAL_HOST', () => {
       const r = await get(srv.port, '/aide/catalogue.json', https)
       expect(r.status).toBe(200)
       expect(r.headers['cache-control']).toBe('public, max-age=300')
+      // Lot 34G : environnement du build déclaré (ENV-02).
+      expect((await get(srv.port, '/aide/corpus-t2.json', https)).headers['x-verebona-environment']).toBe('production')
     })
 
     it('chunk d’une ancienne version : 404 texte non mis en cache, jamais la coquille (PUB-PERF-04)', async () => {
@@ -241,5 +244,13 @@ describe('préproduction protégée (PUB-PERF-01, CA-03)', () => {
     const r = await get(srv.port, '/aide/catalogue.json')
     expect(r.status).toBe(200)
     expect(r.headers['cache-control']).toBe('public, max-age=300')
+  })
+
+  it('HELP2-PUB — corpus de l’assistant : lisible sans identifiants, environnement déclaré (corps et en-tête X-Verebona-Environment)', async () => {
+    const r = await get(srv.port, '/aide/corpus-t2.json')
+    expect(r.status).toBe(200)
+    expect(JSON.parse(r.body).environment).toBe('preprod')
+    expect(r.headers['x-verebona-environment']).toBe('preprod')
+    expect(String(r.headers['access-control-expose-headers'])).toContain('X-Verebona-Environment')
   })
 })

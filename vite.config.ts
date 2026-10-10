@@ -278,6 +278,9 @@ function helpCenterPlugin(): Plugin {
         const o = outputs(corpus ?? load())
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.setHeader('Access-Control-Allow-Origin', '*')
+        // Lot 34G : même en-tête que server.cjs (environnement déclaré).
+        res.setHeader('X-Verebona-Environment', environment)
+        res.setHeader('Access-Control-Expose-Headers', 'X-Verebona-Environment')
         res.end(JSON.stringify(url === CATALOG_PATH ? o.catalog : o.t2))
       })
       server.watcher.on('change', (file) => {
