@@ -79,6 +79,45 @@ describe('source unique des montants', () => {
   })
 })
 
+describe('diagnostic console (lot 36B) : « Tarif indisponible » explicable sans journaux serveur', () => {
+  it('AC-vitrine-1 — requête bloquée par CORS / app injoignable : erreur console nommant l’URL, l’origine et le réglage', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {})
+    await pricing.loadCatalog((async () => { throw new TypeError('Failed to fetch') }) as unknown as typeof fetch)
+    expect(pricing.usePricing().priceOf('standard')).toBe('Tarif indisponible')
+    expect(err).toHaveBeenCalledTimes(1)
+    const msg = String(err.mock.calls[0][0])
+    expect(msg).toContain('/api/billing/catalog')
+    expect(msg).toMatch(/CORS/)
+    expect(msg).toMatch(/NEXT_PUBLIC_PUBLIC_SITE_URL/)
+    expect(msg).toContain(window.location.origin)
+  })
+
+  it('AC-vitrine-2 — réponse non JSON (page HTML, ancienne application) : erreur explicite, aucun prix', async () => {
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {})
+    await pricing.loadCatalog((async () => new Response('<html>404</html>', { status: 404 })) as unknown as typeof fetch)
+    expect(pricing.usePricing().priceOf('premium')).toBe('Tarif indisponible')
+    expect(String(err.mock.calls[0][0])).toMatch(/illisible.*HTTP 404.*VITE_APP_URL/)
+  })
+
+  it('AC-vitrine-3 — catalogue incomplet : raison du serveur en console, offres disponibles affichées', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const partial = { ...V4, status: 'ok', reason: 'PUBLICATION_PENDING', offers: V4.offers.filter((o) => o.plan_code !== 'premium_duo'), unavailable: [{ plan_code: 'premium_duo', billing_period: 'monthly', reason: 'KEY_MISSING' }] }
+    await pricing.loadCatalog((async () => new Response(JSON.stringify(partial), { status: 200 })) as unknown as typeof fetch)
+    const p = pricing.usePricing()
+    expect(nbsp(p.priceOf('standard'))).toBe('3,90 €')
+    expect(p.priceOf('premium_duo')).toBe('Tarif indisponible')
+    expect(String(warn.mock.calls[0][0])).toContain('PUBLICATION_PENDING')
+  })
+
+  it('catalogue complet : aucun message', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {})
+    await pricing.loadCatalog((async () => new Response(JSON.stringify({ ...V4, reason: null, unavailable: [] }), { status: 200 })) as unknown as typeof fetch)
+    expect(warn).not.toHaveBeenCalled()
+    expect(err).not.toHaveBeenCalled()
+  })
+})
+
 describe('mentions d’économie annuelle : hors périmètre, inchangées (LK-115)', () => {
   it('TC-89 / RX-19 — texte et calcul identiques, seules les entrées viennent du catalogue', async () => {
     await pricing.loadCatalog((async () => new Response(JSON.stringify(V4), { status: 200 })) as unknown as typeof fetch)

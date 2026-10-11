@@ -53,6 +53,10 @@ export interface PublicCatalog {
   status: 'ok' | 'stale' | 'unavailable' | 'updating'
   purchasable: boolean
   offers: CatalogOffer[]
+  /** Code non sensible expliquant une grille incomplète (lot 36B), `null` sinon. */
+  reason?: string | null
+  /** Offres indisponibles et raison par offre (lot 36B). */
+  unavailable?: Array<{ plan_code: Plan['code']; billing_period: BillingPeriod; reason: string }>
 }
 
 export type CatalogState = 'loading' | 'ready' | 'unavailable'
@@ -66,16 +70,47 @@ const catalog = ref<PublicCatalog | null>(null)
 const state = ref<CatalogState>('loading')
 let inflight: Promise<void> | null = null
 
+/**
+ * Diagnostic CONSOLE (lot 36B) : « Tarif indisponible » doit être
+ * explicable depuis le navigateur, sans accès aux journaux de l'application.
+ *   - requête bloquée (CORS) ou application injoignable : `fetch` rejette
+ *     sans détail (le navigateur masque la cause CORS) → message qui nomme
+ *     l'URL appelée, l'origine de la page et le réglage à vérifier ;
+ *   - réponse illisible (page HTML, 404 d'une ancienne application) ;
+ *   - catalogue servi mais incomplet : raison donnée par le serveur.
+ * Jamais de prix de secours.
+ */
+function pageOrigin(): string {
+  return typeof window !== 'undefined' ? window.location.origin : '?'
+}
+
 /** Charge (ou recharge) le catalogue. Jamais exécuté au prérendu. */
 export function loadCatalog(fetchImpl: typeof fetch = fetch): Promise<void> {
   if (inflight) return inflight
   inflight = fetchImpl(CATALOG_URL, { cache: 'no-store', credentials: 'omit' })
     .then(async (res) => {
-      const data = (await res.json()) as PublicCatalog
+      let data: PublicCatalog
+      try {
+        data = (await res.json()) as PublicCatalog
+      } catch {
+        console.error(`[Verebona] Tarifs : réponse illisible de ${CATALOG_URL} (HTTP ${res.status}). Vérifier VITE_APP_URL (application déployée avec /api/billing/catalog).`)
+        if (!catalog.value) state.value = 'unavailable'
+        return
+      }
       catalog.value = data
       state.value = res.ok && data.offers?.length ? 'ready' : 'unavailable'
+      if (!res.ok || data.status !== 'ok' || data.reason) {
+        console.warn(`[Verebona] Tarifs : catalogue ${data.status ?? `HTTP ${res.status}`}${data.reason ? ` (raison : ${data.reason})` : ''}.`, data.unavailable ?? [])
+      }
     })
-    .catch(() => {
+    .catch((error: unknown) => {
+      console.error(
+        `[Verebona] Tarifs : catalogue injoignable (${CATALOG_URL}) depuis ${pageOrigin()}. `
+        + 'Cause la plus fréquente : origine refusée par CORS — l\'application doit autoriser cette origine '
+        + '(NEXT_PUBLIC_PUBLIC_SITE_URL ou PUBLIC_SITE_EXTRA_ORIGINS, voir BO › Exploitation › Catalogue Stripe). '
+        + 'Sinon : application arrêtée ou VITE_APP_URL erronée.',
+        error,
+      )
       // Échec réseau : on garde un catalogue déjà chargé, sinon indisponible.
       if (!catalog.value) state.value = 'unavailable'
     })
