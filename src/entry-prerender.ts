@@ -50,3 +50,6 @@ export { DEFAULT_DESCRIPTION, SHELL_TITLE, escapeHtmlAttr } from './config/head.
 
 // Pages du Centre d'aide et leur en-tête (voir scripts/prerender.mjs).
 export { helpPages } from './help/pages'
+
+// Pages Ressources et leur en-tête (CDC Ressources V6 SEO-01, T12).
+export { ressourcePages } from './ressources/pages'

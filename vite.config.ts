@@ -18,6 +18,8 @@ import { CATALOG_PATH, REDIRECTS_FILE, T2_CORPUS_PATH } from './src/help/config'
 import { structuredDataScript } from './src/config/structured-data'
 import { HOME_DESCRIPTIONS, HOME_TITLE, escapeHtmlAttr } from './src/config/head.rules'
 import { socialMetaHtml } from './src/config/social.rules'
+import { RESSOURCES_CONTENT_DIR, RESSOURCES_REGISTRY_FILE, loadRessourceCorpus } from './ressources.build'
+import { articlesToReview, buildRessourceRoutes, ressourcesSitemapPaths, visibleArticles } from './src/ressources/outputs'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -181,10 +183,13 @@ function siteModePlugin(): Plugin {
         // liste reste explicite pour le reste du site (§8 du CDC Sitemap) ;
         // pour l'aide, elle est dérivée du corpus, seule source des articles.
         const help = helpSitemapPaths(loadHelpCorpus(process.cwd()), 'production')
+        // CDC Ressources V6 SEO-03 : sitemap EXISTANT étendu — /ressources et
+        // les seuls articles publiés (ni brouillon, ni prévisualisation).
+        const ressources = ressourcesSitemapPaths(loadRessourceCorpus(process.cwd()))
         this.emitFile({
           type: 'asset',
           fileName: 'sitemap.xml',
-          source: buildSitemapXml([...INDEXABLE_PATHS, ...help]),
+          source: buildSitemapXml([...INDEXABLE_PATHS, ...help, ...ressources]),
         })
       }
 
@@ -305,6 +310,81 @@ function helpCenterPlugin(): Plugin {
 }
 
 /**
+ * Ressources — CDC Ressources V6 §10, §11, §12.
+ *
+ * Le corpus `src/content/ressources/` est lu et CONTRÔLÉ à chaque build : un
+ * défaut bloquant (slug, H1, title ou intention en double, lien cassé,
+ * article publié sans source ni date de revue, HTML dans le texte, URL
+ * publiée disparue sans 301 / 410…) interrompt le build avec la liste
+ * complète. C'est le contrôle préalable à toute publication (§11) : le
+ * workflow brouillon → relecture → approuvé → publié → archivé vit dans le
+ * fichier (`status`), l'historique et le retour arrière dans Git.
+ *
+ * Produit, depuis la même source :
+ *   · `virtual:ressources` — articles visibles dans l'environnement ;
+ *   · `ressources/.routes.json` — 301 et 410, lu par server.cjs (dotfile non servi).
+ */
+function ressourcesPlugin(): Plugin {
+  const VIRTUAL = 'virtual:ressources'
+  const RESOLVED = '\0' + VIRTUAL
+  let environment: HelpEnvironment = 'production'
+  let isSsr = false
+  let corpus: ReturnType<typeof loadRessourceCorpus> | null = null
+  const load = () => (corpus = loadRessourceCorpus(process.cwd()))
+
+  return {
+    name: 'verebona-ressources',
+    configResolved(config) {
+      environment = parseEnvironment(config.env.VITE_ENVIRONMENT as string | undefined)
+      isSsr = Boolean(config.build.ssr)
+    },
+    buildStart() {
+      const c = load()
+      if (!isSsr) {
+        for (const w of c.warnings) this.warn(`[ressources] ${w}`)
+        const today = new Date().toISOString().slice(0, 10)
+        const toReview = articlesToReview(c, today)
+        // ADM-10 : contenus à revoir, signalés à chaque build (sans e-mail).
+        if (toReview.length) this.warn(`[ressources] revue des sources à refaire (> 12 mois) : ${toReview.map((a) => a.id).join(', ')}`)
+      }
+      this.addWatchFile(`${RESSOURCES_CONTENT_DIR}/categories.json`)
+      this.addWatchFile(RESSOURCES_REGISTRY_FILE)
+      for (const a of c.articles) this.addWatchFile(a.source)
+    },
+    resolveId(id) {
+      return id === VIRTUAL ? RESOLVED : null
+    },
+    load(id) {
+      if (id !== RESOLVED) return null
+      const c = corpus ?? load()
+      return [
+        `export const environment = ${JSON.stringify(environment)};`,
+        `export const categories = ${JSON.stringify(c.categories)};`,
+        `export const articles = ${JSON.stringify(visibleArticles(c, environment))};`,
+        `export const routes = ${JSON.stringify(buildRessourceRoutes(c, environment))};`,
+      ].join('\n')
+    },
+    configureServer(server) {
+      server.watcher.on('change', (file) => {
+        if (!file.includes(`${RESSOURCES_CONTENT_DIR}/`)) return
+        try { load() } catch (e) { server.config.logger.error(String((e as Error).message)) }
+        const mod = server.moduleGraph.getModuleById(RESOLVED)
+        if (mod) server.moduleGraph.invalidateModule(mod)
+        server.ws.send({ type: 'full-reload' })
+      })
+    },
+    generateBundle() {
+      if (isSsr) return
+      const c = corpus ?? load()
+      const routes = buildRessourceRoutes(c, environment)
+      this.emitFile({ type: 'asset', fileName: 'ressources/.routes.json', source: JSON.stringify(routes, null, 2) + '\n' })
+      const visibles = visibleArticles(c, environment)
+      this.info?.(`[verebona] ressources · ${visibles.length} article(s) visibles (${environment}) · ${Object.keys(routes.redirects).length} redirection(s) · ${routes.gone.length} retrait(s) 410`)
+    },
+  }
+}
+
+/**
  * ══════════════════════════════════════════════════════════════════════════
  * FICHIERS VERSIONNÉS — PUB-PERF-01
  *
@@ -347,5 +427,5 @@ function immutableAssetsPlugin(): Plugin {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), immutableAssetsPlugin()],
+  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), ressourcesPlugin(), immutableAssetsPlugin()],
 })

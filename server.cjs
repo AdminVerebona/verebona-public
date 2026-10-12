@@ -253,6 +253,58 @@ app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
 });
 
 /**
+ * ══════════════════════════════════════════════════════════════════════════
+ * RESSOURCES — CDC Ressources V6 §8, §15, NAV-03, SEO-05, ADM-07, NFR-05
+ *
+ * · Une URL par page : slash final retiré et majuscules ramenées en
+ *   minuscules, en UNE 301 vers la destination finale (jamais de chaîne).
+ * · Ancien slug (renommage, fusion, archivage 301) : 301 vers la page
+ *   canonique ; table produite au build (`dist/ressources/.routes.json`,
+ *   dotfile non servi).
+ * · Article archivé sans remplacement : 410 Gone (sitemap déjà nettoyé).
+ * · Adresse inconnue : 404 réel, avec l'état « ressource introuvable » et le
+ *   retour à l'index — jamais une redirection vers l'accueil.
+ * · Pages servies depuis leur HTML pré-rendu (contenu lisible sans JS).
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+const ressourcesDir = path.join(distDir, "ressources");
+let ressourcesRoutes = { redirects: {}, gone: [] };
+try {
+  ressourcesRoutes = JSON.parse(fs.readFileSync(path.join(ressourcesDir, ".routes.json"), "utf8"));
+} catch {
+  console.warn("dist/ressources/.routes.json not found: no ressources redirects");
+}
+const ressourcesGone = new Set(Array.isArray(ressourcesRoutes.gone) ? ressourcesRoutes.gone : []);
+
+const shellWithStatus = (res, status) => {
+  res.setHeader("Cache-Control", CACHE.notFound);
+  res.status(status).sendFile(SPA_SHELL, (e) => {
+    if (e) res.status(status).type("text/plain").send(status === 410 ? "Gone\n" : "Not found\n");
+  });
+};
+
+app.get(/^\/ressources(\/.*)?$/i, (req, res, next) => {
+  const q = req.originalUrl.indexOf("?");
+  const query = q === -1 ? "" : req.originalUrl.slice(q);
+  if (req.path.includes("..") || /\.html$/i.test(req.path) || /^\/ressources\/index\/?$/i.test(req.path)) {
+    return shellWithStatus(res, 404);
+  }
+  if (/\.[a-z0-9]+$/i.test(req.path)) return next();
+  const trimmed = req.path.length > "/ressources".length ? req.path.replace(/\/+$/, "") : req.path;
+  const p = trimmed.toLowerCase();
+
+  const target = ressourcesRoutes.redirects && ressourcesRoutes.redirects[p];
+  if (target) return res.redirect(301, target + query);
+  if (p !== req.path) return res.redirect(301, p + query);
+  if (ressourcesGone.has(p)) return shellWithStatus(res, 410);
+
+  const file = p === "/ressources" ? "index.html" : `${p.slice("/ressources/".length)}.html`;
+  const full = path.join(ressourcesDir, file);
+  if (!full.startsWith(ressourcesDir + path.sep)) return shellWithStatus(res, 404);
+  fs.access(full, fs.constants.R_OK, (err) => (err ? shellWithStatus(res, 404) : sendHtml(res, full)));
+});
+
+/**
  * Préproduction : `/?mode=<autre mode>` (CDC pré-lancement §5.3).
  *
  * `dist/index.html` est pré-rendu dans le mode par défaut du build (FULL en

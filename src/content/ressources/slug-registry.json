@@ -1,0 +1,95 @@
+{
+  "A01": [
+    "/ressources/retrouver-facture-ticket-perdu"
+  ],
+  "A02": [
+    "/ressources/conserver-factures-tickets-caisse"
+  ],
+  "A03": [
+    "/ressources/duree-conservation-factures"
+  ],
+  "C01": [
+    "/ressources/cout-entretien-voiture-annuel"
+  ],
+  "C02": [
+    "/ressources/reparer-ou-remplacer-electromenager"
+  ],
+  "E01": [
+    "/ressources/date-controle-technique-voiture"
+  ],
+  "E02": [
+    "/ressources/controle-technique-moto-scooter-dates"
+  ],
+  "E03": [
+    "/ressources/quand-faire-revision-voiture"
+  ],
+  "E04": [
+    "/ressources/historique-entretien-voiture"
+  ],
+  "E05": [
+    "/ressources/entretien-chaudiere-obligatoire"
+  ],
+  "E06": [
+    "/ressources/entretien-pompe-chaleur-climatisation"
+  ],
+  "E07": [
+    "/ressources/echeance-assurance-auto-habitation"
+  ],
+  "G01": [
+    "/ressources/verifier-garantie-appareil"
+  ],
+  "G02": [
+    "/ressources/demander-reparation-sous-garantie"
+  ],
+  "G03": [
+    "/ressources/documents-apres-reparation-appareil"
+  ],
+  "L01": [
+    "/ressources/documents-apres-travaux-logement"
+  ],
+  "L02": [
+    "/ressources/carnet-information-logement-cil"
+  ],
+  "L03": [
+    "/ressources/diagnostics-vente-logement-validite"
+  ],
+  "O01": [
+    "/ressources/entretien-remplacement-detecteur-fumee"
+  ],
+  "O02": [
+    "/ressources/velo-vole-facture-marquage-assurance"
+  ],
+  "O03": [
+    "/ressources/cout-reel-voiture-par-mois"
+  ],
+  "O04": [
+    "/ressources/entretien-velo-electrique"
+  ],
+  "O05": [
+    "/ressources/renouvellement-contrat-entretien-chaudiere-pac"
+  ],
+  "O06": [
+    "/ressources/documents-apres-achat-maison"
+  ],
+  "S01": [
+    "/ressources/cambriolage-justificatifs-assurance"
+  ],
+  "S02": [
+    "/ressources/prouver-valeur-objet-sans-facture"
+  ],
+  "S03": [
+    "/ressources/degat-des-eaux-documents-assurance"
+  ],
+  "S04": [
+    "/ressources/inventaire-biens-assurance-prevention"
+  ],
+  "V01": [
+    "/ressources/documents-vente-voiture"
+  ],
+  "V02": [
+    "/ressources/verifier-documents-voiture-occasion"
+  ],
+  "V03": [
+    "/ressources/vendre-objet-occasion-documents"
+  ]
+}

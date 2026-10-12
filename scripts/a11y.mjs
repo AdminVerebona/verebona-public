@@ -57,6 +57,9 @@ export const PAGES = [
   },
   { name: 'Vue intégrée — accueil', url: '/aide?integre=app' },
   { name: 'Vue intégrée — article', url: '/aide/ajouter-un-document?integre=app' },
+  // CDC Ressources V6 NFR-04, UX-06, UX-07 : index et article avec tableau.
+  { name: 'Ressources — index', url: '/ressources' },
+  { name: 'Ressources — article avec tableau', url: '/ressources/duree-conservation-factures' },
 ]
 
 export const VIEWPORTS = [

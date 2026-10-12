@@ -19,6 +19,14 @@ const routes = [
   { path: '/aide', name: 'help', component: () => import('../views/help/HelpHomeView.vue') },
   { path: '/aide/theme/:category', name: 'help-category', component: () => import('../views/help/HelpCategoryView.vue') },
   { path: '/aide/:slug', name: 'help-article', component: () => import('../views/help/HelpArticleView.vue') },
+  // ══════════════════════════════════════════════════════════════════════════
+  // RESSOURCES — CDC Ressources V6 §8
+  //
+  // Index et articles du corpus `src/content/ressources/`, seule source.
+  // Aucune page de catégorie (les catégories sont des ancres de l'index).
+  // ══════════════════════════════════════════════════════════════════════════
+  { path: '/ressources', name: 'ressources', component: () => import('../views/ressources/RessourcesIndexView.vue') },
+  { path: '/ressources/:slug', name: 'ressources-article', component: () => import('../views/ressources/RessourceArticleView.vue') },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue') },
   { path: '/mentions-legales', name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
   { path: '/cgu', name: 'legal-cgu', component: () => import('../views/LegalView.vue') },

@@ -28,6 +28,11 @@
     "src/help/markdown.ts",
     "src/help/outputs.ts",
     "src/help/referentials.ts",
-    "src/help/types.ts"
+    "src/help/types.ts",
+    "ressources.build.ts",
+    "src/ressources/corpus.ts",
+    "src/ressources/markdown.ts",
+    "src/ressources/outputs.ts",
+    "src/ressources/types.ts"
   ]
 }

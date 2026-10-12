@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "factures-preuves-achat",
+    "name": "Factures et preuves d’achat",
+    "intro": "Retrouver une preuve d’achat, conserver ses justificatifs et savoir combien de temps les garder.",
+    "order": 1
+  },
+  {
+    "slug": "garanties-reparations",
+    "name": "Garanties et réparations",
+    "intro": "Vérifier une garantie, demander une prise en charge et garder la trace d’une réparation.",
+    "order": 2
+  },
+  {
+    "slug": "echeances-maintenance",
+    "name": "Échéances et maintenance",
+    "intro": "Connaître les obligations, suivre les dates et entretenir véhicules et équipements.",
+    "order": 3
+  },
+  {
+    "slug": "assurance-sinistres",
+    "name": "Assurance et sinistres",
+    "intro": "Agir après un dommage, prouver ce que vous possédez et vous préparer avant un sinistre.",
+    "order": 4
+  },
+  {
+    "slug": "achat-revente",
+    "name": "Achat et revente",
+    "intro": "Contrôler les pièces avant d’acheter et préparer une cession sans oubli.",
+    "order": 5
+  },
+  {
+    "slug": "logement-travaux",
+    "name": "Logement et travaux",
+    "intro": "Travaux, carnet d’information, diagnostics et documents d’une maison.",
+    "order": 6
+  },
+  {
+    "slug": "couts-arbitrages",
+    "name": "Coûts et arbitrages",
+    "intro": "Estimer l’entretien, décider entre réparer et remplacer, mesurer le coût d’une voiture.",
+    "order": 7
+  }
+]

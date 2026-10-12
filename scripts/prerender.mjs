@@ -100,8 +100,12 @@ if (ssr.CAN_PREVIEW_SITE_MODE) {
 // de la navigation interne viennent des mêmes fonctions (src/help/head.ts).
 const esc = ssr.escapeHtmlAttr
 const pages = ssr.helpPages()
-for (const page of pages) {
+// 4. Ressources (CDC Ressources V6 SEO-01, T12) : même construction que les
+// pages d'aide — HTML complet (H1, contenu, liens) et en-tête de la page.
+const ressources = ssr.ressourcePages()
+for (const page of [...pages, ...ressources]) {
   const html = await ssr.render(page.path)
+  if (!html.includes('<h1')) throw new Error(`[prerender] H1 absent du rendu de ${page.path}`)
   const h = page.head
   const headTags = [
     h.canonical ? `<link rel="canonical" href="${esc(h.canonical)}">` : '',
@@ -128,4 +132,4 @@ for (const page of pages) {
 }
 
 await rm(ssrDir, { recursive: true, force: true })
-console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html · ${pages.length} pages d'aide${variants.length ? ` · ${variants.join(' · ')}` : ''}`)
+console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html · ${pages.length} pages d'aide · ${ressources.length} pages Ressources${variants.length ? ` · ${variants.join(' · ')}` : ''}`)

@@ -149,6 +149,7 @@ src/
 | ------------------- | ------------ | ----------------------- |
 | `/`                 | HomeView     | landing complète        |
 | `/aide`, `/aide/theme/:category`, `/aide/:slug` | views/help/* | Centre d'aide |
+| `/ressources`, `/ressources/:slug` | views/ressources/* | Ressources (guides pratiques publics) |
 | `/contact`          | ContactView  | formulaire → `/api/contact` de l'application |
 | `/inscription`      | —            | redirection vers l'inscription de l'app (FULL) ou l'accueil (PRELAUNCH) |
 | `/mentions-legales` | LegalView    | onglet Mentions légales |
@@ -265,6 +266,52 @@ Le Markdown accepte : paragraphes, `## Intertitre`, étapes `1. **Titre** — te
 
 - **Page principale** (WebView native) : le site affiche sa barre « Retour à Verebona », qui renvoie vers l'application.
 - **Dans un cadre** (page `/aide` de l'application) : l'application affiche déjà sa propre barre de retour ; celle du site n'est pas rendue, pour éviter deux barres superposées sur mobile. Le message `{ type: 'verebona:help:close' }` reste écouté par l'application.
+
+## Ressources
+
+`/ressources` est la rubrique publique de **guides pratiques** (CDC _Ressources — 31 articles, publication V6_) : factures, garanties, échéances, assurance, achat-revente, logement, coûts. Elle attire et informe de nouveaux lecteurs ; le **Centre d'aide** reste réservé à l'utilisation du produit. Lien unique dans le footer, à côté du Centre d'aide ; pas d'entrée dans le menu principal.
+
+### Où ça vit
+
+| Fichier | Rôle |
+| --- | --- |
+| `src/content/ressources/articles/<ID>.md` | **un article par fichier**, nommé d'après son identifiant immuable (A01, G01, O05…) |
+| `src/content/ressources/categories.json` | les 7 familles, leur ordre et leur phrase d'introduction |
+| `src/content/ressources/slug-registry.json` | toutes les URLs publiées par article ; aucune ne disparaît sans 301 ou 410 |
+| `src/ressources/*.ts` | parsing, contrôles de publication, sorties, en-têtes SEO (fonctions pures, testées) |
+| `ressources.build.ts` | lecture du disque ; le build s'arrête au premier défaut bloquant |
+| `vite.config.ts` (`ressourcesPlugin`) | module `virtual:ressources`, `dist/ressources/.routes.json`, sitemap étendu |
+| `scripts/prerender.mjs` | une page HTML complète par page visible (H1, contenu, liens sans JS) |
+| `server.cjs` | 301 (slash final, majuscules, anciens slugs, archivage 301), 410, 404 réel |
+
+### Workflow éditorial (§11)
+
+Le statut vit dans le fichier ; l'historique, l'auteur de chaque changement et le retour arrière vivent dans Git (revue de la PR = relecture, fusion = publication, `git revert` = retour arrière).
+
+| `status` | Production | Préproduction |
+| --- | --- | --- |
+| `draft` | absent | absent |
+| `review`, `approved` | absent | visible avec un bandeau « Prévisualisation », `noindex` |
+| `published` | page, index, sitemap | idem |
+| `archived` + `archive: 410` | réponse 410, hors sitemap | idem |
+| `archived` + `archive: 301:<ID>` | 301 vers l'article indiqué | idem |
+
+### Contrôles bloquants à chaque build
+
+Slug, H1, title SEO, meta description ou intention déjà utilisés (ADM-03) ; HTML ou `javascript:` dans le texte (ADM-09) ; lien interne cassé, lien externe ou source non HTTPS ; article publié sans source, sans date de revue, sans responsable (ADM-08) ; 2 ou 3 articles liés, existants et publiés ; checklist, exemple, FAQ (2 questions au plus), « Et avec Verebona ? » et sources présents ; H2 uniques ; URL publiée disparue sans `redirectFrom` ni archivage. Alertes non bloquantes : titres proches, sources à revoir après 12 mois (ADM-10).
+
+### Modifier ou ajouter un article
+
+1. Copier un article voisin ; l'identifiant ne change jamais.
+2. Mise à jour de fond : modifier `reviewedAt` (revue des sources), `updatedAt` (mise à jour significative), `revision` + `revisionNote`. `publishedAt` ne change pas.
+3. Slug modifié : ancien slug dans `redirectFrom: [ancien-slug]` **et** nouvelle URL ajoutée à `slug-registry.json`, sans retirer l'ancienne.
+4. `npm run test` puis `npm run build`.
+
+Corps accepté : paragraphes, `## Intertitre`, listes `- élément`, tableaux Markdown, **gras**, liens `[texte](/ressources/slug)` ou `https://…`. Intertitres réservés : `Checklist pratique`, `Exemple concret` (affiché comme « Exemple illustratif »), `Questions fréquentes` (`**Question ?**` puis la réponse), `Et avec Verebona ?` (suivi automatiquement du bouton d'essai, ou du lien vers l'accueil en pré-lancement), `Sources officielles` (`- [Titre](https://…)`). Jamais de HTML.
+
+### Mesure
+
+Le site n'a aucun outil de mesure ni de gestion du consentement : les événements du §14 (`resource_view`, `resource_internal_link_click`, `resource_cta_click`) sont définis dans `src/ressources/analytics.ts` mais n'émettent rien tant qu'un outil consenti ne pose pas `window.__VB_ANALYTICS_CONSENT__ = true`. Le rapport acquisition → essai → abonnement (CONV-05) n'est donc pas mesurable aujourd'hui.
 
 ## Données structurées (JSON-LD)
 

@@ -11,10 +11,16 @@ import './style.css'
 // affiche deja le bon lien. Aucune ecriture dans le navigateur (CDC §4.2).
 captureReferralCode()
 
-createApp(App)
+const app = createApp(App)
   .use(router)
   .directive('hover', vHover)
-  .mount('#app')
 
-// Le HTML pré-rendu est remplacé : la garde `?mode=` n'a plus d'objet (§5.3).
-releaseModePreviewGuard()
+// CDC Ressources V6 NFR-02 : monter APRÈS la première navigation (vue
+// paresseuse chargée). Le HTML pré-rendu (accueil, aide, ressources) reste
+// affiché jusque-là, sans page vide intermédiaire ni saut de mise en page.
+// Une navigation initiale en échec ne bloque jamais le montage.
+router.isReady().catch(() => undefined).finally(() => {
+  app.mount('#app')
+  // Le HTML pré-rendu est remplacé : la garde `?mode=` n'a plus d'objet (§5.3).
+  releaseModePreviewGuard()
+})
