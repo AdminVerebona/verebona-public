@@ -11,6 +11,8 @@ import { flushPromises, mount } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { defineComponent, h } from 'vue'
 import { parseRessourceBody } from '../src/ressources/markdown'
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
 
 const Stub = defineComponent({ render: () => h('div') })
 
@@ -89,5 +91,14 @@ describe('Mesure soumise au consentement (CONV-04, SEC-05, T16, T17)', () => {
     trackRessource({ name: 'resource_cta_click', article_id: 'A01', cta_context: 'article_footer' })
     expect(seen).toEqual([{ name: 'resource_cta_click', article_id: 'A01', cta_context: 'article_footer' }])
     window.removeEventListener('verebona:analytics', on)
+  })
+})
+
+describe('Lot 52 — bouton d’essai lisible dans le corps d’article', () => {
+  it('les liens bleus du texte (.ha-article a) ne recolorent pas les boutons ; dégradé assez sombre pour le texte blanc', () => {
+    const css = readFileSync(path.join(process.cwd(), 'src/ressources/ressources.css'), 'utf8')
+    expect(css).toMatch(/\.ha-article a\.ha-btn \{ color: #fff;/)
+    expect(css).toMatch(/\.ha-article a\.ha-btn-ghost \{ color: #1D4ED8; \}/)
+    expect(css).toMatch(/\.rs-cta a\.ha-btn:not\(\.ha-btn-ghost\) \{ background: linear-gradient\(135deg, #2563EB, #1D4ED8\); \}/)
   })
 })

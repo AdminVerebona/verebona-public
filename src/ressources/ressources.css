@@ -45,6 +45,16 @@
 
 .rs-cta { background: #fff; border: 1px solid #E6EBF3; border-radius: 18px; padding: 22px 24px; margin: 8px 0 18px; }
 .rs-cta p { margin: 0 0 14px !important; }
+/*
+ * Lot 52 : `.ha-article a` (liens bleus du texte) est plus spécifique que
+ * `.ha-btn` : le libellé du bouton d'essai devenait bleu sur fond bleu. Les
+ * boutons gardent leurs couleurs dans le corps d'article ; dégradé assombri
+ * pour un contraste AA du texte blanc (#2563EB : 5,2:1).
+ */
+.ha-article a.ha-btn { color: #fff; font-weight: 600; text-decoration: none; }
+.ha-article a.ha-btn-ghost { color: #1D4ED8; }
+.rs-cta a.ha-btn:not(.ha-btn-ghost) { background: linear-gradient(135deg, #2563EB, #1D4ED8); }
+.rs-cta a.ha-btn:hover { box-shadow: 0 6px 18px rgba(29, 78, 216, .28); }
 .rs-cta-note { font-size: 13.5px; color: #475569; margin-top: 10px; }
 
 .rs-sources { list-style: none; padding: 0 !important; margin: 0 0 12px; display: grid; gap: 10px; }
