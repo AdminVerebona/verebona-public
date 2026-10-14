@@ -9,7 +9,6 @@
         <p class="rs-meta">
           <span v-if="reviewed">Sources vérifiées le {{ reviewed }}</span>
           <span v-if="updated">Mis à jour le {{ updated }}</span>
-          <span>Par {{ article.reviewOwner }}</span>
         </p>
       </template>
       <template v-else>
@@ -47,11 +46,13 @@
           <li v-for="(it, i) in article.checklist" :key="i"><HelpInlines :inlines="it" /></li>
         </ul>
 
-        <h2 id="exemple">Exemple concret</h2>
-        <div class="rs-example">
-          <div class="rs-example-label">Exemple illustratif</div>
-          <RessourceBlocks :blocks="article.example" />
-        </div>
+        <template v-if="article.example.length">
+          <h2 id="exemple">Exemple concret</h2>
+          <div class="rs-example">
+            <div class="rs-example-label">Exemple illustratif</div>
+            <RessourceBlocks :blocks="article.example" />
+          </div>
+        </template>
 
         <template v-if="article.faq.length">
           <h2 id="questions">Questions fréquentes</h2>
@@ -64,7 +65,7 @@
         <h2 id="verebona">Et avec Verebona ?</h2>
         <RessourceCta :blocks="article.cta" :article-id="article.id" />
 
-        <h2 id="sources">Sources officielles</h2>
+        <h2 id="sources">Sources et références utiles</h2>
         <ul class="rs-sources">
           <li v-for="s in article.sources" :key="s.url">
             <a :href="s.url" target="_blank" rel="noopener noreferrer">{{ s.title }}<span class="sr-only"> (nouvel onglet)</span></a>
@@ -92,7 +93,8 @@
  * Article Ressources — CDC Ressources V6 NAV-04, NAV-05, UX-02, UX-03, UX-05,
  * CONV-01, NFR-05.
  *
- * Fil d'Ariane, H1 unique, date de revue et éditeur réel, réponse immédiate,
+ * Fil d'Ariane, H1 unique, date de revue (aucun auteur affiché : décision
+ * PO D29 / Q28 du 12/10), réponse immédiate,
  * sommaire ancré (≥ 4 sections), sections H2, checklist, exemple illustratif,
  * FAQ, UNE transition Verebona après la réponse, sources avec domaine, liens
  * vers 2 ou 3 articles et retour à l'index. Une ancienne adresse reçoit une

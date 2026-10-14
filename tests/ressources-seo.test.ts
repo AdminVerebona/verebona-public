@@ -45,16 +45,20 @@ describe('SEO-02 — title, description et canonical propres à chaque page', ()
 })
 
 describe('SEO-06 — JSON-LD Article et BreadcrumbList conformes aux faits visibles', () => {
-  it('dates du fichier, auteur et éditeur Verebona, pas d’image ni de FAQPage', () => {
+  it('dates du fichier, éditeur Verebona, aucun auteur, pas d’image ni de FAQPage', () => {
     for (const { a, h } of heads) {
       const graph = (h.jsonLd as { '@graph': Array<Record<string, unknown>> })['@graph']
       const art = graph.find((x) => x['@type'] === 'Article')!
       expect(art.headline).toBe(a.h1)
-      expect(art.datePublished).toBe(a.publishedAt)
-      expect(art.dateModified).toBe(a.updatedAt ?? a.publishedAt)
+      // Lot 54 : sans date réelle de première mise en ligne, aucune date n'est inventée.
+      if (a.publishedAt) expect(art.datePublished).toBe(a.publishedAt)
+      else expect(art).not.toHaveProperty('datePublished')
+      if (a.updatedAt ?? a.publishedAt) expect(art.dateModified).toBe(a.updatedAt ?? a.publishedAt)
+      else expect(art).not.toHaveProperty('dateModified')
       expect(art.inLanguage).toBe('fr-FR')
       expect(art.mainEntityOfPage).toBe(canonicalUrl(a.path))
-      expect((art.author as Record<string, unknown>).name).toBe('Verebona')
+      // Décision PO D29 / Q28 : aucun auteur, même dans les métadonnées facultatives.
+      expect(art).not.toHaveProperty('author')
       expect(art.publisher).toEqual({ '@id': ORGANIZATION_ID })
       expect(art).not.toHaveProperty('image')
       expect(JSON.stringify(h.jsonLd)).not.toContain('FAQPage')
@@ -94,5 +98,14 @@ describe('NAV-01 — lien Ressources unique dans le footer, près du Centre d’
     expect(footer.indexOf("link('/ressources')")).toBeLessThan(footer.indexOf("link('/contact')"))
     const header = readFileSync(path.join(process.cwd(), 'src/components/AppHeader.vue'), 'utf8')
     expect(header).not.toContain('/ressources')
+  })
+})
+
+describe('D29 / Q28 — aucun auteur affiché', () => {
+  it('le gabarit d’article n’affiche ni responsable ni signature ; le JSON-LD n’a pas d’auteur', () => {
+    const vue = readFileSync(path.join(process.cwd(), 'src/views/ressources/RessourceArticleView.vue'), 'utf8')
+    const template = vue.slice(0, vue.indexOf('<script'))
+    expect(template).not.toMatch(/reviewOwner|Par \{\{|Équipe éditoriale/)
+    for (const { h } of heads) expect(JSON.stringify(h.jsonLd)).not.toMatch(/"author"|Équipe éditoriale/)
   })
 })

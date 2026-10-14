@@ -7,13 +7,14 @@
  * code (`applyHelpHead`).
  *
  * JSON-LD : `Article` et `BreadcrumbList`, avec des propriétés VRAIES
- * seulement (§12) — dates du fichier, auteur et éditeur = l'organisation
- * Verebona (pas de fausse signature d'expert), aucune image tant qu'il n'y en
- * a pas. Pas de `FAQPage` : les FAQ restent en HTML (§12).
+ * seulement (§12) — dates du fichier, éditeur = l'organisation Verebona,
+ * AUCUN auteur (décision PO D29 / Q28 du 12/10 : ni personne ni « équipe
+ * éditoriale », y compris dans les métadonnées facultatives), aucune image
+ * tant qu'il n'y en a pas. Pas de `FAQPage` : les FAQ restent en HTML (§12).
  */
 import type { HelpHead } from '../help/head'
-import { SITE_ORIGIN, canonicalUrl } from '../config/sitemap.rules'
-import { ORGANIZATION_ID, SITE_NAME } from '../config/structured-data'
+import { canonicalUrl } from '../config/sitemap.rules'
+import { ORGANIZATION_ID } from '../config/structured-data'
 import { RESSOURCES_PREFIX } from './corpus'
 import type { RessourceArticle, RessourceCategory } from './types'
 
@@ -52,7 +53,6 @@ export function ressourcesIndexHead(): RessourceHead {
 export function ressourceArticleHead(a: RessourceArticle, c: RessourceCategory | undefined): RessourceHead {
   const url = canonicalUrl(a.path)
   const published = a.status === 'published'
-  const organization = { '@type': 'Organization', '@id': ORGANIZATION_ID, name: SITE_NAME, url: `${SITE_ORIGIN}/` }
   return {
     title: a.seoTitle,
     description: a.metaDescription,
@@ -72,7 +72,6 @@ export function ressourceArticleHead(a: RessourceArticle, c: RessourceCategory |
               ...(a.publishedAt ? { datePublished: a.publishedAt } : {}),
               ...((a.updatedAt ?? a.publishedAt) ? { dateModified: a.updatedAt ?? a.publishedAt } : {}),
               ...(c ? { articleSection: c.name } : {}),
-              author: organization,
               publisher: { '@id': ORGANIZATION_ID },
             },
             breadcrumb([

@@ -52,6 +52,9 @@ describe('Transition Verebona (UX-04, CONV-02, CONV-06)', () => {
     expect(a.text()).toBe('Essayer gratuitement pendant 7 jours')
     expect(w.text()).toContain('sans carte bancaire')
     expect(w.text()).not.toMatch(/gratuit à vie|code promo|réduction|offert/i)
+    // Lot 54 : les limites sont celles de l'essai, pas des « quotas Premium ».
+    expect(w.text()).toContain('L’essai est limité à 2 biens et 30 documents.')
+    expect(w.text()).not.toMatch(/Premium[^.]*·\s*2 biens/)
   })
 })
 

@@ -346,6 +346,10 @@ function ressourcesPlugin(): Plugin {
         const toReview = articlesToReview(c, today)
         // ADM-10 : contenus à revoir, signalés à chaque build (sans e-mail).
         if (toReview.length) this.warn(`[ressources] revue des sources à refaire (> 12 mois) : ${toReview.map((a) => a.id).join(', ')}`)
+        // Lot 54 : date de première mise en ligne jamais anté-datée — à
+        // renseigner (`publishedAt`) lors du déploiement effectif en production.
+        const undated = c.articles.filter((a) => a.status === 'published' && !a.publishedAt)
+        if (environment === 'production' && undated.length) this.warn(`[ressources] ${undated.length} article(s) publiés sans « publishedAt » : renseigner la date réelle de première mise en ligne au déploiement (${undated.map((a) => a.id).join(', ')})`)
       }
       this.addWatchFile(`${RESSOURCES_CONTENT_DIR}/categories.json`)
       this.addWatchFile(RESSOURCES_REGISTRY_FILE)
@@ -360,7 +364,9 @@ function ressourcesPlugin(): Plugin {
       return [
         `export const environment = ${JSON.stringify(environment)};`,
         `export const categories = ${JSON.stringify(c.categories)};`,
-        `export const articles = ${JSON.stringify(visibleArticles(c, environment))};`,
+        // Lot 54 : le responsable éditorial interne (`reviewOwner`) n'est ni
+        // affiché ni envoyé au navigateur (décision D29 / Q28 : aucun auteur).
+        `export const articles = ${JSON.stringify(visibleArticles(c, environment).map(({ reviewOwner: _owner, ...a }) => ({ ...a, reviewOwner: '' })))};`,
         `export const routes = ${JSON.stringify(buildRessourceRoutes(c, environment))};`,
       ].join('\n')
     },

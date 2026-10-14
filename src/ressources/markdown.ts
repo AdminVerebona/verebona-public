@@ -10,10 +10,12 @@
  *
  * Intertitres RÉSERVÉS, qui portent les champs du modèle §10 :
  *   ## Checklist pratique   → `checklist` (une liste)
- *   ## Exemple concret      → `example` (présenté comme illustratif, ED-04)
+ *   ## Exemple concret      → `example` (présenté comme illustratif, ED-04 ;
+ *                             facultatif depuis la V7 : C01, E02, O03 n'en ont pas)
  *   ## Questions fréquentes → `faq` (« **Question ?** » puis la réponse)
  *   ## Et avec Verebona ?   → `cta` (transition produit, une seule)
- *   ## Sources officielles  → `sources` (« - [Titre](https://…) »)
+ *   ## Sources et références utiles → `sources` (« - [Titre](https://…) »),
+ *                             intitulé de la révision éditoriale V7 (lot 54)
  * Le texte avant le premier intertitre est l'introduction (`intro`, ED-01).
  *
  * Aucun HTML n'est accepté (ADM-09, SEC-03) : une balise est une erreur de
@@ -27,7 +29,7 @@ export const RESERVED = {
   example: 'Exemple concret',
   faq: 'Questions fréquentes',
   cta: 'Et avec Verebona ?',
-  sources: 'Sources officielles',
+  sources: 'Sources et références utiles',
 } as const
 
 export interface ParsedRessourceBody {

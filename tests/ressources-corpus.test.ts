@@ -30,6 +30,8 @@ function variant(id: string | null, edit: (raw: string) => string, extra: Array<
 const raw = (id: string) => files.find((f) => f.path.endsWith(`/${id}.md`))!.raw
 const messages = (r: ReturnType<typeof loadRessources>) => r.issues.map((i) => `${i.articleId} ${i.field} ${i.message}`).join('\n')
 
+const SANS_EXEMPLE_RESERVE = ['C01', 'E02', 'O03']
+
 describe('Catalogue canonique (§4, §16, §26)', () => {
   it('31 articles publiés, 31 identifiants et 31 slugs uniques, aucun défaut ni titre proche', () => {
     const r = loadRessources(files, categories)
@@ -59,7 +61,9 @@ describe('Catalogue canonique (§4, §16, §26)', () => {
       expect(a.intro.length, a.id).toBeGreaterThan(0)
       expect(a.sections.length, a.id).toBeGreaterThanOrEqual(5)
       expect(a.checklist.length, a.id).toBeGreaterThan(0)
-      expect(a.example.length, a.id).toBeGreaterThan(0)
+      // V7 (lot 54) : C01 et O03 portent leur exemple dans une section « Exemple … » ; E02 n'en a plus.
+      if (SANS_EXEMPLE_RESERVE.includes(a.id)) expect(a.example, a.id).toEqual([])
+      else expect(a.example.length, a.id).toBeGreaterThan(0)
       expect(a.faq, a.id).toHaveLength(2)
       expect(a.cta.length, a.id).toBeGreaterThan(0)
       expect(a.related.length, a.id).toBeGreaterThanOrEqual(2)
@@ -126,7 +130,7 @@ describe('Contrôles bloquants avant publication (§11, ADM-03, ADM-08, ADM-09)'
 
   it('T18 / ADM-09 — HTML ou script dans un article : refusé au build', () => {
     for (const inj of ['<script>alert(1)</script>', '<img src=x onerror=alert(1)>', '[clic](javascript:alert(1))']) {
-      const r = variant('A01', (x) => x.replace('\n## 1. Retrouver', `\n${inj}\n\n## 1. Retrouver`))
+      const r = variant('A01', (x) => x.replace('\n## Retrouver la trace', `\n${inj}\n\n## Retrouver la trace`))
       expect(messages(r), inj).toMatch(/HTML ou script interdit|non HTTPS/)
     }
     // Le rendu n'utilise jamais v-html.
@@ -136,7 +140,7 @@ describe('Contrôles bloquants avant publication (§11, ADM-03, ADM-08, ADM-09)'
   })
 
   it('ADM-08 — article publié sans source ou sans date de revue : publication refusée', () => {
-    const sansSource = variant('A01', (x) => x.replace(/## Sources officielles[\s\S]*$/, '## Sources officielles\n'))
+    const sansSource = variant('A01', (x) => x.replace(/## Sources et références utiles[\s\S]*$/, '## Sources et références utiles\n'))
     expect(messages(sansSource)).toMatch(/A01 sources Article publié sans source officielle/)
     const sansRevue = variant('A01', (x) => x.replace(/^reviewedAt: .*\n/m, ''))
     expect(messages(sansRevue)).toMatch(/A01 reviewedAt Article publié sans date de revue/)
@@ -228,5 +232,24 @@ describe('ADM-10 — contenus à revoir', () => {
   it('signale les articles dont la revue a plus d’un an', () => {
     expect(articlesToReview(corpus, '2026-12-01')).toEqual([])
     expect(articlesToReview(corpus, '2027-10-13').length).toBe(31)
+  })
+})
+
+describe('Lot 54 — révision éditoriale V7', () => {
+  it('aucune date de publication anté-datée : publishedAt absent tant que la mise en ligne n’a pas eu lieu', () => {
+    for (const a of corpus.articles) {
+      expect(a.publishedAt, a.id).toBeNull()
+      expect(a.revision, a.id).toBe(2)
+    }
+  })
+  it('C01 et O03 gardent leur exemple chiffré dans une section « Exemple … » ; E02 n’a plus d’exemple', () => {
+    for (const id of ['C01', 'O03']) expect(corpus.articles.find((a) => a.id === id)!.sections.some((s) => s.heading.startsWith('Exemple')), id).toBe(true)
+    expect(corpus.articles.find((a) => a.id === 'E02')!.sections.some((s) => s.heading.startsWith('Exemple'))).toBe(false)
+  })
+  it('« À lire aussi » n’est pas dupliqué dans le corps : il est rendu à partir de « related »', () => {
+    for (const f of files) expect(f.raw, f.path).not.toMatch(/^## À lire aussi/m)
+  })
+  it('la date réelle de mise en ligne, une fois renseignée au déploiement, est acceptée', () => {
+    expect(messages(variant('A01', (x) => x.replace(/^reviewOwner/m, 'publishedAt: 2026-11-02\nreviewOwner')))).toBe('')
   })
 })

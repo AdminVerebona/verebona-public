@@ -12,13 +12,15 @@
  *   · métadonnées connues, obligatoires, au bon format ; ID = nom du fichier ;
  *   · slug ASCII normalisé, unique ; ID, H1, title SEO, meta description et
  *     intention UNIQUES (ADM-03, SEO-10, T07, T08) ;
- *   · corps : aucun HTML, H2 uniques, introduction, checklist, exemple, FAQ
+ *   · corps : aucun HTML, H2 uniques, introduction, checklist, FAQ
  *     (au plus deux questions, §17), transition Verebona, sources ;
  *   · liens internes : vers une page Ressources existante, l'aide ou
  *     l'accueil ; liens externes et sources en HTTPS (SEC-06) ;
  *   · articles liés : 2 ou 3, existants, sans auto-référence (§7, ED-08).
- * Pour un article PUBLIÉ en plus (ADM-08, ED-09) : date de revue, date de
- * publication, responsable, au moins une source, liés eux-mêmes publiés.
+ * Pour un article PUBLIÉ en plus (ADM-08, ED-09) : date de revue,
+ * responsable, au moins une source, liés eux-mêmes publiés. La date de
+ * publication est facultative tant que la première mise en ligne n'a pas eu
+ * lieu (jamais anté-datée, lot 54).
  * Archivé : décision 410 ou 301 vers un article publié (ADM-07), et plus
  * aucun article publié ne pointe vers lui.
  */
@@ -221,7 +223,9 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
     if (a.intro.length === 0) at('body', 'Introduction absente : la réponse doit venir avant le premier intertitre (ED-01).')
     if (a.sections.length === 0) at('body', 'Aucune section de fond.')
     if (a.checklist.length === 0) at('body', '« Checklist pratique » absente (§17).')
-    if (a.example.length === 0) at('body', '« Exemple concret » absent (§17).')
+    // « Exemple concret » : facultatif depuis la révision V7 (lot 54). C01 et
+    // O03 portent leur exemple chiffré dans une section « Exemple … » titrée ;
+    // E02 n'en a plus. La règle §17 reste vérifiée en test pour les 28 autres.
     if (a.faq.length > 2) at('body', `FAQ : ${a.faq.length} questions, deux au plus (§17).`)
     if (a.cta.length === 0) at('body', '« Et avec Verebona ? » absent (§17).')
     for (const s of a.sources) if (!s.url.startsWith('https://')) at('sources', `Source non HTTPS : ${s.url} (SEC-06).`)
@@ -244,7 +248,10 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
 
     if (a.status === 'published') {
       if (!a.reviewedAt) at('reviewedAt', 'Article publié sans date de revue des sources (ADM-08, ED-09).')
-      if (!a.publishedAt) at('publishedAt', 'Article publié sans date de publication.')
+      // `publishedAt` = date de PREMIÈRE MISE EN LIGNE EFFECTIVE en production :
+      // elle n'est connue qu'au déploiement et ne doit jamais être anté-datée
+      // (ticket lot 54). Absente, la page n'expose ni datePublished ni
+      // dateModified ; le build de production le signale (vite.config.ts).
       if (!a.reviewOwner) at('reviewOwner', 'Article publié sans responsable de mise à jour.')
       if (a.sources.length === 0) at('sources', 'Article publié sans source officielle (ADM-08) — publication refusée.')
       if (a.archive) at('archive', 'Un article publié ne porte pas de décision d’archivage.')
