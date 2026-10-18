@@ -1,4 +1,4 @@
-import { ref, computed, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { siteModeQuery } from '../config/site'
 import { embedQuery } from '../help/embed'
@@ -21,10 +21,13 @@ export function useNav() {
   function scrollToId(id: string) {
     const el = document.getElementById(id)
     if (!el) return
+    // Charte 2026 : le header n'est plus fixe. Sa hauteur n'est déduite que
+    // s'il recouvre la page (position fixe ou collante).
     const headerEl = document.getElementById('vb-header')
-    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 68
+    const pos = headerEl ? getComputedStyle(headerEl).position : 'static'
+    const headerH = headerEl && (pos === 'fixed' || pos === 'sticky') ? headerEl.getBoundingClientRect().height : 0
     const padTop = parseFloat(getComputedStyle(el).paddingTop) || 0
-    // On absorbe le padding haut de la section pour que le titre arrive juste sous le header.
+    // On absorbe le padding haut de la section pour que le titre arrive près du haut de l'écran.
     const top = el.getBoundingClientRect().top + window.scrollY - headerH - 16 + Math.max(0, padTop - 28)
     try { window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' }) } catch { window.scrollTo(0, Math.max(0, top)) }
   }
@@ -72,15 +75,9 @@ export function useNav() {
   const navFaq = () => goToAnchor('faq')
   const navCasUsage = () => goToAnchor('cas-usage')
 
-  const burgerBase = 'display:block;width:20px;height:2px;border-radius:2px;background:#fff;transition:transform .25s,opacity .25s;'
-  const burgerTop = computed(() => burgerBase + 'transform:' + (menuOpen.value ? 'translateY(6px) rotate(45deg)' : 'none'))
-  const burgerMid = computed(() => burgerBase + 'opacity:' + (menuOpen.value ? '0' : '1'))
-  const burgerBot = computed(() => burgerBase + 'transform:' + (menuOpen.value ? 'translateY(-6px) rotate(-45deg)' : 'none'))
-
   return {
     menuOpen, toggleMenu, closeMenu, link,
     goHome, goAide, goContact, goMentions, goCGU, goConfid,
     navHow, navFeatures, navPricing, navFaq, navCasUsage,
-    burgerTop, burgerMid, burgerBot,
   }
 }

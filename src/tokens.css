@@ -1,0 +1,82 @@
+/* ============================================================
+   Verebona — jetons de design 2026 « Sérénité » (charte v1.1, 14/10/2026)
+   ------------------------------------------------------------
+   Source : design system du PO (tokens/colors.css, typography.css,
+   spacing.css). Le site public n'a qu'un thème clair : les jetons du
+   thème sombre (application, réseaux) ne sont pas repris ici.
+
+   Contraste (WCAG AA, texte < 18,66 px gras : 4,5:1 minimum) :
+   - cuivre doux #D66B53 : grands titres (≥ 40 px gras) et décor seulement
+     (3,19:1 sur ivoire) ; jamais de texte blanc dessus ;
+   - cuivre texte #AA4E38 : 5,04:1 sur ivoire, 5,45:1 sur blanc, mais
+     4,48:1 sur brume et 4,43:1 sur cuivre-soft ⇒ sur ces fonds, petit
+     texte en --vb-cuivre-texte-brume #A24A35 (4,85:1 / 4,79:1).
+   ============================================================ */
+:root {
+  /* Marque */
+  --vb-petrole: #17474D;
+  --vb-petrole-hover: #10383E;
+  --vb-cuivre: #D66B53;
+  --vb-cuivre-texte: #AA4E38;
+  --vb-cuivre-texte-brume: #A24A35;
+  --vb-ivoire: #F8F6F1;
+  --vb-ivoire-2: #F2F0EA;
+  --vb-brume: #E2EBE9;
+  --vb-blanc: #FFFFFF;
+  --vb-encre: #26353B;
+  --vb-gris: #52636A;
+  --vb-filet: #D5DEDC;
+  --vb-filet-2: #E2E8E6;
+  --vb-cuivre-soft: #F6E4DE;
+  --vb-cuivre-edge: #E8C4B9;
+  --vb-bulle: #ECF1EF;
+  --vb-bulle-edge: #BBD0CC;
+  /* Mascotte : recoloration cyan PROVISOIRE par filtre (§4) */
+  --vb-mascotte-filtre: hue-rotate(-30deg) saturate(1.1) brightness(1.02) contrast(1.08);
+
+  /* Sémantique (thème clair) */
+  --bg-page: var(--vb-ivoire);
+  --bg-card: var(--vb-blanc);
+  --bg-section: var(--vb-brume);
+  --bg-sidebar: var(--vb-ivoire-2);
+  --border: var(--vb-filet);
+  --border-subtle: var(--vb-filet-2);
+  --text-primary: var(--vb-encre);
+  --text-heading: var(--vb-petrole);
+  --text-muted: var(--vb-gris);
+  --accent: var(--vb-petrole);
+  --accent-hover: var(--vb-petrole-hover);
+  --on-accent: var(--vb-blanc);
+  --accent-soft: var(--vb-brume);
+  --accent-display: var(--vb-cuivre);
+  --attention: var(--vb-cuivre-texte);
+  --attention-on-subtle: var(--vb-cuivre-texte-brume);
+  --attention-soft: var(--vb-cuivre-soft);
+  --attention-edge: var(--vb-cuivre-edge);
+  --bubble: var(--vb-bulle);
+  --bubble-edge: var(--vb-bulle-edge);
+  --shadow-card: 0 12px 32px rgba(38, 53, 59, .08);
+  --focus-color: var(--vb-cuivre-texte);
+
+  /* Typographie (§2) */
+  --font-sans: 'Figtree', 'Figtree Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-h1: 60px;  --fs-h1-mobile: 38px;  --lh-h1: 1.06; --ls-h1: -0.03em;
+  --fs-h2: 42px;  --fs-h2-mobile: 30px;  --lh-h2: 1.14; --ls-h2: -0.025em;
+  --fs-h3: 20px;  --fs-h3-mobile: 18px;  --lh-h3: 1.25; --ls-h3: -0.01em;
+  --fs-lead: 21px; --fs-lead-mobile: 18px; --lh-lead: 1.4;
+  --fs-body: 17px; --lh-body: 1.6;
+  --fs-ui: 16px;
+  --fs-meta: 14px;
+  --fs-eyebrow: 14px; --ls-eyebrow: 0.06em;
+
+  /* Espacements, rayons, gabarits (§5) */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-6: 24px;
+  --sp-8: 32px; --sp-12: 48px; --sp-16: 64px; --sp-24: 96px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 22px; --radius-pill: 999px;
+  --container: 1200px; --gutter: 24px;
+  --control-h: 48px; --control-h-sm: 40px; --control-h-lg: 52px;
+
+  /* Mouvement : fond et couleur seulement, sans rebond */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur: 180ms;
+}

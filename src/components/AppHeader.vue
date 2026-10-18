@@ -1,389 +1,59 @@
 <template>
-  <header
-    id="vb-header"
-    style="
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      background: transparent;
-      border-bottom: 1px solid transparent;
-      transition:
-        background 0.3s ease,
-        border-color 0.3s ease,
-        backdrop-filter 0.3s ease;
-    "
-  >
-    <div
-      style="
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 14px 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-      "
-    >
-      <a
-        v-bind="link('/')"
-        aria-label="Verebona — accueil"
-        style="
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex-shrink: 0;
-          cursor: pointer;
-        "
-      >
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 32 32"
-          fill="none"
-          style="overflow: visible"
-        >
-          <rect x="0" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff" />
-          <rect
-            x="11.43"
-            y="0"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="0"
-            y="11.43"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="11.43"
-            y="11.43"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="22.86"
-            y="11.43"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="0"
-            y="22.86"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="11.43"
-            y="22.86"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="22.86"
-            y="22.86"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#fff"
-          />
-          <rect
-            x="22.86"
-            y="-1.55"
-            width="9.14"
-            height="9.14"
-            rx="1.6"
-            fill="#2F6BFF"
-            transform="rotate(18 27.43 3.02)"
-          />
-        </svg>
-        <span
-          style="
-            font-family: &quot;Bricolage Grotesque&quot;, &quot;Bricolage Grotesque Fallback&quot;, sans-serif;
-            font-weight: 700;
-            font-size: 19px;
-            letter-spacing: -0.01em;
-            color: #fff;
-          "
-          >Verebona</span
-        >
+  <!-- Charte 2026 §5 / readme « Layout » : header du site NON fixe, 22 px de
+       padding, logo 34 px. -->
+  <header id="vb-header" class="hd">
+    <div class="hd__bar">
+      <a v-bind="link('/')" aria-label="Verebona — accueil" class="hd__logo">
+        <VbLogo :size="34" />
       </a>
-      <nav
-        class="r-nav"
-        style="
-          display: flex;
-          align-items: center;
-          gap: 32px;
-          font-size: 16px;
-          color: #9ba6bc;
-          font-weight: 500;
-        "
-      >
-        <a
-          href="#how"
-          @click.prevent="navHow"
-          style="cursor: pointer; transition: color 0.15s"
-          v-hover="{ color: '#fff' }"
-          >Comment ça marche</a
-        >
-        <a
-          href="#cas-usage"
-          @click.prevent="navCasUsage"
-          style="cursor: pointer; transition: color 0.15s"
-          v-hover="{ color: '#fff' }"
-          >Cas d'usage</a
-        >
-        <a
-          href="#pricing"
-          @click.prevent="navPricing"
-          style="cursor: pointer; transition: color 0.15s"
-          v-hover="{ color: '#fff' }"
-          >Tarifs</a
-        >
-        <a
-          href="#faq"
-          @click.prevent="navFaq"
-          style="cursor: pointer; transition: color 0.15s"
-          v-hover="{ color: '#fff' }"
-          >FAQ</a
-        >
+      <nav class="r-nav hd__nav" aria-label="Navigation principale">
+        <a href="#how" @click.prevent="navHow">Comment ça marche</a>
+        <a href="#cas-usage" @click.prevent="navCasUsage">Cas d'usage</a>
+        <a href="#pricing" @click.prevent="navPricing">Tarifs</a>
+        <a href="#faq" @click.prevent="navFaq">FAQ</a>
       </nav>
-      <div
-        style="display: flex; align-items: center; gap: 12px; flex-shrink: 0"
-      >
+      <div class="hd__actions">
         <!-- PRELAUNCH : information non cliquable (CDC pré-lancement §6.2) -->
-        <span
-          v-if="isPrelaunch"
-          class="r-hide-m"
-          data-testid="prelaunch-header"
-          style="
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14.5px;
-            font-weight: 600;
-            color: #9ba6bc;
-            padding: 9px 16px;
-            border: 1px dashed rgba(148, 163, 184, 0.3);
-            border-radius: 999px;
-            cursor: default;
-            user-select: none;
-            white-space: nowrap;
-          "
-          ><span
-            aria-hidden="true"
-            style="width: 7px; height: 7px; border-radius: 50%; background: #23c4a8"
-          ></span
-          >{{ labels.header }}</span
+        <span v-if="isPrelaunch" class="r-hide-m vb-pill vb-pill--dashed vb-pill--sm" data-testid="prelaunch-header"
+          ><span class="vb-pill__dot" aria-hidden="true"></span>{{ labels.header }}</span
         >
         <template v-else>
-        <!--
-          Écart assumé au CDC Site Public §6.1 (décision produit 2026-09-28) :
-          en mode FULL, le CTA du header reste « Essayer gratuitement » au lieu
-          de « Créer un compte » (même destination : inscription). Même libellé
-          dans le menu mobile ci-dessous. Verrouillé par tests/prelaunch-cta.test.ts.
-        -->
-        <a
-          :href="loginUrl()"
-          class="r-hide-m"
-          style="
-            font-size: 15.5px;
-            font-weight: 600;
-            color: #c7d0e0;
-            padding: 10px 19px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: 999px;
-            transition: all 0.15s;
-          "
-          v-hover="{ borderColor: 'rgba(148,163,184,.5)', color: '#fff' }"
-          >Se connecter</a
-        >
-        <a
-          :href="signupUrl()"
-          class="r-hide-m"
-          style="
-            font-size: 15.5px;
-            font-weight: 600;
-            color: #fff;
-            padding: 11px 21px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4);
-            transition: transform 0.15s;
-          "
-          v-hover="{ transform: 'translateY(-1px)' }"
-          >Essayer gratuitement</a
-        >
+          <!--
+            Écart assumé au CDC Site Public §6.1 (décision produit 2026-09-28) :
+            en mode FULL, le CTA du header reste « Essayer gratuitement » au lieu
+            de « Créer un compte » (même destination : inscription). Même libellé
+            dans le menu mobile ci-dessous. Verrouillé par tests/prelaunch-cta.test.ts.
+          -->
+          <a :href="loginUrl()" class="r-hide-m vb-btn vb-btn--secondary vb-btn--sm">Se connecter</a>
+          <a :href="signupUrl()" class="r-hide-m vb-btn vb-btn--primary vb-btn--sm">Essayer gratuitement</a>
         </template>
         <button
           type="button"
-          class="r-burger"
+          class="r-burger hd__burger"
           @click.prevent="toggleMenu"
           :aria-expanded="menuOpen ? 'true' : 'false'"
           aria-controls="vb-mobile-menu"
           aria-label="Menu"
-          style="
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            background: rgba(15, 23, 42, 0.55);
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 4px;
-            flex-shrink: 0;
-          "
         >
-          <span :style="burgerTop"></span>
-          <span :style="burgerMid"></span>
-          <span :style="burgerBot"></span>
+          <VbIcon :name="menuOpen ? 'x' : 'menu'" />
         </button>
       </div>
     </div>
     <template v-if="menuOpen">
-      <div
-        id="vb-mobile-menu"
-        class="r-mobile-menu"
-        style="
-          flex-direction: column;
-          gap: 2px;
-          padding: 8px 20px 20px;
-          border-top: 1px solid rgba(148, 163, 184, 0.14);
-          background: rgba(7, 14, 32, 0.98);
-          backdrop-filter: blur(14px);
-        "
-      >
-        <a
-          href="#how"
-          @click.prevent="navHow"
-          style="
-            padding: 14px 6px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #c7d0e0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-          "
-          >Comment ça marche</a
-        >
-        <a
-          href="#cas-usage"
-          @click.prevent="navCasUsage"
-          style="
-            padding: 14px 6px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #c7d0e0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-          "
-          >Cas d'usage</a
-        >
-        <a
-          href="#pricing"
-          @click.prevent="navPricing"
-          style="
-            padding: 14px 6px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #c7d0e0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-          "
-          >Tarifs</a
-        >
-        <a
-          href="#faq"
-          @click.prevent="navFaq"
-          style="
-            padding: 14px 6px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #c7d0e0;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.08);
-          "
-          >FAQ</a
-        >
+      <div id="vb-mobile-menu" class="r-mobile-menu hd__menu">
+        <a href="#how" @click.prevent="navHow">Comment ça marche</a>
+        <a href="#cas-usage" @click.prevent="navCasUsage">Cas d'usage</a>
+        <a href="#pricing" @click.prevent="navPricing">Tarifs</a>
+        <a href="#faq" @click.prevent="navFaq">FAQ</a>
         <!-- PRELAUNCH : mêmes règles que le header desktop (CDC §6.3) -->
-        <div
-          v-if="isPrelaunch"
-          data-testid="prelaunch-mobile-menu"
-          style="
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 13px 10px;
-            border: 1px dashed rgba(148, 163, 184, 0.3);
-            border-radius: 999px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #9ba6bc;
-            cursor: default;
-            user-select: none;
-          "
-        >
-          <span
-            aria-hidden="true"
-            style="width: 7px; height: 7px; border-radius: 50%; background: #23c4a8"
-          ></span
-          >{{ labels.header }}
+        <div v-if="isPrelaunch" data-testid="prelaunch-mobile-menu" class="vb-pill vb-pill--dashed hd__menu-pill">
+          <span class="vb-pill__dot" aria-hidden="true"></span>{{ labels.header }}
         </div>
         <!-- CTA « Essayer gratuitement » conservé en FULL : écart assumé au CDC
              Site Public §6.1 (« Créer un compte »), décision produit 2026-09-28. -->
-        <div v-else style="display: flex; gap: 10px; margin-top: 16px">
-          <a
-            :href="loginUrl()"
-            @click="closeMenu"
-            style="
-              flex: 1;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              text-align: center;
-              padding: 13px 10px;
-              line-height: 1.2;
-              border: 1px solid rgba(148, 163, 184, 0.28);
-              border-radius: 999px;
-              font-size: 15px;
-              font-weight: 600;
-              color: #fff;
-            "
-            >Se connecter</a
-          >
-          <a
-            :href="signupUrl()"
-            @click="closeMenu"
-            style="
-              flex: 1;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              text-align: center;
-              padding: 13px 10px;
-              line-height: 1.2;
-              border-radius: 999px;
-              font-size: 15px;
-              font-weight: 600;
-              color: #fff;
-              background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            "
-            >Essayer gratuitement</a
-          >
+        <div v-else class="hd__menu-ctas">
+          <a :href="loginUrl()" @click="closeMenu" class="vb-btn vb-btn--secondary">Se connecter</a>
+          <a :href="signupUrl()" @click="closeMenu" class="vb-btn vb-btn--primary">Essayer gratuitement</a>
         </div>
       </div>
     </template>
@@ -391,47 +61,37 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
-import { useNav } from "../composables/useNav";
-import { loginUrl, signupUrl } from "../config/urls";
-import { useSiteMode } from "../config/site";
+import { useNav } from '../composables/useNav'
+import { loginUrl, signupUrl } from '../config/urls'
+import { useSiteMode } from '../config/site'
+import VbLogo from './VbLogo.vue'
+import VbIcon from './VbIcon.vue'
 
-const { isPrelaunch, labels } = useSiteMode();
-
-const {
-  menuOpen,
-  toggleMenu,
-  closeMenu,
-  link,
-  navHow,
-  navCasUsage,
-  navPricing,
-  navFaq,
-  burgerTop,
-  burgerMid,
-  burgerBot,
-} = useNav();
-
-// Header goes from transparent (at the very top) to a blurred solid bar as
-// soon as the page is scrolled — ported from the prototype.
-let onScroll: (() => void) | null = null;
-onMounted(() => {
-  const header = document.getElementById("vb-header");
-  onScroll = () => {
-    if (!header) return;
-    const s = window.scrollY > 6;
-    header.style.background = s ? "rgba(7,14,32,.9)" : "transparent";
-    header.style.backdropFilter = s ? "blur(16px)" : "none";
-    (header.style as any).webkitBackdropFilter = s ? "blur(16px)" : "none";
-    header.style.borderBottomColor = s
-      ? "rgba(148,163,184,.14)"
-      : "transparent";
-    header.style.boxShadow = s ? "0 8px 30px rgba(4,10,26,.35)" : "none";
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-});
-onUnmounted(() => {
-  if (onScroll) window.removeEventListener("scroll", onScroll);
-});
+const { isPrelaunch, labels } = useSiteMode()
+const { menuOpen, toggleMenu, closeMenu, link, navHow, navCasUsage, navPricing, navFaq } = useNav()
 </script>
+
+<style>
+.hd { position: relative; z-index: 50; background: var(--bg-page); }
+.hd__bar {
+  max-width: var(--container); margin: 0 auto; padding: 22px var(--gutter);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.hd__logo { display: inline-flex; align-items: center; border-radius: var(--radius-sm); }
+.hd__nav { display: flex; align-items: center; gap: 32px; font-size: 16px; font-weight: 600; }
+.hd__nav a { color: var(--text-primary); border-radius: 6px; transition: color var(--dur) var(--ease); }
+.hd__nav a:hover { color: var(--accent); }
+.hd__actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.hd__burger {
+  width: 44px; height: 44px; border-radius: var(--radius-md); border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--accent); cursor: pointer; align-items: center; justify-content: center;
+}
+.hd__menu { flex-direction: column; gap: 2px; padding: 4px 20px 20px; border-top: 1px solid var(--border); background: var(--bg-page); }
+.hd__menu > a { padding: 14px 6px; font-size: 16px; font-weight: 600; color: var(--text-primary); border-bottom: 1px solid var(--border-subtle); }
+.hd__menu-pill { margin-top: 16px; justify-content: center; }
+.hd__menu-ctas { display: flex; gap: 10px; margin-top: 16px; }
+.hd__menu-ctas .vb-btn { flex: 1; padding: 0 10px; }
+@media (max-width: 860px) {
+  .hd__bar { padding: 16px 20px; }
+}
+</style>

@@ -1,243 +1,55 @@
 <template>
-<section id="top" style="position:relative;padding:132px 24px 64px;overflow:hidden;background:radial-gradient(1200px 700px at 12% -8%,rgba(59,130,246,.22),transparent 60%),radial-gradient(1000px 620px at 100% 0%,rgba(34,197,94,.12),transparent 55%),#070E20">
-  <div style="position:absolute;inset:0;background-image:radial-gradient(rgba(148,163,184,.09) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:linear-gradient(to bottom,#000,transparent 80%);mask-image:linear-gradient(to bottom,#000,transparent 80%);pointer-events:none"></div>
-  <div style="position:absolute;top:6%;left:-7%;width:540px;height:540px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.20),transparent 62%);filter:blur(20px);pointer-events:none"></div>
-  <div style="max-width:1280px;margin:0 auto;position:relative">
-    <div class="r-hero" style="display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center">
-      <!-- Left
-           Ordre imposé (ticket SEO accueil) : H1 → accroche et paragraphe → disponibilité
-           → H2 → quatre bénéfices (H3) → signature. Texte HTML rendu au build
-           (voir scripts/prerender.mjs) : pas de .vb-reveal sur cette colonne,
-           sinon le texte déjà peint disparaîtrait puis réapparaîtrait au
-           démarrage de Vue. -->
-      <div class="r-hero-copy" style="min-width:0">
-        <h1 style="font-size:57px;line-height:1.06;font-weight:600;letter-spacing:-.03em;color:#fff;margin-bottom:20px;overflow-wrap:break-word"><span style="display:block">Profitez de vos biens.</span> <span style="display:block;background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">Passez moins de temps à les gérer.</span></h1>
-        <p data-testid="hero-lead" style="font-size:20px;line-height:1.45;font-weight:600;color:#EAF0FB;max-width:560px;margin-bottom:12px">Moins de temps à chercher. Moins de choses à retenir.</p>
-        <p data-testid="hero-text" style="font-size:18px;line-height:1.6;color:#A5B0C6;max-width:560px;margin-bottom:28px">Maison, voiture, vélo, équipements… Retrouvez vos documents et les informations de chaque bien au même endroit. Déposez une facture, un contrat ou une garantie : Verebona en extrait les informations utiles et vous aide à suivre vos échéances. Préparez vos démarches avec un historique organisé, de l’achat à la vente ou à la transmission.</p>
-        <!-- PRELAUNCH : seule la zone d'action change (CDC pré-lancement §6.4) -->
-        <div v-if="isPrelaunch" data-testid="prelaunch-hero" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <span style="display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:600;color:#EAF0FB;padding:13px 24px;border-radius:999px;background:rgba(35,196,168,.10);border:1px solid rgba(35,196,168,.35);cursor:default;user-select:none"><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:#23C4A8;box-shadow:0 0 0 4px rgba(35,196,168,.18)"></span>{{ labels.heroTitle }}</span>
-          <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">{{ labels.heroText }}</span>
-        </div>
-        <div v-else style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <a :href="signupUrl()" style="font-size:16px;font-weight:600;color:#fff;padding:14px 26px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882);box-shadow:0 16px 36px rgba(0,180,140,.4);transition:transform .15s" v-hover="{transform:'translateY(-2px)'}">Essayer gratuitement pendant 7 jours</a>
-          <span style="font-size:13px;color:#8390A8;max-width:340px;line-height:1.45">Essai Premium sans carte bancaire · 2 biens et 30 documents · aucun abonnement déclenché automatiquement</span>
-        </div>
-
-        <!-- Bénéfices : séparés du bloc de disponibilité par un filet -->
-        <div style="margin-top:36px;padding-top:30px;border-top:1px solid rgba(148,163,184,.16);max-width:560px">
-          <h2 style="font-size:30px;line-height:1.2;font-weight:600;letter-spacing:-.02em;color:#fff;margin-bottom:20px">Centralisez, organisez, valorisez.</h2>
-          <ul class="r-2" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:16px 28px">
-          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Retrouvez vite ce qui compte</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Contrats, garanties, diagnostics au bon endroit.</p></div></li>
-          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Anticipez les dates importantes</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Assurances, contrôles et entretiens au bon moment.</p></div></li>
-          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Suivez l’histoire de vos biens</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Un historique clair qui se construit dans le temps.</p></div></li>
-          <li style="display:flex;gap:10px;min-width:0"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#3B82F6;margin-top:8px;flex-shrink:0"></span><div style="min-width:0"><h3 style="font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-weight:600;color:#EAF0FB;font-size:15px;line-height:1.4">Valorisez-les le moment venu</h3><p style="color:#8390A8;font-size:13.5px;line-height:1.5">Vente, assurance ou transmission mieux documentées.</p></div></li>
-          </ul>
-          <p style="margin-top:26px;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-size:19px;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:#C7D3EA"><span style="background:linear-gradient(100deg,#5C9CFF,#23C4A8);-webkit-background-clip:text;background-clip:text;color:transparent">Être prêt avant d’en avoir besoin.</span></p>
-        </div>
+<section id="top" class="hero">
+  <div class="hero__grid">
+    <!-- Colonne texte.
+         Ordre imposé (ticket SEO accueil) : H1 → accroche et paragraphe → disponibilité
+         → H2 → quatre bénéfices (H3) → signature. Charte 2026 §6 : le bloc de
+         bénéfices devient une bande sous le héros (BenefitsSection, rendue juste
+         après dans HomeView) ; l'ordre des titres dans le HTML pré-rendu est
+         inchangé, le montage de droite ne contient aucun titre. -->
+    <div class="hero__copy">
+      <h1 class="vb-h1 hero__title"><span class="hero__line">Profitez de vos biens.</span> <span class="hero__line vb-accent">Passez moins de temps à les gérer.</span></h1>
+      <p data-testid="hero-lead" class="vb-lead hero__lead">Moins de temps à chercher. Moins de choses à retenir.</p>
+      <p data-testid="hero-text" class="vb-text hero__text">Maison, voiture, vélo, équipements… Retrouvez vos documents et les informations de chaque bien au même endroit. Déposez une facture, un contrat ou une garantie : Verebona en extrait les informations utiles et vous aide à suivre vos échéances. Préparez vos démarches avec un historique organisé, de l’achat à la vente ou à la transmission.</p>
+      <!-- PRELAUNCH : seule la zone d'action change (CDC pré-lancement §6.4) -->
+      <div v-if="isPrelaunch" data-testid="prelaunch-hero" class="hero__action hero__action--row">
+        <span class="vb-pill"><span class="vb-pill__dot" aria-hidden="true"></span>{{ labels.heroTitle }}</span>
+        <span class="vb-meta hero__note">{{ labels.heroText }}</span>
       </div>
-      <!-- Right : mascotte welcome-wave -->
-      <template v-if="showMascot">
-      <div class="vb-reveal" style="transition-delay:.12s;position:relative;display:flex;justify-content:center;align-items:center">
-        <div style="position:absolute;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.34),transparent 62%);filter:blur(10px)"></div>
-        <img src="/assets/mascot/welcome-wave.webp" alt="Verebona vous accueille" style="position:relative;width:min(400px,90%);height:auto;filter:drop-shadow(0 30px 50px rgba(4,10,26,.6));animation:vb-float 6s ease-in-out infinite"/>
-      </div>
-      </template>
-    </div>
-
-    <!-- Triptych strip -->
-    <div class="vb-rgroup r-tri" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px">
-      <div style="display:flex;align-items:center;gap:18px;padding:20px 22px;border-radius:18px;background:rgba(15,23,42,.5);border:1px solid rgba(148,163,184,.14)">
-        <div style="width:60px;height:60px;border-radius:16px;background:rgba(59,130,246,.14);border:1px solid rgba(59,130,246,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7EB0FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.7 12 3l9 7.7"/><path d="M5 9.6V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.6"/><path d="M9.5 21v-6.2h5V21"/></svg>
-        </div>
-        <div>
-          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Biens</div>
-          <div style="font-size:13.5px;color:#8FA0BB">Logements, véhicules, objets</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:18px;padding:20px 22px;border-radius:18px;background:rgba(15,23,42,.5);border:1px solid rgba(148,163,184,.14)">
-        <div style="width:60px;height:60px;border-radius:16px;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#B49BFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h6l4 4v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 16.5h4"/></svg>
-        </div>
-        <div>
-          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Documents</div>
-          <div style="font-size:13.5px;color:#8FA0BB">Factures, garanties, contrats…</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:18px;padding:20px 22px;border-radius:18px;background:rgba(15,23,42,.5);border:1px solid rgba(148,163,184,.14)">
-        <div style="width:60px;height:60px;border-radius:16px;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#6EE7A3" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/><circle cx="15.5" cy="14" r="1.1" fill="#6EE7A3" stroke="none"/></svg>
-        </div>
-        <div>
-          <div style="font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif;font-weight:600;font-size:19px;color:#fff;letter-spacing:-.01em;margin-bottom:3px">Agendas</div>
-          <div style="font-size:13.5px;color:#8FA0BB">Échéances, entretiens, rappels…</div>
-        </div>
+      <div v-else class="hero__action">
+        <a :href="signupUrl()" class="vb-btn vb-btn--primary vb-btn--lg">Essayer gratuitement pendant 7 jours <span aria-hidden="true">→</span></a>
+        <span class="vb-meta hero__note">Essai Premium sans carte bancaire · 2 biens et 30 documents · aucun abonnement déclenché automatiquement</span>
       </div>
     </div>
 
-    <!-- App mockup -->
-    <template v-if="showMockup">
-    <div class="vb-reveal" style="margin-top:64px">
-      <div style="text-align:center;max-width:660px;margin:0 auto 22px">
-        <p style="font-size:15px;line-height:1.6;color:#95A1B8">L'application Verebona, sur le web et sur mobile <span style="color:#C7D0E0;font-weight:600">(iOS &amp; Android)</span> — vos biens, documents et échéances toujours synchronisés.</p>
-      </div>
-      <div class="r-mock" style="display:flex;gap:22px;align-items:flex-end">
-      <div class="r-browser" style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center">
-       <div style="width:92%;background:#0A0E17;padding:9px 9px 10px;border-radius:16px;border:1px solid rgba(132,144,168,.28);box-shadow:0 42px 82px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.03)">
-        <div style="display:flex;justify-content:center;padding-bottom:7px"><span style="width:6px;height:6px;border-radius:50%;background:#141A26;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.16)"></span></div>
-        <div style="border-radius:6px;overflow:hidden;background:rgba(15,23,42,.96)">
-        <div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(31,41,55,.9);background:rgba(9,14,28,.98)">
-          <div style="display:flex;gap:7px"><span style="width:11px;height:11px;border-radius:50%;background:rgba(239,68,68,.7)"></span><span style="width:11px;height:11px;border-radius:50%;background:rgba(245,158,11,.7)"></span><span style="width:11px;height:11px;border-radius:50%;background:rgba(34,197,94,.7)"></span></div>
-          <div style="flex:1;display:flex;justify-content:center"><div style="padding:3px 14px;border-radius:6px;background:rgba(31,41,55,.8);font-size:11px;color:#64748B">app.verebona.fr</div></div>
-          <span style="font-size:11px;color:#64748B">{{ slideLabel }}</span>
-        </div>
-        <div style="display:flex;height:440px;background:#020617">
-          <!-- sidebar -->
-          <div style="width:210px;flex-shrink:0;border-right:1px solid rgba(31,41,55,.6);background:rgba(15,23,42,.25);padding:16px 12px;display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;align-items:center;gap:9px;padding:0 6px;margin-bottom:16px">
-              <svg width="20" height="20" viewBox="0 0 32 32" fill="none" style="overflow:visible"><rect x="0" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="-1.55" width="9.14" height="9.14" rx="1.6" fill="#2F6BFF" transform="rotate(18 27.43 3.02)"/></svg>
-              <span style="font-size:13px;font-weight:600;color:#E2E8F0">Verebona</span>
-            </div>
-            <button type="button" :style="nav[0].style" @click.prevent="nav[0].onClick"><span style="width:15px;height:15px;border-radius:4px;border:2px solid currentColor;opacity:.9"></span>Accueil</button>
-            <button type="button" :style="nav[1].style" @click.prevent="nav[1].onClick"><span style="width:15px;height:15px;border-radius:3px;border:2px solid currentColor;opacity:.9"></span>Mes biens</button>
-            <button type="button" :style="nav[2].style" @click.prevent="nav[2].onClick"><span style="width:15px;height:15px;border-radius:4px;border:2px solid currentColor;opacity:.9"></span>Mes événements</button>
-            <button type="button" :style="nav[3].style" @click.prevent="nav[3].onClick"><span style="width:15px;height:15px;border-radius:4px;border:2px solid currentColor;opacity:.9"></span>Mes documents</button>
-            <div style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;color:#8892A6"><span style="width:15px;height:15px;border-radius:4px;border:2px solid currentColor;opacity:.9"></span>Mes rappels</div>
-          </div>
-          <!-- main -->
-          <div style="flex:1;display:flex;flex-direction:column;min-width:0">
-            <div style="height:48px;flex-shrink:0;border-bottom:1px solid rgba(31,41,55,.6);display:flex;align-items:center;padding:0 18px;gap:12px">
-              <div style="flex:1;max-width:240px;height:30px;border-radius:999px;background:rgba(15,23,42,.6);border:1px solid rgba(31,41,55,.7);display:flex;align-items:center;padding:0 14px;font-size:11.5px;color:#64748B">Rechercher…</div>
-              <div style="margin-left:auto;width:28px;height:28px;border-radius:50%;background:#1E293B;border:1px solid rgba(71,85,105,.6);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#CBD5E1">LM</div>
-            </div>
-            <div style="flex:1;overflow:hidden;padding:22px">
-              <!-- Dashboard -->
-              <template v-if="isDashboard">
-              <div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px">
-                  <div style="padding:13px;border-radius:12px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:9px;background:rgba(59,130,246,.12);color:#60A5FA;display:flex;align-items:center;justify-content:center;font-weight:700">◱</div><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;font-weight:600">Mes biens</div><div style="font-size:19px;font-weight:700;color:#E2E8F0">3</div></div></div>
-                  <div style="padding:13px;border-radius:12px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:9px;background:rgba(245,158,11,.12);color:#FBBF24;display:flex;align-items:center;justify-content:center;font-weight:700">◷</div><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;font-weight:600">Événements</div><div style="font-size:19px;font-weight:700;color:#E2E8F0">2</div></div></div>
-                  <div style="padding:13px;border-radius:12px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:9px;background:rgba(34,197,94,.12);color:#4ADE80;display:flex;align-items:center;justify-content:center;font-weight:700">▤</div><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;font-weight:600">Documents</div><div style="font-size:19px;font-weight:700;color:#E2E8F0">16</div></div></div>
-                  <div style="padding:13px;border-radius:12px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:9px;background:rgba(239,68,68,.12);color:#F87171;display:flex;align-items:center;justify-content:center;font-weight:700">!</div><div><div style="font-size:10px;color:#64748B;text-transform:uppercase;font-weight:600">À traiter</div><div style="font-size:19px;font-weight:700;color:#E2E8F0">0</div></div></div>
-                </div>
-                <div style="font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Mes rappels</div>
-                <div style="position:relative;padding:12px 14px 12px 18px;border-radius:12px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:12px;margin-bottom:18px;overflow:hidden">
-                  <span style="position:absolute;left:0;top:0;bottom:0;width:4px;background:#EF4444"></span>
-                  <div style="width:36px;height:36px;border-radius:9px;background:#1E293B;display:flex;align-items:center;justify-content:center;color:#94A3B8">⚙</div>
-                  <div style="flex:1"><div style="font-size:12px;font-weight:600;color:#E2E8F0">Révision annuelle</div><div style="font-size:10.5px;color:#64748B">Il y a 2 jours • Vélo Cargo Électrique</div></div>
-                  <span style="font-size:10px;padding:3px 9px;border-radius:6px;background:rgba(239,68,68,.14);color:#F87171;border:1px solid rgba(239,68,68,.3)">En retard (2 j)</span>
-                </div>
-                <div style="font-size:11px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Mes biens</div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:74px;background:#020617"><img src="/assets/appartement-lyon.webp" alt="Appartement Lyon" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:9px"><div style="font-size:11.5px;font-weight:700;color:#E2E8F0">Appartement Lyon</div><div style="font-size:10px;color:#64748B">Immobilier • 7 docs</div></div></div>
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:74px;background:#020617"><img src="/assets/velo-cargo.webp" alt="Vélo Cargo" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:9px"><div style="font-size:11.5px;font-weight:700;color:#E2E8F0">Vélo Cargo</div><div style="font-size:10px;color:#64748B">Véhicule • 6 docs</div></div></div>
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:74px;background:#020617"><img src="/assets/surf-personal.webp" alt="Planche de Surf" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:9px"><div style="font-size:11.5px;font-weight:700;color:#E2E8F0">Planche de Surf</div><div style="font-size:10px;color:#64748B">Loisir • 3 docs</div></div></div>
-                </div>
-              </div>
-              </template>
-              <!-- Biens -->
-              <template v-if="isBiens">
-              <div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div style="font-size:14px;font-weight:700;color:#E2E8F0">Mes biens</div><div style="display:flex;gap:7px;font-size:11px"><span style="padding:3px 11px;border-radius:999px;background:rgba(37,99,235,.2);border:1px solid rgba(59,130,246,.3);color:#93C5FD">Tout</span><span style="padding:3px 11px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">Actif</span><span style="padding:3px 11px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">Archivé</span></div></div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:120px;background:#020617"><img src="/assets/appartement-lyon.webp" alt="Appartement Lyon" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:11px"><div style="font-size:12.5px;font-weight:700;color:#E2E8F0">Appartement Lyon</div><div style="font-size:10.5px;color:#64748B;margin-bottom:5px">Immobilier • T3</div><div style="font-size:10px;color:#64748B">▤ 7 documents</div></div></div>
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:120px;background:#020617"><img src="/assets/velo-cargo.webp" alt="Vélo Cargo" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:11px"><div style="font-size:12.5px;font-weight:700;color:#E2E8F0">Vélo Cargo</div><div style="font-size:10.5px;color:#64748B;margin-bottom:5px">Véhicule • Électrique</div><div style="font-size:10px;color:#64748B">▤ 6 documents • 2 évén.</div></div></div>
-                  <div style="border-radius:12px;overflow:hidden;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6)"><div style="height:120px;background:#020617"><img src="/assets/surf-personal.webp" alt="Planche de Surf" style="width:100%;height:100%;object-fit:cover;opacity:.85"/></div><div style="padding:11px"><div style="font-size:12.5px;font-weight:700;color:#E2E8F0">Planche de Surf</div><div style="font-size:10.5px;color:#64748B;margin-bottom:5px">Sport / Loisir</div><div style="font-size:10px;color:#64748B">▤ 3 documents</div></div></div>
-                </div>
-              </div>
-              </template>
-              <!-- Events -->
-              <template v-if="isEvents">
-              <div>
-                <div style="display:flex;gap:8px;font-size:11px;margin-bottom:14px"><span style="padding:4px 12px;border-radius:999px;background:rgba(37,99,235,.2);border:1px solid rgba(59,130,246,.3);color:#93C5FD">Tout</span><span style="padding:4px 12px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">À venir</span><span style="padding:4px 12px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">En retard</span></div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;border-radius:9px;background:rgba(239,68,68,.1);color:#F87171;display:flex;align-items:center;justify-content:center">◷</div><div style="flex:1"><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Révision annuelle</div><div style="font-size:10px;color:#64748B">Vélo Cargo • Il y a 2 jours</div></div><span style="font-size:9px;padding:2px 7px;border-radius:5px;color:#F87171;border:1px solid rgba(239,68,68,.3)">En retard</span></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;border-radius:9px;background:rgba(245,158,11,.1);color:#FBBF24;display:flex;align-items:center;justify-content:center">◷</div><div style="flex:1"><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Contrôle technique</div><div style="font-size:10px;color:#64748B">Voiture familiale • Dans 12 j</div></div><span style="font-size:9px;padding:2px 7px;border-radius:5px;color:#FBBF24;border:1px solid rgba(245,158,11,.3)">À venir</span></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;border-radius:9px;background:rgba(34,197,94,.1);color:#4ADE80;display:flex;align-items:center;justify-content:center">◷</div><div style="flex:1"><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Renouvellement bail</div><div style="font-size:10px;color:#64748B">Appartement Lyon • Dans 3 mois</div></div><span style="font-size:9px;padding:2px 7px;border-radius:5px;color:#4ADE80;border:1px solid rgba(34,197,94,.3)">À venir</span></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;border-radius:9px;background:rgba(34,197,94,.1);color:#4ADE80;display:flex;align-items:center;justify-content:center">◷</div><div style="flex:1"><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Assurance habitation</div><div style="font-size:10px;color:#64748B">Appartement Lyon • Dans 4 mois</div></div><span style="font-size:9px;padding:2px 7px;border-radius:5px;color:#4ADE80;border:1px solid rgba(34,197,94,.3)">À venir</span></div>
-                </div>
-              </div>
-              </template>
-              <!-- Docs -->
-              <template v-if="isDocs">
-              <div>
-                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;max-width:240px;height:30px;border-radius:999px;background:rgba(15,23,42,.6);border:1px solid rgba(31,41,55,.7);display:flex;align-items:center;padding:0 14px;font-size:11px;color:#64748B">Rechercher un document…</div><div style="display:flex;gap:6px;font-size:10px"><span style="padding:3px 10px;border-radius:999px;background:rgba(37,99,235,.2);border:1px solid rgba(59,130,246,.3);color:#93C5FD">Tout</span><span style="padding:3px 10px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">Facture</span><span style="padding:3px 10px;border-radius:999px;border:1px solid rgba(71,85,105,.5);color:#64748B">Notice</span></div></div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(59,130,246,.12);color:#60A5FA;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Facture achat vélo</div><div style="font-size:9.5px;color:#64748B">Facture · Vélo Cargo · 12/03/2024</div></div></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(34,197,94,.12);color:#4ADE80;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Attestation assurance</div><div style="font-size:9.5px;color:#64748B">Assurance · Appart. Lyon · 01/01/2025</div></div></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(139,92,246,.12);color:#A78BFA;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Notice technique</div><div style="font-size:9.5px;color:#64748B">Notice · Vélo Cargo · 12/03/2024</div></div></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(245,158,11,.12);color:#FBBF24;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Contrat de bail</div><div style="font-size:9.5px;color:#64748B">Contrat · Appart. Lyon · 15/09/2023</div></div></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(59,130,246,.12);color:#60A5FA;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">Facture planche surf</div><div style="font-size:9.5px;color:#64748B">Facture · Planche · 05/06/2023</div></div></div>
-                  <div style="padding:11px;border-radius:11px;background:rgba(15,23,42,.5);border:1px solid rgba(31,41,55,.6);display:flex;align-items:center;gap:11px"><div style="width:32px;height:32px;border-radius:8px;background:rgba(148,163,184,.12);color:#94A3B8;display:flex;align-items:center;justify-content:center">▤</div><div><div style="font-size:11.5px;font-weight:600;color:#E2E8F0">PV remise des clés</div><div style="font-size:9.5px;color:#64748B">Admin · Appart. Lyon · 15/09/2023</div></div></div>
-                </div>
-              </div>
-              </template>
-            </div>
-          </div>
-        </div>
-        </div>
-       </div>
-       <div style="width:100%;height:14px;position:relative;background:linear-gradient(180deg,#C8CFDA 0%,#A2ABB8 44%,#7C8492 100%);border-radius:3px 3px 11px 11px;box-shadow:0 34px 50px rgba(0,0,0,.5),inset 0 1.5px 0 rgba(255,255,255,.65)">
-        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:132px;height:8px;background:linear-gradient(180deg,#6B7280,#889099);border-radius:0 0 9px 9px"></div>
-       </div>
-      </div>
-        <!-- phone -->
-        <div style="flex-shrink:0;width:246px;border-radius:50px;padding:6px;background:linear-gradient(150deg,#39414F,#0A101B);border:1px solid rgba(140,152,175,.3);box-shadow:0 46px 82px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.12)">
-          <div style="position:relative;border-radius:44px;overflow:hidden;background:#020617;height:486px;display:flex;flex-direction:column">
-            <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:86px;height:25px;background:#000;border-radius:15px;z-index:6;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)"></div>
-            <div style="height:46px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:8px 20px 0 22px;position:relative;z-index:5">
-              <span style="font-size:12.5px;font-weight:700;color:#E2E8F0;letter-spacing:.01em">9:41</span>
-              <span style="display:flex;align-items:center;gap:6px">
-                <span style="display:flex;align-items:flex-end;gap:2px;height:11px"><i style="width:3px;height:4px;background:#E2E8F0;border-radius:1px"></i><i style="width:3px;height:6px;background:#E2E8F0;border-radius:1px"></i><i style="width:3px;height:8.5px;background:#E2E8F0;border-radius:1px"></i><i style="width:3px;height:11px;background:#E2E8F0;border-radius:1px"></i></span>
-                <svg width="16" height="11" viewBox="0 0 16 12" fill="none"><path d="M1.4 4.1a10 10 0 0 1 13.2 0" stroke="#E2E8F0" stroke-width="1.5" stroke-linecap="round"/><path d="M4 6.8a6 6 0 0 1 8 0" stroke="#E2E8F0" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="9.7" r="1.1" fill="#E2E8F0"/></svg>
-                <span style="display:flex;align-items:center;gap:2px"><span style="width:22px;height:11px;border-radius:3px;border:1.3px solid rgba(226,232,240,.5);padding:1.5px;display:flex;align-items:stretch"><span style="width:72%;background:#E2E8F0;border-radius:1.5px"></span></span><span style="width:1.6px;height:4px;background:rgba(226,232,240,.5);border-radius:0 2px 2px 0"></span></span>
-              </span>
-            </div>
-            <div style="padding:6px 16px 14px;display:flex;flex-direction:column;gap:11px;overflow:hidden;flex:1">
-              <div style="display:flex;align-items:center;gap:8px">
-                <svg width="18" height="18" viewBox="0 0 32 32" fill="none" style="overflow:visible"><rect x="0" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="0" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="11.43" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="0" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="11.43" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="22.86" width="9.14" height="9.14" rx="1.6" fill="#fff"/><rect x="22.86" y="-1.55" width="9.14" height="9.14" rx="1.6" fill="#2F6BFF" transform="rotate(18 27.43 3.02)"/></svg>
-                <span style="font-size:13px;font-weight:700;color:#E2E8F0;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Verebona</span>
-              </div>
-              <div style="font-size:15px;font-weight:700;color:#fff;font-family:'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif">Bonjour, Léa</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <div style="padding:10px;border-radius:12px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25)"><div style="font-size:9px;color:#93A2BD;text-transform:uppercase;letter-spacing:.05em">Biens</div><div style="font-size:18px;font-weight:700;color:#E2E8F0">3</div></div>
-                <div style="padding:10px;border-radius:12px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25)"><div style="font-size:9px;color:#93A2BD;text-transform:uppercase;letter-spacing:.05em">À traiter</div><div style="font-size:18px;font-weight:700;color:#E2E8F0">1</div></div>
-              </div>
-              <div style="position:relative;padding:11px 12px 11px 15px;border-radius:12px;background:rgba(15,23,42,.7);border:1px solid rgba(239,68,68,.25);overflow:hidden">
-                <span style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#EF4444"></span>
-                <div style="font-size:11px;font-weight:600;color:#E2E8F0">Révision annuelle</div>
-                <div style="font-size:9.5px;color:#F87171">En retard · Vélo Cargo</div>
-              </div>
-              <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em">Mes biens</div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:11px;background:rgba(15,23,42,.6);border:1px solid rgba(31,41,55,.7)"><div style="width:38px;height:38px;border-radius:9px;overflow:hidden;flex-shrink:0"><img src="/assets/appartement-lyon.webp" alt="" style="width:100%;height:100%;object-fit:cover"/></div><div><div style="font-size:11px;font-weight:600;color:#E2E8F0">Appartement Lyon</div><div style="font-size:9px;color:#64748B">7 documents</div></div></div>
-                <div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:11px;background:rgba(15,23,42,.6);border:1px solid rgba(31,41,55,.7)"><div style="width:38px;height:38px;border-radius:9px;overflow:hidden;flex-shrink:0"><img src="/assets/velo-cargo.webp" alt="" style="width:100%;height:100%;object-fit:cover"/></div><div><div style="font-size:11px;font-weight:600;color:#E2E8F0">Vélo Cargo</div><div style="font-size:9px;color:#64748B">6 documents · 2 évén.</div></div></div>
-              </div>
-              <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-around;padding:11px 6px 3px;border-top:1px solid rgba(31,41,55,.6)">
-                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.7V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.7"/></svg>
-                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5A657A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5A657A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
-                <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#5A657A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7A2 2 0 0 0 5 4.5v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5Z"/><path d="M14 2.5v5h5"/></svg>
-              </div>
-              <div style="display:flex;justify-content:center;padding-bottom:7px"><span style="width:104px;height:4px;border-radius:3px;background:rgba(226,232,240,.45)"></span></div>
-            </div>
-          </div>
+    <!-- Montage (charte §6) : 3 photos de biens, carte « Mes documents », carte
+         d'échéance, mascotte en bordure basse droite. Deux niveaux de profondeur.
+         Illustration : exposée comme une seule image aux technologies d'assistance. -->
+    <div class="hero__montage" role="img" aria-label="Aperçu de Verebona : documents classés par bien et prochaine échéance">
+      <img class="hero__photo hero__photo--a" src="/assets/appartement-lyon.webp" alt="" width="290" height="200" />
+      <img class="hero__photo hero__photo--b" src="/assets/velo-cargo.webp" alt="" width="270" height="170" />
+      <img class="hero__photo hero__photo--c" src="/assets/surf-personal.webp" alt="" width="170" height="150" />
+
+      <div class="vb-card vb-card--elevated hero__docs">
+        <div class="hero__docs-head"><span class="hero__docs-title">Mes documents</span><span class="hero__docs-all">Voir tous →</span></div>
+        <div v-for="d in docs" :key="d.title + d.meta" class="hero__doc">
+          <span class="vb-tile vb-tile--sm"><VbIcon name="file" :size="20" /></span>
+          <span class="hero__doc-body"><span class="hero__doc-title">{{ d.title }}</span><span class="hero__doc-meta">{{ d.meta }}</span></span>
+          <span :class="['vb-badge', d.pending ? 'vb-badge--attention' : '']">{{ d.state }}</span>
         </div>
       </div>
-      <!-- nav dots -->
-      <div class="r-dots" style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px">
-        <button type="button" @click.prevent="prev" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(71,85,105,.6);background:rgba(15,23,42,.6);color:#94A3B8;cursor:pointer;font-size:15px">‹</button>
-        <div style="display:flex;gap:7px;align-items:center">
-          <button type="button" :style="dots[0].style" @click.prevent="dots[0].onClick"></button>
-          <button type="button" :style="dots[1].style" @click.prevent="dots[1].onClick"></button>
-          <button type="button" :style="dots[2].style" @click.prevent="dots[2].onClick"></button>
-          <button type="button" :style="dots[3].style" @click.prevent="dots[3].onClick"></button>
-        </div>
-        <button type="button" @click.prevent="next" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(71,85,105,.6);background:rgba(15,23,42,.6);color:#94A3B8;cursor:pointer;font-size:15px">›</button>
+
+      <div class="vb-card vb-card--elevated hero__due">
+        <span class="vb-tile"><VbIcon name="calendar" :size="22" /></span>
+        <span class="hero__due-body">
+          <span class="hero__doc-title">Entretien annuel chaudière</span>
+          <span class="hero__doc-meta">Appartement Lyon · mars 2027</span>
+          <span class="vb-badge hero__due-badge">À venir</span>
+        </span>
       </div>
+
+      <img v-if="showMascot" class="vb-mascot hero__mascot" src="/assets/mascot/welcome-wave.webp" alt="" width="124" height="124" />
     </div>
-    </template>
   </div>
 </section>
 </template>
@@ -246,6 +58,67 @@
 import { useLanding } from '../composables/useLanding'
 import { signupUrl } from '../config/urls'
 import { useSiteMode } from '../config/site'
+import VbIcon from '../components/VbIcon.vue'
+
 const { isPrelaunch, labels } = useSiteMode()
-const { showMascot, showMockup, slideLabel, nav, dots, isDashboard, isBiens, isEvents, isDocs, prev, next } = useLanding()
+const { showMascot } = useLanding()
+
+/** Données d'illustration du montage (mêmes biens que la démo de l'application). */
+const docs = [
+  { title: 'Facture d’achat', meta: 'Vélo Cargo · 12/03/2024', state: 'Classé', pending: false },
+  { title: 'Attestation d’assurance', meta: 'Appartement Lyon · 01/01/2025', state: 'Classé', pending: false },
+  { title: 'Facture d’achat', meta: 'Planche de Surf · 05/06/2023', state: 'Analyse…', pending: true },
+]
 </script>
+
+<style>
+.hero { padding: 56px var(--gutter) 80px; }
+.hero__grid {
+  max-width: var(--container); margin: 0 auto; display: grid;
+  grid-template-columns: minmax(0, 1fr) 600px; gap: 56px; align-items: center;
+}
+.hero__title { margin-bottom: 22px; font-size: clamp(40px, 4.2vw, var(--fs-h1)); }
+.hero__line { display: block; }
+.hero__lead { max-width: 520px; margin-bottom: 16px; }
+.hero__text { max-width: 520px; margin-bottom: 32px; }
+.hero__action { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.hero__action--row { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 16px; }
+.hero__note { max-width: 480px; }
+.hero__action--row .hero__note { max-width: 300px; }
+
+.hero__montage { position: relative; height: 580px; }
+.hero__photo { position: absolute; object-fit: cover; border-radius: var(--radius-lg); display: block; }
+.hero__photo--a { left: 0; top: 0; width: 290px; height: 200px; }
+.hero__photo--b { left: 330px; top: 36px; width: 270px; height: 170px; }
+.hero__photo--c { left: 0; top: 408px; width: 170px; height: 150px; }
+.hero__docs { position: absolute; left: 56px; top: 150px; width: 400px; padding: 20px 22px; }
+.hero__docs-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.hero__docs-title { font-size: 19px; font-weight: 700; color: var(--text-heading); }
+.hero__docs-all { font-size: 14px; font-weight: 600; color: var(--accent); }
+.hero__doc { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-top: 1px solid var(--accent-soft); }
+.hero__doc-body, .hero__due-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hero__doc-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.hero__doc-meta { font-size: 13.5px; color: var(--text-muted); }
+.hero__due { position: absolute; left: 300px; top: 430px; width: 290px; padding: 16px 18px; display: flex; gap: 14px; align-items: center; }
+.hero__due .hero__doc-title { font-size: 15px; }
+.hero__due-badge { align-self: flex-start; margin-top: 6px; }
+.hero__mascot { position: absolute; right: -16px; bottom: -8px; width: 124px; }
+
+@media (max-width: 1180px) {
+  .hero__grid { grid-template-columns: 1fr; gap: 48px; }
+  .hero__montage { width: 600px; max-width: 100%; margin: 0 auto; }
+}
+@media (max-width: 860px) {
+  .hero { padding: 24px 20px 56px; }
+  .hero__title { font-size: var(--fs-h1-mobile); }
+  .hero__action--row { flex-direction: column; align-items: stretch; }
+  .hero__action .vb-btn { width: 100%; white-space: normal; }
+  .hero__action .vb-pill { justify-content: center; }
+  /* Mobile : cartes empilées, sans photos (maquette « 1c Mobile 390 »). */
+  .hero__montage { height: auto; width: auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end; }
+  .hero__photo { display: none; }
+  .hero__docs, .hero__due { position: static; width: auto; }
+  .hero__docs { grid-column: 1 / -1; padding: 18px; }
+  .hero__mascot { position: static; width: 96px; }
+}
+</style>

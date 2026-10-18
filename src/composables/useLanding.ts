@@ -1,10 +1,13 @@
 import { ref, computed } from 'vue'
 
 /* ============================================================
-   useLanding — reactive state + derived values for the home page
-   interactive bits: the app mockup carousel, the FAQ accordion and
-   the use-cases accordion. Ported 1:1 from the prototype renderVals().
-   Module-level refs make the state shared across the home sections.
+   useLanding — état partagé des parties interactives de l'accueil :
+   carrousel de l'application, FAQ et cas d'usage (accordéons).
+   Les refs de module sont partagées entre les sections.
+
+   Lot 66P (charte 2026) : plus de chaînes de style ici. Le composable
+   expose l'état (actif / ouvert) ; l'apparence est portée par les
+   classes des sections. Textes inchangés.
    ============================================================ */
 
 const slide = ref(0) // app mockup: 0 dashboard / 1 biens / 2 events / 3 docs
@@ -12,12 +15,6 @@ const faq = ref(-1) // open FAQ index (-1 = none)
 const uc = ref(0) // open use-case index (-1 = none)
 
 const labels = ['Tableau de bord', 'Mes biens', 'Mes événements', 'Mes documents']
-
-const tabStyle = (a: boolean) =>
-  `display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;text-align:left;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;border:1px solid ${a ? 'rgba(59,130,246,.35)' : 'transparent'};background:${a ? 'rgba(37,99,235,.14)' : 'transparent'};color:${a ? '#7EB0FF' : '#8892A6'}`
-
-const dotStyle = (a: boolean) =>
-  `height:6px;border-radius:99px;transition:all .25s;cursor:pointer;border:0;padding:0;width:${a ? '26px' : '6px'};background:${a ? '#2563EB' : 'rgba(148,163,184,.4)'}`
 
 const faqData = [
   { q: "Verebona gère-t-il uniquement les logements ?", a: "Non.\nVerebona centralise tous vos biens : logements, véhicules, matériel professionnel, outillage, équipements de loisirs…\n\nChaque bien sert de point d'ancrage pour organiser les documents, informations et événements qui lui sont associés." },
@@ -45,15 +42,9 @@ const caseGroups = [
 
 ]
 
-const ucPill = (on: boolean) =>
-  "font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap;flex-shrink:0;border:1px solid " +
-  (on ? 'rgba(59,130,246,.5)' : 'rgba(148,163,184,.22)') +
-  ';background:' + (on ? 'rgba(59,130,246,.2)' : 'rgba(148,163,184,.1)') +
-  ';color:' + (on ? '#93C5FD' : '#94A3B8')
-
 export function useLanding() {
-  const nav = computed(() => labels.map((_, i) => ({ style: tabStyle(i === slide.value), onClick: () => { slide.value = i } })))
-  const dots = computed(() => labels.map((_, i) => ({ style: dotStyle(i === slide.value), onClick: () => { slide.value = i } })))
+  const nav = computed(() => labels.map((label, i) => ({ label, active: i === slide.value, onClick: () => { slide.value = i } })))
+  const dots = nav
 
   const slideLabel = computed(() => labels[slide.value])
   const isDashboard = computed(() => slide.value === 0)
@@ -72,8 +63,6 @@ export function useLanding() {
         panelId: 'faq-panel-' + i,
         open,
         onClick: () => { faq.value = faq.value === i ? -1 : i },
-        chevron: `display:inline-block;font-size:18px;transition:transform .25s;transform:rotate(${open ? '180deg' : '0deg'})`,
-        rowStyle: `border:1px solid ${open ? 'rgba(37,99,235,.4)' : '#E6EBF3'};border-radius:14px;background:${open ? 'rgba(37,99,235,.05)' : '#fff'};box-shadow:0 2px 8px rgba(15,27,51,.04);overflow:hidden;transition:all .2s`,
       }
     }),
   )
@@ -94,17 +83,6 @@ export function useLanding() {
           withSteps: u.withSteps,
           open: on,
           onClick: () => { uc.value = uc.value === idx ? -1 : idx },
-          badgeStyle: ucPill(on),
-          headerStyle:
-            'display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:16px 20px;cursor:pointer;transition:all .15s;background:' +
-            (on ? 'rgba(59,130,246,.08)' : 'transparent') +
-            ';border:none;border-left:3px solid ' + (on ? '#3B82F6' : 'transparent'),
-          titleStyle:
-            "flex:1;font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:-.01em;color:" +
-            (on ? '#fff' : '#C3CDDE'),
-          chevStyle:
-            'transition:transform .2s;transform:rotate(' + (on ? '90deg' : '0deg') +
-            ');color:' + (on ? '#60A5FA' : '#5A6577') + ';flex-shrink:0',
         }
       }),
     }))

@@ -108,7 +108,9 @@ src/
                           structured-data.ts, head*.ts, canonical.ts
   content/aide/           corpus du Centre d'aide (articles Markdown + categories.json)
   help/                   Centre d'aide : validation, recherche, sorties, mode intégré
-  style.css               polices, resets, animations de scroll-reveal, règles responsive
+  tokens.css              jetons de la charte 2026 « Sérénité » (couleurs, typo, espacements)
+  fonts.css               Figtree auto-hébergée (public/fonts) + repli métrique anti-CLS
+  style.css               base, composants partagés (vb-btn, vb-pill, vb-badge, vb-card…), responsive
   router/
     index.ts              TOUTES les routes (voir ci-dessous)
   directives/
@@ -119,15 +121,18 @@ src/
     useContact.ts         formulaire de contact : sujet, validation, envoi à l'API
     usePricing.ts         prix et périodicité des offres
     useLegal.ts           onglets de la page légale (dérivés de la route)
-    useScrollReveal.ts    apparition des éléments au scroll (IntersectionObserver)
   components/
-    AppHeader.vue         header sticky (transparent en haut -> solide au scroll) + menu mobile
+    AppHeader.vue         header non fixe (logo 34 px) + menu mobile
+    VbLogo.vue, VbIcon.vue logo (§3 de la charte) et icônes linéaires (icons.ts)
+    PageCrumbs.vue        fil d'Ariane des pages contact et légales
     AppFooter.vue         footer (Produit / Support / Légal)
     MobileFixedCta.vue    CTA fixe mobile (non rendu en PRELAUNCH)
     PreviewModeSwitch.vue sélecteur FULL / PRELAUNCH (préprod et local seulement)
     help/                 composants du Centre d'aide
   sections/               sections de la home, dans l'ordre d'affichage
-    HeroSection.vue       hero + triptyque Biens/Documents/Agendas + mockups laptop & mobile
+    HeroSection.vue       héros : H1, accroche, CTA / pilule PRELAUNCH, montage photos + cartes + mascotte
+    BenefitsSection.vue   bande « Centralisez, organisez, valorisez. » (H2 + 4 H3)
+    AppShowcaseSection.vue triptyque Biens/Documents/Agendas + application ordinateur & téléphone
     UseCasesSection.vue   cas d'usage (accordéon, 7 situations)
     FeaturesSection.vue   fonctionnalités (aperçus d'UI)
     HowItWorksSection.vue « Comment ça marche »
@@ -349,7 +354,7 @@ Puis : valider le bloc dans le [Schema Markup Validator](https://validator.schem
 
 ## Conventions de style
 
-Le design est repris **1:1** du prototype validé : les styles sont **inline** dans les templates (les valeurs exactes de la maquette). Seuls vivent dans `style.css` : polices, resets, keyframes et media-queries responsive. Les styles dynamiques passent par `:style`, les effets de survol par la directive `v-hover`.
+Lot 66P : charte graphique 2026 « Sérénité » (ivoire, pétrole, cuivre, Figtree). Les couleurs et dimensions viennent des jetons de `src/tokens.css` (jamais de valeur en dur hors jetons) ; les composants partagés sont des classes de `src/style.css` (`vb-btn`, `vb-pill`, `vb-badge`, `vb-card`, `vb-tile`, `vb-mascot`…) ; chaque section a son bloc `<style>` (classes préfixées). Pas de dégradé de fond, transitions sur le fond et la couleur seulement, focus 3 px cuivre texte, `prefers-reduced-motion` respecté ; contrastes ≥ 4,5:1 (cuivre doux `#D66B53` réservé aux titres ≥ 40 px). La mascotte est recolorée par filtre CSS provisoire (`.vb-mascot`). Garde-fous : `tests/l66p-charte.test.ts`. La directive `v-hover` reste disponible mais n'est plus utilisée par les gabarits.
 
 ## Reste à valider côté produit
 

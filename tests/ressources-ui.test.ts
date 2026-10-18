@@ -98,10 +98,17 @@ describe('Mesure soumise au consentement (CONV-04, SEC-05, T16, T17)', () => {
 })
 
 describe('Lot 52 — bouton d’essai lisible dans le corps d’article', () => {
-  it('les liens bleus du texte (.ha-article a) ne recolorent pas les boutons ; dégradé assez sombre pour le texte blanc', () => {
+  // Lot 66P (charte 2026) : mêmes garanties, exprimées avec les jetons
+  // (`src/tokens.css`) : texte du bouton = --on-accent (blanc) sur aplat
+  // --accent (pétrole #17474D, 10,27:1) ; plus de dégradé de fond.
+  it('les liens du texte (.ha-article a) ne recolorent pas les boutons ; fond assez sombre pour le texte blanc', () => {
     const css = readFileSync(path.join(process.cwd(), 'src/ressources/ressources.css'), 'utf8')
-    expect(css).toMatch(/\.ha-article a\.ha-btn \{ color: #fff;/)
-    expect(css).toMatch(/\.ha-article a\.ha-btn-ghost \{ color: #1D4ED8; \}/)
-    expect(css).toMatch(/\.rs-cta a\.ha-btn:not\(\.ha-btn-ghost\) \{ background: linear-gradient\(135deg, #2563EB, #1D4ED8\); \}/)
+    expect(css).toMatch(/\.ha-article a\.ha-btn \{ color: var\(--on-accent\);/)
+    expect(css).toMatch(/\.ha-article a\.ha-btn-ghost \{ color: var\(--accent\);/)
+    expect(css).toMatch(/\.rs-cta a\.ha-btn:not\(\.ha-btn-ghost\) \{ background: var\(--accent\); \}/)
+    expect(css).not.toMatch(/gradient/)
+    const tokens = readFileSync(path.join(process.cwd(), 'src/tokens.css'), 'utf8')
+    expect(tokens).toMatch(/--accent: var\(--vb-petrole\);/)
+    expect(tokens).toMatch(/--on-accent: var\(--vb-blanc\);/)
   })
 })

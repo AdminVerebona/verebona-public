@@ -1,71 +1,193 @@
 /* ============================================================
-   Verebona — global styles
-   Fonts, resets, scroll-reveal animation, responsive rules.
-   All component-level styling is inline in the .vue templates
-   (ported 1:1 from the validated design prototype).
+   Verebona — styles globaux, charte 2026 « Sérénité » (lot 66P)
+   Jetons (tokens.css), police (fonts.css), base, composants partagés
+   (boutons, pilule PRELAUNCH, badges, cartes, tuiles, mascotte, champs)
+   et règles responsives. Les styles propres à une section sont dans le
+   bloc <style> de son composant (classes préfixées).
    ============================================================ */
 
-/* Polices auto-hébergées (plus aucun appel à fonts.googleapis.com / fonts.gstatic.com). */
+/* Police auto-hébergée (aucun appel à fonts.googleapis.com / fonts.gstatic.com). */
 @import './fonts.css';
+@import './tokens.css';
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: 'Instrument Sans', 'Instrument Sans Fallback', system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--fs-ui);
+  color: var(--text-primary);
+  background: var(--bg-page);
   -webkit-font-smoothing: antialiased;
-  background: #070E20;
 }
-h1, h2, h3, h4 { font-family: 'Bricolage Grotesque','Bricolage Grotesque Fallback',sans-serif; margin: 0; }
+h1, h2, h3, h4 { font-family: var(--font-sans); color: var(--text-heading); margin: 0; }
 p { margin: 0; }
 a { text-decoration: none; color: inherit; }
-a:hover { color: inherit; }
+img { max-width: 100%; }
+button, input, select, textarea { font-family: inherit; }
 
-@keyframes vb-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-@keyframes vb-float-s { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
-@keyframes vb-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-@keyframes vb-pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-@keyframes vb-pulse { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+.vb-site { background: var(--bg-page); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
 
-section[id] { scroll-margin-top: 82px; }
+section[id] { scroll-margin-top: 24px; }
 
-/* Focus visible des champs du formulaire de contact (A11Y-01, vérifié par
-   `npm run test:a11y`) : jamais d'`outline: none` sans remplaçant. */
-.vb-field:focus-visible { outline: 3px solid #2563EB; outline-offset: 2px; border-color: #2563EB !important; }
+/* ---------- Focus : anneau cuivre texte 3 px décalé (§5) ---------- */
+:focus-visible { outline: 3px solid var(--focus-color); outline-offset: 3px; }
+/* Sur fond pétrole, le cuivre clair du thème sombre (3,93:1 ≥ 3:1). */
+.vb-on-dark { --focus-color: #E2896F; }
 
-/* Scroll reveal */
-.vb-reveal,
-.vb-rgroup > * {
-  transition: opacity .8s cubic-bezier(.16, 1, .3, 1), transform .8s cubic-bezier(.16, 1, .3, 1);
-  will-change: opacity, transform;
+/* ---------- Gabarit ---------- */
+.vb-container { max-width: var(--container); margin: 0 auto; }
+.vb-section { padding: var(--sp-24) var(--gutter); }
+.vb-section--brume { background: var(--bg-section); }
+.vb-band { background: var(--bg-section); padding: var(--sp-16) var(--gutter); }
+
+/* ---------- Typographie ---------- */
+.vb-eyebrow {
+  display: block; font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  font-weight: 700; color: var(--attention); margin-bottom: 14px;
 }
-.vb-anim .vb-reveal,
-.vb-anim .vb-rgroup > * { opacity: 0; transform: translateY(40px) scale(.985); }
-.vb-reveal.vb-in,
-.vb-rgroup > .vb-in { opacity: 1 !important; transform: none !important; }
+.vb-section--brume .vb-eyebrow, .vb-band .vb-eyebrow { color: var(--attention-on-subtle); }
+.vb-h1 { font-size: var(--fs-h1); line-height: var(--lh-h1); font-weight: 800; letter-spacing: var(--ls-h1); text-wrap: pretty; }
+.vb-h2 { font-size: var(--fs-h2); line-height: var(--lh-h2); font-weight: 700; letter-spacing: var(--ls-h2); text-wrap: pretty; }
+.vb-h3 { font-size: var(--fs-h3); line-height: var(--lh-h3); font-weight: 700; letter-spacing: var(--ls-h3); }
+.vb-lead { font-size: var(--fs-lead); line-height: var(--lh-lead); font-weight: 600; color: var(--text-primary); }
+.vb-text { font-size: var(--fs-body); line-height: var(--lh-body); color: var(--text-muted); text-wrap: pretty; }
+.vb-meta { font-size: var(--fs-meta); line-height: 1.45; color: var(--text-muted); }
+/* Mot accentué d'un grand titre : cuivre doux (≥ 40 px gras, §1.3). */
+.vb-accent { color: var(--accent-display); }
+.vb-link { color: var(--accent); font-weight: 600; transition: color var(--dur) var(--ease); }
+.vb-link:hover { color: var(--accent-hover); text-decoration: underline; }
+
+/* ---------- Boutons (§5) ---------- */
+.vb-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: var(--control-h); padding: 0 24px; border-radius: var(--radius-md);
+  border: 1px solid transparent; font-size: var(--fs-ui); font-weight: 700; line-height: 1.2;
+  text-align: center; text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.vb-btn--primary { background: var(--accent); color: var(--on-accent); }
+.vb-btn--primary:hover { background: var(--accent-hover); color: var(--on-accent); }
+.vb-btn--secondary { background: var(--bg-card); color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.vb-btn--secondary:hover { background: var(--accent-soft); color: var(--accent-hover); }
+.vb-btn--inverse { background: var(--vb-blanc); color: var(--vb-petrole); }
+.vb-btn--inverse:hover { background: var(--vb-brume); color: var(--vb-petrole-hover); }
+.vb-btn--lg { min-height: var(--control-h-lg); padding: 0 26px; font-size: 17px; }
+.vb-btn--sm { min-height: var(--control-h-sm); padding: 0 16px; font-size: 15px; }
+.vb-btn--block { width: 100%; }
+.vb-btn[disabled] { opacity: .65; cursor: default; }
+
+/* ---------- Pilule PRELAUNCH : information, jamais une action (§5) ---------- */
+.vb-pill {
+  display: inline-flex; align-items: center; gap: 10px; min-height: var(--control-h); padding: 0 22px;
+  border-radius: var(--radius-md); background: var(--accent-soft); border: 1px solid transparent;
+  color: var(--accent); font-size: var(--fs-ui); font-weight: 600; line-height: 1.2;
+  cursor: default; user-select: none; white-space: nowrap;
+}
+.vb-pill__dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.vb-pill--dashed { background: transparent; border: 1px dashed var(--vb-gris); color: var(--text-muted); }
+.vb-pill--dashed .vb-pill__dot { background: var(--accent); }
+.vb-pill--sm { min-height: var(--control-h-sm); padding: 0 16px; font-size: 15px; }
+.vb-pill--on-dark { background: transparent; border: 1px dashed rgba(255, 255, 255, .55); color: var(--vb-blanc); }
+.vb-pill--on-dark .vb-pill__dot { background: var(--vb-brume); }
+
+/* ---------- Badges : libellé toujours en toutes lettres (§5) ---------- */
+.vb-badge {
+  display: inline-flex; align-items: center; padding: 3px 9px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 600; line-height: 1.4; white-space: nowrap;
+  background: var(--accent-soft); color: var(--accent); border: 1px solid transparent;
+}
+.vb-badge--attention { background: var(--attention-soft); color: var(--attention-on-subtle); border-color: var(--attention-edge); }
+/* « Recommandé » : blanc sur cuivre doux = 3,45:1 (< 4,5:1) ⇒ fond cuivre texte (5,45:1). */
+.vb-badge--recommended { background: var(--vb-cuivre-texte); color: var(--vb-blanc); font-weight: 700; }
+.vb-badge--outline { background: transparent; color: var(--text-muted); border-color: var(--border); }
+
+/* ---------- Cartes : une carte = une unité d'information (§5) ---------- */
+.vb-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); color: var(--text-primary); }
+.vb-card--elevated { box-shadow: var(--shadow-card); }
+
+/* ---------- Tuiles d'icônes ---------- */
+.vb-tile {
+  width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--accent-soft); color: var(--accent);
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.vb-tile--sm { width: 40px; height: 40px; border-radius: 10px; }
+.vb-tile--lg { width: 96px; height: 96px; border-radius: var(--radius-xl); }
+.vb-icon { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+/* ---------- Mascotte : recoloration cyan provisoire par filtre CSS (§4) ---------- */
+.vb-mascot { filter: var(--vb-mascotte-filtre); object-fit: contain; height: auto; flex-shrink: 0; }
+.vb-bubble {
+  position: relative; border-radius: 20px; border-top-left-radius: 6px; border: 1px solid var(--bubble-edge);
+  background: var(--bubble); padding: 16px 20px; font-size: 15px; line-height: 1.6; color: var(--text-primary);
+}
+
+/* ---------- Contrôle segmenté ---------- */
+.vb-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border); }
+.vb-seg button {
+  padding: 8px 16px; border-radius: var(--radius-sm); border: 0; cursor: pointer; font-size: 14px; font-weight: 600;
+  background: transparent; color: var(--text-muted); transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.vb-seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); cursor: default; }
+
+/* ---------- Champs (formulaire de contact) ---------- */
+.vb-field {
+  font-size: 16px; padding: 12px 14px; min-height: var(--control-h); border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--bg-card); color: var(--text-primary); width: 100%;
+}
+.vb-field::placeholder { color: #6B7A80; }
+/* A11Y-01 (`npm run test:a11y`) : jamais d'`outline: none` sans remplaçant. */
+.vb-field:focus-visible { outline: 3px solid var(--focus-color); outline-offset: 2px; border-color: var(--accent); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- Mouvement réduit ---------- */
+/* `transition-duration: 0s` et non `.01ms` (extrait du design system) : avec
+   `transition-property: all` (valeur par défaut), une durée non nulle ferait
+   transiter TOUTES les propriétés — l'anneau de focus serait lu à 0 px
+   (constaté au parcours clavier, `npm run test:a11y`). */
 @media (prefers-reduced-motion: reduce) {
-  .vb-reveal,
-  .vb-rgroup > * { opacity: 1 !important; transform: none !important; transition: none !important; }
-  /* Animations non indispensables : démo produit, flottement mascotte, marquee. */
-  .vb-demoanim { animation: none !important; opacity: 1 !important; transform: none !important; }
-  img[style*="vb-float"], div[style*="vb-marquee"] { animation: none !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: 0s !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
 }
 
-/* Responsive */
+/* ---------- Responsive ---------- */
 .r-burger, .r-mobile-menu { display: none; }
 .r-fixedcta { display: none; }
 @media (max-width: 860px) {
-  h1 { font-size: 37px !important; line-height: 1.08 !important; }
-  h2 { font-size: 26px !important; line-height: 1.22 !important; }
-  .r-nav, .r-hide-m, .r-dots, .r-browser { display: none !important; }
+  .vb-h1 { font-size: var(--fs-h1-mobile); }
+  .vb-h2 { font-size: var(--fs-h2-mobile); }
+  .vb-h3 { font-size: var(--fs-h3-mobile); }
+  .vb-lead { font-size: var(--fs-lead-mobile); }
+  /* Sous 40 px, le cuivre doux n'est plus un « grand titre » (§1.3) : cuivre texte. */
+  .vb-accent { color: var(--attention); }
+  .vb-section { padding: var(--sp-16) 20px; }
+  .vb-band { padding: var(--sp-12) 20px; }
+  .r-nav, .r-hide-m { display: none !important; }
   .r-burger { display: inline-flex !important; }
   .r-mobile-menu { display: flex !important; }
-  .r-hero, .r-2, .r-2b, .r-3, .r-4, .r-cta { grid-template-columns: 1fr !important; }
-  .r-contact { grid-template-columns: 1fr !important; }
-  .r-footer { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
-  .r-mock { flex-direction: column !important; align-items: center !important; gap: 0 !important; }
-  .r-uc { flex-direction: column !important; }
-  .r-uc-panel { min-width: 0 !important; padding: 22px 20px !important; }
-  .r-2 { grid-template-columns: 1fr !important; }
-  .r-tri { grid-template-columns: 1fr !important; }
   .r-fixedcta { display: block !important; }
+  .r-stack { grid-template-columns: 1fr !important; }
+}
+
+/* ---------- En-tête des pages intérieures (contact, légal, 404) ---------- */
+.vb-page-hero { padding: 40px var(--gutter) 44px; border-bottom: 1px solid var(--border); }
+.vb-page-hero__inner { margin: 0 auto; }
+.vb-page-hero__title { font-size: 46px; line-height: 1.08; font-weight: 800; letter-spacing: -.03em; color: var(--text-heading); max-width: 680px; text-wrap: pretty; }
+.vb-page-hero__lead { font-size: 18px; line-height: 1.6; color: var(--text-muted); max-width: 560px; margin-top: 16px; }
+.vb-crumbs { margin-bottom: 24px; }
+.vb-crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
+.vb-crumbs a { display: inline-flex; align-items: center; gap: 7px; color: var(--accent); font-weight: 600; padding: 4px 6px; border-radius: 8px; transition: background-color var(--dur) var(--ease); }
+.vb-crumbs a:hover { background: var(--accent-soft); }
+.vb-crumbs [aria-current] { color: var(--text-primary); font-weight: 600; padding: 4px; }
+.vb-crumbs__sep { display: flex; color: var(--text-muted); }
+.vb-tabs { display: flex; flex-wrap: wrap; gap: 10px; }
+.vb-tabs button {
+  padding: 0 18px; min-height: 40px; border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted);
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.vb-tabs button:hover { border-color: var(--accent); color: var(--accent); }
+.vb-tabs button[aria-current="page"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+@media (max-width: 860px) {
+  .vb-page-hero { padding: 24px 20px 32px; }
+  .vb-page-hero__title { font-size: 34px; }
 }

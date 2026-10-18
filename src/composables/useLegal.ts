@@ -27,16 +27,8 @@ export function useLegal() {
         : 'Mentions légales',
   )
 
-  const tabStyle = (a: boolean) =>
-    `padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid ${a ? 'rgba(37,99,235,.4)' : '#E2E8F0'};background:${a ? 'rgba(37,99,235,.08)' : '#fff'};color:${a ? '#1D4ED8' : '#64748B'};transition:all .15s`
-
-  const legalMentionsStyle = computed(() => tabStyle(isMentions.value))
-  const legalCGUStyle = computed(() => tabStyle(isCGU.value))
-  const legalConfidStyle = computed(() => tabStyle(isConfid.value))
-
   return {
     isMentions, isCGU, isConfid, legalTitle,
-    legalMentionsStyle, legalCGUStyle, legalConfidStyle,
     crumbLabel: 'Informations légales',
   }
 }

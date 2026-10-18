@@ -1,7 +1,7 @@
 <template>
 <template v-if="visible && !isPrelaunch">
-<div class="r-fixedcta" style="position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 16px 14px;background:rgba(7,14,32,.94);backdrop-filter:blur(14px);border-top:1px solid rgba(148,163,184,.18)">
-  <a :href="signupUrl()" style="display:block;text-align:center;font-size:15.5px;font-weight:600;color:#fff;padding:14px;border-radius:999px;background:linear-gradient(135deg,#00D4AA,#00A882)">Essayer gratuitement pendant 7 jours</a>
+<div class="r-fixedcta mcta">
+  <a :href="signupUrl()" class="vb-btn vb-btn--primary vb-btn--block">Essayer gratuitement pendant 7 jours</a>
 </div>
 </template>
 </template>
@@ -26,3 +26,8 @@ onMounted(() => {
 })
 onUnmounted(() => { if (onScroll) window.removeEventListener('scroll', onScroll) })
 </script>
+
+<style>
+/* Aplat ivoire, filet en haut : pas de flou ni de transparence (readme « Fonds »). */
+.mcta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 16px 14px; background: var(--bg-page); border-top: 1px solid var(--border); }
+</style>

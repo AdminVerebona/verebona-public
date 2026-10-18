@@ -20,7 +20,7 @@
                            :text="r.excerpt" :category-name="r.doc.categoryName" :terms="r.terms" />
         </div>
         <div v-else class="ha-panel">
-          <p style="margin:0;font-size:16px;line-height:1.6;color:#334155">
+          <p style="margin:0;font-size:16px;line-height:1.6;color:var(--text-primary)">
             Aucun article ne correspond suffisamment à votre recherche. Essayez avec moins de mots, un autre terme ou parcourez les catégories ci-dessous.
           </p>
         </div>

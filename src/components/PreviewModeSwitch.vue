@@ -6,9 +6,9 @@
     role="group"
     aria-label="Prévisualisation du mode du site"
     data-testid="preview-mode-switch"
-    style="position:fixed;left:14px;bottom:14px;z-index:70;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:999px;background:rgba(7,14,32,.92);border:1px solid rgba(250,204,21,.45);box-shadow:0 10px 30px rgba(4,10,26,.45);backdrop-filter:blur(10px);font-family:'Instrument Sans','Instrument Sans Fallback',sans-serif;font-size:12px;color:#FDE68A"
+    style="position:fixed;left:14px;bottom:14px;z-index:70;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:999px;background:#FFFFFF;border:1px dashed #AA4E38;box-shadow:0 12px 32px rgba(38,53,59,.08);font-size:12px;color:#26353B"
   >
-    <span style="font-weight:700;letter-spacing:.08em;text-transform:uppercase">{{ environment }}</span>
+    <span style="font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#AA4E38">{{ environment }}</span>
     <button
       v-for="option in options"
       :key="option.mode"
@@ -41,5 +41,5 @@ function select(mode: SiteMode) {
 
 const buttonStyle = (active: boolean) =>
   `border:0;border-radius:999px;padding:6px 11px;font:inherit;font-weight:700;cursor:${active ? 'default' : 'pointer'};` +
-  `background:${active ? '#FACC15' : 'transparent'};color:${active ? '#0B1324' : '#FDE68A'}`
+  `background:${active ? '#17474D' : 'transparent'};color:${active ? '#FFFFFF' : '#52636A'}`
 </script>

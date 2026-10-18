@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#070E20;color:#EAF0FB;overflow-x:hidden;min-height:100vh">
+  <div class="vb-site">
     <!--
       Mode intégré à l'application (MOB-02) : ni en-tête ni pied de page du
       site, seulement la barre « Retour à Verebona » — sauf si l'application
@@ -14,11 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch, nextTick, defineAsyncComponent } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineAsyncComponent } from 'vue'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
-import { useScrollReveal } from './composables/useScrollReveal'
 import { CAN_PREVIEW_SITE_MODE } from './config/site'
 import { useEmbed } from './help/embed'
 
@@ -32,14 +30,6 @@ const PreviewModeSwitch = CAN_PREVIEW_SITE_MODE
   ? defineAsyncComponent(() => import('./components/PreviewModeSwitch.vue'))
   : null
 
-const route = useRoute()
-const { scan } = useScrollReveal()
-
-onMounted(() => { scan() })
-
-// Re-scan reveal targets whenever the route (page) changes.
-watch(
-  () => route.fullPath,
-  () => { nextTick(() => setTimeout(scan, 60)) },
-)
+// Charte 2026 (lot 66P) : plus d'animation d'apparition au défilement — les
+// transitions ne portent que sur le fond et la couleur (readme « Animation »).
 </script>
