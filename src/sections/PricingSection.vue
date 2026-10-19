@@ -235,4 +235,16 @@ const proFeatures: string[] = [
   .pr__ref { padding: 22px 20px; gap: 18px; }
   .pr__ref-cta { width: 100%; white-space: normal; justify-content: center; }
 }
+/* Zoom 200 % d'un téléphone (≈195 px, lot 70P) : colonnes sans largeur
+   min-content, badge remis dans le flux (il ne réserve plus 96 px à droite
+   du nom), marges intérieures réduites. Prix et libellés inchangés. */
+@media (max-width: 300px) {
+  .pr__grid { grid-template-columns: minmax(0, 1fr); }
+  .pr__card { padding: 20px 14px; }
+  .pr__badge { position: static; align-self: flex-start; margin-bottom: 8px; }
+  .pr__name { padding-right: 0; }
+  .pr__price { font-size: 28px; }
+  .pr__ref { padding: 18px 14px; }
+  .pr__ref-body { min-width: 0; flex-basis: 100%; }
+}
 </style>

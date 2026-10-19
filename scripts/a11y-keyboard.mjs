@@ -230,6 +230,37 @@ export const KEYBOARD_SCENARIOS = [
   carouselScenario('Types de biens : carrousel au clavier', '.uc__kinds-wrap', SEL.kindsNext, SEL.kindsTrack),
   carouselScenario('Visite en six vues : carrousel au clavier', '.tour', SEL.tourNext, SEL.tourTrack, { viewports: ['mobile'], presses: 2 }),
   {
+    // Lot 70P : sur ordinateur, la visite est une grille entièrement visible —
+    // aucun arrêt de tabulation inutile (piste, boutons masqués), rien ne défile.
+    name: 'Visite en six vues : grille sur ordinateur', url: '/', viewports: ['bureau'],
+    run: async (page) => {
+      const problems = []
+      const st = await page.evaluate(() => {
+        const t = document.querySelector('#tour-track')
+        const vw = document.documentElement.clientWidth
+        const items = [...t.children].map((li) => li.getBoundingClientRect())
+        const btns = [...document.querySelectorAll('.tour .vb-carousel__btn')]
+        return {
+          shown: getComputedStyle(document.querySelector('.tour')).display !== 'none' && t.getBoundingClientRect().height > 0,
+          n: items.length,
+          inside: items.every((r) => r.width > 0 && r.left >= 0 && r.right <= vw),
+          rows: new Set(items.map((r) => Math.round(r.top))).size,
+          tabindex: t.getAttribute('tabindex'),
+          scrolls: t.scrollWidth > t.clientWidth + 1,
+          btnsHidden: btns.every((b) => b.offsetParent === null),
+        }
+      })
+      if (!st.shown) problems.push('visite non affichée sur ordinateur')
+      if (st.n !== 6 || !st.inside) problems.push(`les six vues ne sont pas toutes visibles (${st.n}, inside=${st.inside})`)
+      if (st.rows !== 2) problems.push(`grille attendue sur 2 rangées : ${st.rows}`)
+      if (st.tabindex !== null || st.scrolls) problems.push(`piste encore défilante ou focalisable (tabindex=${st.tabindex})`)
+      if (!st.btnsHidden) problems.push('boutons du carrousel visibles alors que rien ne défile')
+      const { stops } = await walk(page, ['.tour *, #tour-track'])
+      if (stops.some((s) => s.matches[0])) problems.push('un arrêt de tabulation dans la visite (grille)')
+      return { problems, info: `${st.n} vues, ${st.rows} rangées, aucun arrêt` }
+    },
+  },
+  {
     name: 'Accueil : aucun défilement automatique (animations non réduites)', url: '/',
     run: async (page) => {
       const problems = []

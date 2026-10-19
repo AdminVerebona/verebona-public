@@ -45,4 +45,10 @@ const { isPrelaunch, labels } = useSiteMode()
   .cta__copy { padding: 56px 0 8px; }
   .cta__mascot { width: 120px; justify-self: end; }
 }
+/* Zoom 200 % d'un téléphone (≈195 px, lot 70P). */
+@media (max-width: 300px) {
+  .cta { padding: 0 14px; }
+  .cta__grid { grid-template-columns: minmax(0, 1fr); }
+  .cta__mascot { width: 96px; }
+}
 </style>

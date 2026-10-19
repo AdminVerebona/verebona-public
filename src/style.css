@@ -206,6 +206,13 @@ section[id] { scroll-margin-top: 24px; }
   /* minmax(0, …) : pas de débordement sous la largeur min-content (zoom 200 %, lot 69P). */
   .r-stack { grid-template-columns: minmax(0, 1fr) !important; }
 }
+/* Zoom 200 % d'un téléphone (390 px → ≈195 px CSS), lot 70P : un titre ou un
+   bouton ne peut plus imposer sa largeur min-content à la page (mots longs
+   coupés avec césure, libellés de bouton sur deux lignes). */
+@media (max-width: 300px) {
+  .vb-h1, .vb-h2, .vb-h3 { overflow-wrap: anywhere; hyphens: auto; }
+  .vb-btn, .vb-pill { white-space: normal; max-width: 100%; padding-inline: 16px; }
+}
 
 /* ---------- En-tête des pages intérieures (contact, légal, 404) ---------- */
 .vb-page-hero { padding: 40px var(--gutter) 44px; border-bottom: 1px solid var(--border); }

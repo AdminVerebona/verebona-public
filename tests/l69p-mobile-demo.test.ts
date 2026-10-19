@@ -215,10 +215,18 @@ describe('L69P-03 — types de biens : carrousel horizontal natif et accessible'
     expect(noComments(read('src/sections/UseCasesSection.vue'))).toMatch(/\.uc__kind \{ width: min\(146px, 38vw\);/)
   })
 
-  it('visite en six vues : même carrousel accessible (vue précédente / suivante, « 1 / 6 »)', () => {
-    const w = track(mount(AppShowcaseSection))
+  it('visite en six vues : même carrousel accessible (vue précédente / suivante, « 1 / 6 »)', async () => {
+    const w = track(mount(AppShowcaseSection, { attachTo: document.body }))
+    // Lot 70P : géométrie mobile explicite (piste qui défile) — la piste n'est
+    // focalisable que lorsqu'elle défile réellement (grille sur ordinateur).
+    const el = w.find('#tour-track').element as HTMLElement
+    fakeGeometry(el, { w: 300, gap: 12, vw: 390 })
+    el.dispatchEvent(new Event('scroll'))
+    await frame(); await flushPromises()
     expect(w.find('.tour').attributes('role')).toBe('region')
+    expect(w.find('.tour').attributes('aria-roledescription')).toBe('carrousel')
     expect(w.find('#tour-track').attributes('tabindex')).toBe('0')
+    expect(w.find('#tour-track').attributes('aria-label')).toBe('Vues de l’application, défilement horizontal'.replace('’', "'"))
     expect(w.find('button[aria-label="Vue précédente"]').attributes('aria-controls')).toBe('tour-track')
     expect(w.find('button[aria-label="Vue suivante"]').exists()).toBe(true)
     expect(w.find('.tour .vb-carousel__count').text()).toBe('1 / 6')

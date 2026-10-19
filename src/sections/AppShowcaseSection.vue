@@ -4,7 +4,9 @@
      Lot 69P : sur mobile, l'ordinateur n'est plus masqué — il est recomposé
      (menu replié en icônes de 44 px, cadrage partiel) avec le téléphone qui le
      chevauche ; suivent la visite de l'application en six vues (ProductTour)
-     et aucun défilement automatique. -->
+     et aucun défilement automatique.
+     Lot 70P : la visite s'affiche aussi sur tablette et ordinateur, sous la
+     démonstration ordinateur + téléphone (inchangée), recomposée en grille. -->
 <section class="app">
   <div class="vb-container">
     <ul class="app__tri r-stack">

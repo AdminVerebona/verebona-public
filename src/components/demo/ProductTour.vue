@@ -1,14 +1,22 @@
 <template>
-<!-- Visite de l'application en six vues (lot 69P, page publique mobile).
+<!-- Visite de l'application en six vues (lot 69P, page publique mobile ;
+     lot 70P : aussi sur ordinateur et tablette, sous la démonstration
+     ordinateur + téléphone).
      Carrousel natif piloté par l'utilisateur : chaque vue associe un titre et
      une phrase en TEXTE RÉEL à un cadrage partiel de l'interface construit en
      HTML/CSS (inspiré des maquettes « Verebona App 2026 »). Les cadrages sont
      décoratifs pour les lecteurs d'écran (`aria-hidden`) : l'information
      utile est portée par le texte de la vue. Rien n'est focalisable dans les
-     vues : les éléments hors écran ne reçoivent jamais le focus. -->
-<div class="tour vb-carousel vb-carousel--bleed" role="region" aria-roledescription="carrousel" aria-labelledby="tour-title">
+     vues : les éléments hors écran ne reçoivent jamais le focus.
+     UN SEUL composant responsive, un seul exemplaire du texte dans le HTML :
+     carrousel natif sous 768 px ; à partir de 768 px, la même liste devient
+     une grille (2 × 3 puis 3 × 2 dès 1000 px) où les six vues sont visibles
+     d'emblée. Quand rien ne défile (grille), la piste n'est plus un arrêt de
+     tabulation ni annoncée comme carrousel, et les boutons sont masqués. -->
+<div class="tour vb-carousel vb-carousel--bleed" role="region" :aria-roledescription="scrolls ? 'carrousel' : undefined" aria-labelledby="tour-title">
   <p id="tour-title" class="tour__head">Verebona en six vues</p>
-  <ul id="tour-track" ref="track" class="vb-carousel__track tour__track" tabindex="0" aria-label="Vues de l'application, défilement horizontal">
+  <ul id="tour-track" ref="track" class="vb-carousel__track tour__track" :tabindex="scrolls ? 0 : undefined"
+    :aria-label="scrolls ? 'Vues de l\'application, défilement horizontal' : 'Vues de l\'application'">
     <li v-for="(v, i) in views" :key="v.key" :class="['tour__slide', `tour__slide--${v.key}`]" :data-view="v.key">
       <div class="tour__stage" aria-hidden="true">
         <!-- 1. Fiche du bien : photo recadrée + carte d'identité qui la chevauche -->
@@ -89,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useScrollCarousel } from '../../composables/useScrollCarousel'
 import VbIcon from '../VbIcon.vue'
 import CarouselControls from '../CarouselControls.vue'
@@ -100,6 +109,10 @@ const car = useScrollCarousel({
   announce: (f) => `Vue ${f + 1} sur ${views.length} : ${views[f].title}`,
 })
 const track = car.track
+// Piste réellement défilante (carrousel) ou grille entièrement visible.
+// Vrai au prérendu (aucune mesure possible) : le HTML statique reste celui du
+// carrousel accessible ; la mesure au montage corrige pour la grille.
+const scrolls = computed(() => car.overflow.value)
 </script>
 
 <style>
@@ -179,12 +192,29 @@ const track = car.track
 .tour__answer { position: absolute; left: 14px; right: 66px; top: 62px; font-size: 12.5px; line-height: 1.45; color: var(--text-primary); padding: 10px 12px; }
 .tour__mascot { position: absolute; right: 0; bottom: 4px; width: 62px; }
 
-/* Desktop : la démonstration y est portée par l'ordinateur et le téléphone
-   (inchangés) ; la visite est la recomposition propre aux écrans étroits. */
-@media (min-width: 861px) {
-  .tour { display: none; }
-}
-@media (min-width: 600px) and (max-width: 860px) {
+@media (min-width: 600px) and (max-width: 767px) {
   .tour__slide { width: 300px; }
+}
+
+/* ── Tablette et ordinateur (lot 70P) : la même liste en grille ──
+   Sous la démonstration ordinateur + téléphone (inchangée). Les six vues sont
+   visibles d'un coup : rien à faire défiler, donc ni boutons ni position.
+   Bordures 1 px, aplats (pas de dégradé), une seule ombre : celle de la
+   carte flottante de chaque cadrage. */
+@media (min-width: 768px) {
+  .tour { margin-top: var(--sp-16); padding-top: var(--sp-12); border-top: 1px solid var(--border-subtle); }
+  .tour__head { margin: 0 0 var(--sp-8); }
+  .tour.vb-carousel .tour__track {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-12) var(--sp-6);
+    margin: 0; padding: 0; overflow: visible; scroll-snap-type: none;
+  }
+  .tour__slide { width: auto; min-width: 0; }
+  .tour__stage { height: 224px; margin-bottom: var(--sp-4); }
+  .tour__title { font-size: var(--fs-h3); }
+  .tour__text { font-size: 16px; max-width: 34em; }
+  .tour .vb-carousel__controls { display: none; }
+}
+@media (min-width: 1000px) {
+  .tour.vb-carousel .tour__track { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-12) var(--sp-8); }
 }
 </style>

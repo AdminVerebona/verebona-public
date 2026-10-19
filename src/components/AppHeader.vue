@@ -94,4 +94,14 @@ const { menuOpen, toggleMenu, closeMenu, link, navHow, navCasUsage, navPricing, 
 @media (max-width: 860px) {
   .hd__bar { padding: 16px 20px; }
 }
+/* Zoom 200 % d'un téléphone (≈195 px, lot 70P) : logo et marges réduits pour
+   que le logo et le bouton Menu tiennent sur la ligne. */
+@media (max-width: 300px) {
+  .hd__bar { padding: 12px; gap: 8px; }
+  .hd__logo .vb-logo { gap: 7px !important; }
+  .hd__logo svg { width: 26px; height: 26px; }
+  .hd__logo .vb-logo__word { font-size: 18px !important; }
+  .hd__menu { padding-inline: 12px; }
+  .hd__menu-ctas { flex-direction: column; }
+}
 </style>

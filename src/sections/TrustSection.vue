@@ -61,4 +61,11 @@ const { showMascot } = useLanding()
   .trust__mascot { width: 96px; }
   .trust__card { padding: 22px; }
 }
+/* Zoom 200 % d'un téléphone (≈195 px, lot 70P) : le texte prend la largeur
+   disponible (et non celle de son mot le plus long). */
+@media (max-width: 300px) {
+  .trust__intro { align-items: stretch; }
+  .trust__mascot { align-self: flex-start; }
+  .trust__card { padding: 18px 14px; }
+}
 </style>

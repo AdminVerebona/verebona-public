@@ -53,4 +53,10 @@ const { link, navHow, navPricing, navFaq, navCasUsage } = useNav()
   .ft__grid { grid-template-columns: 1fr 1fr; gap: 28px 24px; }
   .ft__grid > :first-child { grid-column: 1 / -1; }
 }
+/* Zoom 200 % d'un téléphone (≈195 px, lot 70P) : une seule colonne. */
+@media (max-width: 300px) {
+  .ft { padding-inline: 14px; }
+  .ft__grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .ft__links a { overflow-wrap: anywhere; }
+}
 </style>
