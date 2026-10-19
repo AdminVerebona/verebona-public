@@ -105,7 +105,9 @@ const docs = [
 .hero__mascot { position: absolute; right: -16px; bottom: -8px; width: 124px; }
 
 @media (max-width: 1180px) {
-  .hero__grid { grid-template-columns: 1fr; gap: 48px; }
+  /* minmax(0, …) : la colonne se réduit sous la largeur min-content de ses
+     cartes (zoom 200 % sur mobile, lot 69P) au lieu de déborder. */
+  .hero__grid { grid-template-columns: minmax(0, 1fr); gap: 48px; }
   .hero__montage { width: 600px; max-width: 100%; margin: 0 auto; }
 }
 @media (max-width: 860px) {
@@ -114,11 +116,33 @@ const docs = [
   .hero__action--row { flex-direction: column; align-items: stretch; }
   .hero__action .vb-btn { width: 100%; white-space: normal; }
   .hero__action .vb-pill { justify-content: center; }
-  /* Mobile : cartes empilées, sans photos (maquette « 1c Mobile 390 »). */
-  .hero__montage { height: auto; width: auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end; }
-  .hero__photo { display: none; }
-  .hero__docs, .hero__due { position: static; width: auto; }
-  .hero__docs { grid-column: 1 / -1; padding: 18px; }
-  .hero__mascot { position: static; width: 96px; }
+  /* Mobile (lot 69P) : montage recomposé, plus de photos masquées. Trois
+     photos de biens en arrière-plan, carte « Mes documents » qui les
+     chevauche, carte d'échéance décalée et mascotte en bordure basse droite :
+     deux niveaux de profondeur (charte §6), sans débordement (grille). */
+  .hero__montage {
+    height: auto; width: auto; max-width: 560px; display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start;
+  }
+  .hero__photo { position: static; width: 100%; height: auto; border-radius: var(--radius-md); }
+  .hero__photo--a { grid-column: 1 / 8; grid-row: 1; aspect-ratio: 290 / 200; }
+  .hero__photo--b { grid-column: 8 / 13; grid-row: 1; aspect-ratio: 1 / 1; margin: 22px 0 0 10px; width: calc(100% - 10px); }
+  .hero__photo--c { grid-column: 9 / 13; grid-row: 3; aspect-ratio: 1 / 1; align-self: end; margin-left: 10px; width: calc(100% - 10px); }
+  .hero__docs, .hero__due { position: relative; left: auto; top: auto; width: auto; }
+  .hero__docs { grid-column: 1 / 13; grid-row: 2; margin: -44px 0 0 14px; padding: 16px 16px 6px; z-index: 1; }
+  .hero__docs-title { font-size: 17px; }
+  .hero__doc { gap: 12px; padding: 10px 0; }
+  .hero__doc-title { font-size: 15px; }
+  .hero__due { grid-column: 1 / 11; grid-row: 3; margin-top: -14px; padding: 14px 16px; z-index: 2; align-self: start; }
+  .hero__mascot { position: relative; grid-column: 10 / 13; grid-row: 3; align-self: end; justify-self: end; width: 84px; right: auto; bottom: auto; margin: 0 -4px -6px 0; z-index: 3; }
+}
+@media (max-width: 300px) {
+  /* Très étroit (zoom 200 % d'un téléphone) : le badge passe sous le titre. */
+  .hero__doc, .hero__due { flex-wrap: wrap; }
+  .hero__action .vb-pill { white-space: normal; }
+}
+@media (max-width: 400px) {
+  .hero__docs { margin-left: 0; }
+  .hero__doc .vb-tile--sm { width: 34px; height: 34px; }
 }
 </style>

@@ -39,6 +39,8 @@ const dist = path.join(root, 'dist')
  * formulaire de contact affichées — A11Y-02/04).
  */
 export const PAGES = [
+  // Lot 69P : accueil (démonstration produit mobile, carrousels).
+  { name: 'Accueil', url: '/' },
   { name: 'Accueil du Centre d’aide', url: '/aide' },
   { name: 'Recherche d’aide', url: '/aide?q=document' },
   { name: 'Thème', url: '/aide/theme/documents' },

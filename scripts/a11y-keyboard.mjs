@@ -33,6 +33,62 @@ const SEL = {
   helpCard: 'a.ha-card',
   crumb: '.ha-crumbs a',
   footer: 'footer a',
+  // Lot 69P — accueil : ordinateur, visite en six vues, types de biens.
+  appSide: '.app__side-btn',
+  appArrow: '.app__arrow',
+  tourTrack: '#tour-track',
+  tourNext: '.tour button[aria-label="Vue suivante"]',
+  kindsTrack: '#uc-kinds',
+  kindsNext: '.uc__kinds-wrap button[aria-label="Types de biens suivants"]',
+}
+
+/** État visible d'un carrousel : position écrite, bornes, annonce. */
+function carouselState(page, scope) {
+  return page.evaluate((sc) => {
+    const root = document.querySelector(sc)
+    const btns = [...root.querySelectorAll('.vb-carousel__btn')]
+    return {
+      count: root.querySelector('.vb-carousel__count')?.textContent.trim(),
+      disabled: btns.map((b) => b.getAttribute('aria-disabled')),
+      live: root.querySelector('[aria-live]')?.textContent.trim(),
+      scroll: root.querySelector('.vb-carousel__track').scrollLeft,
+      focusIn: btns.indexOf(document.activeElement),
+    }
+  }, scope)
+}
+
+/**
+ * Lot 69P : carrousel parcouru au clavier seul — bouton « suivant » atteint au
+ * Tab avec focus visible, Entrée / Espace déplacent la piste, position et
+ * annonce mises à jour, le focus reste sur le bouton (aria-disabled aux bornes,
+ * jamais `disabled`), puis flèche droite sur la piste focalisée.
+ */
+function carouselScenario(name, scope, nextSel, trackSel, { viewports, presses = 1 } = {}) {
+  return {
+    name, url: '/', viewports,
+    run: async (page) => {
+      const problems = []
+      const s = await tabTo(page, nextSel)
+      if (!s.indicator) problems.push(`bouton suivant sans focus visible (${s.style})`)
+      const before = await carouselState(page, scope)
+      if (before.disabled[0] !== 'true') problems.push(`au départ, « précédent » devrait être aria-disabled="true" (${before.disabled[0]})`)
+      for (let i = 0; i < presses; i++) { await page.keyboard.press(i % 2 ? ' ' : 'Enter'); await page.waitForTimeout(450) }
+      const after = await carouselState(page, scope)
+      if (after.count === before.count) problems.push(`position inchangée après Entrée : ${after.count}`)
+      if (!(after.scroll > before.scroll)) problems.push('la piste n’a pas défilé')
+      if (after.focusIn !== 1) problems.push('le focus a quitté le bouton « suivant »')
+      if (after.disabled[0] !== 'false') problems.push('« précédent » reste désactivé après un déplacement')
+      if (!after.live) problems.push('aucune annonce (aria-live) après le déplacement')
+      // Flèche droite sur la piste elle-même (défilement natif au clavier).
+      await page.locator(trackSel).focus()
+      const t0 = await carouselState(page, scope)
+      await page.keyboard.press('ArrowRight')
+      await page.waitForTimeout(450)
+      const t1 = await carouselState(page, scope)
+      if (!(t1.scroll > t0.scroll) && t0.disabled[1] !== 'true') problems.push('flèche droite sur la piste : aucun défilement')
+      return { problems, info: `${before.count} → ${after.count} (${after.live})` }
+    },
+  }
 }
 
 /**
@@ -166,6 +222,32 @@ function orderScenario(name, url, order, { first = 0, viewports } = {}) {
 }
 
 export const KEYBOARD_SCENARIOS = [
+  // Lot 69P — accueil : ordre des contrôles de la démonstration produit.
+  orderScenario('Accueil', '/',
+    [SEL.logo, SEL.headerNav, SEL.appSide, SEL.appArrow, SEL.kindsTrack, SEL.kindsNext, SEL.footer], { viewports: ['bureau'] }),
+  orderScenario('Accueil', '/',
+    [SEL.logo, SEL.burger, SEL.appSide, SEL.appArrow, SEL.tourTrack, SEL.tourNext, SEL.kindsTrack, SEL.kindsNext, SEL.footer], { viewports: ['mobile'] }),
+  carouselScenario('Types de biens : carrousel au clavier', '.uc__kinds-wrap', SEL.kindsNext, SEL.kindsTrack),
+  carouselScenario('Visite en six vues : carrousel au clavier', '.tour', SEL.tourNext, SEL.tourTrack, { viewports: ['mobile'], presses: 2 }),
+  {
+    name: 'Accueil : aucun défilement automatique (animations non réduites)', url: '/',
+    run: async (page) => {
+      const problems = []
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+      await page.reload({ waitUntil: 'networkidle' })
+      await page.waitForFunction(() => document.querySelector('#app')?.children.length, null, { timeout: 10000 })
+      const snap = () => page.evaluate(() => JSON.stringify({
+        app: document.querySelector('.app__side-btn[aria-pressed="true"]')?.textContent.trim(),
+        how: [...document.querySelectorAll('.how__step')].map((b) => b.getAttribute('aria-pressed')),
+        tracks: [...document.querySelectorAll('.vb-carousel__track')].map((t) => t.scrollLeft),
+      }))
+      const a = await snap()
+      await page.waitForTimeout(4500)
+      const b = await snap()
+      if (a !== b) problems.push(`contenu modifié sans action en 4,5 s : ${a} → ${b}`)
+      return { problems, info: 'état identique après 4,5 s' }
+    },
+  },
   orderScenario('Accueil du Centre d’aide', '/aide',
     [SEL.logo, SEL.headerNav, SEL.searchInput, SEL.searchButton, SEL.helpCard, SEL.footer], { viewports: ['bureau'] }),
   orderScenario('Accueil du Centre d’aide', '/aide',

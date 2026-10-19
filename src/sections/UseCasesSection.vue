@@ -6,10 +6,25 @@
       <h2 class="vb-h2 uc__title">Utile au quotidien. Décisif quand il faut agir.</h2>
       <p class="vb-text">Verebona vous aide à retrouver, suivre et documenter vos biens au fil du temps, puis à réunir les bonnes pièces lorsqu'un événement arrive.</p>
     </div>
-    <!-- Types de biens : liste statique (charte : pas de défilement automatique). -->
-    <ul class="uc__kinds" aria-label="Exemples de biens">
-      <li v-for="k in kinds" :key="k">{{ k }}</li>
-    </ul>
+    <!-- Types de biens : carrousel horizontal NATIF piloté par l'utilisateur
+         (lot 69P) — swipe, flèches du clavier sur la piste, boutons
+         précédent / suivant ; carte suivante partiellement visible ; aucun
+         défilement automatique (charte : pas de mouvement continu). Cartes
+         non interactives : rien de focalisable hors écran. -->
+    <div class="uc__kinds-wrap vb-carousel vb-carousel--bleed" role="region" aria-roledescription="carrousel" aria-labelledby="uc-kinds-title">
+      <p id="uc-kinds-title" class="uc__kinds-title">Les biens que Verebona prend en charge</p>
+      <ul id="uc-kinds" ref="kindsTrack" class="vb-carousel__track uc__kinds" tabindex="0" aria-label="Types de biens, défilement horizontal">
+        <li v-for="k in kinds" :key="k.name" class="uc__kind">
+          <span class="vb-tile vb-tile--sm uc__kind-ico"><VbIcon :name="k.icon" :size="20" /></span>
+          <span class="uc__kind-name">{{ k.name }}</span>
+          <span class="uc__kind-ex">{{ k.examples }}</span>
+        </li>
+      </ul>
+      <CarouselControls v-if="kindsCar.overflow.value" controls="uc-kinds" prev-label="Types de biens précédents" next-label="Types de biens suivants"
+        :at-start="kindsCar.atStart.value" :at-end="kindsCar.atEnd.value" :count="kinds.length"
+        :first="kindsCar.first.value" :last="kindsCar.last.value" :position="kindsPosition" :status="kindsCar.status.value"
+        @prev="kindsCar.prev" @next="kindsCar.next" />
+    </div>
     <div v-for="group in ucGroups" :key="group.label" class="uc__group">
       <div class="uc__group-label">{{ group.label }}</div>
       <div class="vb-card uc__list">
@@ -42,19 +57,54 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useLanding } from '../composables/useLanding'
+import { useScrollCarousel } from '../composables/useScrollCarousel'
 import VbIcon from '../components/VbIcon.vue'
+import CarouselControls from '../components/CarouselControls.vue'
+import type { IconName } from '../components/icons'
 
 const { ucGroups } = useLanding()
 
-const kinds = ['Voiture', 'Appartement', 'Garage', 'Moto', 'Maison', 'Terrain', 'Vélo', 'Local commercial', 'Loisir / Sport', 'Électronique']
+/** Ordre prévu par le design (ancien bandeau des types de biens). */
+const kinds: Array<{ name: string; icon: IconName; examples: string }> = [
+  { name: 'Voiture', icon: 'car', examples: 'Carte grise, assurance, entretiens' },
+  { name: 'Appartement', icon: 'building', examples: 'Bail, diagnostics, charges' },
+  { name: 'Garage', icon: 'garage', examples: 'Acte, taxe foncière, travaux' },
+  { name: 'Moto', icon: 'moto', examples: 'Carte grise, révisions, équipement' },
+  { name: 'Maison', icon: 'home', examples: 'Travaux, chaudière, assurance' },
+  { name: 'Terrain', icon: 'terrain', examples: 'Acte, bornage, taxe foncière' },
+  { name: 'Vélo', icon: 'bike', examples: 'Facture, garantie, révisions' },
+  { name: 'Local commercial', icon: 'store', examples: 'Bail, assurance, conformité' },
+  { name: 'Loisir / Sport', icon: 'leisure', examples: 'Factures, garanties, entretien' },
+  { name: 'Électronique', icon: 'laptop', examples: 'Factures, garanties, notices' },
+]
+
+const kindsCar = useScrollCarousel({
+  count: kinds.length,
+  step: 'page',
+  announce: (f, l) => (f === l ? `${kinds[f].name}, type ${f + 1} sur ${kinds.length}` : `Types ${f + 1} à ${l + 1} sur ${kinds.length} : ${kinds.slice(f, l + 1).map((k) => k.name).join(', ')}`),
+})
+const kindsTrack = kindsCar.track
+const kindsPosition = computed(() => {
+  const f = kindsCar.first.value + 1
+  const l = kindsCar.last.value + 1
+  return f === l ? `${f} / ${kinds.length}` : `${f}–${l} / ${kinds.length}`
+})
 </script>
 
 <style>
 .uc__intro { max-width: 700px; margin-bottom: 28px; }
 .uc__title { margin-bottom: 14px; }
-.uc__kinds { list-style: none; margin: 0 0 40px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.uc__kinds li { padding: 5px 12px; border-radius: var(--radius-pill); border: 1px solid var(--bubble-edge); background: var(--bg-page); font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.uc__kinds-wrap { margin: 0 0 40px; }
+.uc__kinds-title { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 6px 4px; }
+.uc__kind {
+  width: 176px; display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px;
+  border-radius: var(--radius-lg); border: 1px solid var(--bubble-edge); background: var(--bg-page);
+}
+.uc__kind-ico { margin-bottom: 4px; }
+.uc__kind-name { font-size: 16px; font-weight: 700; color: var(--text-primary); line-height: 1.25; }
+.uc__kind-ex { font-size: 13.5px; line-height: 1.4; color: var(--text-muted); }
 .uc__group { max-width: 920px; margin: 0 auto 32px; }
 .uc__group-label { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 14px 4px; }
 .uc__list { overflow: hidden; }
@@ -82,6 +132,9 @@ const kinds = ['Voiture', 'Appartement', 'Garage', 'Moto', 'Maison', 'Terrain', 
 .uc__mark { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 .uc__mark--x { color: var(--attention); }
 @media (max-width: 860px) {
+  .uc__kinds-wrap { margin-bottom: 32px; }
+  /* ~2,3 cartes visibles : la suivante dépasse et signale la suite. */
+  .uc__kind { width: min(146px, 38vw); padding: 12px 14px 14px; }
   .uc__head { padding: 14px 14px; align-items: flex-start; }
   .uc__panel { padding: 4px 16px 20px; }
 }

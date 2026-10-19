@@ -1,6 +1,10 @@
 <template>
 <!-- Application : ordinateur + téléphone (charte 2026 §6). Contenu et
-     interactions du carrousel inchangés ; habillage clair de l'application. -->
+     interactions du carrousel inchangés ; habillage clair de l'application.
+     Lot 69P : sur mobile, l'ordinateur n'est plus masqué — il est recomposé
+     (menu replié en icônes de 44 px, cadrage partiel) avec le téléphone qui le
+     chevauche ; suivent la visite de l'application en six vues (ProductTour)
+     et aucun défilement automatique. -->
 <section class="app">
   <div class="vb-container">
     <ul class="app__tri r-stack">
@@ -21,7 +25,7 @@
               <div class="app__side">
                 <div class="app__side-logo"><VbLogo :size="18" :wordmark="false" /><span>Verebona</span></div>
                 <button v-for="(n, i) in nav" :key="n.label" type="button" :aria-pressed="n.active" class="app__side-btn" @click.prevent="n.onClick">
-                  <VbIcon :name="sideIcons[i]" :size="16" />{{ sideLabels[i] }}
+                  <VbIcon :name="sideIcons[i]" :size="16" /><span class="app__side-label">{{ sideLabels[i] }}</span>
                 </button>
                 <div class="app__side-btn app__side-btn--static"><VbIcon name="calendar" :size="16" />Mes rappels</div>
               </div>
@@ -30,7 +34,7 @@
                   <div class="app__search"><VbIcon name="search" :size="14" />Rechercher…</div>
                   <span class="app__avatar" aria-hidden="true">LM</span>
                 </div>
-                <div class="app__body" aria-live="polite">
+                <div :key="slideLabel" class="app__body">
                   <!-- Tableau de bord -->
                   <template v-if="isDashboard">
                     <div class="app__stats">
@@ -91,6 +95,14 @@
           <div class="app__base" aria-hidden="true"></div>
         </div>
 
+        <!-- Mobile : vignette « synchronisé » dans l'espace laissé à gauche du
+             téléphone (redit l'introduction : décorative pour les lecteurs d'écran). -->
+        <div class="app__sync" aria-hidden="true">
+          <span class="app__sync-title"><VbIcon name="check" :size="15" />Synchronisé</span>
+          <span class="app__sync-text">Mêmes biens, documents et échéances sur ordinateur et sur téléphone.</span>
+          <span class="app__sync-chips"><span class="app__chip">Web</span><span class="app__chip">iOS</span><span class="app__chip">Android</span></span>
+        </div>
+
         <!-- Téléphone -->
         <div class="app__phone" aria-hidden="true">
           <div class="app__phone-screen">
@@ -121,19 +133,31 @@
           <button v-for="d in dots" :key="d.label" type="button" :class="['app__dot', d.active ? 'app__dot--on' : '']" :aria-pressed="d.active" :aria-label="`Afficher : ${d.label}`" @click.prevent="d.onClick"></button>
         </div>
         <button type="button" class="app__arrow" aria-label="Écran suivant" @click.prevent="next">›</button>
+        <p class="app__now"><span class="sr-only">Écran affiché : </span>{{ slideLabel }}<span class="app__now-pos"> · {{ slideIndex + 1 }} / 4</span></p>
       </div>
+      <!-- Annonce polie du seul nom de l'écran (et non de tout son contenu). -->
+      <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announced }}</p>
+
+      <ProductTour />
     </template>
   </div>
 </section>
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import { useLanding } from '../composables/useLanding'
+import ProductTour from '../components/demo/ProductTour.vue'
 import VbIcon from '../components/VbIcon.vue'
 import VbLogo from '../components/VbLogo.vue'
 import type { IconName } from '../components/icons'
 
-const { showMockup, nav, dots, isDashboard, isBiens, isEvents, isDocs, prev, next } = useLanding()
+const { showMockup, nav, dots, slideLabel, isDashboard, isBiens, isEvents, isDocs, prev, next } = useLanding()
+
+const slideIndex = computed(() => nav.value.findIndex((n) => n.active))
+// Rien n'est annoncé au chargement ; ensuite, seulement l'écran choisi.
+const announced = ref('')
+watch(slideLabel, (l) => { announced.value = `Écran affiché : ${l}, ${slideIndex.value + 1} sur 4` })
 
 const triptych: Array<{ icon: IconName; title: string; text: string }> = [
   { icon: 'home', title: 'Biens', text: 'Logements, véhicules, objets' },
@@ -257,10 +281,94 @@ const documents = [
 .app__dot::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background-color var(--dur) var(--ease); }
 .app__dot--on::before { background: var(--accent); }
 
+/* Changement d'écran : fondu court (opacité seulement, charte « fond et
+   couleur »), neutralisé par prefers-reduced-motion (style.css). */
+.app__body { animation: app-fade 200ms var(--ease); }
+@keyframes app-fade { from { opacity: 0; } to { opacity: 1; } }
+.app__sync { display: none; }
+.app__now { display: none; margin: 0; font-size: var(--fs-meta); font-weight: 700; color: var(--text-primary); }
+
+/* ── Mobile et tablette étroite (lot 69P) : ordinateur + téléphone recomposés ──
+   L'ordinateur reste visible (menu replié 64 px de l'application, boutons
+   d'icônes de 44 px, contenu recadré) ; le téléphone le chevauche en bas à
+   droite, sans couvrir aucun contrôle. Rien n'est masqué par display:none. */
 @media (max-width: 860px) {
   .app { padding: 48px 20px 8px; }
-  .app__tri { margin-bottom: 36px; gap: 12px; }
-  .app__laptop, .app__dots { display: none; }
-  .app__devices { justify-content: center; }
+  .app .app__tri { margin-bottom: 32px; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)) !important; }
+  .app__tri-item { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px; }
+  .app__tri-item .vb-tile { width: 40px; height: 40px; border-radius: 10px; }
+  .app__tri-title { font-size: 16px; }
+  .app__tri-text { font-size: 13.5px; line-height: 1.4; }
+  .app__intro { text-align: left; font-size: 16px; margin-bottom: 20px; }
+
+  .app__devices { position: relative; display: block; max-width: 640px; padding-bottom: var(--phone-out, 196px); }
+  .app__sync {
+    position: absolute; left: 0; bottom: 18px; width: calc(100% - 246px * var(--phone-k, .56) - 14px);
+    display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: var(--radius-md);
+    background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card);
+  }
+  .app__sync-title { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--accent); }
+  .app__sync-text { font-size: 12.5px; line-height: 1.4; color: var(--text-muted); }
+  .app__sync-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .app__laptop { width: 100%; align-items: flex-start; }
+  .app__bezel { width: 100%; border-radius: 12px 12px 0 0; padding: 10px 8px 10px; }
+  .app__cam { top: 3px; width: 4px; height: 4px; }
+  .app__base { height: 10px; width: 100%; }
+  .app__screen { height: 252px; }
+  .app__side { width: 56px; padding: 8px 6px; align-items: center; gap: 2px; }
+  .app__side-logo { padding: 2px 0 8px; justify-content: center; }
+  .app__side-logo > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .app__side-btn { width: 44px; height: 44px; padding: 0; justify-content: center; border-left: 0; border-radius: 10px; }
+  .app__side-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+  .app__side-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .app__side-btn--static { display: none; }
+  .app__top { height: 38px; padding: 0 10px; }
+  .app__search { max-width: none; }
+  .app__body { padding: 10px; }
+  .app__stats { grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .app__stat { padding: 7px 8px; gap: 8px; }
+  .app__stat-ico { width: 26px; height: 26px; }
+  .app__body > .app__row { margin-bottom: 10px; }
+  .app__row { padding: 8px 10px; }
+  .app__row-meta, .app__row-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app__assets { gap: 6px; }
+  .app__asset-img { height: 52px; }
+  .app__asset-img--lg { height: 78px; }
+  .app__asset-body { padding: 6px 7px; }
+  .app__head { flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .app__two { grid-template-columns: 1fr; gap: 6px; }
+
+  /* Téléphone : même écran que sur desktop, réduit, au premier plan. */
+  .app__phone { position: absolute; right: 0; bottom: 0; transform: scale(var(--phone-k, .56)); transform-origin: 100% 100%; box-shadow: 0 24px 48px rgba(38, 53, 59, .22); }
+
+  .app__dots { flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .app__arrow { width: 44px; height: 44px; }
+  .app__dot { width: 44px; height: 44px; }
+  .app__dots-list { gap: 0; }
+  .app__now { display: block; flex-basis: 100%; text-align: center; }
+}
+@media (min-width: 600px) and (max-width: 860px) {
+  .app__devices { --phone-k: .7; --phone-out: 170px; margin: 0 auto; }
+  .app__sync { bottom: 40px; max-width: 260px; }
+  .app__laptop { width: 82%; }
+  .app__screen { height: 320px; }
+}
+@media (max-width: 400px) {
+  /* Pictogrammes des compteurs retirés du cadrage étroit (le libellé reste). */
+  .app__stat-ico { display: none; }
+  .app__stat > span:last-child { min-width: 0; }
+  .app__stat .app__cap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+@media (max-width: 359px) {
+  .app__devices { --phone-k: .5; --phone-out: 150px; }
+  .app__sync-text { display: none; }
+}
+/* Très étroit (zoom 200 % d'un téléphone) : la superposition deviendrait
+   illisible — les deux supports s'affichent l'un après l'autre. */
+@media (max-width: 300px) {
+  .app__devices { padding-bottom: 0; }
+  .app__phone { position: static; transform: none; zoom: .62; margin: 20px auto 0; }
+  .app__sync { position: static; width: auto; margin-top: 16px; }
+  .app__sync-text { display: block; }
 }
 </style>

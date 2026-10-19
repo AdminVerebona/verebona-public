@@ -59,23 +59,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useLanding } from '../composables/useLanding'
 import VbIcon from '../components/VbIcon.vue'
 
 const { showMascot } = useLanding()
 
 // Démo interactive en 3 états : dépôt → analyse → fiche + échéance.
-// Auto-défilement toutes les 3,6 s, stoppé au premier clic,
-// désactivé si l'utilisateur préfère réduire les animations.
+// Lot 69P : plus d'auto-défilement (il changeait le contenu toutes les 3,6 s
+// sans action de l'utilisateur) — l'état change uniquement au choix d'une étape.
 const demo = ref(0)
-let iv: number | null = null
-const select = (i: number) => { if (iv) { clearInterval(iv); iv = null } demo.value = i }
-onMounted(() => {
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (!reduce) iv = window.setInterval(() => { demo.value = (demo.value + 1) % 3 }, 3600)
-})
-onUnmounted(() => { if (iv) clearInterval(iv) })
+const select = (i: number) => { demo.value = i }
 
 const mascotSays = computed(() => [
   "« Je réceptionne votre document, je regarde ce qu'il contient. »",
