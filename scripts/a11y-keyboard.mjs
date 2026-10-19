@@ -33,13 +33,37 @@ const SEL = {
   helpCard: 'a.ha-card',
   crumb: '.ha-crumbs a',
   footer: 'footer a',
-  // Lot 69P — accueil : ordinateur, visite en six vues, types de biens.
-  appSide: '.app__side-btn',
+  // Lot 69P — accueil : ordinateur. Lot 71P : Fonctionnalités (neuf vues,
+  // carrousel sur mobile) et bouton de pause du bandeau des types de biens.
+  // Lot 71P : la maquette affiche de vraies captures ; plus de menu latéral cliquable.
   appArrow: '.app__arrow',
-  tourTrack: '#tour-track',
-  tourNext: '.tour button[aria-label="Vue suivante"]',
-  kindsTrack: '#uc-kinds',
-  kindsNext: '.uc__kinds-wrap button[aria-label="Types de biens suivants"]',
+  featTrack: '#feat-track',
+  featNext: '.feat__views button[aria-label="Fonctionnalité suivante"]',
+  kindsToggle: '.uc__kinds-toggle',
+}
+
+/** Décalage horizontal courant de la piste du bandeau (matrice de transformation). */
+function marqueeX(page) {
+  return page.evaluate(() => {
+    const t = getComputedStyle(document.querySelector('.uc__marquee-track')).transform
+    return t === 'none' ? 0 : new DOMMatrixReadOnly(t).m41
+  })
+}
+/** Le bandeau bouge-t-il ? (deux mesures espacées de 700 ms) */
+async function marqueeMoves(page) {
+  // Laisse l'animation (fil du compositeur) prendre en compte la pause / reprise.
+  await page.waitForTimeout(200)
+  const a = await marqueeX(page)
+  await page.waitForTimeout(700)
+  return Math.abs((await marqueeX(page)) - a) > 0.5
+}
+/** Nom accessible du bouton du bandeau (texte visible + complément masqué). */
+function toggleName(page) {
+  return page.evaluate(() => document.querySelector('.uc__kinds-toggle').textContent.trim().replace(/\s+/g, ' '))
+}
+/** Débordement horizontal de la page (px). */
+function pageOverflow(page) {
+  return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
 }
 
 /** État visible d'un carrousel : position écrite, bornes, annonce. */
@@ -223,52 +247,125 @@ function orderScenario(name, url, order, { first = 0, viewports } = {}) {
 
 export const KEYBOARD_SCENARIOS = [
   // Lot 69P — accueil : ordre des contrôles de la démonstration produit.
+  // Lot 71P : plus de visite sous la démonstration ; carrousel Fonctionnalités
+  // sur mobile (grille sans arrêt sur ordinateur). Le bouton du bandeau est
+  // masqué en mouvement réduit (contexte de l'audit) : voir le parcours dédié.
   orderScenario('Accueil', '/',
-    [SEL.logo, SEL.headerNav, SEL.appSide, SEL.appArrow, SEL.kindsTrack, SEL.kindsNext, SEL.footer], { viewports: ['bureau'] }),
+    [SEL.logo, SEL.headerNav, SEL.appArrow, SEL.footer], { viewports: ['bureau'] }),
   orderScenario('Accueil', '/',
-    [SEL.logo, SEL.burger, SEL.appSide, SEL.appArrow, SEL.tourTrack, SEL.tourNext, SEL.kindsTrack, SEL.kindsNext, SEL.footer], { viewports: ['mobile'] }),
-  carouselScenario('Types de biens : carrousel au clavier', '.uc__kinds-wrap', SEL.kindsNext, SEL.kindsTrack),
-  carouselScenario('Visite en six vues : carrousel au clavier', '.tour', SEL.tourNext, SEL.tourTrack, { viewports: ['mobile'], presses: 2 }),
+    [SEL.logo, SEL.burger, SEL.appArrow, SEL.featTrack, SEL.featNext, SEL.footer], { viewports: ['mobile'] }),
+  carouselScenario('Fonctionnalités : carrousel au clavier', '.feat__views', SEL.featNext, SEL.featTrack, { viewports: ['mobile'], presses: 2 }),
   {
-    // Lot 70P : sur ordinateur, la visite est une grille entièrement visible —
-    // aucun arrêt de tabulation inutile (piste, boutons masqués), rien ne défile.
-    name: 'Visite en six vues : grille sur ordinateur', url: '/', viewports: ['bureau'],
+    // Lot 71P (reprend le lot 70P) : sur ordinateur, les neuf vues forment une
+    // grille 3 × 3 entièrement visible — aucun arrêt de tabulation inutile.
+    name: 'Fonctionnalités : grille 3 × 3 sur ordinateur', url: '/', viewports: ['bureau'],
     run: async (page) => {
       const problems = []
       const st = await page.evaluate(() => {
-        const t = document.querySelector('#tour-track')
+        const t = document.querySelector('#feat-track')
         const vw = document.documentElement.clientWidth
         const items = [...t.children].map((li) => li.getBoundingClientRect())
-        const btns = [...document.querySelectorAll('.tour .vb-carousel__btn')]
+        const btns = [...document.querySelectorAll('.feat__views .vb-carousel__btn')]
         return {
-          shown: getComputedStyle(document.querySelector('.tour')).display !== 'none' && t.getBoundingClientRect().height > 0,
+          shown: t.getBoundingClientRect().height > 0,
           n: items.length,
           inside: items.every((r) => r.width > 0 && r.left >= 0 && r.right <= vw),
           rows: new Set(items.map((r) => Math.round(r.top))).size,
+          cols: new Set(items.map((r) => Math.round(r.left))).size,
           tabindex: t.getAttribute('tabindex'),
           scrolls: t.scrollWidth > t.clientWidth + 1,
           btnsHidden: btns.every((b) => b.offsetParent === null),
+          tour: document.querySelectorAll('.tour, #tour-track').length,
         }
       })
-      if (!st.shown) problems.push('visite non affichée sur ordinateur')
-      if (st.n !== 6 || !st.inside) problems.push(`les six vues ne sont pas toutes visibles (${st.n}, inside=${st.inside})`)
-      if (st.rows !== 2) problems.push(`grille attendue sur 2 rangées : ${st.rows}`)
+      if (!st.shown) problems.push('Fonctionnalités non affichées sur ordinateur')
+      if (st.n !== 9 || !st.inside) problems.push(`les neuf vues ne sont pas toutes visibles (${st.n}, inside=${st.inside})`)
+      if (st.rows !== 3 || st.cols !== 3) problems.push(`grille 3 × 3 attendue : ${st.rows} rangées × ${st.cols} colonnes`)
       if (st.tabindex !== null || st.scrolls) problems.push(`piste encore défilante ou focalisable (tabindex=${st.tabindex})`)
       if (!st.btnsHidden) problems.push('boutons du carrousel visibles alors que rien ne défile')
-      const { stops } = await walk(page, ['.tour *, #tour-track'])
-      if (stops.some((s) => s.matches[0])) problems.push('un arrêt de tabulation dans la visite (grille)')
-      return { problems, info: `${st.n} vues, ${st.rows} rangées, aucun arrêt` }
+      if (st.tour) problems.push('l’ancienne visite en six vues est encore présente')
+      const { stops } = await walk(page, ['.feat__views *, #feat-track'])
+      if (stops.some((s) => s.matches[0])) problems.push('un arrêt de tabulation dans les Fonctionnalités (grille)')
+      return { problems, info: `${st.n} vues, ${st.rows} × ${st.cols}, aucun arrêt` }
     },
   },
   {
-    name: 'Accueil : aucun défilement automatique (animations non réduites)', url: '/',
+    // Lot 71P — WCAG 2.2.2 : bandeau défilant des types de biens. Animations
+    // actives : il défile ; le focus clavier l'arrête (et le bouton l'annonce) ;
+    // Entrée / Espace le relancent / l'arrêtent ; pause au survol ; jamais de
+    // débordement horizontal de la page.
+    name: 'Bandeau des types de biens : bouton pause au clavier, survol', url: '/',
+    run: async (page) => {
+      const problems = []
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+      await page.reload({ waitUntil: 'networkidle' })
+      await page.waitForFunction(() => document.querySelector('.uc__marquee-list--copy'), null, { timeout: 10000 })
+      await page.locator('.uc__marquee').scrollIntoViewIfNeeded()
+      await page.mouse.move(0, 0)
+      if (!(await marqueeMoves(page))) problems.push('le bandeau ne défile pas (animations actives)')
+      const ov = await pageOverflow(page)
+      if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
+      const s = await tabTo(page, SEL.kindsToggle)
+      if (!s.indicator) problems.push(`bouton du bandeau sans focus visible (${s.style})`)
+      if (await toggleName(page) !== 'Reprendre le défilement') problems.push(`focus clavier : bandeau non arrêté (bouton « ${await toggleName(page)} »)`)
+      if (await marqueeMoves(page)) problems.push('focus clavier : le bandeau bouge encore')
+      await page.keyboard.press('Enter')
+      if (await toggleName(page) !== 'Mettre en pause le défilement') problems.push(`Entrée : libellé « ${await toggleName(page)} »`)
+      if (!(await marqueeMoves(page))) problems.push('Entrée : le bandeau ne reprend pas')
+      await page.keyboard.press(' ')
+      if (await toggleName(page) !== 'Reprendre le défilement') problems.push(`Espace : libellé « ${await toggleName(page)} »`)
+      if (await marqueeMoves(page)) problems.push('Espace : le bandeau ne s’arrête pas')
+      await page.keyboard.press('Enter')
+      const box = await page.locator('.uc__marquee').boundingBox()
+      await page.mouse.move(box.x + 40, box.y + box.height / 2)
+      if (await marqueeMoves(page)) problems.push('survol : le bandeau ne s’arrête pas')
+      await page.mouse.move(0, 0)
+      if (!(await marqueeMoves(page))) problems.push('fin du survol : le bandeau ne reprend pas')
+      return { problems, info: 'arrêt au focus, Entrée / Espace, survol' }
+    },
+  },
+  {
+    // Lot 71P — mouvement réduit (contexte de l'audit) : liste statique et
+    // lisible, sans copie ni bouton, contenu unique pour les lecteurs d'écran.
+    name: 'Bandeau des types de biens : mouvement réduit', url: '/',
+    run: async (page) => {
+      const problems = []
+      const st = await page.evaluate(() => {
+        const vw = document.documentElement.clientWidth
+        const track = document.querySelector('.uc__marquee-track')
+        const copy = document.querySelector('.uc__marquee-list--copy')
+        const items = [...document.querySelectorAll('#uc-kinds li')].map((li) => li.getBoundingClientRect())
+        return {
+          anim: getComputedStyle(track).animationName,
+          transform: getComputedStyle(track).transform,
+          copyShown: !!copy && getComputedStyle(copy).display !== 'none',
+          copyHidden: !copy || copy.getAttribute('aria-hidden') === 'true',
+          toggleShown: getComputedStyle(document.querySelector('.uc__kinds-toggle')).display !== 'none',
+          n: items.length,
+          inside: items.every((r) => r.left >= 0 && r.right <= vw + 0.5),
+        }
+      })
+      if (st.anim !== 'none' || st.transform !== 'none') problems.push(`le bandeau est encore animé (${st.anim}, ${st.transform})`)
+      if (st.copyShown || !st.copyHidden) problems.push('copie de boucle affichée ou exposée aux lecteurs d’écran')
+      if (st.toggleShown) problems.push('bouton de pause affiché alors que rien ne bouge')
+      if (st.n !== 10 || !st.inside) problems.push(`liste statique illisible (${st.n} types, entièrement visibles : ${st.inside})`)
+      const ov = await pageOverflow(page)
+      if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
+      return { problems, info: `${st.n} types visibles, aucune animation` }
+    },
+  },
+  {
+    // Le bandeau des types de biens (lot 71P) est le SEUL contenu qui bouge
+    // seul — décision PO, avec son bouton de pause (parcours ci-dessus) ; les
+    // carrousels et démonstrations restent immobiles sans action.
+    name: 'Accueil : aucun défilement automatique des carrousels (animations non réduites)', url: '/',
     run: async (page) => {
       const problems = []
       await page.emulateMedia({ reducedMotion: 'no-preference' })
       await page.reload({ waitUntil: 'networkidle' })
       await page.waitForFunction(() => document.querySelector('#app')?.children.length, null, { timeout: 10000 })
       const snap = () => page.evaluate(() => JSON.stringify({
-        app: document.querySelector('.app__side-btn[aria-pressed="true"]')?.textContent.trim(),
+        app: document.querySelector('.app__dot[aria-pressed="true"]')?.getAttribute('aria-label'),
         how: [...document.querySelectorAll('.how__step')].map((b) => b.getAttribute('aria-pressed')),
         tracks: [...document.querySelectorAll('.vb-carousel__track')].map((t) => t.scrollLeft),
       }))

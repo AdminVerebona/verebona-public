@@ -6,24 +6,36 @@
       <h2 class="vb-h2 uc__title">Utile au quotidien. Décisif quand il faut agir.</h2>
       <p class="vb-text">Verebona vous aide à retrouver, suivre et documenter vos biens au fil du temps, puis à réunir les bonnes pièces lorsqu'un événement arrive.</p>
     </div>
-    <!-- Types de biens : carrousel horizontal NATIF piloté par l'utilisateur
-         (lot 69P) — swipe, flèches du clavier sur la piste, boutons
-         précédent / suivant ; carte suivante partiellement visible ; aucun
-         défilement automatique (charte : pas de mouvement continu). Cartes
-         non interactives : rien de focalisable hors écran. -->
-    <div class="uc__kinds-wrap vb-carousel vb-carousel--bleed" role="region" aria-roledescription="carrousel" aria-labelledby="uc-kinds-title">
-      <p id="uc-kinds-title" class="uc__kinds-title">Les biens que Verebona prend en charge</p>
-      <ul id="uc-kinds" ref="kindsTrack" class="vb-carousel__track uc__kinds" tabindex="0" aria-label="Types de biens, défilement horizontal">
-        <li v-for="k in kinds" :key="k.name" class="uc__kind">
-          <span class="vb-tile vb-tile--sm uc__kind-ico"><VbIcon :name="k.icon" :size="20" /></span>
-          <span class="uc__kind-name">{{ k.name }}</span>
-          <span class="uc__kind-ex">{{ k.examples }}</span>
-        </li>
-      </ul>
-      <CarouselControls v-if="kindsCar.overflow.value" controls="uc-kinds" prev-label="Types de biens précédents" next-label="Types de biens suivants"
-        :at-start="kindsCar.atStart.value" :at-end="kindsCar.atEnd.value" :count="kinds.length"
-        :first="kindsCar.first.value" :last="kindsCar.last.value" :position="kindsPosition" :status="kindsCar.status.value"
-        @prev="kindsCar.prev" @next="kindsCar.next" />
+    <!-- Types de biens : BANDEAU DÉFILANT (lot 71P, retour du défilement
+         continu d'avant le lot 66, décision PO du 19/10) — liste de mots qui
+         défile en continu, dans le style de la charte. Accessibilité
+         (WCAG 2.2.2) : bouton visible « Mettre en pause / Reprendre le
+         défilement » ; pause au survol ; arrêt durable dès que le focus clavier
+         entre dans le bandeau (il ne reprend que sur demande, via le bouton) ;
+         prefers-reduced-motion : aucun mouvement, liste statique lisible et
+         bouton masqué. La liste n'existe qu'une fois pour les lecteurs
+         d'écran : la copie qui sert à la boucle est `aria-hidden` et n'est
+         ajoutée qu'après le montage (absente du HTML prérendu). Le bandeau
+         découpe son contenu : aucun débordement horizontal de la page. -->
+    <div :class="['uc__kinds', ready ? 'uc__kinds--ready' : '', paused ? 'uc__kinds--paused' : '']"
+      @focusin="onFocusIn" @pointerdown="onPointerDown" @pointerup="releasePointer" @pointercancel="releasePointer">
+      <div class="uc__kinds-head">
+        <p id="uc-kinds-title" class="uc__kinds-title">Les biens que Verebona prend en charge</p>
+        <button type="button" class="uc__kinds-toggle" aria-controls="uc-kinds" @click="toggle">
+          <VbIcon :name="paused ? 'play' : 'pause'" :size="16" />
+          <span>{{ paused ? 'Reprendre' : 'Mettre en pause' }}<span class="sr-only"> le défilement</span></span>
+        </button>
+      </div>
+      <div class="uc__marquee">
+        <div class="uc__marquee-track">
+          <ul id="uc-kinds" class="uc__marquee-list" aria-labelledby="uc-kinds-title">
+            <li v-for="k in kinds" :key="k" class="uc__marquee-item">{{ k }}</li>
+          </ul>
+          <ul v-if="ready" class="uc__marquee-list uc__marquee-list--copy" aria-hidden="true">
+            <li v-for="k in kinds" :key="k" class="uc__marquee-item">{{ k }}</li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div v-for="group in ucGroups" :key="group.label" class="uc__group">
       <div class="uc__group-label">{{ group.label }}</div>
@@ -57,54 +69,75 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useLanding } from '../composables/useLanding'
-import { useScrollCarousel } from '../composables/useScrollCarousel'
 import VbIcon from '../components/VbIcon.vue'
-import CarouselControls from '../components/CarouselControls.vue'
-import type { IconName } from '../components/icons'
 
 const { ucGroups } = useLanding()
 
-/** Ordre prévu par le design (ancien bandeau des types de biens). */
-const kinds: Array<{ name: string; icon: IconName; examples: string }> = [
-  { name: 'Voiture', icon: 'car', examples: 'Carte grise, assurance, entretiens' },
-  { name: 'Appartement', icon: 'building', examples: 'Bail, diagnostics, charges' },
-  { name: 'Garage', icon: 'garage', examples: 'Acte, taxe foncière, travaux' },
-  { name: 'Moto', icon: 'moto', examples: 'Carte grise, révisions, équipement' },
-  { name: 'Maison', icon: 'home', examples: 'Travaux, chaudière, assurance' },
-  { name: 'Terrain', icon: 'terrain', examples: 'Acte, bornage, taxe foncière' },
-  { name: 'Vélo', icon: 'bike', examples: 'Facture, garantie, révisions' },
-  { name: 'Local commercial', icon: 'store', examples: 'Bail, assurance, conformité' },
-  { name: 'Loisir / Sport', icon: 'leisure', examples: 'Factures, garanties, entretien' },
-  { name: 'Électronique', icon: 'laptop', examples: 'Factures, garanties, notices' },
-]
+/** Ordre prévu par le design (bandeau des types de biens d'avant le lot 66). */
+const kinds = ['Voiture', 'Appartement', 'Garage', 'Moto', 'Maison', 'Terrain', 'Vélo', 'Local commercial', 'Loisir / Sport', 'Électronique']
 
-const kindsCar = useScrollCarousel({
-  count: kinds.length,
-  step: 'page',
-  announce: (f, l) => (f === l ? `${kinds[f].name}, type ${f + 1} sur ${kinds.length}` : `Types ${f + 1} à ${l + 1} sur ${kinds.length} : ${kinds.slice(f, l + 1).map((k) => k.name).join(', ')}`),
-})
-const kindsTrack = kindsCar.track
-const kindsPosition = computed(() => {
-  const f = kindsCar.first.value + 1
-  const l = kindsCar.last.value + 1
-  return f === l ? `${f} / ${kinds.length}` : `${f}–${l} / ${kinds.length}`
-})
+// Copie de boucle et animation seulement côté navigateur, après le montage :
+// le HTML prérendu ne contient qu'une liste, immobile.
+const ready = ref(false)
+onMounted(() => { ready.value = true })
+
+/** Arrêt demandé (bouton) ou imposé par l'arrivée du focus clavier. */
+const paused = ref(false)
+function toggle() { paused.value = !paused.value; pointer = false }
+
+// Un clic ou un toucher peut aussi donner le focus au bouton : seul le focus
+// CLAVIER arrête le bandeau (sinon un clic sur « Mettre en pause » le
+// relancerait aussitôt). Deux garde-fous : pointeur en cours d'usage, et
+// `:focus-visible` (faux pour un focus donné à la souris ou au doigt).
+let pointer = false
+let pointerTimer = 0
+function onPointerDown() { window.clearTimeout(pointerTimer); pointer = true }
+function releasePointer() { window.clearTimeout(pointerTimer); pointerTimer = window.setTimeout(() => { pointer = false }, 600) }
+function onFocusIn(e: FocusEvent) {
+  if (pointer) return
+  let keyboard = true
+  try { keyboard = (e.target as Element).matches(':focus-visible') } catch { /* sélecteur non pris en charge : on arrête */ }
+  if (keyboard) paused.value = true
+}
 </script>
 
 <style>
 .uc__intro { max-width: 700px; margin-bottom: 28px; }
 .uc__title { margin-bottom: 14px; }
-.uc__kinds-wrap { margin: 0 0 40px; }
-.uc__kinds-title { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 6px 4px; }
-.uc__kind {
-  width: 176px; display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px;
-  border-radius: var(--radius-lg); border: 1px solid var(--bubble-edge); background: var(--bg-page);
+/* Bandeau des types de biens — mots en Figtree, pétrole sur brume (texte
+   réel, contraste AA), séparés par un point cuivre décoratif ; filets 1 px. */
+.uc__kinds { margin: 0 0 40px; }
+.uc__kinds-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-3); margin: 0 0 var(--sp-3); }
+.uc__kinds-title { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 0 4px; }
+.uc__kinds-toggle {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: var(--radius-pill);
+  border: 1px solid var(--accent); background: var(--bg-card); color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: background-color var(--dur) var(--ease);
 }
-.uc__kind-ico { margin-bottom: 4px; }
-.uc__kind-name { font-size: 16px; font-weight: 700; color: var(--text-primary); line-height: 1.25; }
-.uc__kind-ex { font-size: 13.5px; line-height: 1.4; color: var(--text-muted); }
+.uc__kinds-toggle:hover { background: var(--accent-soft); }
+.uc__marquee { overflow: hidden; border-block: 1px solid var(--border); }
+.uc__marquee-track { display: flex; width: max-content; }
+.uc__marquee-list { display: flex; flex-shrink: 0; margin: 0; padding: 0; list-style: none; }
+.uc__marquee-item {
+  display: flex; align-items: center; gap: 28px; padding: 18px 28px 18px 0; white-space: nowrap;
+  font-size: 30px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; color: var(--text-heading);
+}
+.uc__marquee-item::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--vb-cuivre); }
+/* Défilement continu (après montage) : la piste porte deux listes
+   identiques ; un décalage de -50 % ramène exactement au point de départ. */
+.uc__kinds--ready .uc__marquee-track { animation: uc-marquee 48s linear infinite; }
+.uc__kinds--paused .uc__marquee-track, .uc__marquee:hover .uc__marquee-track { animation-play-state: paused; }
+@keyframes uc-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* Mouvement réduit : aucun défilement, liste statique lisible (qui passe à
+   la ligne), copie de boucle retirée, bouton inutile masqué. */
+@media (prefers-reduced-motion: reduce) {
+  .uc__kinds .uc__marquee-track { display: block; animation: none !important; transform: none; width: auto; }
+  .uc__marquee-list { flex-wrap: wrap; flex-shrink: 1; min-width: 0; }
+  .uc__marquee-list--copy, .uc__kinds-toggle { display: none; }
+  .uc__marquee-item { font-size: 22px; padding: 8px 20px 8px 0; gap: 20px; }
+}
 .uc__group { max-width: 920px; margin: 0 auto 32px; }
 .uc__group-label { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 14px 4px; }
 .uc__list { overflow: hidden; }
@@ -132,9 +165,10 @@ const kindsPosition = computed(() => {
 .uc__mark { color: var(--accent); font-weight: 700; flex-shrink: 0; }
 .uc__mark--x { color: var(--attention); }
 @media (max-width: 860px) {
-  .uc__kinds-wrap { margin-bottom: 32px; }
-  /* ~2,3 cartes visibles : la suivante dépasse et signale la suite. */
-  .uc__kind { width: min(146px, 38vw); padding: 12px 14px 14px; }
+  .uc__kinds { margin-bottom: 32px; }
+  /* Bandeau pleine largeur : il va jusqu'aux bords de l'écran (et les découpe). */
+  .uc__marquee { margin-inline: -20px; padding-inline: 20px; }
+  .uc__marquee-item { font-size: 22px; gap: 20px; padding: 14px 20px 14px 0; }
   .uc__head { padding: 14px 14px; align-items: flex-start; }
   .uc__panel { padding: 4px 16px 20px; }
 }

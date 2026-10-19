@@ -13,6 +13,12 @@
  * jsdom n'applique pas les media queries : règles responsives vérifiées dans
  * les sources CSS, comportement dans les composants montés (géométrie
  * simulée), rendu réel par les captures et `npm run test:a11y`.
+ *
+ * Lot 71P (décision PO du 19/10) : la visite est fusionnée dans la section
+ * Fonctionnalités (#features, neuf vues) et quitte la section Application.
+ * Les intentions L70P (grille sur grand écran, un seul exemplaire du texte,
+ * aucun défilement automatique, charte de la grille) s'appliquent désormais à
+ * `FeaturesSection` : grille 2 colonnes dès 768 px, 3 × 3 dès 1000 px.
  */
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -21,7 +27,8 @@ import { renderToString } from 'vue/server-renderer'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import AppShowcaseSection from '../src/sections/AppShowcaseSection.vue'
-import { TOUR_COSTS, TOUR_VIEWS } from '../src/components/demo/tour'
+import FeaturesSection from '../src/sections/FeaturesSection.vue'
+import { FEATURE_COSTS, FEATURES } from '../src/sections/features'
 
 const root = process.cwd()
 const read = (p: string) => readFileSync(path.join(root, p), 'utf8')
@@ -70,95 +77,91 @@ function gridGeometry(trackEl: HTMLElement, { vw = 1200, cols = 3, gap = 32 } = 
 const frame = () => new Promise((r) => setTimeout(r, 40))
 
 async function mountDesktop() {
-  const w = mount(AppShowcaseSection, { attachTo: document.body })
+  const w = mount(FeaturesSection, { attachTo: document.body })
   wrappers.push(w)
-  const el = w.find('#tour-track').element as HTMLElement
+  const el = w.find('#feat-track').element as HTMLElement
   const g = gridGeometry(el)
   el.dispatchEvent(new Event('scroll'))
   await frame(); await flushPromises()
   return { w, el, ...g }
 }
 
-describe('L70P-01 — la visite est rendue sur ordinateur et tablette, sous la démonstration', () => {
-  it('CSS : plus aucun masquage de la visite ; grille 2 colonnes dès 768 px, 3 colonnes dès 1000 px', () => {
-    const css = styleOf('src/components/demo/ProductTour.vue')
-    // Ni la visite, ni sa piste, ni ses vues ne sont masquées, à aucune largeur.
-    expect(css).not.toMatch(/(^|\})\s*\.tour \{[^}]*display:\s*none/)
-    expect(css).not.toMatch(/\.tour__(track|slide|stage|title|text|head)[^{]*\{[^}]*display:\s*none/)
+describe('L70P-01 — les vues sont rendues sur ordinateur et tablette (section Fonctionnalités)', () => {
+  it('CSS : aucun masquage des vues ; grille 2 colonnes dès 768 px, 3 colonnes dès 1000 px', () => {
+    const css = styleOf('src/sections/FeaturesSection.vue')
+    // Ni la section, ni sa piste, ni ses vues ne sont masquées, à aucune largeur.
+    expect(css).not.toMatch(/(^|[{}])\s*\.feat(__(views|track|item|stage|h3|text|intro))?(\.vb-carousel \.feat__track)? \{[^}]*display:\s*none/)
     expect(css).not.toMatch(/@media \(min-width: 861px\)/)
     const tablet = mediaBlock(css, 'min-width: 768px')
-    expect(tablet).toMatch(/\.tour\.vb-carousel \.tour__track \{[^}]*display: grid; grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/)
+    expect(tablet).toMatch(/\.feat__views\.vb-carousel \.feat__track \{[^}]*display: grid; grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/)
     expect(tablet).toMatch(/overflow: visible; scroll-snap-type: none;/)
-    expect(tablet).toMatch(/\.tour__slide \{ width: auto; min-width: 0; \}/)
+    expect(tablet).toMatch(/\.feat__item \{ width: auto; min-width: 0; \}/)
     // Rien à faire défiler : seuls les boutons sont masqués (pas les vues).
-    expect(tablet).toMatch(/\.tour \.vb-carousel__controls \{ display: none; \}/)
+    expect(tablet).toMatch(/\.feat__views \.vb-carousel__controls \{ display: none; \}/)
     expect(tablet.match(/display: none/g)).toHaveLength(1)
     expect(mediaBlock(css, 'min-width: 1000px')).toMatch(/grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/)
     // Le carrousel mobile reste sous 768 px (largeur de carte inchangée).
-    expect(mediaBlock(css, 'min-width: 600px) and (max-width: 767px')).toMatch(/\.tour__slide \{ width: 300px; \}/)
+    expect(mediaBlock(css, 'min-width: 600px) and (max-width: 767px')).toMatch(/\.feat__item \{ width: 300px; \}/)
   })
 
-  it('ordre : ordinateur + téléphone, leurs contrôles, PUIS la visite (démonstration desktop inchangée)', () => {
+  it('démonstration ordinateur + téléphone et ses contrôles inchangés dans la section Application', () => {
     const w = mount(AppShowcaseSection); wrappers.push(w)
     const container = w.find('.app > .vb-container').element
     const kids = Array.from(container.children).map((c) => c.className)
     const iDevices = kids.findIndex((c) => c.includes('app__devices'))
     const iDots = kids.findIndex((c) => c.includes('app__dots'))
-    const iTour = kids.findIndex((c) => c.split(' ').includes('tour'))
     expect(iDevices).toBeGreaterThan(-1)
     expect(iDots).toBeGreaterThan(iDevices)
-    expect(iTour).toBeGreaterThan(iDots)
     expect(w.find('.app__laptop .app__screen').exists()).toBe(true)
     expect(w.find('.app__phone').exists()).toBe(true)
   })
 
-  it('grille (rien ne défile) : six vues visibles, piste non focalisable, pas annoncée comme carrousel', async () => {
+  it('grille (rien ne défile) : neuf vues visibles, piste non focalisable, pas annoncée comme carrousel', async () => {
     const { w } = await mountDesktop()
-    const region = w.find('.tour')
+    const region = w.find('.feat__views')
     expect(region.attributes('role')).toBe('region')
-    expect(document.getElementById(region.attributes('aria-labelledby')!)?.textContent).toBe('Verebona en six vues')
+    expect(document.getElementById(region.attributes('aria-labelledby')!)?.textContent).toBe('Ce que Verebona vous permet de faire.')
     expect(region.attributes('aria-roledescription')).toBeUndefined()
-    const list = w.find('#tour-track')
+    const list = w.find('#feat-track')
     expect(list.attributes('tabindex')).toBeUndefined()
-    expect(list.attributes('aria-label')).toBe("Vues de l'application")
-    expect(list.findAll('li')).toHaveLength(6)
+    expect(list.attributes('aria-label')).toBe('Fonctionnalités')
+    expect(list.findAll('li')).toHaveLength(9)
     // Toujours rien de focalisable dans les vues ; cadrages décoratifs.
     expect(list.findAll('a, button, input, [tabindex]')).toHaveLength(0)
-    for (const st of list.findAll('.tour__stage')) expect(st.attributes('aria-hidden')).toBe('true')
+    for (const st of list.findAll('.feat__stage')) expect(st.attributes('aria-hidden')).toBe('true')
     // Les boutons (masqués en CSS) restent cohérents : les deux bornes atteintes.
-    expect(w.find('button[aria-label="Vue précédente"]').attributes('aria-disabled')).toBe('true')
-    expect(w.find('button[aria-label="Vue suivante"]').attributes('aria-disabled')).toBe('true')
+    expect(w.find('button[aria-label="Fonctionnalité précédente"]').attributes('aria-disabled')).toBe('true')
+    expect(w.find('button[aria-label="Fonctionnalité suivante"]').attributes('aria-disabled')).toBe('true')
   })
 })
 
 describe('L70P-02 — pas de doublon : un seul exemplaire du texte des vues', () => {
   it('HTML prérendu (SSR) : chaque titre et chaque phrase apparaît exactement une fois', async () => {
     // Commentaires de gabarit retirés (conservés en dev, absents du build de production).
-    const html = (await renderToString(createSSRApp(AppShowcaseSection))).replace(/<!--[\s\S]*?-->/g, '')
+    const html = (await renderToString(createSSRApp(FeaturesSection))).replace(/<!--[\s\S]*?-->/g, '')
     const count = (needle: string) => html.split(needle).length - 1
     const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/'/g, '&#39;')
-    for (const v of TOUR_VIEWS) {
+    for (const v of FEATURES) {
       expect(count(esc(v.title)), v.title).toBe(1)
       expect(count(esc(v.text)), v.text).toBe(1)
     }
-    expect(count('id="tour-track"')).toBe(1)
-    expect(count('class="tour vb-carousel')).toBe(1)
-    expect(count('Verebona en six vues')).toBe(1)
+    expect(count('id="feat-track"')).toBe(1)
+    expect(count('class="feat__views vb-carousel')).toBe(1)
     // Prérendu : état carrousel accessible (la mesure au montage passe en grille).
-    expect(html).toMatch(/<ul id="tour-track"[^>]*tabindex="0"/)
+    expect(html).toMatch(/<ul id="feat-track"[^>]*tabindex="0"/)
   })
 
-  it('DOM monté : six titres et six phrases, un seul composant de visite', async () => {
+  it('DOM monté : neuf titres et neuf phrases, un seul composant', async () => {
     const { w } = await mountDesktop()
-    expect(w.findAll('.tour')).toHaveLength(1)
-    expect(w.findAll('.tour__title')).toHaveLength(6)
-    expect(w.findAll('.tour__text').map((t) => t.text())).toEqual(TOUR_VIEWS.map((v) => v.text))
+    expect(w.findAll('.feat__views')).toHaveLength(1)
+    expect(w.findAll('.feat__h3')).toHaveLength(9)
+    expect(w.findAll('.feat__text').map((t) => t.text())).toEqual(FEATURES.map((v) => v.text))
     const all = document.body.textContent ?? ''
-    for (const v of TOUR_VIEWS) expect(all.split(v.text).length - 1, v.key).toBe(1)
+    for (const v of FEATURES) expect(all.split(v.text).length - 1, v.key).toBe(1)
   })
 
   it('montants d’exemple « Coût de possession » conservés (validés par le PO)', async () => {
-    expect(TOUR_COSTS).toEqual([
+    expect(FEATURE_COSTS).toEqual([
       { label: 'Achat', amount: '1 890 €', pct: 87 },
       { label: 'Entretien', amount: '170 €', pct: 8 },
       { label: 'Assurance', amount: '120 €', pct: 5 },
@@ -172,29 +175,29 @@ describe('L70P-03 — aucun défilement automatique sur ordinateur', () => {
   it('20 s sans action : la grille ne bouge pas, rien n’est annoncé', async () => {
     const { w, scrollTo } = await mountDesktop()
     vi.useFakeTimers()
-    const before = w.find('.tour').html()
+    const before = w.find('.feat__views').html()
     vi.advanceTimersByTime(20_000)
     await flushPromises()
     expect(scrollTo).not.toHaveBeenCalled()
-    expect(w.find('.tour').html()).toBe(before)
-    expect(w.find('.tour [aria-live="polite"]').text()).toBe('')
+    expect(w.find('.feat__views').html()).toBe(before)
+    expect(w.find('.feat__views [aria-live="polite"]').text()).toBe('')
   })
 
-  it('sources : ni minuterie, ni animation, ni transition dans la visite', () => {
-    for (const f of ['src/components/demo/ProductTour.vue', 'src/composables/useScrollCarousel.ts']) {
+  it('sources : ni minuterie, ni animation, ni transition dans les Fonctionnalités', () => {
+    for (const f of ['src/sections/FeaturesSection.vue', 'src/composables/useScrollCarousel.ts']) {
       expect(read(f), f).not.toMatch(/setInterval\(/)
     }
-    expect(styleOf('src/components/demo/ProductTour.vue')).not.toMatch(/animation|@keyframes|transition/)
+    expect(styleOf('src/sections/FeaturesSection.vue')).not.toMatch(/animation|@keyframes|transition/)
   })
 })
 
 describe('L70P-04 — charte « Sérénité » de la grille', () => {
   it('une seule ombre (carte flottante), bordures 1 px, aucun dégradé', () => {
-    const css = styleOf('src/components/demo/ProductTour.vue')
+    const css = styleOf('src/sections/FeaturesSection.vue')
     expect(css).not.toMatch(/gradient\(/)
     const shadows = css.match(/[^}]*box-shadow[^}]*\}/g) ?? []
     expect(shadows).toHaveLength(1)
-    expect(shadows[0]).toMatch(/\.tour__card--float \{ box-shadow: var\(--shadow-card\);/)
+    expect(shadows[0]).toMatch(/\.feat__ui--float \{ box-shadow: var\(--shadow-card\);/)
     for (const b of css.match(/border(-top)?: [^;]+;/g) ?? []) expect(b).toMatch(/^border(-top)?: 1px solid (var\(--[a-z-]+\)|transparent);$/)
   })
 })

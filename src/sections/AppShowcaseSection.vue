@@ -3,10 +3,9 @@
      interactions du carrousel inchangés ; habillage clair de l'application.
      Lot 69P : sur mobile, l'ordinateur n'est plus masqué — il est recomposé
      (menu replié en icônes de 44 px, cadrage partiel) avec le téléphone qui le
-     chevauche ; suivent la visite de l'application en six vues (ProductTour)
-     et aucun défilement automatique.
-     Lot 70P : la visite s'affiche aussi sur tablette et ordinateur, sous la
-     démonstration ordinateur + téléphone (inchangée), recomposée en grille. -->
+     chevauche ; aucun défilement automatique.
+     Lot 71P : la visite « Verebona en six vues » (lots 69P / 70P) a quitté
+     cette section — fusionnée dans Fonctionnalités (#features, neuf vues). -->
 <section class="app">
   <div class="vb-container">
     <ul class="app__tri r-stack">
@@ -23,75 +22,11 @@
         <div class="app__laptop">
           <div class="app__bezel">
             <span class="app__cam" aria-hidden="true"></span>
-            <div class="app__screen">
-              <div class="app__side">
-                <div class="app__side-logo"><VbLogo :size="18" :wordmark="false" /><span>Verebona</span></div>
-                <button v-for="(n, i) in nav" :key="n.label" type="button" :aria-pressed="n.active" class="app__side-btn" @click.prevent="n.onClick">
-                  <VbIcon :name="sideIcons[i]" :size="16" /><span class="app__side-label">{{ sideLabels[i] }}</span>
-                </button>
-                <div class="app__side-btn app__side-btn--static"><VbIcon name="calendar" :size="16" />Mes rappels</div>
-              </div>
-              <div class="app__main">
-                <div class="app__top">
-                  <div class="app__search"><VbIcon name="search" :size="14" />Rechercher…</div>
-                  <span class="app__avatar" aria-hidden="true">LM</span>
-                </div>
-                <div :key="slideLabel" class="app__body">
-                  <!-- Tableau de bord -->
-                  <template v-if="isDashboard">
-                    <div class="app__stats">
-                      <div v-for="s in stats" :key="s.label" class="app__stat">
-                        <span :class="['app__stat-ico', s.attention ? 'app__stat-ico--att' : '']"><VbIcon :name="s.icon" :size="16" /></span>
-                        <span><span class="app__cap">{{ s.label }}</span><span class="app__stat-n">{{ s.n }}</span></span>
-                      </div>
-                    </div>
-                    <div class="app__cap app__cap--h">Mes rappels</div>
-                    <div class="app__row app__row--late">
-                      <span class="app__row-ico"><VbIcon name="calendar" :size="16" /></span>
-                      <span class="app__row-body"><span class="app__row-title">Révision annuelle</span><span class="app__row-meta">Il y a 2 jours • Vélo Cargo Électrique</span></span>
-                      <span class="vb-badge vb-badge--attention app__b">En retard (2 j)</span>
-                    </div>
-                    <div class="app__cap app__cap--h">Mes biens</div>
-                    <div class="app__assets">
-                      <div v-for="a in assets" :key="a.name" class="app__asset">
-                        <img :src="a.img" :alt="a.name" class="app__asset-img" />
-                        <div class="app__asset-body"><div class="app__row-title">{{ a.name }}</div><div class="app__row-meta">{{ a.dash }}</div></div>
-                      </div>
-                    </div>
-                  </template>
-                  <!-- Biens -->
-                  <template v-if="isBiens">
-                    <div class="app__head"><span class="app__h">Mes biens</span><span class="app__chips"><span class="app__chip app__chip--on">Tout</span><span class="app__chip">Actif</span><span class="app__chip">Archivé</span></span></div>
-                    <div class="app__assets">
-                      <div v-for="a in assets" :key="a.name" class="app__asset">
-                        <img :src="a.img" :alt="a.name" class="app__asset-img app__asset-img--lg" />
-                        <div class="app__asset-body"><div class="app__row-title">{{ a.name }}</div><div class="app__row-meta">{{ a.kind }}</div><div class="app__row-meta">{{ a.docs }}</div></div>
-                      </div>
-                    </div>
-                  </template>
-                  <!-- Événements -->
-                  <template v-if="isEvents">
-                    <div class="app__chips app__chips--mb"><span class="app__chip app__chip--on">Tout</span><span class="app__chip">À venir</span><span class="app__chip">En retard</span></div>
-                    <div class="app__two">
-                      <div v-for="e in events" :key="e.title" :class="['app__row', e.late ? 'app__row--late' : '']">
-                        <span class="app__row-ico"><VbIcon name="calendar" :size="16" /></span>
-                        <span class="app__row-body"><span class="app__row-title">{{ e.title }}</span><span class="app__row-meta">{{ e.meta }}</span></span>
-                        <span :class="['vb-badge app__b', e.late ? 'vb-badge--attention' : '']">{{ e.state }}</span>
-                      </div>
-                    </div>
-                  </template>
-                  <!-- Documents -->
-                  <template v-if="isDocs">
-                    <div class="app__head"><div class="app__search app__search--sm"><VbIcon name="search" :size="14" />Rechercher un document…</div><span class="app__chips"><span class="app__chip app__chip--on">Tout</span><span class="app__chip">Facture</span><span class="app__chip">Notice</span></span></div>
-                    <div class="app__two">
-                      <div v-for="d in documents" :key="d.title" class="app__row">
-                        <span class="app__row-ico"><VbIcon name="file" :size="16" /></span>
-                        <span class="app__row-body"><span class="app__row-title">{{ d.title }}</span><span class="app__row-meta">{{ d.meta }}</span></span>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </div>
+            <!-- Lot 71 (PO) : captures réelles de l'application, dans l'ordre du
+                 carrousel (Accueil, Mes biens, Mon agenda, Mes documents). Le nom de
+                 l'écran affiché est annoncé par le carrousel ; images décoratives. -->
+            <div class="app__screen app__screen--shot">
+              <img v-for="(sc, i) in shots" v-show="slideIndex === i" :key="sc.src" :src="sc.src" alt="" width="1600" height="724" :loading="i === 0 ? 'eager' : 'lazy'" decoding="async" class="app__shot" />
             </div>
           </div>
           <div class="app__base" aria-hidden="true"></div>
@@ -107,23 +42,10 @@
 
         <!-- Téléphone -->
         <div class="app__phone" aria-hidden="true">
-          <div class="app__phone-screen">
-            <div class="app__phone-status"><span>9:41</span><span class="app__notch"></span><span class="app__battery"></span></div>
-            <div class="app__phone-body">
-              <div class="app__side-logo"><VbLogo :size="18" :wordmark="false" /><span>Verebona</span></div>
-              <div class="app__phone-hello">Bonjour, Léa</div>
-              <div class="app__phone-stats">
-                <div class="app__stat app__stat--col"><span class="app__cap">Biens</span><span class="app__stat-n">3</span></div>
-                <div class="app__stat app__stat--col app__stat--att"><span class="app__cap">À traiter</span><span class="app__stat-n">1</span></div>
-              </div>
-              <div class="app__row app__row--late app__row--phone"><span class="app__row-body"><span class="app__row-title">Révision annuelle</span><span class="app__row-meta app__row-meta--att">En retard · Vélo Cargo</span></span></div>
-              <div class="app__cap">Mes biens</div>
-              <div v-for="a in assets.slice(0, 2)" :key="a.name" class="app__row">
-                <img :src="a.img" alt="" class="app__thumb" />
-                <span class="app__row-body"><span class="app__row-title">{{ a.name }}</span><span class="app__row-meta">{{ a.phone }}</span></span>
-              </div>
-              <div class="app__tabbar"><VbIcon name="home" :size="20" class="app__tab--on" /><VbIcon name="box" :size="20" /><VbIcon name="calendar" :size="20" /><VbIcon name="file" :size="20" /></div>
-            </div>
+          <!-- Lot 71 (PO) : capture réelle de l'accueil mobile (thème sombre),
+               décorative — le texte de l'introduction dit déjà l'essentiel. -->
+          <div class="app__phone-screen app__phone-screen--shot">
+            <img src="/assets/app-mobile-accueil.webp" alt="" width="696" height="1417" loading="lazy" decoding="async" class="app__phone-shot" />
           </div>
         </div>
       </div>
@@ -139,8 +61,6 @@
       </div>
       <!-- Annonce polie du seul nom de l'écran (et non de tout son contenu). -->
       <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announced }}</p>
-
-      <ProductTour />
     </template>
   </div>
 </section>
@@ -149,12 +69,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useLanding } from '../composables/useLanding'
-import ProductTour from '../components/demo/ProductTour.vue'
 import VbIcon from '../components/VbIcon.vue'
-import VbLogo from '../components/VbLogo.vue'
 import type { IconName } from '../components/icons'
 
-const { showMockup, nav, dots, slideLabel, isDashboard, isBiens, isEvents, isDocs, prev, next } = useLanding()
+const { showMockup, nav, dots, slideLabel, prev, next } = useLanding()
 
 const slideIndex = computed(() => nav.value.findIndex((n) => n.active))
 // Rien n'est annoncé au chargement ; ensuite, seulement l'écran choisi.
@@ -167,36 +85,12 @@ const triptych: Array<{ icon: IconName; title: string; text: string }> = [
   { icon: 'calendar', title: 'Agendas', text: 'Échéances, entretiens, rappels…' },
 ]
 
-const sideLabels = ['Accueil', 'Mes biens', 'Mes événements', 'Mes documents']
-const sideIcons: IconName[] = ['home', 'box', 'calendar', 'file']
-
-const stats: Array<{ icon: IconName; label: string; n: number; attention?: boolean }> = [
-  { icon: 'box', label: 'Mes biens', n: 3 },
-  { icon: 'calendar', label: 'Événements', n: 2 },
-  { icon: 'file', label: 'Documents', n: 16 },
-  { icon: 'check', label: 'À traiter', n: 0 },
-]
-
-const assets = [
-  { name: 'Appartement Lyon', img: '/assets/appartement-lyon.webp', dash: 'Immobilier • 7 docs', kind: 'Immobilier • T3', docs: '7 documents', phone: '7 documents' },
-  { name: 'Vélo Cargo', img: '/assets/velo-cargo.webp', dash: 'Véhicule • 6 docs', kind: 'Véhicule • Électrique', docs: '6 documents • 2 évén.', phone: '6 documents · 2 évén.' },
-  { name: 'Planche de Surf', img: '/assets/surf-personal.webp', dash: 'Loisir • 3 docs', kind: 'Sport / Loisir', docs: '3 documents', phone: '3 documents' },
-]
-
-const events = [
-  { title: 'Révision annuelle', meta: 'Vélo Cargo • Il y a 2 jours', state: 'En retard', late: true },
-  { title: 'Contrôle technique', meta: 'Voiture familiale • Dans 12 j', state: 'À venir', late: false },
-  { title: 'Renouvellement bail', meta: 'Appartement Lyon • Dans 3 mois', state: 'À venir', late: false },
-  { title: 'Assurance habitation', meta: 'Appartement Lyon • Dans 4 mois', state: 'À venir', late: false },
-]
-
-const documents = [
-  { title: 'Facture achat vélo', meta: 'Facture · Vélo Cargo · 12/03/2024' },
-  { title: 'Attestation assurance', meta: 'Assurance · Appart. Lyon · 01/01/2025' },
-  { title: 'Notice technique', meta: 'Notice · Vélo Cargo · 12/03/2024' },
-  { title: 'Contrat de bail', meta: 'Contrat · Appart. Lyon · 15/09/2023' },
-  { title: 'Facture planche surf', meta: 'Facture · Planche · 05/06/2023' },
-  { title: 'PV remise des clés', meta: 'Admin · Appart. Lyon · 15/09/2023' },
+/** Lot 71 : captures réelles, même ordre que `nav` (useLanding). */
+const shots = [
+  { src: '/assets/app-desktop-accueil.webp' },
+  { src: '/assets/app-desktop-biens.webp' },
+  { src: '/assets/app-desktop-agenda.webp' },
+  { src: '/assets/app-desktop-documents.webp' },
 ]
 </script>
 
@@ -214,67 +108,16 @@ const documents = [
 .app__bezel { width: 92%; background: #1E2A2F; border-radius: 16px 16px 0 0; padding: 16px 14px 18px; border: 1px solid #3A4A51; border-bottom: 0; position: relative; }
 .app__cam { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; border-radius: 50%; background: #0B1114; }
 .app__base { width: 100%; height: 14px; background: #C9D1CF; border-radius: 3px 3px 11px 11px; }
+.app__screen.app__screen--shot { display: block; height: auto; aspect-ratio: 1600 / 724; background: var(--bg-page); }
+.app__shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .app__screen { border-radius: 6px; overflow: hidden; background: var(--bg-page); display: flex; height: 400px; }
-.app__side { width: 180px; flex-shrink: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border-subtle); padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; }
-.app__side-logo { display: flex; align-items: center; gap: 8px; padding: 0 6px 12px; font-size: 13px; font-weight: 700; color: var(--text-heading); }
-.app__side-btn {
-  display: flex; align-items: center; gap: 9px; height: 32px; padding: 0 10px; border-radius: var(--radius-sm); border: 0;
-  border-left: 2px solid transparent; background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 500;
-  text-align: left; cursor: pointer; transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.app__side-btn:hover { color: var(--accent); }
-.app__side-btn[aria-pressed="true"] { background: var(--accent-soft); border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
-.app__side-btn--static { cursor: default; }
-.app__main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.app__top { height: 44px; flex-shrink: 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 10px; padding: 0 16px; }
-.app__search { flex: 1; max-width: 260px; height: 28px; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--bg-card); display: flex; align-items: center; gap: 6px; padding: 0 10px; font-size: 11.5px; color: var(--text-muted); }
-.app__search--sm { max-width: 220px; }
-.app__avatar { margin-left: auto; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.app__body { flex: 1; overflow: hidden; padding: 18px 20px; }
-.app__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-.app__stat { padding: 11px; border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-.app__stat--col { flex-direction: column; align-items: flex-start; gap: 2px; }
-.app__stat--att { background: var(--attention-soft); border-color: var(--attention-edge); }
-.app__stat-ico { width: 30px; height: 30px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.app__stat-ico--att { background: var(--attention-soft); color: var(--attention-on-subtle); }
-.app__cap { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); }
-.app__cap--h { margin-bottom: 8px; }
-.app__stat-n { display: block; font-size: 18px; font-weight: 800; color: var(--text-primary); }
-.app__row { position: relative; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-md); background: var(--bg-card); border: 1px solid var(--border); margin-bottom: 0; overflow: hidden; }
-.app__row--late::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--attention); }
-.app__body > .app__row { margin-bottom: 16px; }
-.app__row-ico { width: 32px; height: 32px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.app__row--late .app__row-ico { background: var(--attention-soft); color: var(--attention-on-subtle); }
-.app__row-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.app__row-title { font-size: 12px; font-weight: 700; color: var(--text-primary); }
-.app__row-meta { font-size: 10.5px; color: var(--text-muted); }
-.app__row-meta--att { color: var(--attention); font-weight: 600; }
 .app__b { font-size: 10px; padding: 2px 8px; }
-.app__assets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.app__asset { border-radius: var(--radius-md); overflow: hidden; background: var(--bg-card); border: 1px solid var(--border); }
-.app__asset-img { display: block; width: 100%; height: 76px; object-fit: cover; }
-.app__asset-img--lg { height: 120px; }
-.app__asset-body { padding: 9px 10px; }
-.app__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-.app__h { font-size: 14px; font-weight: 800; color: var(--text-primary); }
-.app__chips { display: flex; gap: 6px; }
-.app__chips--mb { margin-bottom: 14px; }
 .app__chip { padding: 3px 11px; border-radius: var(--radius-pill); border: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text-muted); }
-.app__chip--on { border-color: var(--accent); background: var(--accent-soft); color: var(--text-primary); }
-.app__two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .app__phone { flex-shrink: 0; width: 246px; border-radius: 46px; padding: 7px; background: #1E2A2F; border: 1px solid #3A4A51; }
 .app__phone-screen { border-radius: 40px; overflow: hidden; background: var(--bg-page); height: 486px; display: flex; flex-direction: column; }
-.app__phone-status { height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 6px 22px 0; font-size: 12.5px; font-weight: 700; color: var(--text-primary); }
-.app__notch { width: 80px; height: 24px; border-radius: 14px; background: #0B1114; }
-.app__battery { width: 22px; height: 11px; border-radius: 3px; border: 1.5px solid var(--text-primary); }
-.app__phone-body { padding: 6px 16px 10px; display: flex; flex-direction: column; gap: 10px; flex: 1; overflow: hidden; }
-.app__phone-hello { font-size: 16px; font-weight: 800; letter-spacing: -.02em; color: var(--text-primary); }
-.app__phone-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.app__row--phone { padding-left: 15px; }
-.app__thumb { width: 38px; height: 38px; border-radius: 9px; object-fit: cover; flex-shrink: 0; }
-.app__tabbar { margin-top: auto; display: flex; justify-content: space-around; padding: 10px 4px 2px; border-top: 1px solid var(--border-subtle); color: var(--text-muted); }
-.app__tab--on { color: var(--accent); }
+.app__phone-screen--shot { background: #1B2529; }
+.app__phone-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 
 .app__dots { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; }
 .app__arrow { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-card); color: var(--accent); cursor: pointer; font-size: 18px; line-height: 1; }
@@ -285,7 +128,7 @@ const documents = [
 
 /* Changement d'écran : fondu court (opacité seulement, charte « fond et
    couleur »), neutralisé par prefers-reduced-motion (style.css). */
-.app__body { animation: app-fade 200ms var(--ease); }
+.app__shot { animation: app-fade 200ms var(--ease); }
 @keyframes app-fade { from { opacity: 0; } to { opacity: 1; } }
 .app__sync { display: none; }
 .app__now { display: none; margin: 0; font-size: var(--fs-meta); font-weight: 700; color: var(--text-primary); }
@@ -317,28 +160,6 @@ const documents = [
   .app__cam { top: 3px; width: 4px; height: 4px; }
   .app__base { height: 10px; width: 100%; }
   .app__screen { height: 252px; }
-  .app__side { width: 56px; padding: 8px 6px; align-items: center; gap: 2px; }
-  .app__side-logo { padding: 2px 0 8px; justify-content: center; }
-  .app__side-logo > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .app__side-btn { width: 44px; height: 44px; padding: 0; justify-content: center; border-left: 0; border-radius: 10px; }
-  .app__side-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-  .app__side-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .app__side-btn--static { display: none; }
-  .app__top { height: 38px; padding: 0 10px; }
-  .app__search { max-width: none; }
-  .app__body { padding: 10px; }
-  .app__stats { grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
-  .app__stat { padding: 7px 8px; gap: 8px; }
-  .app__stat-ico { width: 26px; height: 26px; }
-  .app__body > .app__row { margin-bottom: 10px; }
-  .app__row { padding: 8px 10px; }
-  .app__row-meta, .app__row-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .app__assets { gap: 6px; }
-  .app__asset-img { height: 52px; }
-  .app__asset-img--lg { height: 78px; }
-  .app__asset-body { padding: 6px 7px; }
-  .app__head { flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-  .app__two { grid-template-columns: 1fr; gap: 6px; }
 
   /* Téléphone : même écran que sur desktop, réduit, au premier plan. */
   .app__phone { position: absolute; right: 0; bottom: 0; transform: scale(var(--phone-k, .56)); transform-origin: 100% 100%; box-shadow: 0 24px 48px rgba(38, 53, 59, .22); }
@@ -356,10 +177,6 @@ const documents = [
   .app__screen { height: 320px; }
 }
 @media (max-width: 400px) {
-  /* Pictogrammes des compteurs retirés du cadrage étroit (le libellé reste). */
-  .app__stat-ico { display: none; }
-  .app__stat > span:last-child { min-width: 0; }
-  .app__stat .app__cap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 @media (max-width: 359px) {
   .app__devices { --phone-k: .5; --phone-out: 150px; }

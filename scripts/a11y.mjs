@@ -40,7 +40,15 @@ const dist = path.join(root, 'dist')
  */
 export const PAGES = [
   // Lot 69P : accueil (démonstration produit mobile, carrousels).
-  { name: 'Accueil', url: '/' },
+  // Lot 71P : aussi animations actives (bandeau défilant des types de biens et
+  // son bouton « Mettre en pause le défilement », masqué en mouvement réduit).
+  {
+    name: 'Accueil', url: '/',
+    then: { name: 'animations actives (bandeau défilant)', act: async (page) => {
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+      await page.locator('.uc__kinds-toggle').waitFor({ state: 'visible' })
+    } },
+  },
   { name: 'Accueil du Centre d’aide', url: '/aide' },
   { name: 'Recherche d’aide', url: '/aide?q=document' },
   { name: 'Thème', url: '/aide/theme/documents' },
