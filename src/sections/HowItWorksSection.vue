@@ -16,9 +16,23 @@
     <div>
       <div aria-live="polite" class="vb-card how__demo">
         <template v-if="demo === 0">
+          <!-- Lot 72G (demande PO du 19/10) : des documents (facture, contrat,
+               photo) arrivent dans le dossier Verebona. Animation CSS légère,
+               jouée UNE fois quand l'illustration apparaît à l'écran (moins de
+               3 s, translation + opacité, sans rebond) ; prefers-reduced-motion
+               ou absence de JavaScript : image fixe (documents déjà rangés).
+               Illustration décorative ; la légende est du texte réel. -->
           <div class="how__drop">
-            <VbIcon name="upload" :size="28" class="how__accent" />
-            <div class="how__file"><VbIcon name="file" :size="16" class="how__accent" /><span class="how__file-name">facture-chaudiere-2026.pdf</span><span class="how__muted">182 Ko</span></div>
+            <div ref="inbox" :class="['how__inbox', armed ? 'how__inbox--armed' : '', play ? 'how__inbox--play' : '']" aria-hidden="true">
+              <span class="how__folder-back"></span>
+              <span class="how__doc how__doc--1"><span class="how__doc-head"><span class="how__doc-ico"><VbIcon name="euro" :size="12" /></span>Facture</span><span class="how__doc-bar"></span><span class="how__doc-bar how__doc-bar--short"></span></span>
+              <span class="how__doc how__doc--2"><span class="how__doc-head"><span class="how__doc-ico"><VbIcon name="file" :size="12" /></span>Contrat</span><span class="how__doc-bar"></span><span class="how__doc-bar how__doc-bar--short"></span></span>
+              <span class="how__doc how__doc--3"><span class="how__doc-head">Photo</span><img src="/assets/appartement-lyon.webp" alt="" width="76" height="40" loading="lazy" decoding="async" class="how__doc-photo" /></span>
+              <span class="how__folder-front">
+                <VbLogo :size="18" inverse />
+                <span class="how__folder-done"><VbIcon name="check" :size="13" />3 documents rangés</span>
+              </span>
+            </div>
             <div class="how__muted how__center">Photo, PDF ou email — déposé tel quel.</div>
           </div>
         </template>
@@ -59,9 +73,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import { useLanding } from '../composables/useLanding'
 import VbIcon from '../components/VbIcon.vue'
+import VbLogo from '../components/VbLogo.vue'
 
 const { showMascot } = useLanding()
 
@@ -70,6 +85,29 @@ const { showMascot } = useLanding()
 // sans action de l'utilisateur) — l'état change uniquement au choix d'une étape.
 const demo = ref(0)
 const select = (i: number) => { demo.value = i }
+
+// Animation du dépôt (lot 72G) : armée au montage de l'illustration (documents
+// masqués), jouée une seule fois dès qu'elle est visible à l'écran. Sans
+// IntersectionObserver ou en mouvement réduit : rien n'est armé, l'image
+// reste fixe (documents déjà dans le dossier).
+const inbox = ref<HTMLElement | null>(null)
+const armed = ref(false)
+const play = ref(false)
+let io: IntersectionObserver | null = null
+function stopObserving() { io?.disconnect(); io = null }
+watch(inbox, (el) => {
+  stopObserving()
+  armed.value = false
+  play.value = false
+  if (!el || typeof IntersectionObserver === 'undefined') return
+  try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return } catch { return }
+  armed.value = true
+  io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) { play.value = true; stopObserving() }
+  }, { threshold: 0.5 })
+  io.observe(el)
+})
+onBeforeUnmount(stopObserving)
 
 const mascotSays = computed(() => [
   "« Je réceptionne votre document, je regarde ce qu'il contient. »",
@@ -99,7 +137,44 @@ const steps = [
 .how__step-desc { display: block; font-size: 15.5px; line-height: 1.55; color: var(--text-muted); }
 
 .how__demo { padding: 18px; min-height: 290px; display: flex; flex-direction: column; justify-content: center; }
-.how__drop { display: flex; flex-direction: column; align-items: center; gap: 14px; border: 1.5px dashed var(--bubble-edge); border-radius: var(--radius-md); background: var(--bg-page); padding: 30px 18px; }
+.how__drop { display: flex; flex-direction: column; align-items: center; gap: 14px; border-radius: var(--radius-md); background: var(--bg-page); padding: 24px 18px 20px; }
+/* Dossier Verebona (lot 72G) : dos et façade pétrole, documents glissés entre
+   les deux (aplats, bordures 1 px). État de repos = image fixe. */
+.how__inbox { position: relative; width: 272px; max-width: 100%; height: 190px; flex-shrink: 0; }
+.how__folder-back { position: absolute; left: 0; right: 0; bottom: 0; height: 128px; border-radius: var(--radius-md); background: var(--accent-hover); z-index: 1; }
+.how__folder-back::before { content: ''; position: absolute; left: 0; top: -14px; width: 92px; height: 22px; border-radius: 10px 10px 0 0; background: var(--accent-hover); }
+.how__folder-front {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 92px; z-index: 3; border-radius: var(--radius-md); background: var(--accent);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--vb-ivoire);
+}
+.how__folder-done { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; }
+.how__doc {
+  position: absolute; bottom: 44px; z-index: 2; width: 84px; height: 112px; padding: 9px 7px; border-radius: var(--radius-sm);
+  background: var(--bg-card); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 7px;
+  transform: rotate(var(--r, 0deg)); transform-origin: 50% 100%;
+}
+.how__doc--1 { left: 12px; --r: -7deg; }
+.how__doc--2 { left: 94px; bottom: 50px; }
+.how__doc--3 { left: 176px; --r: 7deg; }
+.how__doc-head { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: var(--text-primary); }
+.how__doc-ico { width: 18px; height: 18px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.how__doc-bar { height: 5px; border-radius: 3px; background: var(--border-subtle); }
+.how__doc-bar--short { width: 60%; }
+.how__doc-photo { width: 100%; height: 40px; border-radius: 6px; object-fit: cover; }
+/* Lecture unique à l'apparition : chaque document descend dans le dossier
+   (translation + opacité, courbe de la charte, sans rebond), puis la mention
+   « rangés » apparaît. Durée totale < 3 s, aucune boucle. */
+.how__inbox--armed .how__doc, .how__inbox--armed .how__folder-done { opacity: 0; }
+.how__inbox--play .how__doc { animation: how-drop 800ms var(--ease) both; }
+.how__inbox--play .how__doc--1 { animation-delay: 150ms; }
+.how__inbox--play .how__doc--2 { animation-delay: 700ms; }
+.how__inbox--play .how__doc--3 { animation-delay: 1250ms; }
+.how__inbox--play .how__folder-done { animation: how-fade 400ms var(--ease) 2100ms both; }
+@keyframes how-drop { from { opacity: 0; transform: translateY(-84px) rotate(var(--r, 0deg)); } to { opacity: 1; transform: translateY(0) rotate(var(--r, 0deg)); } }
+@keyframes how-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .how__inbox .how__doc, .how__inbox .how__folder-done { animation: none !important; opacity: 1 !important; }
+}
 .how__accent { color: var(--accent); }
 .how__muted { font-size: 13px; color: var(--text-muted); }
 .how__center { text-align: center; }
@@ -122,6 +197,10 @@ const steps = [
 .how__bubble { margin-top: 8px; }
 @media (max-width: 860px) {
   .how__grid { gap: 36px; }
+  .how__inbox { width: 256px; }
+  .how__doc--1 { left: 6px; }
+  .how__doc--2 { left: 86px; }
+  .how__doc--3 { left: 166px; }
   .how__mascot-row { grid-template-columns: 72px minmax(0, 1fr); gap: 0 14px; }
   .how__mascot { width: 72px; }
 }

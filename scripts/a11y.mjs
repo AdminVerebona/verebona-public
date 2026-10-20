@@ -40,13 +40,14 @@ const dist = path.join(root, 'dist')
  */
 export const PAGES = [
   // Lot 69P : accueil (démonstration produit mobile, carrousels).
-  // Lot 71P : aussi animations actives (bandeau défilant des types de biens et
-  // son bouton « Mettre en pause le défilement », masqué en mouvement réduit).
+  // Lot 71P : aussi animations actives (bandeau défilant des types de biens).
+  // Lot 72G : plus de bouton de pause ; en animations actives, le bandeau
+  // devient un arrêt de tabulation nommé (role="group", tabindex="0").
   {
     name: 'Accueil', url: '/',
     then: { name: 'animations actives (bandeau défilant)', act: async (page) => {
       await page.emulateMedia({ reducedMotion: 'no-preference' })
-      await page.locator('.uc__kinds-toggle').waitFor({ state: 'visible' })
+      await page.locator('.uc__marquee[tabindex="0"]').waitFor({ state: 'visible' })
     } },
   },
   { name: 'Accueil du Centre d’aide', url: '/aide' },

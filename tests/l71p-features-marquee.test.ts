@@ -6,9 +6,10 @@
  *    composant, grille sur grand écran et carrousel accessible sur mobile ; la
  *    visite disparaît de la section Application.
  * 2. « Les biens que Verebona prend en charge » redevient un bandeau défilant
- *    (comme avant le lot 66), accessible : bouton pause / reprise, pause au
- *    survol et au focus, arrêt complet en mouvement réduit, contenu unique
- *    pour les lecteurs d'écran, aucun débordement horizontal.
+ *    (comme avant le lot 66), accessible : pause au survol et au focus,
+ *    arrêt complet en mouvement réduit, contenu unique pour les lecteurs
+ *    d'écran, aucun débordement horizontal. Lot 72G (PO) : surtitre et bouton
+ *    pause / reprise retirés ; arrêt au clic / toucher (L72G-01).
  * 3. « Centralisez, organisez, valorisez. » : les icônes deviennent des
  *    mini-vues décoratives.
  *
@@ -134,88 +135,106 @@ describe('L71P-03 — pas de doublon de texte', () => {
   })
 })
 
-describe('L71P-04 — bandeau défilant des types de biens (WCAG 2.2.2)', () => {
-  it('prérendu : une seule liste de 10 types, dans l’ordre, sans copie de boucle ; bouton de pause présent', async () => {
+describe('L71P-04 / L72G-01 — bandeau défilant des types de biens (WCAG 2.2.2, sans bouton visible)', () => {
+  // Lot 72G (demande PO du 19/10) : ni surtitre ni bouton « Mettre en pause ».
+  // Alternative conservée : arrêt au survol, au focus clavier, au clic /
+  // toucher ; aucun mouvement en prefers-reduced-motion.
+  it('prérendu : une seule liste de 10 types, dans l’ordre, sans copie de boucle ; ni surtitre ni bouton ; pas d’arrêt de tabulation', async () => {
     const html = await ssr(UseCasesSection)
     for (const k of KINDS) expect(html.split(`>${k.replace('/', '/')}</li>`).length - 1, k).toBe(1)
     expect(html).not.toContain('uc__marquee-list--copy')
     expect(html).not.toContain('uc__kinds--ready')
-    expect(html).toMatch(/<button type="button" class="uc__kinds-toggle" aria-controls="uc-kinds">/)
+    expect(html).not.toMatch(/uc__kinds-toggle|uc__kinds-title|Mettre en pause|Les biens que Verebona prend en charge<\/p>/)
+    expect(html).not.toMatch(/class="uc__marquee"[^>]*tabindex/)
+    expect(html).toMatch(/<ul id="uc-kinds" class="uc__marquee-list" aria-label="Les biens que Verebona prend en charge">/)
   })
 
-  it('monté : liste nommée par le titre ; la copie de boucle est aria-hidden ; rien de focalisable dans le bandeau', async () => {
+  it('monté : liste nommée ; copie de boucle aria-hidden ; aucun bouton ; le bandeau est un arrêt de tabulation nommé', async () => {
     const w = track(mount(UseCasesSection, { attachTo: document.body }))
     await flushPromises()
     const list = w.find('#uc-kinds')
-    expect(document.getElementById(list.attributes('aria-labelledby')!)?.textContent).toBe('Les biens que Verebona prend en charge')
+    expect(list.attributes('aria-label')).toBe('Les biens que Verebona prend en charge')
     expect(list.findAll('li').map((l) => l.text())).toEqual(KINDS)
     expect(list.attributes('aria-hidden')).toBeUndefined()
     const copy = w.find('.uc__marquee-list--copy')
     expect(copy.attributes('aria-hidden')).toBe('true')
     expect(copy.findAll('li').map((l) => l.text())).toEqual(KINDS)
     expect(w.findAll('.uc__marquee ul:not([aria-hidden])')).toHaveLength(1)
-    expect(w.find('.uc__marquee').findAll('a, button, input, [tabindex]')).toHaveLength(0)
+    expect(w.find('.uc__kinds').findAll('a, button, input')).toHaveLength(0)
+    expect(w.find('.uc__kinds').text()).not.toMatch(/pause|Reprendre|prend en charge/i)
+    const m = w.find('.uc__marquee')
+    expect(m.attributes('tabindex')).toBe('0')
+    expect(m.attributes('role')).toBe('group')
+    expect(m.attributes('aria-label')).toMatch(/s’arrête au focus, au survol ou au toucher/)
     expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--ready')
   })
 
-  it('bouton visible « Mettre en pause / Reprendre le défilement » : vrai bouton, nom accessible, bascule', async () => {
+  it('clic / toucher : arrête puis relance le défilement', async () => {
     const w = track(mount(UseCasesSection, { attachTo: document.body }))
-    const btn = w.find('.uc__kinds-toggle')
-    expect(btn.element.tagName).toBe('BUTTON')
-    expect(btn.attributes('type')).toBe('button')
-    expect(btn.attributes('aria-controls')).toBe('uc-kinds')
-    expect(btn.text()).toBe('Mettre en pause le défilement')
-    expect(btn.find('svg').attributes('aria-hidden')).toBe('true')
-    await btn.trigger('click')
-    expect(btn.text()).toBe('Reprendre le défilement')
+    await flushPromises()
+    const m = w.find('.uc__marquee')
+    await m.trigger('pointerdown')
+    await m.trigger('pointerup')
+    await m.trigger('click')
     expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--paused')
-    await btn.trigger('click')
-    expect(btn.text()).toBe('Mettre en pause le défilement')
+    await m.trigger('click')
     expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
   })
 
-  it('focus clavier : le bandeau s’arrête et ne reprend que sur demande ; un clic à la souris ne l’arrête pas', async () => {
+  it('focus clavier : arrêt durable (même après la sortie du focus) ; un focus donné au pointeur n’arrête pas', async () => {
     const w = track(mount(UseCasesSection, { attachTo: document.body }))
-    const btn = w.find('.uc__kinds-toggle')
-    // Souris / doigt : le focus donné par le pointeur n'arrête pas le bandeau.
-    await btn.trigger('pointerdown')
-    ;(btn.element as HTMLElement).focus()
+    await flushPromises()
+    const m = w.find('.uc__marquee')
+    const el = m.element as HTMLElement
+    await m.trigger('pointerdown')
+    el.focus()
     await flushPromises()
     expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
-    await btn.trigger('pointerup')
+    await m.trigger('pointerup')
     await new Promise((r) => setTimeout(r, 650))
-    ;(btn.element as HTMLElement).blur()
-    // Clavier : arrêt durable, annoncé par le libellé du bouton.
-    ;(btn.element as HTMLElement).focus()
+    el.blur()
+    el.focus()
     await flushPromises()
     expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--paused')
-    expect(btn.text()).toBe('Reprendre le défilement')
-    ;(btn.element as HTMLElement).blur()
+    el.blur()
     await flushPromises()
     expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--paused')
-    await btn.trigger('click')
+  })
+
+  it('prefers-reduced-motion : ni arrêt de tabulation ni rôle (rien ne bouge), clic sans effet', async () => {
+    vi.stubGlobal('matchMedia', (q: string) => ({ matches: q.includes('reduce'), media: q, addEventListener() {}, removeEventListener() {} }))
+    const w = track(mount(UseCasesSection, { attachTo: document.body }))
+    await flushPromises()
+    const m = w.find('.uc__marquee')
+    expect(m.attributes('tabindex')).toBeUndefined()
+    expect(m.attributes('role')).toBeUndefined()
+    await m.trigger('click')
     expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
   })
 
-  it('CSS : défilement continu après montage, pause au survol et au bouton, aucun débordement de page', () => {
+  it('CSS : défilement continu après montage, pause au survol (pointeur fin), au focus et à l’arrêt ; aucun débordement de page', () => {
     const css = styleOf('src/sections/UseCasesSection.vue')
     expect(css).toMatch(/\.uc__marquee \{ overflow: hidden;/)
     expect(css).toMatch(/\.uc__kinds--ready \.uc__marquee-track \{ animation: uc-marquee \d+s linear infinite; \}/)
-    expect(css).toMatch(/\.uc__kinds--paused \.uc__marquee-track, \.uc__marquee:hover \.uc__marquee-track \{ animation-play-state: paused; \}/)
+    expect(css).toMatch(/\.uc__kinds--paused \.uc__marquee-track, \.uc__marquee:focus-visible \.uc__marquee-track \{ animation-play-state: paused; \}/)
+    expect(mediaBlock(css, 'hover: hover')).toMatch(/\.uc__marquee:hover \.uc__marquee-track \{ animation-play-state: paused; \}/)
+    expect(css).toMatch(/\.uc__marquee:focus-visible \{ outline-offset: -3px; \}/)
     expect(css).toMatch(/@keyframes uc-marquee \{ from \{ transform: translateX\(0\); \} to \{ transform: translateX\(-50%\); \} \}/)
-    expect(css).toMatch(/\.uc__kinds-toggle \{[^}]*min-height: 44px;/)
+    expect(css).not.toMatch(/uc__kinds-toggle|uc__kinds-title|uc__kinds-head/)
     expect(css).not.toMatch(/gradient\(/)
     // Mobile : bandeau jusqu'aux bords de l'écran, toujours découpé.
     expect(mediaBlock(css, 'max-width: 860px')).toMatch(/\.uc__marquee \{ margin-inline: -20px; padding-inline: 20px; \}/)
     // Aucune minuterie JavaScript ne fait bouger le bandeau.
     expect(read('src/sections/UseCasesSection.vue')).not.toMatch(/setInterval\(|requestAnimationFrame\(/)
+    // Icônes pause / lecture devenues inutiles : retirées.
+    expect(read('src/components/icons.ts')).not.toMatch(/^\s*(pause|play):/m)
   })
 
-  it('prefers-reduced-motion : arrêt complet, liste statique lisible, ni copie ni bouton', () => {
+  it('prefers-reduced-motion : arrêt complet, liste statique lisible, sans copie', () => {
     const m = mediaBlock(styleOf('src/sections/UseCasesSection.vue'), 'prefers-reduced-motion: reduce')
     expect(m).toMatch(/\.uc__kinds \.uc__marquee-track \{ display: block; animation: none !important; transform: none; width: auto; \}/)
     expect(m).toMatch(/\.uc__marquee-list \{ flex-wrap: wrap; flex-shrink: 1; min-width: 0; \}/)
-    expect(m).toMatch(/\.uc__marquee-list--copy, \.uc__kinds-toggle \{ display: none; \}/)
+    expect(m).toMatch(/\.uc__marquee-list--copy \{ display: none; \}/)
   })
 })
 

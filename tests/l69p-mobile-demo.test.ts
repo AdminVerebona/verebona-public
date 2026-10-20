@@ -245,7 +245,8 @@ describe('L69P-04 — aucun défilement automatique', () => {
   })
 
   // Lot 71P : le bandeau des types de biens défile en continu (décision PO,
-  // CSS seule, avec bouton de pause — l71p-features-marquee.test.ts) ; les
+  // CSS seule ; lot 72G : sans bouton, arrêt au survol / focus / toucher —
+  // l71p-features-marquee.test.ts) ; les
   // carrousels et démonstrations ne bougent toujours jamais seuls.
   it('20 s sans action : rien ne change (ordinateur, « Comment ça marche », carrousels)', async () => {
     vi.useFakeTimers()

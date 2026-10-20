@@ -6,29 +6,23 @@
       <h2 class="vb-h2 uc__title">Utile au quotidien. Décisif quand il faut agir.</h2>
       <p class="vb-text">Verebona vous aide à retrouver, suivre et documenter vos biens au fil du temps, puis à réunir les bonnes pièces lorsqu'un événement arrive.</p>
     </div>
-    <!-- Types de biens : BANDEAU DÉFILANT (lot 71P, retour du défilement
-         continu d'avant le lot 66, décision PO du 19/10) — liste de mots qui
-         défile en continu, dans le style de la charte. Accessibilité
-         (WCAG 2.2.2) : bouton visible « Mettre en pause / Reprendre le
-         défilement » ; pause au survol ; arrêt durable dès que le focus clavier
-         entre dans le bandeau (il ne reprend que sur demande, via le bouton) ;
-         prefers-reduced-motion : aucun mouvement, liste statique lisible et
-         bouton masqué. La liste n'existe qu'une fois pour les lecteurs
-         d'écran : la copie qui sert à la boucle est `aria-hidden` et n'est
-         ajoutée qu'après le montage (absente du HTML prérendu). Le bandeau
-         découpe son contenu : aucun débordement horizontal de la page. -->
-    <div :class="['uc__kinds', ready ? 'uc__kinds--ready' : '', paused ? 'uc__kinds--paused' : '']"
-      @focusin="onFocusIn" @pointerdown="onPointerDown" @pointerup="releasePointer" @pointercancel="releasePointer">
-      <div class="uc__kinds-head">
-        <p id="uc-kinds-title" class="uc__kinds-title">Les biens que Verebona prend en charge</p>
-        <button type="button" class="uc__kinds-toggle" aria-controls="uc-kinds" @click="toggle">
-          <VbIcon :name="paused ? 'play' : 'pause'" :size="16" />
-          <span>{{ paused ? 'Reprendre' : 'Mettre en pause' }}<span class="sr-only"> le défilement</span></span>
-        </button>
-      </div>
-      <div class="uc__marquee">
+    <!-- Types de biens : BANDEAU DÉFILANT (lot 71P, décision PO du 19/10).
+         Lot 72G (demande PO du 19/10) : ni surtitre ni bouton « Mettre en
+         pause » — seul le bandeau de mots défile. Alternative WCAG 2.2.2
+         sans bouton visible : pause au survol (pointeur fin) ; arrêt durable
+         au focus clavier (le bandeau devient un arrêt de tabulation, nommé) ;
+         un clic ou un toucher arrête / relance le défilement ;
+         prefers-reduced-motion : aucun mouvement, liste statique lisible, pas
+         d'arrêt de tabulation. La liste n'existe qu'une fois pour les lecteurs
+         d'écran (nommée par aria-label) : la copie de boucle est `aria-hidden`
+         et n'est ajoutée qu'après le montage (absente du HTML prérendu). Le
+         bandeau découpe son contenu : aucun débordement horizontal. -->
+    <div :class="['uc__kinds', ready ? 'uc__kinds--ready' : '', paused ? 'uc__kinds--paused' : '']">
+      <div class="uc__marquee" :tabindex="moving ? 0 : undefined" :role="moving ? 'group' : undefined"
+        :aria-label="moving ? KINDS_HINT : undefined"
+        @focusin="onFocusIn" @pointerdown="onPointerDown" @pointerup="releasePointer" @pointercancel="releasePointer" @click="toggle">
         <div class="uc__marquee-track">
-          <ul id="uc-kinds" class="uc__marquee-list" aria-labelledby="uc-kinds-title">
+          <ul id="uc-kinds" class="uc__marquee-list" aria-label="Les biens que Verebona prend en charge">
             <li v-for="k in kinds" :key="k" class="uc__marquee-item">{{ k }}</li>
           </ul>
           <ul v-if="ready" class="uc__marquee-list uc__marquee-list--copy" aria-hidden="true">
@@ -69,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useLanding } from '../composables/useLanding'
 import VbIcon from '../components/VbIcon.vue'
 
@@ -77,18 +71,33 @@ const { ucGroups } = useLanding()
 
 /** Ordre prévu par le design (bandeau des types de biens d'avant le lot 66). */
 const kinds = ['Voiture', 'Appartement', 'Garage', 'Moto', 'Maison', 'Terrain', 'Vélo', 'Local commercial', 'Loisir / Sport', 'Électronique']
+/** Nom du bandeau quand il défile (et devient focalisable) : dit comment l'arrêter. */
+const KINDS_HINT = 'Défilement des types de biens : s’arrête au focus, au survol ou au toucher'
 
 // Copie de boucle et animation seulement côté navigateur, après le montage :
 // le HTML prérendu ne contient qu'une liste, immobile.
 const ready = ref(false)
-onMounted(() => { ready.value = true })
+/** Mouvement réduit demandé : rien ne bouge, le bandeau n'est pas un arrêt de tabulation. */
+const reduced = ref(false)
+let mql: MediaQueryList | null = null
+const onReduce = (e: MediaQueryListEvent) => { reduced.value = e.matches }
+onMounted(() => {
+  try {
+    mql = window.matchMedia('(prefers-reduced-motion: reduce)')
+    reduced.value = mql.matches
+    mql.addEventListener?.('change', onReduce)
+  } catch { /* matchMedia indisponible : animations considérées actives */ }
+  ready.value = true
+})
+onBeforeUnmount(() => { mql?.removeEventListener?.('change', onReduce) })
+const moving = computed(() => ready.value && !reduced.value)
 
-/** Arrêt demandé (bouton) ou imposé par l'arrivée du focus clavier. */
+/** Arrêt durable : focus clavier, clic ou toucher (un second clic / toucher relance). */
 const paused = ref(false)
-function toggle() { paused.value = !paused.value; pointer = false }
+function toggle() { if (moving.value) paused.value = !paused.value }
 
-// Un clic ou un toucher peut aussi donner le focus au bouton : seul le focus
-// CLAVIER arrête le bandeau (sinon un clic sur « Mettre en pause » le
+// Un clic ou un toucher donne aussi le focus au bandeau (tabindex) : seul le
+// focus CLAVIER l'arrête d'office (sinon le clic, qui bascule l'état, le
 // relancerait aussitôt). Deux garde-fous : pointeur en cours d'usage, et
 // `:focus-visible` (faux pour un focus donné à la souris ou au doigt).
 let pointer = false
@@ -109,15 +118,10 @@ function onFocusIn(e: FocusEvent) {
 /* Bandeau des types de biens — mots en Figtree, pétrole sur brume (texte
    réel, contraste AA), séparés par un point cuivre décoratif ; filets 1 px. */
 .uc__kinds { margin: 0 0 40px; }
-.uc__kinds-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-3); margin: 0 0 var(--sp-3); }
-.uc__kinds-title { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--text-heading); margin: 0 0 0 4px; }
-.uc__kinds-toggle {
-  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: var(--radius-pill);
-  border: 1px solid var(--accent); background: var(--bg-card); color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
-  transition: background-color var(--dur) var(--ease);
-}
-.uc__kinds-toggle:hover { background: var(--accent-soft); }
 .uc__marquee { overflow: hidden; border-block: 1px solid var(--border); }
+/* Focus clavier visible à l'intérieur du bandeau (il touche les bords de
+   l'écran sur mobile : un contour extérieur serait coupé). */
+.uc__marquee:focus-visible { outline-offset: -3px; }
 .uc__marquee-track { display: flex; width: max-content; }
 .uc__marquee-list { display: flex; flex-shrink: 0; margin: 0; padding: 0; list-style: none; }
 .uc__marquee-item {
@@ -128,14 +132,17 @@ function onFocusIn(e: FocusEvent) {
 /* Défilement continu (après montage) : la piste porte deux listes
    identiques ; un décalage de -50 % ramène exactement au point de départ. */
 .uc__kinds--ready .uc__marquee-track { animation: uc-marquee 48s linear infinite; }
-.uc__kinds--paused .uc__marquee-track, .uc__marquee:hover .uc__marquee-track { animation-play-state: paused; }
+.uc__kinds--paused .uc__marquee-track, .uc__marquee:focus-visible .uc__marquee-track { animation-play-state: paused; }
+/* Survol : pointeur fin seulement (sur écran tactile, le « survol » collant
+   après un toucher empêcherait de relancer le défilement). */
+@media (hover: hover) { .uc__marquee:hover .uc__marquee-track { animation-play-state: paused; } }
 @keyframes uc-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 /* Mouvement réduit : aucun défilement, liste statique lisible (qui passe à
-   la ligne), copie de boucle retirée, bouton inutile masqué. */
+   la ligne), copie de boucle retirée. */
 @media (prefers-reduced-motion: reduce) {
   .uc__kinds .uc__marquee-track { display: block; animation: none !important; transform: none; width: auto; }
   .uc__marquee-list { flex-wrap: wrap; flex-shrink: 1; min-width: 0; }
-  .uc__marquee-list--copy, .uc__kinds-toggle { display: none; }
+  .uc__marquee-list--copy { display: none; }
   .uc__marquee-item { font-size: 22px; padding: 8px 20px 8px 0; gap: 20px; }
 }
 .uc__group { max-width: 920px; margin: 0 auto 32px; }

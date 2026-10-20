@@ -17,9 +17,6 @@ export const ICONS = {
   x: [p('M18 6 6 18M6 6l12 12')],
   chevronRight: [p('M9 6l6 6-6 6')],
   chevronLeft: [p('M15 6l-6 6 6 6')],
-  // Lot 71P — bouton « Mettre en pause / Reprendre le défilement » du bandeau des types de biens.
-  pause: [p('M9 5v14M15 5v14')],
-  play: [p('M7 4.5v15l12-7.5z')],
   euro: [p('M17.5 6.5A6.5 6.5 0 1 0 17.5 17.5'), p('M4 10.5h9M4 13.5h9')],
   sparkle: [p('M12 3v4M12 17v4M3 12h4M17 12h4'), p('m6 6 2.2 2.2M15.8 15.8 18 18M6 18l2.2-2.2M15.8 8.2 18 6')],
   bell: [p('M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9'), p('M10 20a2 2 0 0 0 4 0')],

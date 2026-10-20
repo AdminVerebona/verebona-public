@@ -32,13 +32,8 @@
           <div class="app__base" aria-hidden="true"></div>
         </div>
 
-        <!-- Mobile : vignette « synchronisé » dans l'espace laissé à gauche du
-             téléphone (redit l'introduction : décorative pour les lecteurs d'écran). -->
-        <div class="app__sync" aria-hidden="true">
-          <span class="app__sync-title"><VbIcon name="check" :size="15" />Synchronisé</span>
-          <span class="app__sync-text">Mêmes biens, documents et échéances sur ordinateur et sur téléphone.</span>
-          <span class="app__sync-chips"><span class="app__chip">Web</span><span class="app__chip">iOS</span><span class="app__chip">Android</span></span>
-        </div>
+        <!-- Lot 72G (demande PO du 19/10) : la vignette mobile « Synchronisé »
+             (Web · iOS · Android) est supprimée ; l'introduction le dit déjà. -->
 
         <!-- Téléphone -->
         <div class="app__phone" aria-hidden="true">
@@ -112,7 +107,6 @@ const shots = [
 .app__shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .app__screen { border-radius: 6px; overflow: hidden; background: var(--bg-page); display: flex; height: 400px; }
 .app__b { font-size: 10px; padding: 2px 8px; }
-.app__chip { padding: 3px 11px; border-radius: var(--radius-pill); border: 1px solid var(--border); font-size: 11px; font-weight: 600; color: var(--text-muted); }
 
 .app__phone { flex-shrink: 0; width: 246px; border-radius: 46px; padding: 7px; background: #1E2A2F; border: 1px solid #3A4A51; }
 .app__phone-screen { border-radius: 40px; overflow: hidden; background: var(--bg-page); height: 486px; display: flex; flex-direction: column; }
@@ -130,7 +124,6 @@ const shots = [
    couleur »), neutralisé par prefers-reduced-motion (style.css). */
 .app__shot { animation: app-fade 200ms var(--ease); }
 @keyframes app-fade { from { opacity: 0; } to { opacity: 1; } }
-.app__sync { display: none; }
 .app__now { display: none; margin: 0; font-size: var(--fs-meta); font-weight: 700; color: var(--text-primary); }
 
 /* ── Mobile et tablette étroite (lot 69P) : ordinateur + téléphone recomposés ──
@@ -147,14 +140,6 @@ const shots = [
   .app__intro { text-align: left; font-size: 16px; margin-bottom: 20px; }
 
   .app__devices { position: relative; display: block; max-width: 640px; padding-bottom: var(--phone-out, 196px); }
-  .app__sync {
-    position: absolute; left: 0; bottom: 18px; width: calc(100% - 246px * var(--phone-k, .56) - 14px);
-    display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: var(--radius-md);
-    background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow-card);
-  }
-  .app__sync-title { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--accent); }
-  .app__sync-text { font-size: 12.5px; line-height: 1.4; color: var(--text-muted); }
-  .app__sync-chips { display: flex; flex-wrap: wrap; gap: 4px; }
   .app__laptop { width: 100%; align-items: flex-start; }
   .app__bezel { width: 100%; border-radius: 12px 12px 0 0; padding: 10px 8px 10px; }
   .app__cam { top: 3px; width: 4px; height: 4px; }
@@ -172,7 +157,6 @@ const shots = [
 }
 @media (min-width: 600px) and (max-width: 860px) {
   .app__devices { --phone-k: .7; --phone-out: 170px; margin: 0 auto; }
-  .app__sync { bottom: 40px; max-width: 260px; }
   .app__laptop { width: 82%; }
   .app__screen { height: 320px; }
 }
@@ -180,14 +164,11 @@ const shots = [
 }
 @media (max-width: 359px) {
   .app__devices { --phone-k: .5; --phone-out: 150px; }
-  .app__sync-text { display: none; }
 }
 /* Très étroit (zoom 200 % d'un téléphone) : la superposition deviendrait
    illisible — les deux supports s'affichent l'un après l'autre. */
 @media (max-width: 300px) {
   .app__devices { padding-bottom: 0; }
   .app__phone { position: static; transform: none; zoom: .62; margin: 20px auto 0; }
-  .app__sync { position: static; width: auto; margin-top: 16px; }
-  .app__sync-text { display: block; }
 }
 </style>

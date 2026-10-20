@@ -75,6 +75,8 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 | `tests/sitemap.test.ts` | contenu du sitemap de production (accueil, `/aide`, thèmes et articles publiés seulement), `canonicalUrl`, `robots.txt` |
 | `tests/structured-data.test.ts` | graphe Organization + WebSite (unicité, `@id`, logo PNG ≥ 112 px, aucun placeholder, rien hors production), `TechArticle` des articles |
 | `tests/server.test.ts` | `server.cjs` lancé sur un `dist/` factice : 301 unique vers l'hôte canonique, `X-Robots-Tag` en préprod, sitemap `application/xml`, 404 sans repli HTML, redirections d'aide, `frame-ancestors`, `Cache-Control` par famille (hachés immuables, image à nom fixe courte, HTML revalidé + 304, 404 `no-store`, `private` en préprod protégée) |
+| `tests/l72p-liens-routes.test.ts` | lot 72 : routeur = table `route-paths.ts`, inventaire commité à jour, anciennes URL sans chaîne, chaque lien interne des sources (`link`, `anchor`, `router.push`, `to`, `href`) vers une route/page/ancre existante, header + menu mobile + pied de page montés depuis `/aide` avec des ancres absolues |
+| `tests/l72p-server-routes.test.ts` | lot 72 : `server.cjs` réel — `/pourquoi-verebona` 404, `/comment-ca-marche` une 301 → `/#how` (query avant le fragment, casse, slash final), adresse inconnue 404 / routes déclarées 200, aide et ressources inchangées, une seule 301 depuis l'apex en production, repli sans `.site-routes.json` |
 | `tests/stale-chunk.test.ts` | chunks obsolètes (PUB-PERF-04) : une seule reprise automatique, pas de boucle, message ensuite, saisie conservée, paramètres et parrainage conservés, erreurs d'exécution ignorées |
 | `tests/help-corpus.test.ts` | validation de build du corpus réel (0 défaut, 100 articles), aucune occurrence T1–T5 quelle que soit la casse, notes de rédaction interne refusées, AID-BILL-010 publié sans avantage filleul |
 | `tests/contact.test.ts` | sujet du formulaire transmis, « Choisir… » refusé, erreurs annoncées (`role="alert"`) — GAP-17, CONTACT-02, A11Y-02 |
@@ -162,9 +164,39 @@ src/
 | `/confidentialite`  | LegalView    | onglet Confidentialité  |
 | `/:pathMatch(.*)*`  | NotFoundView | 404                     |
 
-- Les liens **header/footer** utilisent `useNav()` : les pages passent par `router.push`, et les 4 liens de section de la home (Pourquoi / Fonctionnalités / Tarifs / FAQ) routent vers `/` puis défilent vers l'ancre.
+- Les chemins sont tenus dans **`src/router/route-paths.ts`** (table pure, seule source) : le routeur, le build (`dist/.site-routes.json`) et l'inventaire des liens la lisent. Ajouter une route = l'ajouter à cette table (un test compare la table au routeur instancié).
+- Les liens **header/footer/menu mobile** utilisent `useNav()` : `link('/aide')` pour les pages, `anchor('how')` pour les 4 sections de l'accueil (Comment ça marche `#how` / Cas d'usage `#cas-usage` / Tarifs `#pricing` / FAQ `#faq`). La cible est **absolue** (`/#how`) : un nouvel onglet ou une navigation sans JavaScript depuis `/aide` atterrit sur la bonne section ; un clic simple défile en douceur.
 - Le **fil d'Ariane** des sous-pages et le lien « Accueil » naviguent via le router.
 - La page **légale** est unique : les 3 onglets sont 3 routes distinctes (bon pour le SEO / partage de liens), l'onglet actif est déduit du chemin dans `useLegal()`.
+
+## Anciennes URL, vraies 404 et inventaire des liens (lot 72)
+
+### Réponses HTTP
+
+| Adresse | Réponse | Source |
+| --- | --- | --- |
+| route déclarée sans paramètre (`/contact`, `/cgu`…) | 200, coquille SPA | `src/router/route-paths.ts` → `dist/.site-routes.json` |
+| `/aide…`, `/ressources…` | règles du Centre d'aide / des Ressources (HTML pré-rendu, 301, 404, 410) | corpus |
+| `/comment-ca-marche` | **une** 301 → `/#how` (query conservée : `/?utm=x#how`) ; en production derrière `CANONICAL_HOST`, `http://verebona.fr/comment-ca-marche` → **une** 301 → `https://www.verebona.fr/#how` | `src/config/legacy-routes.rules.ts` |
+| `/pourquoi-verebona` | 404 (page retirée sans équivalent, ni recréée ni redirigée vers l'accueil) | idem |
+| toute autre adresse | **404** (coquille « page introuvable », `no-store`) — plus de « soft 404 » | — |
+
+Fragment dans `Location` : conforme (RFC 9110 §10.2.2, URI-reference) et suivi par tous les navigateurs actuels ; les robots l'ignorent et voient la page déplacée sur l'accueil, ce qui est exact.
+
+`dist/.site-routes.json` absent (build incomplet) : `server.cjs` le signale au démarrage et retombe sur l'ancien comportement (coquille en 200) plutôt que de répondre 404 partout. `npm run build` et `npm run build:preprod` échouent d'ailleurs avant (`scripts/check-site-routes.mjs` : fichier présent, chaque ancre de l'accueil présente dans `dist/index.html` pré-rendu, aucune chaîne de redirections).
+
+Ajouter une ancienne URL : `LEGACY_REDIRECTS` (équivalent pertinent → destination **finale**) ou `RETIRED_PATHS` (aucun équivalent → 404) dans `src/config/legacy-routes.rules.ts`, puis régénérer l'inventaire.
+
+### Inventaire des liens (`link-inventory.json`)
+
+Dérivé du code par `link-inventory.build.ts` (routes du routeur, `id` des sections de l'accueil, pages publiées en production du Centre d'aide et des Ressources, anciennes URL, appels `appUrl('…')`), **commité** à la racine, et **copié dans l'application** (`src/lib/public-site/link-inventory.json`) où les tests valident chaque lien de l'application vers la vitrine.
+
+| Étape | Commande |
+| --- | --- |
+| régénérer après un changement de route, d'ancre, d'ancienne URL ou de lien vers l'application | `UPDATE_LINK_INVENTORY=1 npx vitest run tests/l72p-liens-routes.test.ts` |
+| reporter dans l'application | `node scripts/sync-public-link-inventory.mjs <chemin du dépôt vitrine>` (dans le dépôt de l'application) |
+
+`tests/l72p-liens-routes.test.ts` échoue si l'inventaire commité dérive du code (routes, ancres, anciennes URL, liens vers l'application, page du corpus **disparue**). Publier un nouvel article n'impose pas de régénérer.
 
 ## Sitemap et indexation
 
@@ -370,7 +402,7 @@ L'accueil est livré avec son contenu dans le HTML initial (H1, paragraphe, bén
 | `src/entry-prerender.ts`   | rend la route `/` avec `vue/server-renderer` (build SSR dans `node_modules/.prerender`, supprimé après) |
 | `scripts/prerender.mjs`    | injecte le rendu dans `dist/index.html` et produit `dist/spa.html` (coquille des autres routes)         |
 | `src/config/head.rules.ts` | titre et meta description par route ; description de l'accueil selon le mode `prelaunch` / `full`       |
-| `server.cjs`               | sert `dist/index.html` sur `/` et `dist/spa.html` pour les autres routes                                |
+| `server.cjs`               | sert `dist/index.html` sur `/` et `dist/spa.html` (200) pour les seules routes déclarées ; 404 sinon     |
 
 Le navigateur monte ensuite l'application normalement (`createApp`, pas d'hydratation) : le DOM est identique.
 

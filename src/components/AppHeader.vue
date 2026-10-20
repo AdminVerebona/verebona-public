@@ -7,10 +7,10 @@
         <VbLogo :size="34" />
       </a>
       <nav class="r-nav hd__nav" aria-label="Navigation principale">
-        <a href="#how" @click.prevent="navHow">Comment ça marche</a>
-        <a href="#cas-usage" @click.prevent="navCasUsage">Cas d'usage</a>
-        <a href="#pricing" @click.prevent="navPricing">Tarifs</a>
-        <a href="#faq" @click.prevent="navFaq">FAQ</a>
+        <a v-bind="anchor('how')">Comment ça marche</a>
+        <a v-bind="anchor('cas-usage')">Cas d'usage</a>
+        <a v-bind="anchor('pricing')">Tarifs</a>
+        <a v-bind="anchor('faq')">FAQ</a>
       </nav>
       <div class="hd__actions">
         <!-- PRELAUNCH : information non cliquable (CDC pré-lancement §6.2) -->
@@ -41,10 +41,10 @@
     </div>
     <template v-if="menuOpen">
       <div id="vb-mobile-menu" class="r-mobile-menu hd__menu">
-        <a href="#how" @click.prevent="navHow">Comment ça marche</a>
-        <a href="#cas-usage" @click.prevent="navCasUsage">Cas d'usage</a>
-        <a href="#pricing" @click.prevent="navPricing">Tarifs</a>
-        <a href="#faq" @click.prevent="navFaq">FAQ</a>
+        <a v-bind="anchor('how')">Comment ça marche</a>
+        <a v-bind="anchor('cas-usage')">Cas d'usage</a>
+        <a v-bind="anchor('pricing')">Tarifs</a>
+        <a v-bind="anchor('faq')">FAQ</a>
         <!-- PRELAUNCH : mêmes règles que le header desktop (CDC §6.3) -->
         <div v-if="isPrelaunch" data-testid="prelaunch-mobile-menu" class="vb-pill vb-pill--dashed hd__menu-pill">
           <span class="vb-pill__dot" aria-hidden="true"></span>{{ labels.header }}
@@ -68,7 +68,7 @@ import VbLogo from './VbLogo.vue'
 import VbIcon from './VbIcon.vue'
 
 const { isPrelaunch, labels } = useSiteMode()
-const { menuOpen, toggleMenu, closeMenu, link, navHow, navCasUsage, navPricing, navFaq } = useNav()
+const { menuOpen, toggleMenu, closeMenu, link, anchor } = useNav()
 </script>
 
 <style>

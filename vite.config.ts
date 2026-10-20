@@ -20,6 +20,7 @@ import { HOME_DESCRIPTIONS, HOME_TITLE, escapeHtmlAttr } from './src/config/head
 import { socialMetaHtml } from './src/config/social.rules'
 import { RESSOURCES_CONTENT_DIR, RESSOURCES_REGISTRY_FILE, loadRessourceCorpus } from './ressources.build'
 import { articlesToReview, buildRessourceRoutes, ressourcesSitemapPaths, visibleArticles } from './src/ressources/outputs'
+import { computeLinkInventory } from './link-inventory.build'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -432,6 +433,47 @@ function immutableAssetsPlugin(): Plugin {
 }
 
 // https://vitejs.dev/config/
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * ROUTES RÉELLES ET ANCIENNES URL — lot 72 (ticket « liens obsolètes »)
+ *
+ * `dist/.site-routes.json` (dotfile, non servi) : `server.cjs` n'envoie la
+ * coquille SPA en 200 qu'aux routes statiques DÉCLARÉES par le routeur
+ * (`src/router/route-paths.ts`) ; toute autre adresse reçoit une vraie 404
+ * (plus de « soft 404 »). Les anciennes URL y figurent aussi (301 vers la
+ * destination finale, ou 404 pour une page retirée). Les pages du Centre
+ * d'aide et des Ressources restent servies par leurs propres règles
+ * (HTML pré-rendu, 404/410 réels) : elles ne passent pas par ce fichier.
+ *
+ * `homeAnchors` sert au contrôle d'après build (`scripts/check-site-routes.mjs`) :
+ * chaque ancre doit figurer dans l'accueil PRÉ-RENDU (`dist/index.html`).
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+export const SITE_ROUTES_FILE = '.site-routes.json'
+
+function siteRoutesPlugin(): Plugin {
+  let isSsr = false
+  return {
+    name: 'verebona-site-routes',
+    apply: 'build',
+    configResolved(config) {
+      isSsr = Boolean(config.build.ssr)
+    },
+    generateBundle() {
+      // Build SSR du pré-rendu : rien à émettre.
+      if (isSsr) return
+      const inv = computeLinkInventory(process.cwd())
+      const source = JSON.stringify({
+        staticRoutes: inv.routes.static,
+        legacyRedirects: inv.legacyRedirects,
+        retired: inv.retired,
+        homeAnchors: inv.homeAnchors,
+      }, null, 2) + '\n'
+      this.emitFile({ type: 'asset', fileName: SITE_ROUTES_FILE, source })
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), ressourcesPlugin(), immutableAssetsPlugin()],
+  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), ressourcesPlugin(), immutableAssetsPlugin(), siteRoutesPlugin()],
 })

@@ -12,19 +12,21 @@
     <ul class="ben__grid r-stack">
       <li v-for="b in items" :key="b.key" :class="['ben__item', `ben__item--${b.key}`]">
         <div class="ben__view" aria-hidden="true">
-          <!-- Retrouvez : champ de recherche + un résultat -->
+          <!-- Retrouvez : champ de recherche + un résultat. Lot 72G (PO) : la
+               mascotte « neutral » remplace la loupe, comme le champ
+               « Demander à Verebona » de l'application. -->
           <template v-if="b.key === 'search'">
-            <span class="ben__search"><VbIcon name="search" :size="15" />garantie lave-linge</span>
+            <span class="ben__search"><img class="vb-mascot ben__search-m" src="/assets/mascot/neutral.webp" alt="" width="26" height="26" loading="lazy" decoding="async" />garantie lave-linge</span>
             <span class="ben__ui ben__result">
               <span class="ben__ico"><VbIcon name="file" :size="14" /></span>
               <span class="ben__col"><span class="ben__strong">Garantie lave-linge</span><span class="ben__meta">Maison · jusqu’au 03/2027</span></span>
             </span>
           </template>
-          <!-- Anticipez : deux pastilles de date -->
+          <!-- Anticipez : deux pastilles de date (lot 72G, PO : libellés explicites) -->
           <template v-else-if="b.key === 'dates'">
             <span class="ben__dates">
-              <span class="ben__ui ben__due"><span class="ben__date"><b>12</b>MARS</span><span class="ben__strong">Chaudière</span></span>
-              <span class="ben__ui ben__due"><span class="ben__date ben__date--soon"><b>01</b>JANV</span><span class="ben__strong">Assurance</span></span>
+              <span class="ben__ui ben__due"><span class="ben__date"><b>12</b>MARS</span><span class="ben__strong">Entretien chaudière</span></span>
+              <span class="ben__ui ben__due"><span class="ben__date ben__date--soon"><b>01</b>JANV</span><span class="ben__strong">Échéance assurance</span></span>
             </span>
           </template>
           <!-- Suivez : mini-frise achat · entretien · réparation -->
@@ -86,8 +88,8 @@ const steps = [
 .ben__ico { width: 28px; height: 28px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .ben__b { font-size: 11px; padding: 2px 8px; flex-shrink: 0; }
 /* Retrouvez */
-.ben__search { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--accent); background: var(--bg-card); font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; }
-.ben__search .vb-icon { color: var(--accent); flex-shrink: 0; }
+.ben__search { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 4px; border-radius: var(--radius-pill); border: 1px solid var(--accent); background: var(--bg-card); font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; }
+.ben__search-m { width: 26px; flex-shrink: 0; }
 .ben__result { display: flex; align-items: center; gap: 10px; padding: 7px 10px; }
 /* Anticipez */
 .ben__dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -95,6 +97,9 @@ const steps = [
 .ben__date { width: 42px; height: 46px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9.5px; font-weight: 700; letter-spacing: .04em; flex-shrink: 0; }
 .ben__date b { font-size: 17px; line-height: 1.05; letter-spacing: 0; }
 .ben__date--soon { background: var(--attention-soft); color: var(--attention-on-subtle); }
+/* Libellés explicites (lot 72G) : sur deux lignes au besoin dans les cartes
+   étroites (grille 4 colonnes), sans dépasser la vignette de 120 px. */
+.ben__due .ben__strong { white-space: normal; text-align: center; font-size: 12.5px; line-height: 1.2; }
 /* Suivez : frise sur un filet 1 px */
 .ben__line { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding-top: 4px; }
 .ben__line::before { content: ''; position: absolute; left: 6px; right: 6px; top: 10px; border-top: 1px solid var(--accent); }

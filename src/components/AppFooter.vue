@@ -8,15 +8,15 @@
     <div>
       <div class="ft__title">Produit</div>
       <div class="ft__links">
-        <a href="#how" @click.prevent="navHow">Comment ça marche</a>
-        <a href="#cas-usage" @click.prevent="navCasUsage">Cas d'usage</a>
-        <a href="#pricing" @click.prevent="navPricing">Tarifs</a>
+        <a v-bind="anchor('how')">Comment ça marche</a>
+        <a v-bind="anchor('cas-usage')">Cas d'usage</a>
+        <a v-bind="anchor('pricing')">Tarifs</a>
       </div>
     </div>
     <div>
       <div class="ft__title">Support</div>
       <div class="ft__links">
-        <a href="#faq" @click.prevent="navFaq">FAQ</a>
+        <a v-bind="anchor('faq')">FAQ</a>
         <a v-bind="link('/aide')">Centre d'aide</a>
         <a v-bind="link('/ressources')">Ressources</a>
         <a v-bind="link('/contact')">Contact</a>
@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { useNav } from '../composables/useNav'
 import VbLogo from './VbLogo.vue'
-const { link, navHow, navPricing, navFaq, navCasUsage } = useNav()
+const { link, anchor } = useNav()
 </script>
 
 <style>

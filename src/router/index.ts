@@ -6,9 +6,12 @@ import { installCanonicalGuard } from '../config/canonical'
 import { installHeadGuard } from '../config/head'
 import { installEmbedGuard } from '../help/embed'
 import { installStaleChunkRecovery } from '../config/stale-chunk'
+// Lot 72 : chemins tenus dans une table pure, lue aussi par le build et
+// `server.cjs` (vraies 404) et par l'inventaire des liens de l'application.
+import { ROUTE_PATHS } from './route-paths'
 
 const routes = [
-  { path: '/', name: 'home', component: HomeView },
+  { path: ROUTE_PATHS.home, name: 'home', component: HomeView },
   // ══════════════════════════════════════════════════════════════════════════
   // CENTRE D'AIDE — CDC Centre d'aide V1
   //
@@ -16,21 +19,21 @@ const routes = [
   // `/aide/theme/…` est réservé : aucun article ne peut porter le slug
   // « theme » (validation de build).
   // ══════════════════════════════════════════════════════════════════════════
-  { path: '/aide', name: 'help', component: () => import('../views/help/HelpHomeView.vue') },
-  { path: '/aide/theme/:category', name: 'help-category', component: () => import('../views/help/HelpCategoryView.vue') },
-  { path: '/aide/:slug', name: 'help-article', component: () => import('../views/help/HelpArticleView.vue') },
+  { path: ROUTE_PATHS.help, name: 'help', component: () => import('../views/help/HelpHomeView.vue') },
+  { path: ROUTE_PATHS['help-category'], name: 'help-category', component: () => import('../views/help/HelpCategoryView.vue') },
+  { path: ROUTE_PATHS['help-article'], name: 'help-article', component: () => import('../views/help/HelpArticleView.vue') },
   // ══════════════════════════════════════════════════════════════════════════
   // RESSOURCES — CDC Ressources V6 §8
   //
   // Index et articles du corpus `src/content/ressources/`, seule source.
   // Aucune page de catégorie (les catégories sont des ancres de l'index).
   // ══════════════════════════════════════════════════════════════════════════
-  { path: '/ressources', name: 'ressources', component: () => import('../views/ressources/RessourcesIndexView.vue') },
-  { path: '/ressources/:slug', name: 'ressources-article', component: () => import('../views/ressources/RessourceArticleView.vue') },
-  { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue') },
-  { path: '/mentions-legales', name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
-  { path: '/cgu', name: 'legal-cgu', component: () => import('../views/LegalView.vue') },
-  { path: '/confidentialite', name: 'legal-confid', component: () => import('../views/LegalView.vue') },
+  { path: ROUTE_PATHS.ressources, name: 'ressources', component: () => import('../views/ressources/RessourcesIndexView.vue') },
+  { path: ROUTE_PATHS['ressources-article'], name: 'ressources-article', component: () => import('../views/ressources/RessourceArticleView.vue') },
+  { path: ROUTE_PATHS.contact, name: 'contact', component: () => import('../views/ContactView.vue') },
+  { path: ROUTE_PATHS['legal-mentions'], name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
+  { path: ROUTE_PATHS['legal-cgu'], name: 'legal-cgu', component: () => import('../views/LegalView.vue') },
+  { path: ROUTE_PATHS['legal-confid'], name: 'legal-confid', component: () => import('../views/LegalView.vue') },
 
   // ══════════════════════════════════════════════════════════════════════════
   // POINT D'ENTREE DU PARRAINAGE — CDC parrainage §4.1
@@ -46,7 +49,7 @@ const routes = [
   // mener a l'inscription. En PRELAUNCH, le visiteur est renvoye sur l'accueil.
   // ══════════════════════════════════════════════════════════════════════════
   {
-    path: '/inscription',
+    path: ROUTE_PATHS['signup-redirect'],
     name: 'signup-redirect',
     beforeEnter: (to: { fullPath: string }) => {
       if (useSiteMode().isPrelaunch.value) {
@@ -60,7 +63,7 @@ const routes = [
     component: HomeView, // jamais rendu : `beforeEnter` redirige toujours
   },
 
-  { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue') },
+  { path: ROUTE_PATHS['not-found'], name: 'not-found', component: () => import('../views/NotFoundView.vue') },
 ]
 
 const router = createRouter({

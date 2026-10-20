@@ -31,6 +31,62 @@ try {
 }
 
 /**
+ * ══════════════════════════════════════════════════════════════════════════
+ * ROUTES RÉELLES ET ANCIENNES URL — lot 72 (ticket « liens obsolètes »)
+ *
+ * `dist/.site-routes.json` est écrit au build depuis le routeur
+ * (`src/router/route-paths.ts`) et `src/config/legacy-routes.rules.ts` :
+ *   · `staticRoutes`    — seules adresses servies en 200 par la coquille SPA ;
+ *   · `legacyRedirects` — ancienne URL → destination finale, UNE 301 ;
+ *   · `retired`         — pages retirées sans équivalent : 404.
+ * Toute autre adresse reçoit une vraie 404 (avant : 200 + page « introuvable »
+ * dessinée par Vue, soit une « soft 404 »). Le Centre d'aide et les Ressources
+ * gardent leurs propres règles plus bas (pages pré-rendues, 404/410 réels).
+ *
+ * Fichier absent (build incomplet) : repli sur l'ancien comportement (coquille
+ * en 200) plutôt qu'un site entier en 404 — signalé au démarrage.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+let siteRoutes = null;
+try {
+  const raw = JSON.parse(fs.readFileSync(path.join(distDir, ".site-routes.json"), "utf8"));
+  siteRoutes = {
+    staticRoutes: new Set(Array.isArray(raw.staticRoutes) ? raw.staticRoutes : []),
+    legacyRedirects: raw.legacyRedirects && typeof raw.legacyRedirects === "object" ? raw.legacyRedirects : {},
+    retired: new Set(Array.isArray(raw.retired) ? raw.retired : []),
+  };
+} catch {
+  console.warn("dist/.site-routes.json not found: SPA shell served with 200 for every route (no real 404)");
+}
+
+/** Chemin comparable : minuscules, sans slash final (le routeur Vue fait de même). */
+const normalizeSitePath = (p) => {
+  const lower = String(p || "/").toLowerCase();
+  return lower.length > 1 ? lower.replace(/\/+$/, "") || "/" : lower;
+};
+
+/** Query de l'URL demandée (`?…`), telle que reçue. */
+const queryOf = (req) => {
+  const q = req.originalUrl.indexOf("?");
+  return q === -1 ? "" : req.originalUrl.slice(q);
+};
+
+/**
+ * Destination d'une ancienne URL, ou `null`. Query conservée AVANT le
+ * fragment : `/comment-ca-marche?utm=x` → `/?utm=x#how`. Le fragment dans
+ * `Location` est conforme (RFC 9110 §10.2.2) et suivi par les navigateurs.
+ */
+function legacyLocation(req) {
+  if (!siteRoutes) return null;
+  const target = siteRoutes.legacyRedirects[normalizeSitePath(req.path)];
+  if (typeof target !== "string") return null;
+  const hashAt = target.indexOf("#");
+  const base = hashAt === -1 ? target : target.slice(0, hashAt);
+  const hash = hashAt === -1 ? "" : target.slice(hashAt);
+  return `${base}${queryOf(req)}${hash}`;
+}
+
+/**
  * Hote canonique (ticket SEO accueil, « Indexabilite »).
  *
  * `CANONICAL_HOST=www.verebona.fr` (production uniquement) : toute requete
@@ -48,7 +104,10 @@ if (canonicalHost) {
     const host = (req.hostname || "").toLowerCase();
     const isHttps = req.secure || req.get("x-forwarded-proto") === "https";
     if (host === canonicalHost && isHttps) return next();
-    res.redirect(301, `https://${canonicalHost}${req.originalUrl}`);
+    // Ancienne URL sur un autre hôte : directement vers la destination finale
+    // (une seule 301, jamais http → https → ancienne → nouvelle).
+    const legacy = req.method === "GET" || req.method === "HEAD" ? legacyLocation(req) : null;
+    res.redirect(301, `https://${canonicalHost}${legacy || req.originalUrl}`);
   });
 }
 
@@ -138,6 +197,13 @@ if (authEnabled) {
 
   console.log("Basic authentication enabled");
 }
+
+/** Anciennes URL avec un équivalent : une 301 vers la destination finale. */
+app.get(/.*/, (req, res, next) => {
+  const legacy = legacyLocation(req);
+  if (!legacy) return next();
+  res.redirect(301, legacy);
+});
 
 /**
  * Polices auto-hebergees (dist/fonts). Les noms de fichiers portent la
@@ -377,6 +443,13 @@ app.get("/{*splat}", (req, res) => {
     res.setHeader("Cache-Control", CACHE.notFound);
     res.status(404).type("text/plain").send("Not found\n");
     return;
+  }
+  // Lot 72 : coquille en 200 pour les seules routes déclarées par le routeur ;
+  // page retirée ou adresse inconnue → vraie 404 (la coquille y affiche
+  // « page introuvable »), jamais une redirection vers l'accueil.
+  if (siteRoutes) {
+    const p = normalizeSitePath(req.path);
+    if (siteRoutes.retired.has(p) || !siteRoutes.staticRoutes.has(p)) return notFoundShell(res);
   }
   // `/` est servi par express.static (dist/index.html : accueil pré-rendu).
   // Toute autre route reçoit la coquille SPA, sans le contenu ni le titre de

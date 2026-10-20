@@ -33,6 +33,10 @@
     "src/ressources/corpus.ts",
     "src/ressources/markdown.ts",
     "src/ressources/outputs.ts",
-    "src/ressources/types.ts"
+    "src/ressources/types.ts",
+    "link-inventory.build.ts",
+    "src/router/route-paths.ts",
+    "src/config/legacy-routes.rules.ts",
+    "src/config/link-inventory.rules.ts"
   ]
 }

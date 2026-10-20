@@ -62,6 +62,28 @@ export function useNav() {
     }
   }
 
+  /**
+   * Lien vers une section de l'accueil, à poser avec `v-bind="anchor('how')"`.
+   *
+   * Lot 72 : la cible est ABSOLUE (`/#how`, `?mode=` conservé en préprod).
+   * L'ancienne cible relative (« #how » seul) visait la page courante : depuis
+   * `/aide`, un nouvel onglet ou une navigation sans JavaScript ouvrait
+   * `/aide#how`, où la section n'existe pas. Un clic simple garde le
+   * défilement doux vers la section (retour à l'accueil si besoin).
+   */
+  function anchor(id: string) {
+    const to = { path: '/', query: { ...siteModeQuery(), ...embedQuery() }, hash: `#${id}` }
+    return {
+      href: router.resolve(to).href,
+      onClick: (event: MouseEvent) => {
+        if (event.defaultPrevented || event.button !== 0) return
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+        event.preventDefault()
+        goToAnchor(id)
+      },
+    }
+  }
+
   const goHome = () => { closeMenu(); router.push('/') }
   const goAide = () => { closeMenu(); router.push('/aide') }
   const goContact = () => { closeMenu(); router.push('/contact') }
@@ -76,7 +98,7 @@ export function useNav() {
   const navCasUsage = () => goToAnchor('cas-usage')
 
   return {
-    menuOpen, toggleMenu, closeMenu, link,
+    menuOpen, toggleMenu, closeMenu, link, anchor,
     goHome, goAide, goContact, goMentions, goCGU, goConfid,
     navHow, navFeatures, navPricing, navFaq, navCasUsage,
   }

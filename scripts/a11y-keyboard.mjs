@@ -34,12 +34,13 @@ const SEL = {
   crumb: '.ha-crumbs a',
   footer: 'footer a',
   // Lot 69P — accueil : ordinateur. Lot 71P : Fonctionnalités (neuf vues,
-  // carrousel sur mobile) et bouton de pause du bandeau des types de biens.
+  // carrousel sur mobile). Lot 72G : le bandeau des types de biens n'a plus
+  // de bouton de pause ; le bandeau lui-même est l'arrêt de tabulation.
   // Lot 71P : la maquette affiche de vraies captures ; plus de menu latéral cliquable.
   appArrow: '.app__arrow',
   featTrack: '#feat-track',
   featNext: '.feat__views button[aria-label="Fonctionnalité suivante"]',
-  kindsToggle: '.uc__kinds-toggle',
+  kindsMarquee: '.uc__marquee',
 }
 
 /** Décalage horizontal courant de la piste du bandeau (matrice de transformation). */
@@ -57,9 +58,9 @@ async function marqueeMoves(page) {
   await page.waitForTimeout(700)
   return Math.abs((await marqueeX(page)) - a) > 0.5
 }
-/** Nom accessible du bouton du bandeau (texte visible + complément masqué). */
-function toggleName(page) {
-  return page.evaluate(() => document.querySelector('.uc__kinds-toggle').textContent.trim().replace(/\s+/g, ' '))
+/** Le bandeau est-il en arrêt durable (focus clavier, clic ou toucher) ? */
+function marqueePaused(page) {
+  return page.evaluate(() => document.querySelector('.uc__kinds').classList.contains('uc__kinds--paused'))
 }
 /** Débordement horizontal de la page (px). */
 function pageOverflow(page) {
@@ -290,43 +291,67 @@ export const KEYBOARD_SCENARIOS = [
     },
   },
   {
-    // Lot 71P — WCAG 2.2.2 : bandeau défilant des types de biens. Animations
-    // actives : il défile ; le focus clavier l'arrête (et le bouton l'annonce) ;
-    // Entrée / Espace le relancent / l'arrêtent ; pause au survol ; jamais de
-    // débordement horizontal de la page.
-    name: 'Bandeau des types de biens : bouton pause au clavier, survol', url: '/',
+    // Lot 71P — WCAG 2.2.2 : bandeau défilant des types de biens. Lot 72G
+    // (demande PO) : plus de surtitre ni de bouton de pause visible.
+    // Alternative vérifiée ici, animations actives : il défile ; le focus
+    // clavier l'arrête durablement (le bandeau est un arrêt de tabulation
+    // nommé, focus visible) ; un clic / toucher l'arrête puis le relance ;
+    // pause au survol (pointeur fin) ; jamais de débordement horizontal.
+    name: 'Bandeau des types de biens : arrêt au focus clavier, au clic / toucher, au survol', url: '/',
     run: async (page) => {
       const problems = []
       await page.emulateMedia({ reducedMotion: 'no-preference' })
-      await page.reload({ waitUntil: 'networkidle' })
-      await page.waitForFunction(() => document.querySelector('.uc__marquee-list--copy'), null, { timeout: 10000 })
-      await page.locator('.uc__marquee').scrollIntoViewIfNeeded()
-      await page.mouse.move(0, 0)
+      const fresh = async () => {
+        await page.reload({ waitUntil: 'networkidle' })
+        await page.waitForFunction(() => document.querySelector('.uc__marquee-list--copy'), null, { timeout: 10000 })
+        await page.locator('.uc__marquee').scrollIntoViewIfNeeded()
+        await page.mouse.move(0, 0)
+      }
+      await fresh()
+      const st = await page.evaluate(() => ({
+        toggle: !!document.querySelector('.uc__kinds-toggle, .uc__kinds button'),
+        title: !!document.querySelector('.uc__kinds-title') || /prend en charge/i.test(document.querySelector('.uc__kinds').innerText),
+        tabindex: document.querySelector('.uc__marquee').getAttribute('tabindex'),
+        name: document.querySelector('.uc__marquee').getAttribute('aria-label') || '',
+        fineHover: matchMedia('(hover: hover)').matches,
+      }))
+      if (st.toggle) problems.push('bouton de pause encore présent (retiré à la demande du PO)')
+      if (st.title) problems.push('surtitre « Les biens que Verebona prend en charge » encore affiché')
+      if (st.tabindex !== '0' || !/s’arrête au focus/.test(st.name)) problems.push(`bandeau non focalisable ou sans nom explicite (tabindex=${st.tabindex}, « ${st.name} »)`)
       if (!(await marqueeMoves(page))) problems.push('le bandeau ne défile pas (animations actives)')
       const ov = await pageOverflow(page)
       if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
-      const s = await tabTo(page, SEL.kindsToggle)
-      if (!s.indicator) problems.push(`bouton du bandeau sans focus visible (${s.style})`)
-      if (await toggleName(page) !== 'Reprendre le défilement') problems.push(`focus clavier : bandeau non arrêté (bouton « ${await toggleName(page)} »)`)
-      if (await marqueeMoves(page)) problems.push('focus clavier : le bandeau bouge encore')
-      await page.keyboard.press('Enter')
-      if (await toggleName(page) !== 'Mettre en pause le défilement') problems.push(`Entrée : libellé « ${await toggleName(page)} »`)
-      if (!(await marqueeMoves(page))) problems.push('Entrée : le bandeau ne reprend pas')
-      await page.keyboard.press(' ')
-      if (await toggleName(page) !== 'Reprendre le défilement') problems.push(`Espace : libellé « ${await toggleName(page)} »`)
-      if (await marqueeMoves(page)) problems.push('Espace : le bandeau ne s’arrête pas')
-      await page.keyboard.press('Enter')
+      // Clavier : arrêt au focus, qui persiste après la sortie du focus.
+      const s = await tabTo(page, SEL.kindsMarquee)
+      if (!s.indicator) problems.push(`bandeau sans focus visible (${s.style})`)
+      if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push('focus clavier : le bandeau bouge encore')
+      await page.keyboard.press('Tab')
+      if (await marqueeMoves(page)) problems.push('focus clavier quitté : le bandeau est reparti (arrêt non durable)')
+      // Pointeur : toucher (écran tactile) ou clic, puis second toucher / clic.
+      await fresh()
       const box = await page.locator('.uc__marquee').boundingBox()
-      await page.mouse.move(box.x + 40, box.y + box.height / 2)
-      if (await marqueeMoves(page)) problems.push('survol : le bandeau ne s’arrête pas')
-      await page.mouse.move(0, 0)
-      if (!(await marqueeMoves(page))) problems.push('fin du survol : le bandeau ne reprend pas')
-      return { problems, info: 'arrêt au focus, Entrée / Espace, survol' }
+      const x = box.x + 40, y = box.y + box.height / 2
+      const press = async () => { if (st.fineHover) await page.mouse.click(x, y); else await page.touchscreen.tap(x, y) }
+      await press()
+      if (st.fineHover) await page.mouse.move(0, 0)
+      if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push(`${st.fineHover ? 'clic' : 'toucher'} : le bandeau ne s’arrête pas`)
+      await press()
+      if (st.fineHover) await page.mouse.move(0, 0)
+      if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push(`second ${st.fineHover ? 'clic' : 'toucher'} : le bandeau ne repart pas`)
+      // Survol (pointeur fin seulement).
+      if (st.fineHover) {
+        await page.mouse.move(x, y)
+        if (await marqueeMoves(page)) problems.push('survol : le bandeau ne s’arrête pas')
+        await page.mouse.move(0, 0)
+        if (!(await marqueeMoves(page))) problems.push('fin du survol : le bandeau ne reprend pas')
+      }
+      return { problems, info: `arrêt au focus (durable), ${st.fineHover ? 'clic, survol' : 'toucher'}, aucun bouton` }
     },
   },
   {
     // Lot 71P — mouvement réduit (contexte de l'audit) : liste statique et
-    // lisible, sans copie ni bouton, contenu unique pour les lecteurs d'écran.
+    // lisible, sans copie ni bouton, contenu unique pour les lecteurs d'écran ;
+    // lot 72G : le bandeau immobile n'est pas un arrêt de tabulation.
     name: 'Bandeau des types de biens : mouvement réduit', url: '/',
     run: async (page) => {
       const problems = []
@@ -340,14 +365,16 @@ export const KEYBOARD_SCENARIOS = [
           transform: getComputedStyle(track).transform,
           copyShown: !!copy && getComputedStyle(copy).display !== 'none',
           copyHidden: !copy || copy.getAttribute('aria-hidden') === 'true',
-          toggleShown: getComputedStyle(document.querySelector('.uc__kinds-toggle')).display !== 'none',
+          focusable: document.querySelector('.uc__marquee').hasAttribute('tabindex'),
+          toggle: !!document.querySelector('.uc__kinds-toggle, .uc__kinds button'),
           n: items.length,
           inside: items.every((r) => r.left >= 0 && r.right <= vw + 0.5),
         }
       })
       if (st.anim !== 'none' || st.transform !== 'none') problems.push(`le bandeau est encore animé (${st.anim}, ${st.transform})`)
       if (st.copyShown || !st.copyHidden) problems.push('copie de boucle affichée ou exposée aux lecteurs d’écran')
-      if (st.toggleShown) problems.push('bouton de pause affiché alors que rien ne bouge')
+      if (st.toggle) problems.push('bouton de pause présent (retiré à la demande du PO)')
+      if (st.focusable) problems.push('bandeau immobile mais encore arrêt de tabulation')
       if (st.n !== 10 || !st.inside) problems.push(`liste statique illisible (${st.n} types, entièrement visibles : ${st.inside})`)
       const ov = await pageOverflow(page)
       if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
@@ -356,8 +383,10 @@ export const KEYBOARD_SCENARIOS = [
   },
   {
     // Le bandeau des types de biens (lot 71P) est le SEUL contenu qui bouge
-    // seul — décision PO, avec son bouton de pause (parcours ci-dessus) ; les
-    // carrousels et démonstrations restent immobiles sans action.
+    // en continu — décision PO, arrêt au focus / clic / toucher / survol
+    // (parcours ci-dessus ; lot 72G : sans bouton). L'illustration du dépôt
+    // (lot 72G) n'est jouée qu'une fois, < 3 s. Les carrousels et
+    // démonstrations restent immobiles sans action.
     name: 'Accueil : aucun défilement automatique des carrousels (animations non réduites)', url: '/',
     run: async (page) => {
       const problems = []
