@@ -262,9 +262,14 @@ describe('L71P-05 — « Centralisez, organisez, valorisez. » : mini-vues', () 
     expect(w.find('.ben__sign').text()).toBe('Être prêt avant d’en avoir besoin.')
   })
 
-  it('CSS : vignette de 120 px, aplats et bordures 1 px, sans ombre ni animation', () => {
+  // Lot 75O : seule exception, la recherche animée de « Retrouvez » (règles
+  // `ben__search--play` / `ben__result--play`, l75o-mascotte-recherche.test.ts).
+  it('CSS : vignette de 120 px, aplats et bordures 1 px, sans ombre ni autre animation', () => {
     const css = styleOf('src/sections/BenefitsSection.vue')
     expect(css).toMatch(/\.ben__view \{[^}]*height: 120px;/)
-    expect(css).not.toMatch(/gradient\(|box-shadow|animation|@keyframes/)
+    expect(css).not.toMatch(/gradient\(|box-shadow/)
+    const anims = css.split('}').filter((r) => /animation/.test(r)).map((r) => r.trim().split('{')[0].trim())
+    expect(anims.every((sel) => /ben__(search|result)|^@media|^\.ben__search \.ben__query/.test(sel) || sel === '')).toBe(true)
+    expect([...css.matchAll(/@keyframes ([\w-]+)/g)].map((m) => m[1])).toEqual(['ben-type', 'ben-scan', 'ben-found'])
   })
 })

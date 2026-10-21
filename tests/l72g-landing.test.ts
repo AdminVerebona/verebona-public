@@ -72,16 +72,18 @@ beforeEach(() => {
 afterEach(() => { wrappers.forEach((w) => w.unmount()); wrappers = []; document.body.innerHTML = ''; vi.unstubAllGlobals() })
 
 describe('L72G-02 — mascotte dans le champ de recherche', () => {
-  it('la mascotte « neutral » de la vitrine remplace la loupe (décorative)', () => {
+  // Lot 75O (PO 20/10) : la pose « search-loupe » remplace « neutral » dans ce
+  // champ (la mascotte cherche) ; voir tests/l75o-mascotte-recherche.test.ts.
+  it('une mascotte de la vitrine remplace la loupe (décorative)', () => {
     const w = track(mount(BenefitsSection))
     const field = w.find('.ben__item--search .ben__search')
     const img = field.find('img.vb-mascot.ben__search-m')
     expect(img.exists()).toBe(true)
-    expect(img.attributes('src')).toBe('/assets/mascot/neutral.webp')
+    expect(img.attributes('src')).toBe('/assets/mascot/search-loupe.webp')
     expect(img.attributes('alt')).toBe('')
     expect(field.find('svg').exists()).toBe(false)
     expect(field.text()).toBe('garantie lave-linge')
-    expect(existsSync(path.join(root, 'public/assets/mascot/neutral.webp'))).toBe(true)
+    expect(existsSync(path.join(root, 'public/assets/mascot/search-loupe.webp'))).toBe(true)
     // Même asset que la vue « Verebona vous répond » des Fonctionnalités.
     expect(read('src/sections/FeaturesSection.vue')).toContain('/assets/mascot/neutral.webp')
   })

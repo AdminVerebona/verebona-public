@@ -13,11 +13,16 @@
       <li v-for="b in items" :key="b.key" :class="['ben__item', `ben__item--${b.key}`]">
         <div class="ben__view" aria-hidden="true">
           <!-- Retrouvez : champ de recherche + un résultat. Lot 72G (PO) : la
-               mascotte « neutral » remplace la loupe, comme le champ
-               « Demander à Verebona » de l'application. -->
+               mascotte remplace la loupe, comme le champ « Demander à
+               Verebona » de l'application. Lot 75O (PO) : pose existante
+               « search-loupe » (la mascotte cherche, comme dans l'application
+               pendant une recherche en cours) et animation légère jouée UNE
+               fois à l'apparition (moins de 2 s) : la recherche se tape, la
+               loupe balaie, puis le résultat apparaît. Mouvement réduit ou
+               sans JavaScript : image fixe, résultat affiché. -->
           <template v-if="b.key === 'search'">
-            <span class="ben__search"><img class="vb-mascot ben__search-m" src="/assets/mascot/neutral.webp" alt="" width="26" height="26" loading="lazy" decoding="async" />garantie lave-linge</span>
-            <span class="ben__ui ben__result">
+            <span ref="searchView" :class="['ben__search', armed ? 'ben__search--armed' : '', play ? 'ben__search--play' : '']"><img class="vb-mascot ben__search-m" src="/assets/mascot/search-loupe.webp" alt="" width="26" height="26" loading="lazy" decoding="async" /><span class="ben__query">garantie lave-linge</span></span>
+            <span :class="['ben__ui', 'ben__result', armed ? 'ben__result--armed' : '', play ? 'ben__result--play' : '']">
               <span class="ben__ico"><VbIcon name="file" :size="14" /></span>
               <span class="ben__col"><span class="ben__strong">Garantie lave-linge</span><span class="ben__meta">Maison · jusqu’au 03/2027</span></span>
             </span>
@@ -53,7 +58,33 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount, ref, watch } from 'vue'
 import VbIcon from '../components/VbIcon.vue'
+
+// Recherche animée (lot 75O) — même principe que le dépôt de « Comment ça
+// marche » (lot 72G) : armée au montage (requête et résultat masqués), jouée
+// une seule fois dès que le champ est visible. Sans IntersectionObserver ou en
+// mouvement réduit : rien n'est armé, l'illustration reste fixe et complète.
+// Dans un `v-for`, une ref de template est un tableau.
+const searchView = ref<HTMLElement[] | HTMLElement | null>(null)
+const armed = ref(false)
+const play = ref(false)
+let io: IntersectionObserver | null = null
+function stopObserving() { io?.disconnect(); io = null }
+watch(searchView, (v) => {
+  const el = Array.isArray(v) ? v[0] : v
+  stopObserving()
+  armed.value = false
+  play.value = false
+  if (!el || typeof IntersectionObserver === 'undefined') return
+  try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return } catch { return }
+  armed.value = true
+  io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) { play.value = true; stopObserving() }
+  }, { threshold: 0.5 })
+  io.observe(el)
+}, { flush: 'post' })
+onBeforeUnmount(stopObserving)
 
 const items = [
   { key: 'search', title: 'Retrouvez vite ce qui compte', text: 'Contrats, garanties, diagnostics au bon endroit.' },
@@ -75,7 +106,8 @@ const steps = [
 .ben__item { display: flex; flex-direction: column; gap: 12px; padding-top: 16px; border-top: 2px solid var(--accent); }
 
 /* Mini-vues (lot 71P) : vignette ivoire de 120 px, éléments d'interface en
-   aplats et bordures 1 px, sans ombre ni animation. */
+   aplats et bordures 1 px, sans ombre. Seule animation : la recherche de
+   « Retrouvez » (lot 75O, ci-dessous). */
 .ben__view {
   position: relative; height: 120px; margin-bottom: 4px; padding: 14px; border-radius: var(--radius-lg); overflow: hidden;
   background: var(--bg-page); border: 1px solid var(--border-subtle);
@@ -90,7 +122,22 @@ const steps = [
 /* Retrouvez */
 .ben__search { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 4px; border-radius: var(--radius-pill); border: 1px solid var(--accent); background: var(--bg-card); font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; }
 .ben__search-m { width: 26px; flex-shrink: 0; }
+.ben__query { display: inline-block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ben__result { display: flex; align-items: center; gap: 10px; padding: 7px 10px; }
+/* Lot 75O — recherche animée, une seule fois (≈ 1,8 s, sans rebond) : la
+   requête se tape (révélation par pas), la loupe balaie la saisie, puis le
+   résultat apparaît en fondu. « armed » n'existe qu'avec JavaScript et hors
+   mouvement réduit : sinon l'état final est affiché d'emblée. */
+.ben__search--armed .ben__query, .ben__result--armed { opacity: 0; }
+.ben__search--play .ben__query { opacity: 1; animation: ben-type 1100ms steps(19, end) 150ms both; }
+.ben__search--play .ben__search-m { animation: ben-scan 1100ms var(--ease) 150ms both; }
+.ben__result--play { opacity: 1; animation: ben-found 400ms var(--ease) 1400ms both; }
+@keyframes ben-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes ben-scan { 0%, 100% { transform: none; } 30% { transform: translateX(2px) rotate(-6deg); } 70% { transform: translateX(-1px) rotate(4deg); } }
+@keyframes ben-found { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .ben__search .ben__query, .ben__search .ben__search-m, .ben__result { animation: none !important; opacity: 1 !important; clip-path: none !important; transform: none !important; }
+}
 /* Anticipez */
 .ben__dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .ben__due { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; min-width: 0; }
