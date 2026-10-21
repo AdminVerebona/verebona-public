@@ -181,7 +181,9 @@ describe('L71P-04 / L72G-01 — bandeau défilant des types de biens (WCAG 2.2.2
     expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
   })
 
-  it('focus clavier : arrêt durable (même après la sortie du focus) ; un focus donné au pointeur n’arrête pas', async () => {
+  // Lot 76P (PO du 21/10, « ne tourne pas en web ») : la pause au focus doit
+  // REPRENDRE à la sortie du focus (l'arrêt durable du lot 72G est abandonné).
+  it('focus clavier : arrêt pendant le focus, reprise à la sortie ; un focus donné au pointeur n’arrête pas', async () => {
     const w = track(mount(UseCasesSection, { attachTo: document.body }))
     await flushPromises()
     const m = w.find('.uc__marquee')
@@ -198,7 +200,7 @@ describe('L71P-04 / L72G-01 — bandeau défilant des types de biens (WCAG 2.2.2
     expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--paused')
     el.blur()
     await flushPromises()
-    expect(w.find('.uc__kinds').classes()).toContain('uc__kinds--paused')
+    expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
   })
 
   it('prefers-reduced-motion : ni arrêt de tabulation ni rôle (rien ne bouge), clic sans effet', async () => {
@@ -212,12 +214,15 @@ describe('L71P-04 / L72G-01 — bandeau défilant des types de biens (WCAG 2.2.2
     expect(w.find('.uc__kinds').classes()).not.toContain('uc__kinds--paused')
   })
 
-  it('CSS : défilement continu après montage, pause au survol (pointeur fin), au focus et à l’arrêt ; aucun débordement de page', () => {
+  it('CSS : défilement continu après montage, pause au focus et à l’arrêt (survol : JavaScript, lot 76P) ; aucun débordement de page', () => {
     const css = styleOf('src/sections/UseCasesSection.vue')
     expect(css).toMatch(/\.uc__marquee \{ overflow: hidden;/)
     expect(css).toMatch(/\.uc__kinds--ready \.uc__marquee-track \{ animation: uc-marquee \d+s linear infinite; \}/)
     expect(css).toMatch(/\.uc__kinds--paused \.uc__marquee-track, \.uc__marquee:focus-visible \.uc__marquee-track \{ animation-play-state: paused; \}/)
-    expect(mediaBlock(css, 'hover: hover')).toMatch(/\.uc__marquee:hover \.uc__marquee-track \{ animation-play-state: paused; \}/)
+    // Lot 76P : plus de pause CSS `:hover` (elle arrêtait le bandeau sous un
+    // pointeur immobile pendant le défilement de la page, sur ordinateur) ;
+    // survol volontaire géré par le composant (l76p-carrousel-cas-usage.test.ts).
+    expect(css).not.toMatch(/\.uc__marquee:hover/)
     expect(css).toMatch(/\.uc__marquee:focus-visible \{ outline-offset: -3px; \}/)
     expect(css).toMatch(/@keyframes uc-marquee \{ from \{ transform: translateX\(0\); \} to \{ transform: translateX\(-50%\); \} \}/)
     expect(css).not.toMatch(/uc__kinds-toggle|uc__kinds-title|uc__kinds-head/)

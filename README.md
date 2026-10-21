@@ -36,10 +36,49 @@ CDC _Site public Verebona — pré-lancement_ (§4, §5, §10). Un seul code, de
 
 Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src/config/site.ts` est le **seul** point d'entrée qui lit ces variables (`useSiteMode()`, libellés `PRELAUNCH_LABELS`). Une variable définie chez l'hébergeur (`process.env`) prime sur les fichiers `.env`.
 
-- **Lancement commercial** : passer `VITE_DEFAULT_SITE_MODE=full` dans la configuration de production, puis rebuild/redéployer. Aucun composant à modifier.
+- **Lancement commercial** : passer `VITE_DEFAULT_SITE_MODE=full` dans la configuration de production, puis rebuild/redéployer. Aucun composant à modifier. Les tarifs doivent avoir basculé sur le catalogue (`VITE_PRICING_SOURCE=catalog`, voir « Tarifs : grille temporaire du pré-lancement et bascule ») : sinon le build échoue.
 - **Retour arrière** : remettre `prelaunch`, rebuild/redéployer.
 
 > Ce mécanisme règle l'**affichage** du site public. Ce n'est pas un contrôle d'accès : `app.verebona.fr/signup` reste joignable tant que l'application ne ferme pas elle-même l'inscription.
+
+## Tarifs : grille temporaire du pré-lancement et bascule
+
+Lot 76P (ticket P1 « tarifs fixes temporaires »). Tant que l'application intégrant le nouveau catalogue Stripe n'est pas en production, `GET https://app.verebona.fr/api/billing/catalog` ne fournit pas les tarifs : la vitrine afficherait « Tarif indisponible ». La production PRELAUNCH affiche donc une **grille temporaire**, explicitement choisie au build.
+
+| `VITE_PRICING_SOURCE` (figée au build) | Montants affichés | Appel à `/api/billing/catalog` |
+| --- | --- | --- |
+| `prelaunch_fixed` | grille `PRELAUNCH_PRICE_GRID` (`src/composables/usePricing.ts`, centimes TTC) + mention « Tarifs prévus à l'ouverture — TTC » ; présents dans le HTML prérendu | **aucun** |
+| `catalog` (défaut si absente ou invalide) | catalogue de l'application (révision active = prix de Checkout) ; « Tarif indisponible » si l'API ne répond pas — **jamais** de montant fixe | oui |
+
+Grille (identique au `PRICING_MANIFEST` de verebona-app) : Standard 3,90 € / 39,00 € ; Premium 6,90 € / 69,00 € ; Premium Duo 9,90 € / 99,00 € (mensuel / annuel TTC) ; Pro « Bientôt ».
+
+Règles (`src/config/pricing-source.rules.ts`, lues par `src/config/site.ts` et `vite.config.ts`) :
+
+- `prelaunch_fixed` n'est appliqué qu'en **production** (`VITE_ENVIRONMENT=production`) **et** en PRELAUNCH. Le PRELAUNCH reste non souscriptible : aucun lien d'inscription, de connexion ni de Checkout.
+- `prelaunch_fixed` avec `VITE_DEFAULT_SITE_MODE=full` en production : **le build échoue** (un site ouvert n'affiche que des prix réellement souscriptibles ; aucune grille de secours silencieuse).
+- Préproduction et local : **toujours le catalogue**, quelle que soit la valeur (la préproduction Scalingo est construite par `npm run build` et lit `.env.production`).
+- Fichiers : `.env.production` → `prelaunch_fixed` ; `.env.preprod` et `.env.development` → `catalog`. Une variable de l'hébergeur prime sur les fichiers `.env`.
+- Contrôle du HTML livré : `scripts/check-prelaunch-prices.mjs`, en fin de `npm run build` et `npm run build:preprod` (grille → les trois prix mensuels et la mention dans `dist/index.html` ; catalogue → aucun montant ni mention figés).
+
+### Bascule vers le catalogue Stripe (mise en production de verebona-app)
+
+**Conditions préalables, toutes vérifiées** (ne jamais basculer parce que l'API répond HTTP 200 : c'est la conformité de la grille qui compte) :
+
+1. Les six prix sont publiés dans Stripe Live avec leurs `lookup_key`.
+2. La révision active du catalogue est enregistrée et exploitable en base de production (BO › Exploitation › Catalogue Stripe).
+3. Le webhook Stripe Production pointe vers l'application déployée, avec un secret de signature valide, et traite correctement les événements.
+4. `https://app.verebona.fr/api/billing/catalog` renvoie les six offres avec les montants attendus (3,90 / 39,00 / 6,90 / 69,00 / 9,90 / 99,00, `tax_included: true`).
+5. Les montants affichés par le site correspondent à ceux du parcours de souscription (essai : la préproduction, en `catalog`, montre ce que la production affichera).
+6. Checkout et le portail d'abonnement sont validés.
+
+**Procédure** :
+
+1. Dans `.env.production`, remplacer `VITE_PRICING_SOURCE=prelaunch_fixed` par `VITE_PRICING_SOURCE=catalog` (ou définir `VITE_PRICING_SOURCE=catalog` chez l'hébergeur, qui prime). À l'ouverture commerciale, passer aussi `VITE_DEFAULT_SITE_MODE=full` (voir « Modes FULL / PRELAUNCH ») : sans la première modification, ce build échoue volontairement.
+2. Rebuild / redéployer. Le journal du build affiche `tarifs=catalog` ; `dist/.site-env.json` contient `"pricingSource": "catalog"`.
+3. Vérifier sur verebona.fr : six montants identiques à l'API et à Checkout, plus de mention « Tarifs prévus à l'ouverture ».
+4. Lot suivant : supprimer `PRELAUNCH_PRICE_GRID`, `PRELAUNCH_PRICING_NOTICE` et la valeur `prelaunch_fixed` (le catalogue redevient la source unique, sans fallback commercial).
+
+Retour arrière (avant l'ouverture seulement) : remettre `prelaunch_fixed`, rebuild / redéployer.
 
 ## Déploiement : variables de l'hébergeur (`server.cjs`)
 
@@ -70,6 +109,8 @@ Les règles sont des fonctions pures dans `src/config/site-mode.rules.ts` ; `src
 
 | Fichier | Couvre |
 | --- | --- |
+| `tests/l76p-tarifs-prelaunch.test.ts` | lot 76P : grille temporaire (centimes, six montants), production PRELAUNCH sans appel API, mention, prix au prérendu et identiques au montage, économies annuelles, PRELAUNCH sans lien, préprod / FULL dynamiques, API indisponible jamais masquée, combinaison FULL + grille refusée, bascule `catalog` |
+| `tests/l76p-carrousel-cas-usage.test.ts` | lot 76P : bandeau des types de biens (défile sur ordinateur : survol volontaire seulement, reprise après clic / focus clavier), alignement en colonne des titres des cas d'usage (mobile, desktop, zoom 200 %) |
 | `tests/site-mode.test.ts` | `parseEnvironment`, `parseSiteMode`, `resolveDefaultMode`, `resolveSiteMode`, `isIndexable` ; `site.ts` par environnement (production verrouillée, `?mode=` en préprod, garde du routeur) — CDC pré-lancement §5, §10.1 |
 | `tests/prelaunch-cta.test.ts` | composants réels (`@vue/test-utils`) : header, menu mobile, hero, tarifs, CTA final, CTA fixe mobile sans aucun lien `/signup` ni `/login` en PRELAUNCH (production et préprod `?mode=prelaunch`) ; liens présents en FULL ; titre des tarifs — §6, §7, §11 |
 | `tests/sitemap.test.ts` | contenu du sitemap de production (accueil, `/aide`, thèmes et articles publiés seulement), `canonicalUrl`, `robots.txt` |

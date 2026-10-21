@@ -294,10 +294,13 @@ export const KEYBOARD_SCENARIOS = [
     // Lot 71P — WCAG 2.2.2 : bandeau défilant des types de biens. Lot 72G
     // (demande PO) : plus de surtitre ni de bouton de pause visible.
     // Alternative vérifiée ici, animations actives : il défile ; le focus
-    // clavier l'arrête durablement (le bandeau est un arrêt de tabulation
-    // nommé, focus visible) ; un clic / toucher l'arrête puis le relance ;
-    // pause au survol (pointeur fin) ; jamais de débordement horizontal.
-    name: 'Bandeau des types de biens : arrêt au focus clavier, au clic / toucher, au survol', url: '/',
+    // clavier l'arrête (le bandeau est un arrêt de tabulation nommé, focus
+    // visible) et il reprend à la sortie du focus ; un toucher l'arrête puis
+    // le relance ; un clic ou un survol VOLONTAIRE de la souris l'arrête
+    // jusqu'à la sortie du pointeur ; jamais de débordement horizontal.
+    // Lot 76P (PO : « ne tourne pas en web ») : sur ordinateur, amené sous un
+    // pointeur immobile par la molette, il continue de défiler.
+    name: 'Bandeau des types de biens : arrêt au focus clavier, au clic / toucher, au survol, puis reprise', url: '/',
     run: async (page) => {
       const problems = []
       await page.emulateMedia({ reducedMotion: 'no-preference' })
@@ -321,31 +324,44 @@ export const KEYBOARD_SCENARIOS = [
       if (!(await marqueeMoves(page))) problems.push('le bandeau ne défile pas (animations actives)')
       const ov = await pageOverflow(page)
       if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
-      // Clavier : arrêt au focus, qui persiste après la sortie du focus.
+      // Clavier : arrêt pendant le focus, reprise à la sortie (lot 76P).
       const s = await tabTo(page, SEL.kindsMarquee)
       if (!s.indicator) problems.push(`bandeau sans focus visible (${s.style})`)
       if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push('focus clavier : le bandeau bouge encore')
       await page.keyboard.press('Tab')
-      if (await marqueeMoves(page)) problems.push('focus clavier quitté : le bandeau est reparti (arrêt non durable)')
-      // Pointeur : toucher (écran tactile) ou clic, puis second toucher / clic.
+      if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push('focus clavier quitté : le bandeau ne reprend pas')
       await fresh()
       const box = await page.locator('.uc__marquee').boundingBox()
       const x = box.x + 40, y = box.y + box.height / 2
-      const press = async () => { if (st.fineHover) await page.mouse.click(x, y); else await page.touchscreen.tap(x, y) }
-      await press()
-      if (st.fineHover) await page.mouse.move(0, 0)
-      if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push(`${st.fineHover ? 'clic' : 'toucher'} : le bandeau ne s’arrête pas`)
-      await press()
-      if (st.fineHover) await page.mouse.move(0, 0)
-      if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push(`second ${st.fineHover ? 'clic' : 'toucher'} : le bandeau ne repart pas`)
-      // Survol (pointeur fin seulement).
       if (st.fineHover) {
-        await page.mouse.move(x, y)
+        // Ordinateur : clic → arrêt tant que le pointeur reste ; sortie → reprise.
+        await page.mouse.click(x, y)
+        if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push('clic : le bandeau ne s’arrête pas')
+        await page.mouse.move(0, 0)
+        if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push('pointeur sorti après un clic : le bandeau ne reprend pas')
+        // Survol volontaire : arrêt ; sortie : reprise.
+        await page.mouse.move(x, y, { steps: 3 })
         if (await marqueeMoves(page)) problems.push('survol : le bandeau ne s’arrête pas')
         await page.mouse.move(0, 0)
         if (!(await marqueeMoves(page))) problems.push('fin du survol : le bandeau ne reprend pas')
+        // Molette : la page amène le bandeau sous un pointeur IMMOBILE → il défile.
+        await page.evaluate(() => window.scrollTo(0, 0))
+        const vh = page.viewportSize().height
+        await page.mouse.move(page.viewportSize().width / 2, vh / 2)
+        const target = await page.evaluate((h) => { const r = document.querySelector('.uc__marquee').getBoundingClientRect(); return r.top + scrollY + r.height / 2 - h / 2 }, vh)
+        await page.mouse.wheel(0, target)
+        await page.waitForTimeout(500)
+        const under = await page.evaluate(([cx, cy]) => !!document.elementFromPoint(cx, cy)?.closest('.uc__marquee'), [page.viewportSize().width / 2, vh / 2])
+        if (!under) problems.push('molette : le bandeau n’est pas arrivé sous le pointeur (scénario non joué)')
+        else if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push('molette : bandeau sous un pointeur immobile arrêté (cause du « ne tourne pas en web »)')
+      } else {
+        // Écran tactile : toucher → arrêt ; second toucher → relance.
+        await page.touchscreen.tap(x, y)
+        if (!(await marqueePaused(page)) || await marqueeMoves(page)) problems.push('toucher : le bandeau ne s’arrête pas')
+        await page.touchscreen.tap(x, y)
+        if (await marqueePaused(page) || !(await marqueeMoves(page))) problems.push('second toucher : le bandeau ne repart pas')
       }
-      return { problems, info: `arrêt au focus (durable), ${st.fineHover ? 'clic, survol' : 'toucher'}, aucun bouton` }
+      return { problems, info: `arrêt au focus puis reprise, ${st.fineHover ? 'clic / survol puis reprise, défile sous un pointeur immobile' : 'toucher'}, aucun bouton` }
     },
   },
   {
@@ -379,6 +395,47 @@ export const KEYBOARD_SCENARIOS = [
       const ov = await pageOverflow(page)
       if (ov > 0) problems.push(`débordement horizontal de la page : ${ov} px`)
       return { problems, info: `${st.n} types visibles, aucune animation` }
+    },
+  },
+  {
+    // Lot 76P (PO du 21/10, « Alignement ! ») : titres des cas d'usage alignés
+    // sur une même verticale, juste après la colonne d'étiquettes (largeur
+    // commune aux deux listes), aucune étiquette tronquée, chevron à droite ;
+    // au zoom 200 % (≈ 195 px), aucun débordement horizontal.
+    name: 'Cas d’usage : titres alignés en colonne, étiquettes entières', url: '/',
+    run: async (page) => {
+      const problems = []
+      const measure = () => page.evaluate(() => [...document.querySelectorAll('.uc__head')].map((h) => {
+        const b = h.querySelector('.uc__badge').getBoundingClientRect()
+        const t = h.querySelector('.uc__item-title').getBoundingClientRect()
+        const c = h.querySelector('.uc__chev').getBoundingClientRect()
+        const badge = h.querySelector('.uc__badge')
+        return { label: badge.textContent.trim(), bl: b.left, br: b.right, bt: b.top, tl: t.left, tt: t.top, cr: c.right, hr: h.getBoundingClientRect().right, cut: badge.scrollWidth > badge.clientWidth + 0.5 }
+      }))
+      const rows = await measure()
+      if (rows.length !== 8) problems.push(`${rows.length} cas d’usage au lieu de 8`)
+      const lefts = [...new Set(rows.map((r) => Math.round(r.tl)))]
+      if (lefts.length !== 1) problems.push(`titres sur ${lefts.length} verticales : ${rows.map((r) => `${r.label}→${Math.round(r.tl)}`).join(', ')}`)
+      for (const r of rows) {
+        if (r.cut) problems.push(`étiquette « ${r.label} » tronquée`)
+        if (r.br > r.tl - 4) problems.push(`étiquette « ${r.label} » collée au titre ou le chevauche`)
+        if (r.cr > r.hr) problems.push(`chevron hors de la ligne (« ${r.label} »)`)
+      }
+      const ov = await pageOverflow(page)
+      if (ov > 0) problems.push(`débordement horizontal : ${ov} px`)
+      // Zoom 200 % d'un téléphone : ≈ 195 px CSS.
+      const vp = page.viewportSize()
+      await page.setViewportSize({ width: 195, height: vp.height })
+      await page.waitForTimeout(150)
+      const z = await measure()
+      const zl = [...new Set(z.map((r) => Math.round(r.tl)))]
+      if (zl.length !== 1) problems.push(`zoom 200 % : titres non alignés (${zl.join(', ')})`)
+      if (z.some((r) => r.cut)) problems.push('zoom 200 % : étiquette tronquée')
+      if (z.some((r) => Math.round(r.bl) !== Math.round(r.tl))) problems.push('zoom 200 % : étiquette et titre non alignés à gauche')
+      const zov = await pageOverflow(page)
+      if (zov > 0) problems.push(`zoom 200 % : débordement horizontal ${zov} px`)
+      await page.setViewportSize(vp)
+      return { problems, info: `8 titres à x=${lefts.join('/')} px ; zoom 200 % : étiquette au-dessus, x=${zl.join('/')} px` }
     },
   },
   {

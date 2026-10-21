@@ -14,6 +14,11 @@ interface ImportMetaEnv {
   readonly VITE_ENVIRONMENT?: string
   /** `full` | `prelaunch` — lu uniquement par `src/config/site.ts`. */
   readonly VITE_DEFAULT_SITE_MODE?: string
+  /**
+   * `catalog` | `prelaunch_fixed` — source des montants de la section Tarifs
+   * (lot 76P). Absente/invalide = `catalog`. Lu uniquement par `src/config/site.ts`.
+   */
+  readonly VITE_PRICING_SOURCE?: string
 }
 
 /**

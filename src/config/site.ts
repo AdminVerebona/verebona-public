@@ -28,9 +28,11 @@ import {
   resolveSiteMode,
   type SiteMode,
 } from './site-mode.rules'
+import { resolvePricingSource, type PricingSource } from './pricing-source.rules'
 
 export { SITE_MODE_PARAM, SITE_MODES } from './site-mode.rules'
 export type { SiteEnvironment, SiteMode } from './site-mode.rules'
+export type { PricingSource } from './pricing-source.rules'
 
 /* ── Configuration figée au build ──────────────────────────────────────── */
 
@@ -47,6 +49,22 @@ export const DEFAULT_SITE_MODE = resolveDefaultMode(SITE_ENVIRONMENT, import.met
  */
 export const CAN_PREVIEW_SITE_MODE: boolean =
   __VB_CAN_PREVIEW_SITE_MODE__ ?? allowsModeOverride(SITE_ENVIRONMENT)
+
+/**
+ * Source des montants de la section Tarifs (lot 76P, `pricing-source.rules.ts`).
+ *
+ *   prelaunch_fixed  grille temporaire du pré-lancement, sans appel à l'API ;
+ *                    seulement en PRODUCTION et en PRELAUNCH par défaut
+ *                    (préproduction / local : toujours le catalogue) ;
+ *   catalog          catalogue de l'application (mode normal, défaut).
+ *
+ * `VITE_PRICING_SOURCE=prelaunch_fixed` avec `VITE_DEFAULT_SITE_MODE=full` fait
+ * échouer le build (vite.config.ts) ; s'il passait malgré tout (Vitest), le
+ * catalogue est utilisé et l'erreur est écrite en console.
+ */
+const pricingResolution = resolvePricingSource(SITE_ENVIRONMENT, DEFAULT_SITE_MODE, import.meta.env.VITE_PRICING_SOURCE)
+if (pricingResolution.error && typeof console !== 'undefined') console.error(`[Verebona] ${pricingResolution.error}`)
+export const PRICING_SOURCE: PricingSource = pricingResolution.source
 
 /* ── Libellés de référence (CDC §13) ───────────────────────────────────── */
 

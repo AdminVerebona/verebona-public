@@ -6,6 +6,7 @@ import {
   parseEnvironment,
   resolveDefaultMode,
 } from './src/config/site-mode.rules'
+import { resolvePricingSource, type PricingSource } from './src/config/pricing-source.rules'
 import { MODE_PREVIEW_GUARD_CSS, MODE_PREVIEW_GUARD_SCRIPT, PREVIEW_SWITCH_CSS } from './src/config/mode-preview-guard.rules'
 import { INDEXABLE_PATHS, SITE_ORIGIN, buildRobotsTxt, buildSitemapXml, canonicalUrl } from './src/config/sitemap.rules'
 import { assertHelpGuards, deployedCommit, loadHelpCorpus, COVERAGE_FILE, HELP_CONTENT_DIR, SLUG_REGISTRY_FILE } from './help.build'
@@ -37,6 +38,7 @@ function siteModePlugin(): Plugin {
   let environment = parseEnvironment(undefined)
   let defaultMode = resolveDefaultMode(environment, undefined)
   let indexable = isIndexable(environment)
+  let pricingSource: PricingSource = 'catalog'
   let appOrigin: string | null = null
 
   return {
@@ -70,6 +72,12 @@ function siteModePlugin(): Plugin {
       environment = parseEnvironment(raw)
       defaultMode = resolveDefaultMode(environment, config.env.VITE_DEFAULT_SITE_MODE)
       indexable = isIndexable(environment)
+      // Lot 76P : source des tarifs. Grille fixe du pré-lancement dans un site
+      // ouvert (FULL) = configuration INTERDITE : le build échoue, il ne
+      // retombe jamais silencieusement sur des montants fixes.
+      const pricing = resolvePricingSource(environment, defaultMode, config.env.VITE_PRICING_SOURCE)
+      if (pricing.error) throw new Error(`[verebona] ${pricing.error}`)
+      pricingSource = pricing.source
       try {
         appOrigin = new URL(String(config.env.VITE_APP_URL || 'https://app.verebona.fr')).origin
       } catch {
@@ -78,7 +86,7 @@ function siteModePlugin(): Plugin {
       const warn = raw ? '' : ' (VITE_ENVIRONMENT absent : traité comme production)'
       config.logger.info(
         `\n[verebona] environnement=${environment} · mode par défaut=${defaultMode} · ` +
-          `${indexable ? 'indexable' : 'noindex'}${warn}\n`,
+          `${indexable ? 'indexable' : 'noindex'} · tarifs=${pricingSource}${warn}\n`,
       )
     },
     transformIndexHtml(html) {
@@ -199,7 +207,7 @@ function siteModePlugin(): Plugin {
         fileName: '.site-env.json',
         // `appOrigin` : seule origine autorisée à encadrer le site (mode intégré
         // du Centre d'aide) et à lire ses fichiers d'aide depuis le navigateur.
-        source: JSON.stringify({ environment, defaultMode, indexable, appOrigin }, null, 2) + '\n',
+        source: JSON.stringify({ environment, defaultMode, indexable, appOrigin, pricingSource }, null, 2) + '\n',
       })
     },
   }

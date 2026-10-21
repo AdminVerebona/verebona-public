@@ -19,6 +19,8 @@
         <span class="pr__save">En annuel, économisez l'équivalent de 2 mois.</span>
       </div>
       <div v-if="isYearly" class="vb-meta">Paiement annuel en une fois.</div>
+      <!-- Lot 76P : grille temporaire du pré-lancement (usePricing) — mention discrète et explicite. -->
+      <p v-if="pricingNotice" data-testid="pricing-notice" class="vb-meta pr__notice">{{ pricingNotice }}</p>
       <!-- PRELAUNCH : offres visibles, souscription indisponible (CDC pré-lancement §6.5) -->
       <span v-if="isPrelaunch" data-testid="prelaunch-pricing" class="vb-pill vb-pill--dashed pr__cta"><span class="vb-pill__dot" aria-hidden="true"></span>{{ labels.pricing }}</span>
       <a v-else :href="signupUrl()" class="vb-btn vb-btn--primary vb-btn--lg pr__cta">Essayer gratuitement</a>
@@ -34,8 +36,10 @@
         <h3 class="pr__name">{{ card.name }}</h3>
         <p class="pr__tagline">{{ card.tagline }}</p>
 
-        <!-- Montant : catalogue de l'application (source unique, CDC lookup_key LK-31) ;
-             jamais figé au prérendu, aucun prix de secours. -->
+        <!-- Montant : catalogue de l'application (source unique, CDC lookup_key LK-31),
+             aucun prix de secours. Exception temporaire (lot 76P) : en PRELAUNCH avec
+             VITE_PRICING_SOURCE=prelaunch_fixed, grille du pré-lancement, présente dès
+             le HTML prérendu. Aucun montant dans ce composant. -->
         <div :data-testid="`price-${card.code}`" :aria-busy="catalogState === 'loading'" class="pr__price">
           {{ priceOf(card.code) }}<span v-if="hasPrice(card.code)" class="pr__per">{{ perLabel(card.code) }}</span>
         </div>
@@ -104,7 +108,7 @@ import VbIcon from '../components/VbIcon.vue'
 
 const { isPrelaunch, labels } = useSiteMode()
 
-const { isYearly, setPeriod, pricePer, priceOf, mentionOf, hasPrice, equivalentOf, catalogState } = usePricing()
+const { isYearly, setPeriod, pricePer, priceOf, mentionOf, hasPrice, equivalentOf, catalogState, pricingNotice } = usePricing()
 
 /** « /mois TTC » précédé d'une espace insécable (les espaces du gabarit étaient écrasés : « /moisTTC »). */
 const perLabel = (code: Parameters<typeof mentionOf>[0]) => {
@@ -194,6 +198,7 @@ const proFeatures: string[] = [
 .pr__save { font-size: 14px; font-weight: 600; color: var(--attention-on-subtle); }
 .pr__cta { margin-top: 6px; }
 .pr__quote { font-style: italic; }
+.pr__notice { margin: 0; }
 .pr__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch; }
 .pr__card { position: relative; display: flex; flex-direction: column; padding: 26px; border-radius: var(--radius-lg); background: var(--bg-card); border: 1px solid var(--border); color: var(--text-primary); }
 .pr__card--featured { background: var(--vb-petrole); border-color: var(--vb-petrole); color: var(--vb-blanc); --focus-color: #E2896F; }

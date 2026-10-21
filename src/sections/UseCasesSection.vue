@@ -9,9 +9,14 @@
     <!-- Types de biens : BANDEAU DÉFILANT (lot 71P, décision PO du 19/10).
          Lot 72G (demande PO du 19/10) : ni surtitre ni bouton « Mettre en
          pause » — seul le bandeau de mots défile. Alternative WCAG 2.2.2
-         sans bouton visible : pause au survol (pointeur fin) ; arrêt durable
-         au focus clavier (le bandeau devient un arrêt de tabulation, nommé) ;
-         un clic ou un toucher arrête / relance le défilement ;
+         sans bouton visible : pause au survol VOLONTAIRE de la souris ;
+         pause pendant le focus clavier (le bandeau devient un arrêt de
+         tabulation, nommé) ; un clic souris l'arrête jusqu'à ce que le
+         pointeur le quitte ; un toucher arrête / relance le défilement.
+         Lot 76P (PO : « ne tourne pas en web ») : sur ordinateur, la pause
+         CSS au simple survol l'arrêtait dès que la molette l'amenait sous un
+         pointeur immobile, et clic / focus l'arrêtaient pour de bon — il
+         reprend désormais toujours en quittant le bandeau ou le focus ;
          prefers-reduced-motion : aucun mouvement, liste statique lisible, pas
          d'arrêt de tabulation. La liste n'existe qu'une fois pour les lecteurs
          d'écran (nommée par aria-label) : la copie de boucle est `aria-hidden`
@@ -20,7 +25,8 @@
     <div :class="['uc__kinds', ready ? 'uc__kinds--ready' : '', paused ? 'uc__kinds--paused' : '']">
       <div class="uc__marquee" :tabindex="moving ? 0 : undefined" :role="moving ? 'group' : undefined"
         :aria-label="moving ? KINDS_HINT : undefined"
-        @focusin="onFocusIn" @pointerdown="onPointerDown" @pointerup="releasePointer" @pointercancel="releasePointer" @click="toggle">
+        @focusin="onFocusIn" @focusout="onFocusOut" @pointerdown="onPointerDown" @pointerup="releasePointer" @pointercancel="releasePointer"
+        @pointermove="onPointerMove" @pointerleave="onPointerLeave" @click="toggle">
         <div class="uc__marquee-track">
           <ul id="uc-kinds" class="uc__marquee-list" aria-label="Les biens que Verebona prend en charge">
             <li v-for="k in kinds" :key="k" class="uc__marquee-item">{{ k }}</li>
@@ -35,8 +41,12 @@
       <div class="uc__group-label">{{ group.label }}</div>
       <div class="vb-card uc__list">
         <div v-for="(item, vi0) in group.items" :key="vi0" class="uc__item">
+          <!-- Lot 76P (« Alignement ! ») : grille étiquette | titre | chevron. La
+               colonne d'étiquettes prend la largeur de la plus large de TOUTES
+               les étiquettes (gabarit invisible `data-sizer`, pseudo-élément ni
+               lu ni annoncé) : les titres commencent sur la même verticale. -->
           <button type="button" :aria-expanded="item.open" :aria-controls="item.panelId" :class="['uc__head', item.open ? 'uc__head--open' : '']" @click.prevent="item.onClick">
-            <span :class="['vb-badge', item.open ? '' : 'vb-badge--outline', 'uc__badge']">{{ item.badge }}</span>
+            <span class="uc__tag" :data-sizer="badgeSizer"><span :class="['vb-badge', item.open ? '' : 'vb-badge--outline', 'uc__badge']">{{ item.badge }}</span></span>
             <span class="uc__item-title">{{ item.title }}</span>
             <VbIcon name="chevronRight" :size="18" class="uc__chev" />
           </button>
@@ -69,6 +79,10 @@ import VbIcon from '../components/VbIcon.vue'
 
 const { ucGroups } = useLanding()
 
+/** Étiquette la plus longue des deux listes : gabarit de la colonne d'étiquettes. */
+const badgeSizer = computed(() => ucGroups.value.flatMap((g) => g.items.map((i) => i.badge))
+  .reduce((a, b) => (b.length > a.length ? b : a), ''))
+
 /** Ordre prévu par le design (bandeau des types de biens d'avant le lot 66). */
 const kinds = ['Voiture', 'Appartement', 'Garage', 'Moto', 'Maison', 'Terrain', 'Vélo', 'Local commercial', 'Loisir / Sport', 'Électronique']
 /** Nom du bandeau quand il défile (et devient focalisable) : dit comment l'arrêter. */
@@ -92,24 +106,56 @@ onMounted(() => {
 onBeforeUnmount(() => { mql?.removeEventListener?.('change', onReduce) })
 const moving = computed(() => ready.value && !reduced.value)
 
-/** Arrêt durable : focus clavier, clic ou toucher (un second clic / toucher relance). */
-const paused = ref(false)
-function toggle() { if (moving.value) paused.value = !paused.value }
+/**
+ * Trois causes d'arrêt, chacune levée par l'action inverse (lot 76P) :
+ *   - `touchPaused`  toucher / stylet : arrêt, relance au toucher suivant ;
+ *   - `mousePaused`  souris déplacée sur le bandeau, ou clic : jusqu'à ce
+ *                    que le pointeur quitte le bandeau ;
+ *   - `focusPaused`  focus clavier : jusqu'à la sortie du focus.
+ */
+const touchPaused = ref(false)
+const mousePaused = ref(false)
+const focusPaused = ref(false)
+const paused = computed(() => moving.value && (touchPaused.value || mousePaused.value || focusPaused.value))
+
+let lastPointerType = ''
+function toggle() {
+  if (!moving.value) return
+  if (lastPointerType === 'mouse') mousePaused.value = true
+  else touchPaused.value = !touchPaused.value
+}
+
+// Survol VOLONTAIRE : un vrai déplacement de la souris sur le bandeau. Quand
+// la page défile à la molette sous un pointeur immobile (cas courant sur
+// ordinateur), le pointeur n'a pas bougé : le bandeau continue de défiler.
+let lastXY: [number, number] | null = null
+function onPointerMove(e: PointerEvent) {
+  if (e.pointerType !== 'mouse') return
+  const moved = (e.movementX ?? 0) !== 0 || (e.movementY ?? 0) !== 0
+    || (lastXY !== null && (lastXY[0] !== e.clientX || lastXY[1] !== e.clientY))
+  lastXY = [e.clientX, e.clientY]
+  if (moved && moving.value) mousePaused.value = true
+}
+function onPointerLeave(e: PointerEvent) {
+  lastXY = null
+  if (e.pointerType === 'mouse') mousePaused.value = false
+}
 
 // Un clic ou un toucher donne aussi le focus au bandeau (tabindex) : seul le
-// focus CLAVIER l'arrête d'office (sinon le clic, qui bascule l'état, le
+// focus CLAVIER l'arrête (sinon le toucher, qui bascule l'état, le
 // relancerait aussitôt). Deux garde-fous : pointeur en cours d'usage, et
 // `:focus-visible` (faux pour un focus donné à la souris ou au doigt).
 let pointer = false
 let pointerTimer = 0
-function onPointerDown() { window.clearTimeout(pointerTimer); pointer = true }
+function onPointerDown(e: PointerEvent) { window.clearTimeout(pointerTimer); pointer = true; lastPointerType = e.pointerType ?? '' }
 function releasePointer() { window.clearTimeout(pointerTimer); pointerTimer = window.setTimeout(() => { pointer = false }, 600) }
 function onFocusIn(e: FocusEvent) {
   if (pointer) return
   let keyboard = true
   try { keyboard = (e.target as Element).matches(':focus-visible') } catch { /* sélecteur non pris en charge : on arrête */ }
-  if (keyboard) paused.value = true
+  if (keyboard) focusPaused.value = true
 }
+function onFocusOut() { focusPaused.value = false }
 </script>
 
 <style>
@@ -133,9 +179,9 @@ function onFocusIn(e: FocusEvent) {
    identiques ; un décalage de -50 % ramène exactement au point de départ. */
 .uc__kinds--ready .uc__marquee-track { animation: uc-marquee 48s linear infinite; }
 .uc__kinds--paused .uc__marquee-track, .uc__marquee:focus-visible .uc__marquee-track { animation-play-state: paused; }
-/* Survol : pointeur fin seulement (sur écran tactile, le « survol » collant
-   après un toucher empêcherait de relancer le défilement). */
-@media (hover: hover) { .uc__marquee:hover .uc__marquee-track { animation-play-state: paused; } }
+/* Survol : géré en JavaScript (lot 76P, survol VOLONTAIRE de la souris) —
+   un `:hover` CSS arrêtait le bandeau sous un pointeur immobile pendant le
+   défilement de la page. */
 @keyframes uc-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 /* Mouvement réduit : aucun défilement, liste statique lisible (qui passe à
    la ligne), copie de boucle retirée. */
@@ -150,12 +196,22 @@ function onFocusIn(e: FocusEvent) {
 .uc__list { overflow: hidden; }
 .uc__item + .uc__item { border-top: 1px solid var(--border-subtle); }
 .uc__head {
-  display: flex; align-items: center; gap: 13px; width: 100%; text-align: left; padding: 16px 20px; cursor: pointer;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px 13px; width: 100%; text-align: left; padding: 16px 20px; cursor: pointer;
   background: transparent; border: 0; border-left: 3px solid transparent; transition: background-color var(--dur) var(--ease);
 }
 .uc__head:hover { background: var(--bg-page); }
 .uc__head--open { border-left-color: var(--accent); background: var(--bg-page); }
 .uc__badge { flex-shrink: 0; }
+/* Colonne d'étiquettes de largeur commune (lot 76P) : l'étiquette et le
+   gabarit invisible de la plus longue (mêmes métriques que .vb-badge :
+   12 px / 600, 9 px + 1 px de bordure de chaque côté) partagent la même
+   cellule ; la cellule prend la plus grande des deux largeurs. */
+.uc__tag { display: grid; justify-items: start; }
+.uc__tag > .uc__badge, .uc__tag::after { grid-area: 1 / 1; }
+.uc__tag::after {
+  content: attr(data-sizer); visibility: hidden; height: 0; padding: 0 10px;
+  font-size: 12px; font-weight: 600; line-height: 1.4; white-space: nowrap; pointer-events: none;
+}
 .uc__item-title { flex: 1; font-size: 16.5px; font-weight: 700; color: var(--text-primary); }
 .uc__chev { color: var(--accent); flex-shrink: 0; transition: transform var(--dur) var(--ease); }
 .uc__head--open .uc__chev { transform: rotate(90deg); }
@@ -176,7 +232,16 @@ function onFocusIn(e: FocusEvent) {
   /* Bandeau pleine largeur : il va jusqu'aux bords de l'écran (et les découpe). */
   .uc__marquee { margin-inline: -20px; padding-inline: 20px; }
   .uc__marquee-item { font-size: 22px; gap: 20px; padding: 14px 20px 14px 0; }
-  .uc__head { padding: 14px 14px; align-items: flex-start; }
+  .uc__head { padding: 14px 14px; align-items: start; }
   .uc__panel { padding: 4px 16px 20px; }
+}
+/* Zoom 200 % d'un téléphone (≈ 195 px) : plus de place pour deux colonnes —
+   l'étiquette passe au-dessus du titre, tous deux alignés à gauche ; chevron
+   à droite de l'étiquette. */
+@media (max-width: 300px) {
+  .uc__head { grid-template-columns: minmax(0, 1fr) auto; }
+  .uc__tag::after { display: none; }
+  .uc__item-title { grid-column: 1; grid-row: 2; }
+  .uc__chev { grid-column: 2; grid-row: 1; }
 }
 </style>

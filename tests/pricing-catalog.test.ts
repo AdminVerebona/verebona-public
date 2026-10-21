@@ -32,8 +32,14 @@ beforeEach(async () => {
 afterEach(() => { vi.unstubAllGlobals() })
 
 describe('source unique des montants', () => {
-  it('LK-31 / TC-59 — la vitrine ne contient plus aucun montant de vente', () => {
-    const src = read('src/composables/usePricing.ts') + read('src/sections/PricingSection.vue')
+  it('LK-31 / TC-59 — la vitrine ne contient plus aucun montant de vente (hors grille temporaire du lot 76P)', () => {
+    // Lot 76P (ticket P1) : SEULE exception, le bloc `PRELAUNCH_PRICE_GRID`
+    // de usePricing.ts, actif uniquement en production PRELAUNCH
+    // (l76p-tarifs-prelaunch.test.ts). Partout ailleurs : aucun montant.
+    const usePricingSrc = read('src/composables/usePricing.ts')
+    const grid = usePricingSrc.match(/export const PRELAUNCH_PRICE_GRID[\s\S]*?\n\}\)\n/)
+    expect(grid).not.toBeNull()
+    const src = usePricingSrc.replace(grid![0], '') + read('src/sections/PricingSection.vue')
     expect(src).not.toMatch(/monthly:\s*\d|yearly:\s*\d|\b(2|5|8|3|6|9)[.,]9\b|\b(29|59|89|39|69|99)\s*€/)
     expect(pricing.PLANS.every((p) => !('monthly' in p) && !('yearly' in p))).toBe(true)
     expect(read('src/content/aide/articles/AID-BILL-001.md')).not.toMatch(/\d+(,\d+)?\s*€/)
