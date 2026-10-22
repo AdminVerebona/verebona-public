@@ -25,7 +25,7 @@ export const ORGANIZATION_ID = `${SITE_ORIGIN}/#organization`
 export const WEBSITE_ID = `${SITE_ORIGIN}/#website`
 
 /**
- * Logo officiel — `public/assets/app-icon.png`, 180 x 180 (§4, AC-04).
+ * Logo officiel — `public/assets/apple-touch-icon-180-l79.png` (symbole validé, lot 79), 180 x 180 (§4, AC-04).
  *
  * C'est la seule marque déposée comme fichier dans ce dépôt, et c'est la
  * déclinaison exacte du sigle rendu en SVG inline dans `AppHeader.vue` :
@@ -33,7 +33,7 @@ export const WEBSITE_ID = `${SITE_ORIGIN}/#website`
  * Servie en HTTPS depuis `public/`, sans authentification, et au-delà du
  * minimum de 112 x 112 exigé.
  */
-export const ORGANIZATION_LOGO_PATH = '/assets/app-icon.png'
+export const ORGANIZATION_LOGO_PATH = '/assets/apple-touch-icon-180-l79.png'
 
 /**
  * Description de l'organisation — formulation du §4, reprise telle quelle.
