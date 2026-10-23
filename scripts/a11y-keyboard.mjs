@@ -398,6 +398,70 @@ export const KEYBOARD_SCENARIOS = [
     },
   },
   {
+    // Lot 80P (PO du 22/10 : « parfois ça marche et parfois non », capture
+    // figée sur deux lignes) : le bandeau défile à CHAQUE chargement, quelles
+    // que soient les conditions — à froid (cache coupé), à chaud, arrivée par
+    // #cas-usage, retour SPA vers l'accueil, polices puis JS servis en
+    // retard, redimensionnement — et la seule cause de l'état « deux lignes,
+    // immobile » est la préférence système « mouvement réduit », suivie dans
+    // les deux sens sans recharger (Bureau à distance, réglage Windows).
+    name: 'Bandeau des types de biens : défile à chaque chargement (conditions variées)', url: '/',
+    run: async (page) => {
+      const problems = []
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+      const cdp = await page.context().newCDPSession(page)
+      const state = () => page.evaluate(() => {
+        const tops = new Set([...document.querySelectorAll('#uc-kinds li')].map((li) => Math.round(li.getBoundingClientRect().top)))
+        return {
+          lines: tops.size,
+          copy: !!document.querySelector('.uc__marquee-list--copy'),
+          paused: document.querySelector('.uc__kinds').classList.contains('uc__kinds--paused'),
+          tabindex: document.querySelector('.uc__marquee').getAttribute('tabindex'),
+        }
+      })
+      const check = async (label) => {
+        await page.waitForFunction(() => document.querySelector('.uc__marquee-list--copy'), null, { timeout: 10000 })
+          .catch(() => problems.push(`${label} : copie de boucle jamais ajoutée`))
+        await page.locator('.uc__marquee').scrollIntoViewIfNeeded()
+        await page.mouse.move(0, 0)
+        const st = await state()
+        const moves = await marqueeMoves(page)
+        if (!moves || st.lines !== 1 || !st.copy || st.paused || st.tabindex !== '0') {
+          problems.push(`${label} : figé (défile=${moves}, lignes=${st.lines}, copie=${st.copy}, arrêt=${st.paused}, tabindex=${st.tabindex})`)
+        }
+      }
+      const delay = (ms) => async (route) => { await new Promise((r) => setTimeout(r, ms)); await route.continue() }
+      const CONDITIONS = [
+        ['à froid', async () => { await cdp.send('Network.setCacheDisabled', { cacheDisabled: true }); await page.goto(new URL('/', page.url()).href); await cdp.send('Network.setCacheDisabled', { cacheDisabled: false }) }],
+        ['à chaud', async () => { await page.reload() }],
+        ['arrivée par #cas-usage', async () => { await page.goto(new URL('/#cas-usage', page.url()).href) }],
+        ['retour SPA depuis /contact', async () => {
+          await page.goto(new URL('/contact', page.url()).href)
+          await page.evaluate(() => { window.__l80pSpa = true })
+          await page.locator(SEL.logo).first().click()
+          await page.waitForURL((u) => u.pathname === '/')
+          if (!(await page.evaluate(() => window.__l80pSpa === true))) problems.push('retour SPA : la page a été rechargée (scénario non joué)')
+        }],
+        ['polices servies en retard', async () => { await page.route(/\/fonts\//, delay(1200)); await cdp.send('Network.setCacheDisabled', { cacheDisabled: true }); await page.goto(new URL('/', page.url()).href); await cdp.send('Network.setCacheDisabled', { cacheDisabled: false }); await page.unroute(/\/fonts\//) }],
+        ['JS servi en retard', async () => { await page.route(/\/assets\/.*\.js$/, delay(600)); await cdp.send('Network.setCacheDisabled', { cacheDisabled: true }); await page.goto(new URL('/', page.url()).href); await cdp.send('Network.setCacheDisabled', { cacheDisabled: false }); await page.unroute(/\/assets\/.*\.js$/) }],
+        ['redimensionnement', async () => { const vp = page.viewportSize(); await page.setViewportSize({ width: Math.max(320, vp.width - 500), height: vp.height }); await page.waitForTimeout(150); await page.setViewportSize(vp) }],
+      ]
+      for (let round = 1; round <= 2; round++) {
+        for (const [label, act] of CONDITIONS) { await act(); await check(`${label} (${round})`) }
+      }
+      // Préférence système basculée en cours de visite : statique, puis défile.
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await page.waitForTimeout(150)
+      const red = await state()
+      if (red.lines < 2 && page.viewportSize().width < 1600) problems.push(`mouvement réduit : liste non repliée (${red.lines} ligne)`)
+      if (await marqueeMoves(page)) problems.push('mouvement réduit activé en cours de visite : le bandeau bouge encore')
+      if (red.tabindex !== null) problems.push('mouvement réduit : le bandeau reste un arrêt de tabulation')
+      await page.emulateMedia({ reducedMotion: 'no-preference' })
+      await check('mouvement réduit désactivé en cours de visite')
+      return { problems, info: `${CONDITIONS.length * 2} chargements / navigations : défile à chaque fois ; mouvement réduit basculé à chaud suivi dans les deux sens` }
+    },
+  },
+  {
     // Lot 76P (PO du 21/10, « Alignement ! ») : titres des cas d'usage alignés
     // sur une même verticale, juste après la colonne d'étiquettes (largeur
     // commune aux deux listes), aucune étiquette tronquée, chevron à droite ;

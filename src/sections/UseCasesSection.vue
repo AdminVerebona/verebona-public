@@ -21,7 +21,14 @@
          d'arrêt de tabulation. La liste n'existe qu'une fois pour les lecteurs
          d'écran (nommée par aria-label) : la copie de boucle est `aria-hidden`
          et n'est ajoutée qu'après le montage (absente du HTML prérendu). Le
-         bandeau découpe son contenu : aucun débordement horizontal. -->
+         bandeau découpe son contenu : aucun débordement horizontal.
+         Lot 80P (PO : « parfois ça marche et parfois non », capture figée sur
+         deux lignes) : cette mise en page n'existe que sous
+         prefers-reduced-motion ; le démarrage ne dépend d'aucune mesure,
+         police, visibilité d'onglet ni état mémorisé (reproduit sans échec
+         sur 252 chargements) — l'intermittence vient de la préférence système
+         (Windows « Effets d'animation », Bureau à distance…). Garde :
+         tests/l80p-carrousel-intermittent.test.ts et test:a11y. -->
     <div :class="['uc__kinds', ready ? 'uc__kinds--ready' : '', paused ? 'uc__kinds--paused' : '']">
       <div class="uc__marquee" :tabindex="moving ? 0 : undefined" :role="moving ? 'group' : undefined"
         :aria-label="moving ? KINDS_HINT : undefined"
