@@ -20,10 +20,10 @@ canonical: /aide/utiliser-filtres
 indexable: true
 lang: fr-FR
 synonyms: [recherche, filtres, biens, documents, agenda, chercher, trouver, filtre, résultat]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : filtres obsolètes (« vue V2 », note interne « passe finale ») ; il manque les filtres Pièce, Équipement, Date du document et Date d’ajout (lot 103F) et la recherche locale (lot 97C). Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Les filtres et la recherche répondent à deux besoins différents : les filtres réduisent un ensemble connu à partir de critères structurés ; la recherche retrouve un élément à partir de mots.

@@ -1,0 +1,5 @@
+# Textes figés des CGUV : servis OCTET POUR OCTET et hachés (SHA-256).
+# Aucune conversion de fin de ligne ni normalisation par Git, sur aucun poste.
+src/content/legal/cguv/versions/*.html -text
+# Sources fournies par le PO (108P-L) : octets conservés (empreinte relevée dans dernier-import.json).
+src/content/legal/import/sources/* -text

@@ -24,7 +24,8 @@ function withRaw(id: string, edit: (raw: string) => string) {
 describe('contrat de publication (§10.3, D-O)', () => {
   it('tout article publié du corpus réel porte une date de validation et une version', () => {
     const publies = result.articles.filter((a) => a.status === 'published')
-    expect(publies.length).toBeGreaterThan(90)
+    // Lot 105P : 14 articles bloqués en plus (100 − 3 − 14 = 83 publiés).
+    expect(publies.length).toBeGreaterThanOrEqual(83)
     for (const a of publies) {
       expect(a.validatedAt, a.id).toMatch(/^\d{4}-\d{2}-\d{2}$/)
       expect(a.appVersion, a.id).toBe('V1')

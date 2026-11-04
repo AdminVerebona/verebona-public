@@ -53,3 +53,9 @@ export { helpPages } from './help/pages'
 
 // Pages Ressources et leur en-tête (CDC Ressources V6 SEO-01, T12).
 export { ressourcePages } from './ressources/pages'
+
+// Rubrique « Légal » : cinq contenus, permaliens des CGUV, 404 « version inconnue » (chantier 104P).
+export { legalPages } from './legal/pages'
+
+// Pages simples pré-rendues (/contact : H1 et en-tête dans le HTML servi, chantier 105Q).
+export { sitePages } from './config/site-pages'

@@ -20,10 +20,10 @@ canonical: /aide/comprendre-notifications
 indexable: true
 lang: fr-FR
 synonyms: [notifications, push, email, verebona, notification, alerte, rappel]
-status: published
-validatedAt: 2026-09-26
+status: blocked
+blocker: Lot 105P : annonce un récapitulatif e-mail activé par défaut et des alertes immédiates ; récapitulatif désactivé par défaut et alertes immédiates supprimées (lot 79C). Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Verebona peut utiliser plusieurs canaux : notification push sur un appareil autorisé, e-mail et cloche dans l’application lorsqu’un événement est prévu pour ce canal. Les éléments « À traiter » restent d’abord visibles dans leur page dédiée et ne sont pas ajoutés à la cloche.

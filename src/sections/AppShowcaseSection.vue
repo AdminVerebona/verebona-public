@@ -23,10 +23,12 @@
           <div class="app__bezel">
             <span class="app__cam" aria-hidden="true"></span>
             <!-- Lot 71 (PO) : captures réelles de l'application, dans l'ordre du
-                 carrousel (Accueil, Mes biens, Mon agenda, Mes documents). Le nom de
-                 l'écran affiché est annoncé par le carrousel ; images décoratives. -->
+                 carrousel (Accueil, Mes biens, Mon agenda, Mes documents).
+                 Chantier 105Q (audit Bing, §4) : captures produit = images
+                 INFORMATIVES, alt bref et propre à l'écran (seule la capture
+                 affichée est exposée : les autres sont en display:none). -->
             <div class="app__screen app__screen--shot">
-              <img v-for="(sc, i) in shots" v-show="slideIndex === i" :key="sc.src" :src="sc.src" alt="" width="1600" height="724" :loading="i === 0 ? 'eager' : 'lazy'" decoding="async" class="app__shot" />
+              <img v-for="(sc, i) in shots" v-show="slideIndex === i" :key="sc.src" :src="sc.src" :alt="sc.alt" width="1600" height="724" :loading="i === 0 ? 'eager' : 'lazy'" decoding="async" class="app__shot" />
             </div>
           </div>
           <div class="app__base" aria-hidden="true"></div>
@@ -36,11 +38,12 @@
              (Web · iOS · Android) est supprimée ; l'introduction le dit déjà. -->
 
         <!-- Téléphone -->
-        <div class="app__phone" aria-hidden="true">
-          <!-- Lot 71 (PO) : capture réelle de l'accueil mobile (thème sombre),
-               décorative — le texte de l'introduction dit déjà l'essentiel. -->
+        <div class="app__phone">
+          <!-- Lot 71 (PO) : capture réelle de l'accueil mobile (thème sombre).
+               Chantier 105Q : capture produit, informative (alt), plus masquée
+               aux technologies d'assistance. -->
           <div class="app__phone-screen app__phone-screen--shot">
-            <img src="/assets/app-mobile-accueil.webp" alt="" width="696" height="1417" loading="lazy" decoding="async" class="app__phone-shot" />
+            <img src="/assets/app-mobile-accueil.webp" alt="Accueil de l’application sur mobile : biens et prochaines échéances" width="696" height="1417" loading="lazy" decoding="async" class="app__phone-shot" />
           </div>
         </div>
       </div>
@@ -82,10 +85,10 @@ const triptych: Array<{ icon: IconName; title: string; text: string }> = [
 
 /** Lot 71 : captures réelles, même ordre que `nav` (useLanding). */
 const shots = [
-  { src: '/assets/app-desktop-accueil.webp' },
-  { src: '/assets/app-desktop-biens.webp' },
-  { src: '/assets/app-desktop-agenda.webp' },
-  { src: '/assets/app-desktop-documents.webp' },
+  { src: '/assets/app-desktop-accueil.webp', alt: 'Tableau de bord de l’application sur ordinateur : biens et prochaines échéances' },
+  { src: '/assets/app-desktop-biens.webp', alt: 'Écran Mes biens : logements, véhicules et objets, chacun avec sa photo' },
+  { src: '/assets/app-desktop-agenda.webp', alt: 'Agenda annuel : entretiens, contrôles et fins de garantie mois par mois' },
+  { src: '/assets/app-desktop-documents.webp', alt: 'Écran Mes documents : contrôles techniques et diagnostics rattachés à leur bien' },
 ]
 </script>
 

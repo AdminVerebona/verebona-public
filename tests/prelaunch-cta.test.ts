@@ -28,7 +28,7 @@ async function setup(env: Env) {
   const { vHover } = await import('../src/directives/hover')
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: ['/', '/aide', '/contact', '/mentions-legales', '/cgu', '/confidentialite']
+    routes: ['/', '/aide', '/contact', '/legal/mentions-legales', '/legal/cguv', '/legal/confidentialite', '/legal/sous-traitants']
       .map((path) => ({ path, component: Stub })),
   })
   await router.push('/')

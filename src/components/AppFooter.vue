@@ -25,9 +25,11 @@
     <div>
       <div class="ft__title">Légal</div>
       <div class="ft__links">
-        <a v-bind="link('/mentions-legales')">Mentions légales</a>
-        <a v-bind="link('/cgu')">CGSU</a>
-        <a v-bind="link('/confidentialite')">Confidentialité</a>
+        <a v-bind="link('/legal/mentions-legales')">Mentions légales</a>
+        <a v-bind="link('/legal/cguv')">CGUV</a>
+        <a v-bind="link('/legal/confidentialite')">Confidentialité</a>
+        <a v-bind="link('/legal/sous-traitants')">Sous-traitants et prestataires</a>
+        <a v-bind="link('/legal/parrainage')">Parrainage</a>
       </div>
     </div>
   </div>

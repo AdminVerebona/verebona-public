@@ -20,10 +20,10 @@ canonical: /aide/recherche-sans-resultat
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, recherche, retrouve, pas, cherche, problème, erreur, support, aide, incident]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : promet une « recherche intelligente selon le déploiement actif » avec Premium ; la recherche générale n’a pas de repli intelligent (global-search.service.ts, allowSemantic: false). Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 La recherche dépend des informations réellement présentes et indexées dans votre compte. Une requête trop longue ou composée de plusieurs mots qui ne se trouvent pas ensemble peut ne rien retourner dans le moteur classique.

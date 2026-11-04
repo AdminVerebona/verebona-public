@@ -14,16 +14,16 @@ screens: [Inscription, Mot de passe oublié]
 objectTypes: []
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-START-003, AID-ACCOUNT-003]
-seoTitle: Je ne reçois pas l’e-mail de vérification ou de réinitialisation | Aide Verebona
+seoTitle: E-mail de vérification non reçu | Aide Verebona
 metaDescription: Retrouver un e-mail de sécurité attendu ou demander une nouvelle action.
 canonical: /aide/email-verification-non-recu
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, email, mot de passe, reçois, pas, mail, vérification, réinitialisation, problème, erreur]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Les messages de vérification et de réinitialisation sont envoyés à l’adresse associée au parcours. Un filtre anti-spam, une erreur d’adresse ou un délai de distribution peut empêcher leur apparition immédiate.

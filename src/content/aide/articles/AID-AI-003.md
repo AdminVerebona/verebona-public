@@ -14,16 +14,16 @@ screens: [Fiche bien, À traiter]
 objectTypes: [champ métier, document, action]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-TODO-003, AID-AI-002]
-seoTitle: Comprendre confiance, conflits et protection des valeurs | Aide Verebona
+seoTitle: IA : confiance et conflits de données | Aide Verebona
 metaDescription: Savoir quand Verebona applique une proposition et quand il demande votre avis.
 canonical: /aide/confiance-conflits-valeurs
 indexable: true
 lang: fr-FR
 synonyms: [ia, confiance, conflit, conflits, protection, valeurs, intelligence artificielle, automatique, analyse, enrichissement]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 La confiance seule ne suffit pas à décider. Verebona tient compte de la qualité de la source, de la valeur déjà enregistrée, de son origine et des règles propres aux champs critiques. Une décision humaine explicite a priorité sur une modification automatique silencieuse.

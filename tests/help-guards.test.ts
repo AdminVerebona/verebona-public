@@ -34,11 +34,14 @@ describe('COVER-01 — matrice de couverture §12', () => {
     const report = checkCoverage(corpus, matrix, 'production')
     expect(report.errors).toEqual([])
     expect(report.uncovered.map((r) => r.screen)).toEqual([])
-    expect(report.covered).toBe(48)
+    // Lot 105P : « Import document », « Notifications - incident » et « Recherche
+    // globale » exemptées (articles bloqués : vidéo 500 Mo, push navigateur,
+    // recherche) — 50 − 5 = 45.
+    expect(report.covered).toBe(45)
   })
 
-  it('seules les lignes liées au cycle d’impayé sont exemptées', () => {
-    expect(Object.keys(matrix.blockedRows).sort()).toEqual(['Compte restreint', 'Impayé'])
+  it('seules les lignes liées au cycle d’impayé et aux blocages du lot 105P sont exemptées', () => {
+    expect(Object.keys(matrix.blockedRows).sort()).toEqual(['Compte restreint', 'Impayé', 'Import document', 'Notifications - incident', 'Recherche globale'])
     for (const reason of Object.values(matrix.blockedRows)) expect(reason.trim().length).toBeGreaterThan(20)
   })
 
@@ -149,6 +152,17 @@ describe('§7 — articles débloqués : comportement livré', () => {
     }
   })
 
+  it('lot 105P : bloqués tant que leur texte contredit l’application (règles content-rules.ts)', () => {
+    for (const id of [
+      'AID-DOC-003', 'AID-HELP-004', 'AID-NOTIF-002', 'AID-NOTIF-005', 'AID-HELP-013', 'AID-DOC-006', 'AID-HELP-007', 'AID-SEARCH-002',
+      // Décision PO du 02/11/2026 : faits faux non détectés par les règles (audit docs/aide/audit-2026-11-02.md).
+      'AID-NOTIF-001', 'AID-NOTIF-004', 'AID-DOC-009', 'AID-SEARCH-001', 'AID-TODO-002', 'AID-HELP-001',
+    ]) {
+      expect(status(id), id).toBe('blocked')
+      expect(corpus.articles.find((a) => a.id === id)!.blocker, id).toMatch(/^Lot 105P : .{40,}/)
+    }
+  })
+
   it('AID-START-002 décrit l’inscription sur invitation du pré-lancement', () => {
     const r = raw('AID-START-002')
     expect(r).toContain('seules les personnes invitées peuvent créer un compte')
@@ -156,17 +170,19 @@ describe('§7 — articles débloqués : comportement livré', () => {
     expect(r).not.toMatch(/Depuis le site ou l’application, choisissez la création de compte/)
   })
 
-  it('AID-ACCOUNT-006 : suppression différée de 30 jours, annulable, avec export', () => {
+  it('AID-ACCOUNT-006 : suppression sous 24 heures, annulable, avec export (lot 104)', () => {
     const r = raw('AID-ACCOUNT-006')
     for (const s of [
-      'supprimé définitivement 30 jours plus tard', '**annuler la suppression**', '**exporter vos données**',
+      'supprimé définitivement sous 24 heures', '**annuler la suppression**', '**exporter vos données**',
       '« SUPPRIMER MON COMPTE »', 'saisissez votre mot de passe', '« Compte en cours de suppression »',
-      '7 jours avant', 'n’est pas réactivé automatiquement', 'les factures, les preuves d’acceptation',
+      'n’est pas réactivé automatiquement', 'les factures, les preuves d’acceptation',
       'demandes de rétractation', 'la trace de votre demande de suppression', 'registre des demandes',
     ]) expect(r, s).toContain(s)
     // Plus d'anonymisation immédiate ni de suppression « sans retour » à la confirmation.
     expect(r).not.toMatch(/anonymisées dans la route|ne peut pas être annulée\. *$/m)
     expect(r).not.toContain('blocker:')
+    // Lot 104 : plus de rappel J−7 (suppression sous 24 heures, comme dans l'application).
+    expect(r).not.toContain('7 jours avant')
   })
 
   it('AID-DOSSIER-007 : maisons et appartements uniquement', () => {

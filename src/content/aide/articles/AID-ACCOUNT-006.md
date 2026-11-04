@@ -3,7 +3,7 @@ id: AID-ACCOUNT-006
 title: Supprimer définitivement son compte
 slug: supprimer-compte
 category: compte-securite
-summary: Votre compte est clôturé immédiatement, puis supprimé définitivement 30 jours plus tard. D’ici là, vous pouvez annuler ou exporter vos données.
+summary: Votre compte est clôturé immédiatement, puis supprimé définitivement sous 24 heures. D’ici là, vous pouvez annuler ou exporter vos données.
 tags: [compte, suppression, sécurité]
 offers: [standard, premium, premium_duo]
 roles: [owner, concerned_user]
@@ -15,25 +15,25 @@ objectTypes: [compte, utilisateur, données]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-ACCOUNT-005, AID-BILL-007, AID-BILL-009, AID-DUO-006]
 seoTitle: Supprimer définitivement son compte | Aide Verebona
-metaDescription: Supprimer son compte Verebona : clôture immédiate, 30 jours pour annuler ou exporter ses données, puis suppression définitive.
+metaDescription: Supprimer son compte Verebona : clôture immédiate, 24 heures pour annuler ou exporter ses données, puis suppression définitive.
 canonical: /aide/supprimer-compte
 indexable: true
 lang: fr-FR
 synonyms: [compte, suppression, sécurité, supprimer, définitivement, profil, connexion, mot de passe, RGPD, clôturer, fermer, annuler la suppression]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
-La suppression de votre compte se fait **en deux temps**. Dès votre confirmation, le compte est **clôturé** : vous ne pouvez plus utiliser Verebona normalement. Il est ensuite **supprimé définitivement 30 jours plus tard**, avec toutes vos données. Pendant ces 30 jours, vous pouvez **annuler la suppression** ou **exporter vos données**.
+La suppression de votre compte se fait **en deux temps**. Dès votre confirmation, le compte est **clôturé** : vous ne pouvez plus utiliser Verebona normalement. Il est ensuite **supprimé définitivement sous 24 heures**, avec toutes vos données. D’ici là, vous pouvez **annuler la suppression** ou **exporter vos données**.
 
 ## Procédure
 
-1. **Exportez ce que vous souhaitez conserver** — Depuis le bloc « Mes données » de Mon compte, téléchargez une copie de vos données et de vos documents. Vous pourrez encore le faire pendant les 30 jours.
+1. **Exportez ce que vous souhaitez conserver** — Depuis le bloc « Mes données » de Mon compte, téléchargez une copie de vos données et de vos documents. Vous pourrez encore le faire jusqu’à la suppression définitive.
 2. **Ouvrez « Supprimer mon compte »** — Dans Mon compte > Informations, zone dangereuse. Verebona affiche ce qui sera supprimé et la date de suppression définitive.
 3. **Confirmez** — Recopiez exactement « SUPPRIMER MON COMPTE », saisissez votre mot de passe, puis cliquez sur « Clôturer et supprimer mon compte ».
-4. **Conservez l’e-mail de confirmation** — Il indique la date de suppression définitive. Un rappel vous est envoyé 7 jours avant cette date.
+4. **Conservez l’e-mail de confirmation** — Il indique la date de suppression définitive.
 
 ## Détails et cas particuliers
 

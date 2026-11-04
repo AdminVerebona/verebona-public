@@ -235,15 +235,32 @@ describe('L66P-04 — tarifs : la source reste le catalogue de l’application',
 
 describe('L66P-05 — catalogue d’aide et Ressources inchangés par la migration graphique', () => {
   const { files, categories } = readHelpSources(root)
-  const corpus = loadCorpus(files, categories)
+  // Lot 105P : dates de mise à jour prises dans le frontmatter (`updatedAt`),
+  // pas dans Git — sinon l'empreinte change au simple commit des articles
+  // (horodatage du commit) et ne peut pas être calculée avant lui.
+  const corpus = loadCorpus(files.map((f) => ({ ...f, updatedAt: null })), categories)
 
-  it('catalogue JSON lu par l’application : contenu identique à la base lot53pv7', () => {
+  it('catalogue JSON lu par l’application : contenu identique à la base lot105', () => {
     const at = '2026-10-16T00:00:00Z'
     const prod = buildCatalog(corpus, 'production', 'v', 'https://www.verebona.fr', at)
     const pre = buildCatalog(corpus, 'preprod', 'v', 'https://www.verebona.fr', at)
     expect(prod.schema).toBe('verebona-help-catalog-v1')
-    expect(sha(prod)).toBe('f1ab0c490aa5bd234517c2c1d9074826744a872b64f91d4a743a7b328d00f4b8')
-    expect(sha(pre)).toBe('0605045f44887aafb69066162be209cdfa8dce638103401ef6fa8424a319e3f4')
+    // Empreintes remises à jour au lot 104 (articles AID-BILL-009/010, AID-TRANSFER-006,
+    // AID-ACCOUNT-006 modifiés volontairement), puis au lot 105P : 8 articles passés en
+    // « blocked » (AID-DOC-003, AID-DOC-006, AID-HELP-004, AID-HELP-007, AID-HELP-013,
+    // AID-NOTIF-002, AID-NOTIF-005, AID-SEARCH-002 — statut, published: false en production,
+    // validatedAt retiré, updatedAt 2026-11-02) et AID-TODO-001 (« V2 » retiré, dates
+    // 2026-11-02) ; puis, sur décision PO du 02/11/2026, 6 autres bloqués (AID-NOTIF-001,
+    // AID-NOTIF-004, AID-DOC-009, AID-SEARCH-001, AID-TODO-002, AID-HELP-001 : faits faux de l'audit
+    // docs/aide/audit-2026-11-02.md). Le test reste un garde-fou contre une modification NON voulue du catalogue.
+    // Chantier 105Q (audit Bing du 02/11/2026) : seoTitle de 12 articles publiés raccourci
+    // (AID-DUO-005, AID-SEARCH-003, AID-AI-003, AID-DOC-005, AID-HELP-006, AID-AI-005,
+    // AID-BILL-011, AID-SEARCH-004, AID-DOSSIER-008, AID-DUO-006, AID-HELP-010, AID-HELP-003) :
+    // le catalogue ne porte pas le seoTitle, mais leurs updatedAt et validatedAt passent au
+    // 2026-11-02 (EDITOR-02 / D-O : modification datée, libellés validés au ticket) — seule
+    // différence du catalogue. Anciennes empreintes : 7b548e15… (production), 1934745a… (préproduction).
+    expect(sha(prod)).toBe('d83a094c335668d7ab6530f37fd9b3a4b715587b9ca4b3023a7943b5ad9bcd91')
+    expect(sha(pre)).toBe('649b2900fafed892a9985cfcf411d104610bbbd028df33e95e9b72cae598445c')
   })
 
   it('Ressources : routes publiées identiques à la base lot53pv7', () => {

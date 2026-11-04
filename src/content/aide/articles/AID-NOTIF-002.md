@@ -20,10 +20,10 @@ canonical: /aide/activer-push-appareils
 indexable: true
 lang: fr-FR
 synonyms: [notifications, push, appareil, activer, appareils, notification, alerte, email, rappel]
-status: published
-validatedAt: 2026-10-05
+status: blocked
+blocker: Lot 105P : décrit le push Web (autorisation du navigateur, ajout à l’écran d’accueil sur iPhone), supprimé au lot 94. Le push n’existe que dans les applications iOS et Android. Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Le push nécessite l’autorisation du navigateur ou du système. Un appareil n’est considéré comme autorisé qu’après que vous avez accepté la demande de permission.

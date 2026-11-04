@@ -14,16 +14,16 @@ screens: [Mon abonnement, Parrainage]
 objectTypes: [abonnement, récompense]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-BILL-010]
-seoTitle: Comprendre l’application des mois offerts de parrainage | Aide Verebona
+seoTitle: Mois offerts : échéances et parrainage | Aide Verebona
 metaDescription: Comprendre comment les récompenses de parrainage modifient les échéances selon la périodicité du parrain.
 canonical: /aide/mois-offerts-parrainage
 indexable: true
 lang: fr-FR
 synonyms: [parrainage, récompense, application, mois, offerts, abonnement, offre, plan, facture, paiement]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Chaque parrainage validé donne un mois offert au parrain sur son abonnement courant. La façon de matérialiser cet avantage dépend de la périodicité de l’abonnement du parrain, pas de celle du filleul au moment où la récompense est appliquée.

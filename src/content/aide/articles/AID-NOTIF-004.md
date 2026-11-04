@@ -20,10 +20,10 @@ canonical: /aide/recapitulatif-a-traiter
 indexable: true
 lang: fr-FR
 synonyms: [notifications, à traiter, récapitulatif, traiter, notification, alerte, push, email, rappel]
-status: published
-validatedAt: 2026-09-26
+status: blocked
+blocker: Lot 105P : annonce le récapitulatif e-mail activé par défaut et des alertes immédiates ; récapitulatif désactivé par défaut, alertes immédiates supprimées (lot 79C). Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 La catégorie « À traiter » peut envoyer un récapitulatif quotidien prévu à 8 h 30. Par défaut, l’e-mail de récapitulatif est activé par défaut et le push de récapitulatif désactivé. Les notifications immédiates de cette catégorie sont désactivées par défaut.

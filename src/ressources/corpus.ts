@@ -14,8 +14,12 @@
  *     intention UNIQUES (ADM-03, SEO-10, T07, T08) ;
  *   · corps : aucun HTML, H2 uniques, introduction, checklist, FAQ
  *     (au plus deux questions, §17), transition Verebona, sources ;
- *   · liens internes : vers une page Ressources existante, l'aide ou
- *     l'accueil ; liens externes et sources en HTTPS (SEC-06) ;
+ *   · liens internes : vers une page Ressources existante ou l'accueil
+ *     SEULEMENT ; liens externes et sources en HTTPS (SEC-06) ;
+ *   · séparation des corpus (lot 105P, décision PO) : aucun lien vers le
+ *     Centre d'aide (/aide, ses sous-chemins, ou son adresse absolue) et
+ *     aucune mention « Centre d'aide », nulle part (métadonnées, corps,
+ *     tableaux, sources, catégories) — voir `helpCenterMentions` ;
  *   · articles liés : 2 ou 3, existants, sans auto-référence (§7, ED-08).
  * Pour un article PUBLIÉ en plus (ADM-08, ED-09) : date de revue,
  * responsable, au moins une source, liés eux-mêmes publiés. La date de
@@ -24,6 +28,7 @@
  * Archivé : décision 410 ou 301 vers un article publié (ADM-07), et plus
  * aucun article publié ne pointe vers lui.
  */
+import { SITE_TITLE_SUFFIX, effectiveSeoTitle } from '../config/seo-title.rules'
 import { parseFrontmatter, type FrontmatterValue } from '../help/frontmatter'
 import { linksOfBlocks, parseRessourceBody } from './markdown'
 import {
@@ -50,15 +55,54 @@ export interface RessourceLoadResult extends RessourceCorpus {
 export const RESSOURCES_PREFIX = '/ressources'
 export const articlePath = (slug: string) => `${RESSOURCES_PREFIX}/${slug}`
 
-const REQUIRED = ['id', 'slug', 'category', 'status', 'priority', 'h1', 'seoTitle', 'metaDescription', 'intent', 'boundary', 'related', 'reviewOwner', 'revision', 'revisionNote'] as const
-const OPTIONAL = ['reviewedAt', 'publishedAt', 'updatedAt', 'redirectFrom', 'archive'] as const
+const REQUIRED = ['id', 'slug', 'category', 'status', 'priority', 'h1', 'metaDescription', 'intent', 'boundary', 'related', 'reviewOwner', 'revision', 'revisionNote'] as const
+// `seoTitle` facultatif (chantier 105Q) : absent, repli « H1 | Verebona »
+// (`src/config/seo-title.rules.ts`), contrôlé comme les autres pour l'unicité.
+const OPTIONAL = ['seoTitle', 'reviewedAt', 'publishedAt', 'updatedAt', 'redirectFrom', 'archive'] as const
 const KNOWN = new Set<string>([...REQUIRED, ...OPTIONAL])
 
 const ID = /^[A-Z]\d{2}$/
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const DATE = /^\d{4}-\d{2}-\d{2}$/
-/** Liens internes admis hors Ressources : accueil, Centre d'aide (NAV-06). */
-const OTHER_INTERNAL = /^\/(?:$|aide(?:\/[a-z0-9-]+)?$)/
+/**
+ * Liens internes admis hors Ressources : l'accueil seul. Le Centre d'aide
+ * (/aide et sous-chemins) en est RETIRÉ (lot 105P, ticket Ressources §2
+ * « NAV / séparation des corpus », décision PO) : les Ressources sont
+ * autonomes et ne renvoient jamais vers les procédures produit.
+ */
+const OTHER_INTERNAL = /^\/$/
+
+/**
+ * Séparation des corpus Ressources / Centre d'aide (lot 105P) — règles
+ * centralisées, appliquées au texte BRUT de chaque fichier (métadonnées,
+ * corps, cellules de tableau, sources) et aux catégories :
+ *   · lien relatif /aide, /aide/…, /aide?…, /aide#… ;
+ *   · adresse absolue vers /aide d'un domaine Verebona (site, préproduction) ;
+ *   · mention « Centre d'aide » / « help center ».
+ * Le verbe « aider » (« peut aider ») n'est pas visé : seul un chemin /aide
+ * précédé d'une barre oblique, ou l'expression complète, est refusé.
+ */
+const HELP_CENTER_RULES: ReadonlyArray<{ re: RegExp; label: string }> = [
+  { re: /(?:^|[\s(\[<"'`=])\/aide(?=$|[\s/?#)\]>"'`.,;:])/gm, label: 'lien vers le Centre d’aide (/aide)' },
+  { re: /https?:\/\/(?:[a-z0-9-]+\.)*verebona\.[a-z]+\/aide(?=$|[\s/?#)\]>"'`.,;:])/gim, label: 'adresse du Centre d’aide' },
+  { re: /centre\s+d['’]\s?aide|help\s*cent(?:er|re)/gi, label: 'mention du Centre d’aide' },
+]
+
+/** Occurrences interdites (séparation des corpus) dans un texte, avec leur libellé. */
+export function helpCenterMentions(text: string): string[] {
+  const found: string[] = []
+  for (const { re, label } of HELP_CENTER_RULES) {
+    for (const m of text.matchAll(re)) found.push(`${label} : « ${m[0].trim()} »`)
+  }
+  return found
+}
+
+/** Un href mène-t-il au Centre d'aide (relatif ou absolu sur un domaine Verebona) ? */
+export function isHelpCenterHref(href: string): boolean {
+  const h = href.trim()
+  if (/^\/aide(?:$|[/?#])/.test(h)) return true
+  return /^https?:\/\/(?:[a-z0-9-]+\.)*verebona\.[a-z]+\/aide(?:$|[/?#])/i.test(h)
+}
 
 const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[’']/g, ' ').replace(/\|\s*verebona\s*$/, '').replace(/[^a-z0-9]+/g, ' ').trim()
 
@@ -99,6 +143,7 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
         issue('categories.json', null, 'categories', `Catégorie mal formée : ${JSON.stringify(c)}.`)
         continue
       }
+      for (const m of helpCenterMentions(`${c.name}\n${c.intro}`)) issue('categories.json', null, 'categories', `Catégorie ${c.slug} — ${m} : les Ressources ne renvoient pas vers le Centre d’aide (lot 105P).`)
       categories.push({ slug: c.slug, name: c.name, intro: c.intro, order: c.order })
     }
   }
@@ -111,6 +156,9 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
     const fileId = /([A-Z]\d{2})\.md$/.exec(f.path)?.[1] ?? null
     errors.forEach((e) => issue(f.path, fileId, 'frontmatter', e))
     for (const k of Object.keys(data)) if (!KNOWN.has(k)) issue(f.path, fileId, k, `Métadonnée inconnue « ${k} ».`)
+    // Lot 105P : contrôle sur le fichier ENTIER (métadonnées, corps, tableaux,
+    // sources, related éventuels), quel que soit le statut de l'article.
+    for (const m of helpCenterMentions(f.raw)) issue(f.path, fileId, 'aide', `${m} — interdit dans les Ressources, autonomes du Centre d’aide (lot 105P, décision PO).`)
 
     const str = (k: string): string | null => {
       const v: FrontmatterValue | undefined = data[k]
@@ -161,7 +209,7 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
 
     articles.push({
       id, slug, path: articlePath(slug), category, status, priority,
-      h1: str('h1') ?? '', seoTitle: str('seoTitle') ?? '', metaDescription: str('metaDescription') ?? '',
+      h1: str('h1') ?? '', seoTitle: effectiveSeoTitle(str('seoTitle'), str('h1') ?? '', SITE_TITLE_SUFFIX), metaDescription: str('metaDescription') ?? '',
       intent: str('intent') ?? '', boundary: str('boundary') ?? '',
       intro: parsed.intro, sections: parsed.sections, checklist: parsed.checklist, example: parsed.example,
       faq: parsed.faq, cta: parsed.cta, sources: parsed.sources,
@@ -229,6 +277,7 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
     if (a.faq.length > 2) at('body', `FAQ : ${a.faq.length} questions, deux au plus (§17).`)
     if (a.cta.length === 0) at('body', '« Et avec Verebona ? » absent (§17).')
     for (const s of a.sources) if (!s.url.startsWith('https://')) at('sources', `Source non HTTPS : ${s.url} (SEC-06).`)
+    for (const s of a.sources) if (isHelpCenterHref(s.url)) at('sources', `Source vers le Centre d’aide refusée : ${s.url} (lot 105P).`)
 
     const liens = [
       ...linksOfBlocks(a.intro), ...a.sections.flatMap((s) => linksOfBlocks(s.blocks)),
@@ -236,6 +285,7 @@ export function loadRessources(files: RessourceSourceFile[], categoriesJson: unk
       ...a.checklist.flat().filter((i) => i.kind === 'link').map((i) => (i as { href: string }).href),
     ]
     for (const href of liens) {
+      if (isHelpCenterHref(href)) { at('body', `Lien vers le Centre d’aide refusé : ${href} — les Ressources sont autonomes (lot 105P).`); continue }
       if (href.startsWith('/')) { if (!pathOk(href)) at('body', `Lien interne cassé : ${href} (SEO-08).`) }
       else if (!href.startsWith('https://')) at('body', `Lien externe non HTTPS ou mal formé : ${href} (SEC-06).`)
     }

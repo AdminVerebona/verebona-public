@@ -1,0 +1,13 @@
+{
+  "description": "Termes interdits dans le contenu juridique servi (pages /legal/… et textes figés des CGUV du site). Règles adaptables : « pattern » est une expression régulière JavaScript, « flags » ses options (jamais « g »). Les archives reprises de l'application ne sont pas contrôlées : leurs octets ne changent jamais.",
+  "forbidden": [
+    { "pattern": "\\bCGSU\\b", "flags": "i", "reason": "terme unique : CGUV" },
+    { "pattern": "\\bCGVU\\b", "flags": "i", "reason": "terme unique : CGUV" },
+    { "pattern": "\\bCGU\\b", "flags": "", "reason": "terme unique : CGUV" },
+    { "pattern": "Standard\\s+gratuit", "flags": "i", "reason": "l'offre Standard est payante (catalogue Standard, Premium, Premium Duo)" },
+    { "pattern": "\\bPro\\b", "flags": "", "reason": "offre « Pro » inexistante" },
+    { "pattern": "Contact\\s+DPO", "flags": "i", "reason": "aucun DPO désigné : « Contact protection des données (dpo@verebona.com) »" },
+    { "pattern": "(?<!\\d)2025(?!\\d)", "flags": "", "reason": "date obsolète" },
+    { "pattern": "25/09/2026", "flags": "", "reason": "date obsolète de l'ancienne politique de confidentialité" }
+  ]
+}

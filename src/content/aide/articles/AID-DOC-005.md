@@ -14,16 +14,16 @@ screens: [Mes documents, Détail document, À traiter]
 objectTypes: [document, bien, pièce, équipement]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-TODO-004, AID-AI-003]
-seoTitle: Comprendre le classement et le rattachement d’un document | Aide Verebona
+seoTitle: Classer et rattacher un document | Aide Verebona
 metaDescription: Savoir comment un document est classé et lié au bon bien.
 canonical: /aide/classement-rattachement-document
 indexable: true
 lang: fr-FR
 synonyms: [documents, classement, rattachement, document, fichier, justificatif, pièce, upload, import]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Le classement décrit la fonction documentaire ; le rattachement indique à quel bien le document se rapporte. Ce sont deux décisions distinctes. Un document peut être correctement classé mais encore nécessiter un rattachement, ou inversement.

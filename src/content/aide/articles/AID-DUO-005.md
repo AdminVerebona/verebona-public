@@ -14,16 +14,16 @@ screens: [Mon abonnement, Duo récupération]
 objectTypes: [compte Duo, bien]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-TRANSFER-007, AID-DUO-006, AID-BILL-004]
-seoTitle: Que se passe-t-il lors d’un downgrade ou d’un impayé Duo ? | Aide Verebona
+seoTitle: Premium Duo : impayé ou changement d’offre | Aide Verebona
 metaDescription: Comprendre les conséquences d’une sortie de Premium Duo ou d’un défaut de paiement.
 canonical: /aide/downgrade-impaye-duo
 indexable: true
 lang: fr-FR
 synonyms: [duo, downgrade, impayé, passe, lors, partage, second utilisateur, membre, invitation]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Quitter Premium Duo, que ce soit vers Premium ou vers Standard, met fin au partage : le second utilisateur perd l’accès à l’espace du titulaire. En cas d’impayé, le Duo est restreint dès l’échec du paiement et passe directement en mode récupération.

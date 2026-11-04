@@ -14,16 +14,16 @@ screens: [Mes biens, Mes documents, Mon abonnement]
 objectTypes: [compte, bien, document]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-BILL-001, AID-BILL-002, AID-BILL-008]
-seoTitle: Je ne peux plus ajouter ou modifier un bien ou un document | Aide Verebona
+seoTitle: Ajout ou modification bloqués | Aide Verebona
 metaDescription: Comprendre un blocage lié à l’essai, à l’abonnement ou aux quotas.
 canonical: /aide/ecriture-bloquee
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, quota, abonnement, peux, plus, ajouter, bien, document, problème, erreur]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Verebona contrôle vos droits de modification. Un compte peut devenir consultable mais non modifiable après la fin de l’essai, une résiliation ou certaines restrictions. Un quota atteint bloque la création ; un quota dépassé après changement d’offre peut bloquer les modifications.

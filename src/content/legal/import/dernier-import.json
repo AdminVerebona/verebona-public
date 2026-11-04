@@ -1,0 +1,117 @@
+{
+  "schema": "verebona-legal-import-v1",
+  "source": {
+    "fichier": "corpus-juridique-2026-10-30.md",
+    "format": "markdown",
+    "sha256": "2f5a09d1233a5f933e097c0fb3c7b6f85ea27ac70c865d691d18c819139de860",
+    "octets": 63763
+  },
+  "niveauBloc": 2,
+  "titreDeBloc": "retirer",
+  "blocs": [
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « MENTIONS LÉGALES »",
+      "cible": "mentions-legales"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « CGUV » — PARTIE 1/2",
+      "cible": "cguv"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « CGUV » — PARTIE 2/2",
+      "cible": "cguv"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « CONFIDENTIALITÉ » — PARTIE 1/2",
+      "cible": "confidentialite"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « CONFIDENTIALITÉ » — PARTIE 2/2",
+      "cible": "confidentialite"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « SOUS-TRAITANTS ET PRESTATAIRES »",
+      "cible": "sous-traitants"
+    },
+    {
+      "titre": "CONTENU À INTÉGRER — ONGLET « PARRAINAGE »",
+      "cible": "parrainage"
+    }
+  ],
+  "cibles": {
+    "mentions-legales": {
+      "blocsSource": [
+        "CONTENU À INTÉGRER — ONGLET « MENTIONS LÉGALES »"
+      ],
+      "mots": 492,
+      "texteSha256": "92412d26414f89faae4a5389e902f15248efc9ca02346ca1dfad56697d5d7f89",
+      "fichier": "src/content/legal/mentions-legales.html"
+    },
+    "cguv": {
+      "blocsSource": [
+        "CONTENU À INTÉGRER — ONGLET « CGUV » — PARTIE 1/2",
+        "CONTENU À INTÉGRER — ONGLET « CGUV » — PARTIE 2/2"
+      ],
+      "mots": 3300,
+      "texteSha256": "cebe8921bdc9306389f4c382189a2ca227ec68edfa2e45c400442b91ae9a6248",
+      "fichier": "src/content/legal/cguv/versions/2026-10-30-v1.html",
+      "version": "2026-10-30-v1"
+    },
+    "confidentialite": {
+      "blocsSource": [
+        "CONTENU À INTÉGRER — ONGLET « CONFIDENTIALITÉ » — PARTIE 1/2",
+        "CONTENU À INTÉGRER — ONGLET « CONFIDENTIALITÉ » — PARTIE 2/2"
+      ],
+      "mots": 2920,
+      "texteSha256": "b008b945487dbc028e11076c03fbd12fca4283a69668e27cb01cc02c4056f75f",
+      "fichier": "src/content/legal/confidentialite.html"
+    },
+    "sous-traitants": {
+      "blocsSource": [
+        "CONTENU À INTÉGRER — ONGLET « SOUS-TRAITANTS ET PRESTATAIRES »"
+      ],
+      "mots": 754,
+      "texteSha256": "08621cfa60cbe97e75925bee5c77124a25a38e51f474b57693cc4557338141c9",
+      "fichier": "src/content/legal/sous-traitants.html"
+    },
+    "parrainage": {
+      "blocsSource": [
+        "CONTENU À INTÉGRER — ONGLET « PARRAINAGE »"
+      ],
+      "mots": 759,
+      "texteSha256": "0d3457792dcca05b3609f97e2026e69fa3cca8133c6788bb9d6a677c26e1d3d2",
+      "fichier": "src/content/legal/parrainage.html"
+    }
+  },
+  "fidelite": {
+    "ok": true,
+    "parContenu": {
+      "mentions-legales": {
+        "mots": 492,
+        "ok": true
+      },
+      "cguv": {
+        "mots": 3300,
+        "ok": true
+      },
+      "confidentialite": {
+        "mots": 2920,
+        "ok": true
+      },
+      "sous-traitants": {
+        "mots": 754,
+        "ok": true
+      },
+      "parrainage": {
+        "mots": 759,
+        "ok": true
+      }
+    }
+  },
+  "commentairesIgnores": 0,
+  "texteIgnore": [
+    "préambule (avant le premier bloc) : Verebona — Corpus juridique de référence (30 octobre 2026) Source : ticket Trello 607 — https://trello.com/c/n6RWdZe1 Version CGUV : 2026-10-30-v1. Règle de livraison : cinq contenus à publier sur le site public Verebona ; aucun texte juridique servi par l’application. Les sept blocs ci-dessous reproduisent les sept commentaires juridiques du ticket 607, dans leur ordre logique, sans reformulation. Navigation attendue : Mentions légales · CGUV · Confidentialité · Sous-traitants et prestataires · Parrainage. Consultation : seule la version courante des CGUV apparaît en navigation publique ; les versions antérieures n’ont pas besoin d’un index public mais doivent rester consultables par URL directe pour les utilisateurs qui les ont acceptées. Les archives ne doivent jamais être modifiées ; reprise identique et vérifiée par SHA-256 des versions héritées."
+  ],
+  "avertissements": [],
+  "importeLe": "2026-11-03T16:03:52.852Z"
+}

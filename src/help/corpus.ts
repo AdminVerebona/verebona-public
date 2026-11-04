@@ -23,6 +23,8 @@ import {
   AUTH_STATES, LANGS, OBJECT_TYPES, OFFERS, PERMISSIONS, PLATFORMS, RESERVED_SLUGS, ROLES, SCREENS, STATUSES,
 } from './referentials'
 import type { BuildIssue, HelpArticle, HelpCategory } from './types'
+import { CONTENT_RULE_EXCEPTIONS, checkContentRules, quote, type ContentRuleException } from './content-rules'
+import { HELP_TITLE_SUFFIX, effectiveSeoTitle } from '../config/seo-title.rules'
 
 export interface SourceFile {
   /** Chemin relatif à la racine du dépôt. */
@@ -49,6 +51,8 @@ const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/
 // corpus de l'assistant. Aucun article ne parle de typologie de logement
 // (« T3 ») : le faux positif est accepté plutôt qu'une fuite du jargon interne.
 const INTERNAL_CODES = /\bT[1-5]\b/i
+// Règles du lot 105P (vidéo 500 Mo, push Web, 2FA, jargon « V2 »…) :
+// `content-rules.ts`, qui centralise et documente chaque interdiction.
 // GAP-15 (passe éditoriale) : formulations de rédaction interne reprises du
 // CDC (« route d'import actuelle », « l'ancienne aide mentionnait… », « à
 // confirmer à la recette », « dans la cible », codes d'état en MAJUSCULES…).
@@ -72,16 +76,18 @@ const EDITORIAL_NOTES: ReadonlyArray<[RegExp, string]> = [
 // du préfixe dans une consigne (« remplacez webcal:// par https:// »).
 const SECRET_HINTS = /(webcal:\/\/[a-z0-9]|[?&](token|key|signature|sig)=|\bsk_(live|test)_)/i
 
+// `seoTitle` n'est plus obligatoire (chantier 105Q) : absent, le titre SEO est
+// un repli court construit sur le H1 (`src/config/seo-title.rules.ts`).
 const REQUIRED_TEXT = [
   'id', 'title', 'slug', 'category', 'summary', 'rolesLabel', 'permissions',
-  'seoTitle', 'metaDescription', 'canonical', 'lang', 'status',
+  'metaDescription', 'canonical', 'lang', 'status',
 ] as const
 const REQUIRED_LIST = [
   'tags', 'offers', 'roles', 'platforms', 'authState', 'screens', 'objectTypes',
   'relatedArticles', 'synonyms',
 ] as const
 const KNOWN = new Set<string>([
-  ...REQUIRED_TEXT, ...REQUIRED_LIST, 'indexable', 'offersNote', 'blocker', 'redirectFrom', 'updatedAt',
+  ...REQUIRED_TEXT, ...REQUIRED_LIST, 'seoTitle', 'indexable', 'offersNote', 'blocker', 'redirectFrom', 'updatedAt',
   // Contrat de publication (CDC Assistant §10.3, D-O).
   'validatedAt', 'allowedRoutes', 'allowedActions', 'appVersion',
 ])
@@ -89,8 +95,14 @@ const KNOWN = new Set<string>([
 /** Date de repli (EDITOR-02) : jour calendaire ISO, sans heure. */
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 
-export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadResult {
+export function loadCorpus(
+  files: SourceFile[],
+  categoriesJson: unknown,
+  contentExceptions: readonly ContentRuleException[] = CONTENT_RULE_EXCEPTIONS,
+): LoadResult {
   const issues: BuildIssue[] = []
+  const usedExceptions = new Set<ContentRuleException>()
+  const publishedIds = new Set<string>()
   const categories = readCategories(categoriesJson, issues)
   const catSlugs = new Set(categories.map((c) => c.slug))
   const articles: HelpArticle[] = []
@@ -138,7 +150,8 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
       objectTypes: list('objectTypes', true),
       permissions: text('permissions'),
       relatedArticles: list('relatedArticles'),
-      seoTitle: text('seoTitle'),
+      // Titre SEO indépendant du H1 ; repli « H1 | Aide Verebona » (105Q).
+      seoTitle: effectiveSeoTitle(optText('seoTitle'), typeof data.title === 'string' ? data.title : '', HELP_TITLE_SUFFIX),
       metaDescription: text('metaDescription'),
       canonical: text('canonical'),
       indexable: readBool(data.indexable, () => report('indexable', 'Obligatoire (true ou false).', id)),
@@ -240,6 +253,16 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
       for (const [re, label] of EDITORIAL_NOTES) {
         if (re.test(visible)) report('content', `Formulation de rédaction interne ${label} interdite dans un article publié (GAP-15).`, id)
       }
+      // Lot 105P — règles centralisées (`content-rules.ts`) : vidéo 500 Mo,
+      // push Web / navigateur / PWA, double authentification, jargon interne.
+      // Texte vu par le lecteur ET par l'Assistant (tags, synonymes, SEO).
+      const lu = [visible, meta.seoTitle, meta.tags.join(', '), meta.synonyms.join(', ')].join('\n')
+      const rules = checkContentRules(meta.id, lu, contentExceptions)
+      rules.usedExceptions.forEach((e) => usedExceptions.add(e))
+      for (const f of rules.findings) {
+        report('content', `Interdit dans un article publié — ${f.rule.label} : « ${quote(f.sentence)} ». ${f.rule.reference} Corriger le texte, ou passer l’article en « blocked » avec son motif (lot 105P).`, id)
+      }
+      publishedIds.add(meta.id)
     }
 
     articles.push({
@@ -256,6 +279,14 @@ export function loadCorpus(files: SourceFile[], categoriesJson: unknown): LoadRe
   }
 
   checkCrossReferences(articles, issues)
+  // Exception de règle devenue inutile : elle masquerait une future erreur.
+  for (const e of contentExceptions) {
+    if (!publishedIds.has(e.articleId) || usedExceptions.has(e)) continue
+    issues.push({
+      source: 'src/help/content-rules.ts', articleId: e.articleId, field: 'content',
+      message: `Exception « ${e.rule} » inutile (extrait « ${e.excerpt} » absent ou conforme) : la retirer de CONTENT_RULE_EXCEPTIONS.`,
+    })
+  }
   articles.sort(compareArticles(categories))
   return { articles, categories, issues }
 }

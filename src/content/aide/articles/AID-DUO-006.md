@@ -14,16 +14,16 @@ screens: [Mon abonnement]
 objectTypes: [membership, compte]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-DUO-004, AID-DUO-002, AID-DUO-005]
-seoTitle: Retirer le second utilisateur ou quitter un espace partagé | Aide Verebona
+seoTitle: Quitter le Duo ou retirer un membre | Aide Verebona
 metaDescription: Retirer le second utilisateur d’un Premium Duo, ou quitter un Duo dont on n’est pas titulaire.
 canonical: /aide/quitter-retirer-duo
 indexable: true
 lang: fr-FR
 synonyms: [duo, membre, sortie, retirer, second, utilisateur, quitter, espace, partagé, partage]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Le titulaire d’un Premium Duo peut retirer le second utilisateur, et le second utilisateur peut quitter le Duo à tout moment. Dans les deux cas, l’accès à l’espace partagé cesse, sans que les biens de cet espace soient supprimés.

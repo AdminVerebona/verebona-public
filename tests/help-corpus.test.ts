@@ -47,7 +47,8 @@ describe('corpus du Centre d\'aide', () => {
   })
 
   it('refuse une note de rédaction interne dans un article publié (GAP-15)', () => {
-    const issues = withRaw('AID-DOC-003', (raw) => `${raw}\nLa taille reste à confirmer à la recette dans la route d’import actuelle.\n`)
+    // Lot 105P : AID-DOC-003 est bloqué (règles non appliquées) — article publié pris à la place.
+    const issues = withRaw('AID-DOC-001', (raw) => `${raw}\nLa taille reste à confirmer à la recette dans la route d’import actuelle.\n`)
     expect(issues.filter((i) => i.message.includes('GAP-15')).length).toBeGreaterThanOrEqual(2)
   })
 
@@ -74,13 +75,13 @@ describe('corpus du Centre d\'aide', () => {
     expect(raw).not.toMatch(/seront (conservés|conservées)|supprimées ou conservées/)
   })
 
-  it('publie la suppression du compte différée de 30 jours (AID-ACCOUNT-006)', () => {
+  it('publie la suppression du compte sous 24 heures (AID-ACCOUNT-006, lot 104 : aligné sur l’application)', () => {
     const a = result.articles.find((x) => x.id === 'AID-ACCOUNT-006')!
     expect(a.status).toBe('published')
     expect(a.blocker).toBeNull()
     expect(a.relatedArticles).not.toContain('AID-TRANSFER-006') // encore bloqué : pas de lien mort
     const raw = files.find((f) => f.path.endsWith('/AID-ACCOUNT-006.md'))!.raw
     expect(raw).toContain('**clôturé**')
-    expect(raw).toContain('**supprimé définitivement 30 jours plus tard**')
+    expect(raw).toContain('**supprimé définitivement sous 24 heures**')
   })
 })

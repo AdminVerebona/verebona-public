@@ -403,6 +403,9 @@
   ],
   "blockedRows": {
     "Compte restreint": "AID-TRANSFER-006 bloqué jusqu’à la recette du cycle d’impayé de 90 jours (GAP-06).",
-    "Impayé": "AID-BILL-008 et AID-TRANSFER-006 bloqués jusqu’à la recette du cycle d’impayé de 90 jours (GAP-06)."
+    "Impayé": "AID-BILL-008 et AID-TRANSFER-006 bloqués jusqu’à la recette du cycle d’impayé de 90 jours (GAP-06).",
+    "Import document": "AID-DOC-003 et AID-HELP-004 bloqués au lot 105P : limite vidéo « 500 Mo » fausse (réel : 25 Mo par document, 100 Mo par vidéo, 10 fichiers et 100 Mo par dépôt). Textes corrigés attendus du PO.",
+    "Recherche globale": "AID-SEARCH-001, AID-SEARCH-002 et AID-HELP-007 bloqués au lot 105P : recherche locale dite absente, repli intelligent promis (inexistant), filtres obsolètes. Textes corrigés attendus du PO.",
+    "Notifications - incident": "AID-NOTIF-005 et AID-HELP-013 bloqués au lot 105P : ils renvoient au push du navigateur, supprimé (push natif iOS/Android seulement). Textes corrigés attendus du PO."
   }
 }

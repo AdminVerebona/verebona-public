@@ -87,9 +87,6 @@ export function useNav() {
   const goHome = () => { closeMenu(); router.push('/') }
   const goAide = () => { closeMenu(); router.push('/aide') }
   const goContact = () => { closeMenu(); router.push('/contact') }
-  const goMentions = () => { closeMenu(); router.push('/mentions-legales') }
-  const goCGU = () => { closeMenu(); router.push('/cgu') }
-  const goConfid = () => { closeMenu(); router.push('/confidentialite') }
 
   const navHow = () => goToAnchor('how')
   const navFeatures = () => goToAnchor('features')
@@ -99,7 +96,7 @@ export function useNav() {
 
   return {
     menuOpen, toggleMenu, closeMenu, link, anchor,
-    goHome, goAide, goContact, goMentions, goCGU, goConfid,
+    goHome, goAide, goContact,
     navHow, navFeatures, navPricing, navFaq, navCasUsage,
   }
 }

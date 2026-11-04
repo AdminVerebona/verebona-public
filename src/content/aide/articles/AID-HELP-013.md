@@ -20,10 +20,10 @@ canonical: /aide/depannage-notifications
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, notifications, reçois, pas, problème, erreur, support, aide, incident]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : mentionne un push bloqué par le navigateur, alors que le push n’existe que dans les applications iOS et Android (lot 94). Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Si une notification attendue n’arrive pas, vérifiez à la fois la préférence Verebona, l’autorisation de l’appareil et le déclencheur métier. Les réglages sont individuels en Premium Duo.

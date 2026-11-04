@@ -20,11 +20,11 @@ canonical: /aide/utiliser-recherche-globale
 indexable: true
 lang: fr-FR
 synonyms: [recherche, navigation, globale, chercher, trouver, filtre, résultat]
-status: published
-validatedAt: 2026-10-05
+status: blocked
+blocker: Lot 105P : affirme l’absence de recherche par écran et un repli intelligent ; recherches locales Documents et Agenda (lot 97C), aucun repli intelligent. Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
 redirectFrom: [/aide/utiliser-la-recherche]
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 La recherche générale de l’application évite de dupliquer un champ de recherche dans chaque écran. Elle recherche d’abord dans les données structurées accessibles à votre compte et peut, selon l’offre et le contexte, utiliser un repli intelligent si aucun résultat classique n’est trouvé.

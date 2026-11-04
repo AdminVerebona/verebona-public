@@ -87,6 +87,8 @@ Retour arrière (avant l'ouverture seulement) : remettre `prelaunch_fixed`, rebu
 | `CANONICAL_HOST=www.verebona.fr` | **production uniquement — à définir chez l'hébergeur** (aucun fichier du dépôt ne la porte) | une seule 301 de `http://…` et de l'apex `verebona.fr` vers `https://www.verebona.fr` + chemin + query. Vérifier après déploiement : `curl -sI http://verebona.fr/` → `301 Location: https://www.verebona.fr/`. **Jamais en préproduction** (elle redirigerait vers la production). |
 | `BASIC_AUTH_ENABLED=true`, `BASIC_AUTH_USER`, `BASIC_AUTH_PASSWD` | préproduction | Basic Auth (les JSON d'aide restent lisibles par l'application) |
 | `PORT` | partout | port d'écoute (3000 par défaut) |
+| `INDEXNOW_KEY` | **production uniquement — à définir chez l'hébergeur** (jamais dans le dépôt) | clé IndexNow (8 à 128 caractères `a-z A-Z 0-9 -`) : servie à `/<clé>.txt` et utilisée pour notifier les URL publiques modifiées après chaque déploiement. Absente : IndexNow inactif. Ignorée hors production. Voir `docs/seo/indexnow.md`. |
+| `INDEXNOW_ENABLED=false`, `INDEXNOW_DELAY_SECONDS` | production (facultatif) | coupe la notification sans retirer la clé ; délai avant l'envoi (120 s par défaut) |
 
 ### Cache HTTP et versions déployées (PUB-PERF-01, PUB-PERF-04)
 
@@ -163,7 +165,7 @@ src/
     useLanding.ts         état/logique de la home (carrousel mockup, accordéons FAQ & cas d'usage)
     useContact.ts         formulaire de contact : sujet, validation, envoi à l'API
     usePricing.ts         prix et périodicité des offres
-    useLegal.ts           onglets de la page légale (dérivés de la route)
+    useLegal.ts           onglets de la rubrique « Légal » (dérivés de la route, contenus de virtual:legal)
   components/
     AppHeader.vue         header non fixe (logo 34 px) + menu mobile
     VbLogo.vue, VbIcon.vue logo (§3 de la charte) et icônes linéaires (icons.ts)
@@ -187,7 +189,7 @@ src/
     HomeView.vue          assemble les sections de la home
     help/                 /aide, /aide/theme/:category, /aide/:slug
     ContactView.vue       /contact
-    LegalView.vue         /mentions-legales, /cgu, /confidentialite
+    LegalView.vue         /legal/… (5 onglets) et /legal/cguv/versions/:code
     NotFoundView.vue      404
 ```
 
@@ -200,15 +202,15 @@ src/
 | `/ressources`, `/ressources/:slug` | views/ressources/* | Ressources (guides pratiques publics) |
 | `/contact`          | ContactView  | formulaire → `/api/contact` de l'application |
 | `/inscription`      | —            | redirection vers l'inscription de l'app (FULL) ou l'accueil (PRELAUNCH) |
-| `/mentions-legales` | LegalView    | onglet Mentions légales |
-| `/cgu`              | LegalView    | onglet CGSU             |
-| `/confidentialite`  | LegalView    | onglet Confidentialité  |
+| `/legal/mentions-legales`, `/legal/cguv`, `/legal/confidentialite`, `/legal/sous-traitants`, `/legal/parrainage` | LegalView | un onglet chacun (textes : `src/content/legal/`) |
+| `/legal/cguv/versions/:code` | LegalView | permalien d'une version des CGUV (404 explicite si inconnue) |
+| `/mentions-legales`, `/cgu`, `/confidentialite`, `/legal` | — | anciennes adresses : 301 (serveur) et redirection du routeur |
 | `/:pathMatch(.*)*`  | NotFoundView | 404                     |
 
 - Les chemins sont tenus dans **`src/router/route-paths.ts`** (table pure, seule source) : le routeur, le build (`dist/.site-routes.json`) et l'inventaire des liens la lisent. Ajouter une route = l'ajouter à cette table (un test compare la table au routeur instancié).
 - Les liens **header/footer/menu mobile** utilisent `useNav()` : `link('/aide')` pour les pages, `anchor('how')` pour les 4 sections de l'accueil (Comment ça marche `#how` / Cas d'usage `#cas-usage` / Tarifs `#pricing` / FAQ `#faq`). La cible est **absolue** (`/#how`) : un nouvel onglet ou une navigation sans JavaScript depuis `/aide` atterrit sur la bonne section ; un clic simple défile en douceur.
 - Le **fil d'Ariane** des sous-pages et le lien « Accueil » naviguent via le router.
-- La page **légale** est unique : les 3 onglets sont 3 routes distinctes (bon pour le SEO / partage de liens), l'onglet actif est déduit du chemin dans `useLegal()`.
+- La page **légale** est unique : les 5 onglets sont 5 routes distinctes (URL stables du contrat site ↔ application), l'onglet actif vient de `meta.legalTab`. Voir « Rubrique « Légal » » plus bas et `docs/legal.md`.
 
 ## Anciennes URL, vraies 404 et inventaire des liens (lot 72)
 
@@ -216,7 +218,9 @@ src/
 
 | Adresse | Réponse | Source |
 | --- | --- | --- |
-| route déclarée sans paramètre (`/contact`, `/cgu`…) | 200, coquille SPA | `src/router/route-paths.ts` → `dist/.site-routes.json` |
+| route déclarée sans paramètre (`/contact`…) | 200, coquille SPA | `src/router/route-paths.ts` → `dist/.site-routes.json` |
+| `/legal/…` | pages pré-rendues, textes figés, manifeste des CGUV (voir `docs/legal.md`) | `src/content/legal/` |
+| `/mentions-legales`, `/cgu`, `/confidentialite`, `/legal` | **une** 301 → `/legal/mentions-legales`, `/legal/cguv`, `/legal/confidentialite`, `/legal/mentions-legales` | `src/config/legacy-routes.rules.ts` |
 | `/aide…`, `/ressources…` | règles du Centre d'aide / des Ressources (HTML pré-rendu, 301, 404, 410) | corpus |
 | `/comment-ca-marche` | **une** 301 → `/#how` (query conservée : `/?utm=x#how`) ; en production derrière `CANONICAL_HOST`, `http://verebona.fr/comment-ca-marche` → **une** 301 → `https://www.verebona.fr/#how` | `src/config/legacy-routes.rules.ts` |
 | `/pourquoi-verebona` | 404 (page retirée sans équivalent, ni recréée ni redirigée vers l'accueil) | idem |
@@ -239,6 +243,28 @@ Dérivé du code par `link-inventory.build.ts` (routes du routeur, `id` des sect
 
 `tests/l72p-liens-routes.test.ts` échoue si l'inventaire commité dérive du code (routes, ancres, anciennes URL, liens vers l'application, page du corpus **disparue**). Publier un nouvel article n'impose pas de régénérer.
 
+## Rubrique « Légal » (chantier 104P)
+
+Cinq contenus (Mentions légales, CGUV, Confidentialité, Sous-traitants et
+prestataires, Parrainage) aux URL stables `/legal/…`, CGUV versionnées avec
+permaliens, textes figés servis octet pour octet et manifeste
+`/legal/cguv/versions.json` (contrat : verebona-app,
+`docs/exploitation/contrat-site-public-legal.md`).
+
+- Textes : **`src/content/legal/`**, fournis par le PO et collés tels quels
+  (format : `src/content/legal/README.md`). Aucun texte juridique dans le code.
+- Build : `scripts/publish-legal.mjs` (textes figés puis manifeste, écrit en
+  dernier) et **`scripts/check-legal-texts.mjs`**, bloquant tant qu'un
+  marqueur `<!-- TEXTE-JURIDIQUE-A-FOURNIR -->`, une décision du PO ou un
+  terme interdit subsiste.
+- Procédures : `npm run legal:nouvelle-cguv -- <code>`,
+  `npm run legal:figer-cguv -- <code>`,
+  `node scripts/import-cguv-archive.mjs <fichier> --code <code> --sha256 <empreinte>`.
+- Ordre de mise en ligne, publication d'une version, décision
+  « substantielle » : **`docs/legal.md`**.
+- Variable de build : `VITE_PUBLIC_SITE_URL` (origine des permaliens du
+  manifeste ; `.env.preprod` / `.env.production`).
+
 ## Sitemap et indexation
 
 `https://www.verebona.fr/sitemap.xml` déclare aux moteurs les pages publiques à indexer. CDC _Sitemap XML du site public Verebona_ (V1).
@@ -257,6 +283,13 @@ Dérivé du code par `link-inventory.build.ts` (routes du routeur, `id` des sect
 Le sitemap **n'est pas dérivé du router** : c'est une liste explicite (CDC §8). Le router déclare aussi les pages légales, `/contact` et la redirection `/inscription`, toutes hors périmètre. Seule exception : les pages du Centre d'aide (thèmes et articles publiés), dérivées du corpus au build (CDC Centre d'aide SEO-02) — voir ci-dessous.
 
 Aucun `lastmod`, `changefreq` ni `priority` en V1 (§7). Aucun sitemap n'est produit hors production, et `robots.txt` y passe en `Disallow: /` (§10).
+
+### Audit Bing du 02/11/2026 (chantier 105Q)
+
+- `<title>` des articles d'aide et des Ressources : `seoTitle` du frontmatter, **indépendant du H1** ; absent, repli « H1 | Aide Verebona » (ou « | Verebona » si trop long), jamais tronqué, suffixe jamais doublé (`src/config/seo-title.rules.ts`).
+- `/contact` est pré-rendue (`dist/.pages/contact.html`, H1 « Contacter Verebona ») ; elle reste hors sitemap.
+- Étape de build `scripts/check-seo-html.mjs` : `server.cjs` démarré sur `dist/`, contrôle du HTML servi (200, title, description, H1, canonical, robots, sitemap, 13 titres de l'audit). `npm run check:seo-html -- --json` donne le relevé complet.
+- IndexNow : `docs/seo/indexnow.md`. Recette : `docs/seo/recette-bing-2026-11-02.md`.
 
 ### Maintenir la liste (§11)
 

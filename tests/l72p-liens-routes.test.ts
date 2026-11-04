@@ -20,6 +20,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import { defineComponent, h } from 'vue'
 import { ROUTE_PATHS } from '../src/router/route-paths'
+import { LEGACY_REDIRECTS } from '../src/config/legacy-routes.rules'
 import { checkPublicHref, inventoryDrift, type LinkInventory } from '../src/config/link-inventory.rules'
 import { LINK_INVENTORY_FILE, computeLinkInventory, serializeInventory, sourceFiles } from '../link-inventory.build'
 import { INDEXABLE_PATHS } from '../src/config/sitemap.rules'
@@ -35,11 +36,29 @@ if (process.env.UPDATE_LINK_INVENTORY === '1') writeFileSync(inventoryPath, seri
 const lire = (f: string) => readFileSync(path.join(root, f), 'utf8')
 
 describe('L72P-INV-01 — inventaire dérivé du code, commité et à jour', () => {
-  it('L72P-INV-01a — le routeur instancié déclare exactement la table `route-paths.ts`', async () => {
+  it('L72P-INV-01a — le routeur instancié déclare exactement la table `route-paths.ts` (+ redirections des anciennes URL)', async () => {
     vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })))
     const { default: router } = await import('../src/router/index')
     const declared = router.getRoutes().map((r) => r.path).sort()
-    expect(declared).toEqual(Object.values(ROUTE_PATHS).map((p) => p).sort())
+    // Chantier 104P : les anciennes URL sont aussi des redirections du routeur
+    // (navigation interne), générées depuis la même table que server.cjs.
+    expect(declared).toEqual([...Object.values(ROUTE_PATHS), ...Object.keys(LEGACY_REDIRECTS)].sort())
+  }, 30_000)
+
+  it('L72P-INV-01e — redirections du routeur : destination finale, query conservée, aucune boucle (104P)', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('{}', { status: 200 })))
+    vi.stubGlobal('scrollTo', vi.fn())
+    const { default: router } = await import('../src/router/index')
+    for (const [from, to] of Object.entries(LEGACY_REDIRECTS)) {
+      await router.push({ path: from, query: { utm: 'x' } })
+      const final = router.currentRoute.value
+      expect({ from, path: final.path, utm: final.query.utm }).toEqual({ from, path: to.split('#')[0] || '/', utm: 'x' })
+      expect(Object.keys(LEGACY_REDIRECTS)).not.toContain(final.path)
+    }
+    await router.push('/cgu?utm=x')
+    expect(router.currentRoute.value.fullPath).toBe('/legal/cguv?utm=x')
+    await router.push('/confidentialite')
+    expect(router.currentRoute.value.name).toBe('legal-confid')
   }, 30_000)
 
   it('L72P-INV-01b — `link-inventory.json` existe et ne dérive pas du code (sinon : UPDATE_LINK_INVENTORY=1)', () => {
@@ -49,10 +68,15 @@ describe('L72P-INV-01 — inventaire dérivé du code, commité et à jour', () 
   })
 
   it('L72P-INV-01c — contenu attendu : routes, ancres de l’accueil, routes dynamiques, liens vers l’application', () => {
-    expect(current.routes.static).toEqual(expect.arrayContaining(['/', '/aide', '/ressources', '/contact', '/mentions-legales', '/cgu', '/confidentialite']))
+    expect(current.routes.static).toEqual(expect.arrayContaining([
+      '/', '/aide', '/ressources', '/contact',
+      '/legal/mentions-legales', '/legal/cguv', '/legal/confidentialite', '/legal/sous-traitants', '/legal/parrainage',
+    ]))
     expect(current.routes.static).not.toContain('/pourquoi-verebona')
     expect(current.routes.static).not.toContain('/comment-ca-marche')
-    expect(current.routes.dynamic).toEqual(['/aide/:slug', '/aide/theme/:category', '/ressources/:slug'])
+    for (const old of ['/mentions-legales', '/cgu', '/cgvu', '/cguv', '/confidentialite', '/legal']) expect(current.routes.static).not.toContain(old)
+    expect(current.routes.dynamic).toEqual(['/aide/:slug', '/aide/theme/:category', '/legal/cguv/versions/:code', '/ressources/:slug'])
+    expect(current.dataFiles).toContain('/legal/cguv/versions.json')
     // Sections ancrées de l'accueil (menus, pied de page, application).
     expect(current.homeAnchors).toEqual(expect.arrayContaining(['how', 'cas-usage', 'features', 'pricing', 'faq']))
     expect(current.pages.help.length).toBeGreaterThan(0)
@@ -72,7 +96,16 @@ describe('L72P-INV-01 — inventaire dérivé du code, commité et à jour', () 
 
 describe('L72P-INV-02 — anciennes URL : redirections intentionnelles distinguées des liens cassés', () => {
   it('L72P-INV-02a — /comment-ca-marche → /#how (destination finale valide, ancre présente) ; /pourquoi-verebona retirée', () => {
-    expect(current.legacyRedirects).toEqual({ '/comment-ca-marche': '/#how' })
+    expect(current.legacyRedirects).toEqual({
+      '/cgu': '/legal/cguv',
+      // 108P-L : anciens noms techniques des CGUV (une seule 301, même cible).
+      '/cguv': '/legal/cguv',
+      '/cgvu': '/legal/cguv',
+      '/comment-ca-marche': '/#how',
+      '/confidentialite': '/legal/confidentialite',
+      '/legal': '/legal/mentions-legales',
+      '/mentions-legales': '/legal/mentions-legales',
+    })
     expect(current.retired).toEqual(['/pourquoi-verebona'])
   })
 

@@ -21,7 +21,12 @@ import { HOME_DESCRIPTIONS, HOME_TITLE, escapeHtmlAttr } from './src/config/head
 import { socialMetaHtml } from './src/config/social.rules'
 import { RESSOURCES_CONTENT_DIR, RESSOURCES_REGISTRY_FILE, loadRessourceCorpus } from './ressources.build'
 import { articlesToReview, buildRessourceRoutes, ressourcesSitemapPaths, visibleArticles } from './src/ressources/outputs'
+import { RESSOURCES_T2_CORPUS_PATH, buildRessourcesT2Corpus } from './src/ressources/t2-corpus'
 import { computeLinkInventory } from './link-inventory.build'
+import {
+  LEGAL_CONTENT_DIR, buildCguvManifest, displayableVersions, legalViewData, loadLegalSources, publishedVersions,
+  resolveSiteOrigin, serializeManifest, type LegalSources,
+} from './scripts/lib/legal-core.mjs'
 
 /**
  * Règles SEO et marqueur d'exploitation par environnement
@@ -40,6 +45,8 @@ function siteModePlugin(): Plugin {
   let indexable = isIndexable(environment)
   let pricingSource: PricingSource = 'catalog'
   let appOrigin: string | null = null
+  // Chantier 104P : origine du site de l'environnement (permaliens du manifeste des CGUV).
+  let siteOrigin = SITE_ORIGIN
 
   return {
     name: 'verebona-site-mode',
@@ -83,10 +90,11 @@ function siteModePlugin(): Plugin {
       } catch {
         appOrigin = null
       }
+      siteOrigin = resolveSiteOrigin(environment, config.env.VITE_PUBLIC_SITE_URL as string | undefined)
       const warn = raw ? '' : ' (VITE_ENVIRONMENT absent : traité comme production)'
       config.logger.info(
         `\n[verebona] environnement=${environment} · mode par défaut=${defaultMode} · ` +
-          `${indexable ? 'indexable' : 'noindex'} · tarifs=${pricingSource}${warn}\n`,
+          `${indexable ? 'indexable' : 'noindex'} · tarifs=${pricingSource} · site=${siteOrigin}${warn}\n`,
       )
     },
     transformIndexHtml(html) {
@@ -207,7 +215,8 @@ function siteModePlugin(): Plugin {
         fileName: '.site-env.json',
         // `appOrigin` : seule origine autorisée à encadrer le site (mode intégré
         // du Centre d'aide) et à lire ses fichiers d'aide depuis le navigateur.
-        source: JSON.stringify({ environment, defaultMode, indexable, appOrigin, pricingSource }, null, 2) + '\n',
+        // `siteOrigin` : base des permaliens du manifeste des CGUV (scripts/publish-legal.mjs).
+        source: JSON.stringify({ environment, defaultMode, indexable, appOrigin, pricingSource, siteOrigin }, null, 2) + '\n',
       })
     },
   }
@@ -331,7 +340,10 @@ function helpCenterPlugin(): Plugin {
  *
  * Produit, depuis la même source :
  *   · `virtual:ressources` — articles visibles dans l'environnement ;
- *   · `ressources/.routes.json` — 301 et 410, lu par server.cjs (dotfile non servi).
+ *   · `ressources/.routes.json` — 301 et 410, lu par server.cjs (dotfile non servi) ;
+ *   · `/ressources/corpus-t2.json` — chantier 108J : articles PUBLIÉS en
+ *     sections citables, lus par l'assistant de l'application (même principe
+ *     que `/aide/corpus-t2.json` ; environnement et version déclarés).
  */
 function ressourcesPlugin(): Plugin {
   const VIRTUAL = 'virtual:ressources'
@@ -380,6 +392,16 @@ function ressourcesPlugin(): Plugin {
       ].join('\n')
     },
     configureServer(server) {
+      // 108J : en local, l'application peut lire le corpus du serveur de dev.
+      server.middlewares.use((req, res, next) => {
+        if ((req.url ?? '').split('?')[0] !== RESSOURCES_T2_CORPUS_PATH) return next()
+        const t2 = buildRessourcesT2Corpus(corpus ?? load(), environment, { siteOrigin: SITE_ORIGIN, commit: deployedCommit(process.cwd()), generatedAt: new Date().toISOString() })
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.setHeader('X-Verebona-Environment', environment)
+        res.setHeader('Access-Control-Expose-Headers', 'X-Verebona-Environment')
+        res.end(JSON.stringify(t2))
+      })
       server.watcher.on('change', (file) => {
         if (!file.includes(`${RESSOURCES_CONTENT_DIR}/`)) return
         try { load() } catch (e) { server.config.logger.error(String((e as Error).message)) }
@@ -393,8 +415,95 @@ function ressourcesPlugin(): Plugin {
       const c = corpus ?? load()
       const routes = buildRessourceRoutes(c, environment)
       this.emitFile({ type: 'asset', fileName: 'ressources/.routes.json', source: JSON.stringify(routes, null, 2) + '\n' })
+      // 108J : corpus interrogeable par l'assistant (articles publiés seulement).
+      const t2 = buildRessourcesT2Corpus(c, environment, { siteOrigin: SITE_ORIGIN, commit: deployedCommit(process.cwd()), generatedAt: new Date().toISOString() })
+      this.emitFile({ type: 'asset', fileName: RESSOURCES_T2_CORPUS_PATH.slice(1), source: JSON.stringify(t2, null, 2) + '\n' })
       const visibles = visibleArticles(c, environment)
-      this.info?.(`[verebona] ressources · ${visibles.length} article(s) visibles (${environment}) · ${Object.keys(routes.redirects).length} redirection(s) · ${routes.gone.length} retrait(s) 410`)
+      this.info?.(`[verebona] ressources · ${visibles.length} article(s) visibles (${environment}) · ${t2.articles.length} dans le corpus de l’assistant (${t2.version}) · ${Object.keys(routes.redirects).length} redirection(s) · ${routes.gone.length} retrait(s) 410`)
+    },
+  }
+}
+
+/**
+ * Rubrique « Légal » — chantier 104P (P0-A / P0-B).
+ *
+ * Sources `src/content/legal/` (textes fournis par le PO, versions des CGUV,
+ * verrou des empreintes) lues et CONTRÔLÉES à chaque build par
+ * `scripts/lib/legal-core.mjs`, le même code que la publication du manifeste :
+ * un défaut de structure ou d'immuabilité (version publiée modifiée)
+ * interrompt le build. Les textes ou décisions encore « à fournir » ne
+ * l'interrompent pas ici : `scripts/check-legal-texts.mjs`, dernier maillon,
+ * les liste et fait échouer le build.
+ *
+ * Produit `virtual:legal` (contenus lisibles et métadonnées des versions
+ * PUBLIÉES). Les fichiers figés et le manifeste sont écrits après le
+ * pré-rendu par `scripts/publish-legal.mjs`, jamais par Vite : aucune
+ * transformation possible de leurs octets.
+ */
+function legalPlugin(): Plugin {
+  const VIRTUAL = 'virtual:legal'
+  const RESOLVED = '\0' + VIRTUAL
+  let includePending = false
+  let siteOrigin = SITE_ORIGIN
+  let sources: LegalSources | null = null
+  const load = (): LegalSources => {
+    const s = loadLegalSources(process.cwd())
+    if (s.errors.length) {
+      throw new Error(`[legal] build interrompu — ${s.errors.length} défaut(s) dans ${LEGAL_CONTENT_DIR} :\n  · ${s.errors.join('\n  · ')}`)
+    }
+    sources = s
+    return s
+  }
+
+  return {
+    name: 'verebona-legal',
+    configResolved(config) {
+      // Serveur de dev : les versions en préparation sont affichées (relecture).
+      includePending = config.command === 'serve'
+      siteOrigin = resolveSiteOrigin(parseEnvironment(config.env.VITE_ENVIRONMENT as string | undefined), config.env.VITE_PUBLIC_SITE_URL as string | undefined)
+    },
+    buildStart() {
+      const s = load()
+      for (const d of s.documents) if (d.source) this.addWatchFile(d.source)
+      for (const v of s.versions) { this.addWatchFile(v.jsonRel); this.addWatchFile(v.htmlRel) }
+    },
+    resolveId(id) {
+      return id === VIRTUAL ? RESOLVED : null
+    },
+    load(id) {
+      if (id !== RESOLVED) return null
+      const data = legalViewData(sources ?? load(), { includePending }) as Record<string, unknown>
+      return Object.entries(data).map(([k, v]) => `export const ${k} = ${JSON.stringify(v)};`).join('\n')
+    },
+    configureServer(server) {
+      // En local : textes figés (octets exacts) et manifeste, comme server.cjs.
+      server.middlewares.use((req, res, next) => {
+        const url = (req.url ?? '').split('?')[0]
+        const s = sources ?? load()
+        const m = /^\/legal\/cguv\/versions\/([^/]+)\.html$/.exec(url)
+        if (m) {
+          const v = displayableVersions(s).find((x) => x.code === m[1])
+          if (!v?.bytes) return next()
+          res.setHeader('Content-Type', 'text/html; charset=utf-8')
+          res.end(Buffer.from(v.bytes))
+          return
+        }
+        if (url === '/legal/cguv/versions.json') {
+          const published = publishedVersions(s)
+          if (!published.length) { res.statusCode = 404; res.end('Aucune version publiée\n'); return }
+          res.setHeader('Content-Type', 'application/json; charset=utf-8')
+          res.end(serializeManifest(buildCguvManifest(published, siteOrigin)))
+          return
+        }
+        next()
+      })
+      server.watcher.on('change', (file) => {
+        if (!file.includes(`${LEGAL_CONTENT_DIR}/`)) return
+        try { load() } catch (e) { server.config.logger.error(String((e as Error).message)) }
+        const mod = server.moduleGraph.getModuleById(RESOLVED)
+        if (mod) server.moduleGraph.invalidateModule(mod)
+        server.ws.send({ type: 'full-reload' })
+      })
     },
   }
 }
@@ -483,5 +592,5 @@ function siteRoutesPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), ressourcesPlugin(), immutableAssetsPlugin(), siteRoutesPlugin()],
+  plugins: [vue(), siteModePlugin(), helpCenterPlugin(), ressourcesPlugin(), legalPlugin(), immutableAssetsPlugin(), siteRoutesPlugin()],
 })

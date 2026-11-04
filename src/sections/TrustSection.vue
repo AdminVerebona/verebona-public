@@ -24,10 +24,13 @@
       </div>
       <div class="vb-card trust__card">
         <span class="vb-tile vb-tile--lg trust__tile">
-          <svg width="72" height="72" viewBox="0 0 100 100" fill="none" stroke="#17474D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M50 8 18 20v24c0 20 13.5 35.5 32 42 18.5-6.5 32-22 32-42V20z" fill="#F8F6F1"/><path d="M50 16 26 25v19c0 15.5 10.2 27.6 24 33.2C63.8 71.6 74 59.5 74 44V25z" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="38" y="44" width="24" height="20" rx="4" fill="#17474D" stroke="none"/><path d="M42 44v-6a8 8 0 0 1 16 0v6"/><circle cx="50" cy="52" r="2.6" fill="#D66B53" stroke="none"/><path d="M50 54.5V59" stroke="#D66B53" stroke-width="2.2"/><text x="26" y="36" font-family="Figtree, sans-serif" font-size="9" font-weight="800" fill="#AA4E38" stroke="none">SSL</text><text x="60" y="78" font-family="Figtree, sans-serif" font-size="9" font-weight="800" fill="#AA4E38" stroke="none">2FA</text></svg>
+          <svg width="72" height="72" viewBox="0 0 100 100" fill="none" stroke="#17474D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M50 8 18 20v24c0 20 13.5 35.5 32 42 18.5-6.5 32-22 32-42V20z" fill="#F8F6F1"/><path d="M50 16 26 25v19c0 15.5 10.2 27.6 24 33.2C63.8 71.6 74 59.5 74 44V25z" stroke-width="1.6" stroke-dasharray="3 3"/><rect x="38" y="44" width="24" height="20" rx="4" fill="#17474D" stroke="none"/><path d="M42 44v-6a8 8 0 0 1 16 0v6"/><circle cx="50" cy="52" r="2.6" fill="#D66B53" stroke="none"/><path d="M50 54.5V59" stroke="#D66B53" stroke-width="2.2"/><text x="26" y="36" font-family="Figtree, sans-serif" font-size="9" font-weight="800" fill="#AA4E38" stroke="none">SSL</text></svg>
         </span>
         <h3 class="vb-h3 trust__h3">Connexion sécurisée</h3>
-        <p class="trust__p">Verebona utilise une connexion chiffrée pour protéger les échanges avec l'application et une authentification à deux facteurs (2FA) pour une sécurité renforcée.</p>
+        <!-- Chantier 105Q : promesse « authentification à deux facteurs (2FA) » retirée
+             (texte et pictogramme) — aucune double authentification en V1
+             (application : décision PO Q2, lot 96B). -->
+        <p class="trust__p">Verebona utilise une connexion chiffrée pour protéger les échanges avec l'application.</p>
       </div>
       <div class="vb-card trust__card">
         <span class="vb-tile vb-tile--lg trust__tile">

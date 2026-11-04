@@ -50,9 +50,20 @@ export const SHELL_TITLE = 'Verebona'
 export const ROUTE_TITLES: Record<string, string> = {
   contact: 'Contact | Verebona',
   'legal-mentions': 'Mentions légales | Verebona',
-  'legal-cgu': 'Conditions générales | Verebona',
+  'legal-cguv': 'CGUV — Conditions générales d’utilisation et de vente | Verebona',
   'legal-confid': 'Politique de confidentialité | Verebona',
+  'legal-sous-traitants': 'Sous-traitants et prestataires | Verebona',
+  'legal-parrainage': 'Parrainage | Verebona',
+  'legal-cguv-version': 'Version des CGUV | Verebona',
   'not-found': 'Page introuvable | Verebona',
+}
+
+/**
+ * Descriptions propres à une route (chantier 105Q). Toute route absente garde
+ * `DEFAULT_DESCRIPTION`. Lues par le navigateur et par le pré-rendu.
+ */
+export const ROUTE_DESCRIPTIONS: Record<string, string> = {
+  contact: 'Une question, une suggestion, un partenariat ? Écrivez à l’équipe Verebona depuis le formulaire de contact.',
 }
 
 export interface PageHead {
@@ -60,14 +71,22 @@ export interface PageHead {
   description: string
 }
 
+/** Titre du permalien d'une version des CGUV (navigation interne et pré-rendu). */
+export function cguvVersionTitle(code: string): string {
+  return `CGUV — version ${code} | Verebona`
+}
+
 /** Head d'une route donnée. `home` et toute route inconnue sont traitées explicitement. */
-export function headForRoute(routeName: string | undefined, mode: SiteMode): PageHead {
+export function headForRoute(routeName: string | undefined, mode: SiteMode, params: Record<string, unknown> = {}): PageHead {
   if (routeName === 'home') {
     return { title: HOME_TITLE, description: HOME_DESCRIPTIONS[mode] }
   }
+  if (routeName === 'legal-cguv-version' && typeof params.code === 'string') {
+    return { title: cguvVersionTitle(params.code), description: DEFAULT_DESCRIPTION }
+  }
   return {
     title: (routeName && ROUTE_TITLES[routeName]) || SHELL_TITLE,
-    description: DEFAULT_DESCRIPTION,
+    description: (routeName && ROUTE_DESCRIPTIONS[routeName]) || DEFAULT_DESCRIPTION,
   }
 }
 

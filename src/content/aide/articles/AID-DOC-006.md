@@ -20,10 +20,10 @@ canonical: /aide/consulter-corriger-telecharger-document
 indexable: true
 lang: fr-FR
 synonyms: [documents, consultation, modification, téléchargement, corriger, télécharger, document, fichier, justificatif, pièce]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : affirme qu’il n’y a pas de recherche dans la page Documents (« vue V2 ») ; une recherche existe sur Mes documents et l’onglet Documents d’un bien depuis le lot 97C. Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Le détail d’un document réunit le fichier et les informations utilisées par Verebona. Vous pouvez y vérifier son titre, sa date, sa classification, son bien associé et les autres champs affichés.

@@ -20,10 +20,10 @@ canonical: /aide/ordonner-actions-a-traiter
 indexable: true
 lang: fr-FR
 synonyms: [à traiter, priorité, vue, changer, ordre, présentation, actions, action, arbitrer, confirmer]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : décrit la bascule Cartes / Liste, supprimée au lot 60A (cartes seules). Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 La page propose deux choix indépendants : l’ordre des actions et leur densité visuelle. Le choix Cartes/Liste est mémorisé ; le choix Par priorité/Par action revient à Par priorité lors d’une nouvelle visite.

@@ -8,6 +8,7 @@
  * Sorties :
  *   dist/index.html  accueil : HTML de `/` injecté dans <div id="app">,
  *                    head de l'accueil (titre, description, canonical) ;
+ *   dist/.pages/…    pages simples pré-rendues (/contact, chantier 105Q) ;
  *   dist/spa.html    coquille SPA servie par server.cjs pour les autres
  *                    routes : #app vide, titre neutre, description générique,
  *                    pas de canonical figé (posé par src/config/canonical.ts),
@@ -103,7 +104,13 @@ const pages = ssr.helpPages()
 // 4. Ressources (CDC Ressources V6 SEO-01, T12) : même construction que les
 // pages d'aide — HTML complet (H1, contenu, liens) et en-tête de la page.
 const ressources = ssr.ressourcePages()
-for (const page of [...pages, ...ressources]) {
+// 5. Rubrique « Légal » (chantier 104P) : contenus lisibles sans JavaScript,
+// dans `dist/legal/.pages/` (servis par server.cjs sous leur URL stable).
+const legal = ssr.legalPages()
+// 6. Pages simples (chantier 105Q, audit Bing « H1 manquant ») : /contact,
+// dans `dist/.pages/` (servie par server.cjs sous son URL stable).
+const site = ssr.sitePages()
+for (const page of [...pages, ...ressources, ...legal, ...site]) {
   const html = await ssr.render(page.path)
   if (!html.includes('<h1')) throw new Error(`[prerender] H1 absent du rendu de ${page.path}`)
   const h = page.head
@@ -132,4 +139,4 @@ for (const page of [...pages, ...ressources]) {
 }
 
 await rm(ssrDir, { recursive: true, force: true })
-console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html · ${pages.length} pages d'aide · ${ressources.length} pages Ressources${variants.length ? ` · ${variants.join(' · ')}` : ''}`)
+console.log(`[prerender] dist/index.html (${(appHtml.length / 1024).toFixed(1)} KiB de HTML) · dist/spa.html · ${pages.length} pages d'aide · ${ressources.length} pages Ressources · ${legal.length} pages légales · ${site.length} page(s) simple(s)${variants.length ? ` · ${variants.join(' · ')}` : ''}`)

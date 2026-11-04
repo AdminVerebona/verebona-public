@@ -20,10 +20,10 @@ canonical: /aide/notifications-non-recues
 indexable: true
 lang: fr-FR
 synonyms: [notifications, dépannage, reçois, pas, notification, alerte, push, email, rappel]
-status: published
-validatedAt: 2026-09-26
+status: blocked
+blocker: Lot 105P : renvoie à l’autorisation du navigateur pour le push, qui n’existe plus (push natif iOS/Android seulement, lot 94). Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Une notification peut être bloquée par le réglage Verebona, l’autorisation du navigateur, les paramètres du téléphone, un appareil supprimé, l’absence d’événement déclencheur ou le classement d’un e-mail en indésirable.

@@ -21,13 +21,13 @@ function setDescription(content: string): void {
   meta.content = content
 }
 
-export function applyHead(routeName: string | undefined): void {
+export function applyHead(routeName: string | undefined, params: Record<string, unknown> = {}): void {
   if (typeof document === 'undefined') return
   // Les pages du Centre d'aide portent leur propre en-tête, calculé depuis
   // l'article affiché (src/help/head.ts) : ne pas l'écraser ici.
   if (routeName?.startsWith('help') || routeName?.startsWith('ressources')) return
   const { siteMode } = useSiteMode()
-  const head = headForRoute(routeName, siteMode.value)
+  const head = headForRoute(routeName, siteMode.value, params)
   if (document.title !== head.title) document.title = head.title
   setDescription(head.description)
 }
@@ -37,7 +37,8 @@ export function installHeadGuard(router: Router): void {
     const name = router.currentRoute.value.name
     return typeof name === 'string' ? name : undefined
   }
-  router.afterEach(() => applyHead(nameOf()))
+  const paramsOf = () => router.currentRoute.value.params as Record<string, unknown>
+  router.afterEach(() => applyHead(nameOf(), paramsOf()))
   // Prévisualisation FULL / PRELAUNCH (préprod) : la description de l'accueil suit le mode.
-  watch(useSiteMode().siteMode, () => applyHead(nameOf()))
+  watch(useSiteMode().siteMode, () => applyHead(nameOf(), paramsOf()))
 }

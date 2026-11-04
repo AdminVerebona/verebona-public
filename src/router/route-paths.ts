@@ -22,9 +22,17 @@ export const ROUTE_PATHS = {
   ressources: '/ressources',
   'ressources-article': '/ressources/:slug',
   contact: '/contact',
-  'legal-mentions': '/mentions-legales',
-  'legal-cgu': '/cgu',
-  'legal-confid': '/confidentialite',
+  // Rubrique « Légal » (chantier 104P, contrat site public ↔ application § 2) :
+  // une URL stable par onglet. Les anciennes adresses (/mentions-legales, /cgu,
+  // /confidentialite) et `/legal` seul sont des redirections 301
+  // (`src/config/legacy-routes.rules.ts`).
+  'legal-mentions': '/legal/mentions-legales',
+  'legal-cguv': '/legal/cguv',
+  'legal-confid': '/legal/confidentialite',
+  'legal-sous-traitants': '/legal/sous-traitants',
+  'legal-parrainage': '/legal/parrainage',
+  // Permalien d'une version des CGUV (page pré-rendue ; code inconnu → 404 explicite).
+  'legal-cguv-version': '/legal/cguv/versions/:code',
   'signup-redirect': '/inscription',
   'not-found': '/:pathMatch(.*)*',
 } as const

@@ -20,10 +20,10 @@ canonical: /aide/document-import-impossible
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, document, import, importe, pas, problème, erreur, support, aide, incident]
-status: published
-validatedAt: 2026-09-26
+status: blocked
+blocker: Lot 105P : limite vidéo « 500 Mo » fausse (réel : 100 Mo par vidéo, 25 Mo par document, 10 fichiers et 100 Mo par dépôt — upload-limits.ts). Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 L’import peut être refusé pour un format non autorisé, une taille excessive, un fichier vide, une extension incohérente, un nom dangereux, un quota atteint, un droit d’écriture bloqué ou une erreur de stockage.

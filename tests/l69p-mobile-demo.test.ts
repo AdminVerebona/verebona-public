@@ -128,13 +128,18 @@ describe('L69P-02 — l’ordinateur reste rendu sur mobile, avec le téléphone
     expect(w.find('.app__laptop .app__screen').exists()).toBe(true)
     expect(w.find('.app__phone').exists()).toBe(true)
     // Lot 71 : captures réelles de l'application, une par écran, dans l'ordre du
-    // carrousel (Accueil, Mes biens, Mon agenda, Mes documents), décoratives.
+    // carrousel (Accueil, Mes biens, Mon agenda, Mes documents). Chantier 105Q
+    // (audit Bing §4) : captures produit INFORMATIVES — alt non vide et distinct.
     const shots = w.findAll('.app__laptop .app__shot')
     expect(shots.map((s) => s.attributes('src'))).toEqual([
       '/assets/app-desktop-accueil.webp', '/assets/app-desktop-biens.webp',
       '/assets/app-desktop-agenda.webp', '/assets/app-desktop-documents.webp',
     ])
-    shots.forEach((s) => expect(s.attributes('alt')).toBe(''))
+    const alts = shots.map((s) => s.attributes('alt') ?? '')
+    alts.forEach((a) => expect(a.length).toBeGreaterThan(10))
+    expect(new Set(alts).size).toBe(4)
+    expect(w.find('.app__phone').attributes('aria-hidden')).toBeUndefined()
+    expect(w.find('.app__phone-shot').attributes('alt')).toMatch(/mobile/)
     // Contrôles du carrousel conservés (boutons nommés et points).
     expect(w.find('button[aria-label="Écran suivant"]').exists()).toBe(true)
     expect(w.find('button[aria-label="Écran précédent"]').exists()).toBe(true)

@@ -15,16 +15,16 @@ screens: [Assistant, Centre d’aide]
 objectTypes: []
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-HELP-001, AID-SEARCH-004]
-seoTitle: Comment Verebona répond aux questions sur l’application | Aide Verebona
+seoTitle: Assistant : questions sur l’application | Aide Verebona
 metaDescription: Comprendre comment l’assistant utilise le Centre d’aide pour expliquer Verebona.
 canonical: /aide/assistant-aide-application
 indexable: true
 lang: fr-FR
 synonyms: [assistant, centre aide, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Pour les questions portant sur l’utilisation de Verebona, l’assistant s’appuie uniquement sur le Centre d’aide. Il peut reformuler et combiner plusieurs articles, mais il n’invente pas de règle absente de la documentation.

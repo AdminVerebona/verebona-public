@@ -20,11 +20,11 @@ canonical: /aide/trier-filtrer-documents
 indexable: true
 lang: fr-FR
 synonyms: [documents, filtres, tri, trier, filtrer, document, fichier, justificatif, pièce, upload]
-status: published
-validatedAt: 2026-09-25
+status: blocked
+blocker: Lot 105P : affirme l’absence de recherche locale et de mémorisation des filtres ; recherche locale (lot 97C), filtres restaurés et filtres de dates (lot 103F). Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
 redirectFrom: [/aide/organiser-docs]
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 La page Documents propose un panneau de tri et de filtres. Ces réglages agissent seulement sur la liste affichée : ils ne reclassent aucun document et ne sont pas mémorisés d’une visite à l’autre.

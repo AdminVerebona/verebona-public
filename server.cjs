@@ -2,6 +2,7 @@ const express = require("express");
 const basicAuth = require("express-basic-auth");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
 
@@ -12,6 +13,7 @@ const password = process.env.BASIC_AUTH_PASSWD;
 
 const distDir = path.join(__dirname, "dist");
 const SPA_SHELL = path.join(distDir, "spa.html");
+const CACHE_NO_STORE = "no-store";
 
 /**
  * Environnement du build servi (CDC pre-lancement §8).
@@ -111,6 +113,61 @@ if (canonicalHost) {
   });
 }
 
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * INDEXNOW — chantier 105Q (audit Bing). Voir docs/seo/indexnow.md.
+ *
+ * Production indexable + `INDEXNOW_KEY` seulement (jamais en préproduction) :
+ *   · `/<clé>.txt` : la clé, en texte brut (vérification par le moteur) ;
+ *   · après le démarrage (délai `INDEXNOW_DELAY_SECONDS`, 120 s par défaut,
+ *     le temps que la nouvelle version reçoive le trafic), envoi des URL de
+ *     `dist/.indexnow-pending.json` (préparées au build d'après le sitemap) ;
+ *   · `/indexnow-manifest.json` : empreintes des pages, relues au build
+ *     suivant ; une URL pas encore notifiée avec succès y est marquée, pour
+ *     être reprise au déploiement suivant.
+ * Un seul conteneur notifie (`CONTAINER` absent ou `web-1`, Scalingo).
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+let indexNow = null;
+try {
+  indexNow = require("./scripts/lib/indexnow.cjs");
+} catch {
+  indexNow = null;
+}
+const indexNowState = indexNow ? indexNow.indexNowStatus(process.env, siteEnv) : { enabled: false, reason: "module absent" };
+const indexNowPending = new Set();
+if (indexNowState.enabled) {
+  try {
+    const pending = JSON.parse(fs.readFileSync(path.join(distDir, ".indexnow-pending.json"), "utf8"));
+    for (const u of Array.isArray(pending.urls) ? pending.urls : []) if (typeof u === "string") indexNowPending.add(u);
+  } catch {
+    console.warn("[indexnow] dist/.indexnow-pending.json absent : aucune URL à notifier");
+  }
+}
+console.log(`[indexnow] ${indexNowState.enabled ? `actif, ${indexNowPending.size} URL à notifier` : `inactif (${indexNowState.reason})`}`);
+
+if (indexNowState.enabled) {
+  const keyPath = `/${indexNowState.key}.txt`;
+  app.get(keyPath, (_, res) => {
+    res.setHeader("Cache-Control", CACHE_NO_STORE);
+    res.type("text/plain; charset=utf-8").send(indexNowState.key);
+  });
+  app.get("/indexnow-manifest.json", (_, res, next) => {
+    if (indexNowPending.size === 0) return next();
+    fs.readFile(path.join(distDir, "indexnow-manifest.json"), "utf8", (err, raw) => {
+      if (err) return next();
+      try {
+        const m = JSON.parse(raw);
+        for (const u of indexNowPending) if (m.pages && u in m.pages) m.pages[u] = "non-notifie";
+        res.setHeader("Cache-Control", CACHE_NO_STORE);
+        res.type("application/json; charset=utf-8").send(JSON.stringify(m));
+      } catch {
+        next();
+      }
+    });
+  });
+}
+
 if (siteEnv && siteEnv.indexable === false) {
   app.use((_, res, next) => {
     res.setHeader("X-Robots-Tag", "noindex, nofollow");
@@ -124,7 +181,19 @@ if (siteEnv && siteEnv.indexable === false) {
  * préproduction, sans quoi l'assistant de préproduction ne lirait aucun
  * article et le contrôle CI échouerait. Contenu d'aide uniquement, `noindex`.
  */
-const HELP_DATA_PATHS = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
+// 108J : + corpus des Ressources lu par l'assistant (articles publiés seulement).
+const HELP_DATA_PATHS = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json", "/ressources/corpus-t2.json"]);
+
+/**
+ * Rubrique « Légal » (chantier 104P, contrat site public ↔ application § 4.1) :
+ * le manifeste des CGUV et les textes figés sont lus DE SERVEUR À SERVEUR par
+ * l'application (synchronisation horaire, vérification des empreintes), sans
+ * authentification — y compris en préproduction. Textes publics par nature.
+ */
+const CGUV_MANIFEST_PATH = "/legal/cguv/versions.json";
+const CGUV_CODE = /^\d{4}-\d{2}-\d{2}-v[1-9]\d{0,3}$/;
+const CGUV_TEXT_PATH = /^\/legal\/cguv\/versions\/(\d{4}-\d{2}-\d{2}-v[1-9]\d{0,3})\.html$/;
+const isLegalPublicFile = (p) => p === CGUV_MANIFEST_PATH || CGUV_TEXT_PATH.test(p);
 
 const authEnabled = process.env.BASIC_AUTH_ENABLED === "true";
 
@@ -193,7 +262,7 @@ if (authEnabled) {
     challenge: true,
     realm: "Protected",
   });
-  app.use((req, res, next) => (HELP_DATA_PATHS.has(req.path) ? next() : auth(req, res, next)));
+  app.use((req, res, next) => (HELP_DATA_PATHS.has(req.path) || isLegalPublicFile(req.path) ? next() : auth(req, res, next)));
 
   console.log("Basic authentication enabled");
 }
@@ -256,7 +325,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const HELP_DATA = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json"]);
+const HELP_DATA = new Set(["/aide/catalogue.json", "/aide/corpus-t2.json", "/ressources/corpus-t2.json"]);
 /**
  * Environnement du build servi, déclaré en en-tête des données d'aide
  * (lot 34G, ENV-02) : l'application le cite quand elle refuse un corpus d'un
@@ -316,6 +385,126 @@ app.get(/^\/aide(\/.*)?$/, (req, res, next) => {
   const full = path.join(helpDir, file);
   if (!full.startsWith(helpDir + path.sep)) return notFoundShell(res);
   fs.access(full, fs.constants.R_OK, (err) => (err ? notFoundShell(res) : sendHtml(res, full)));
+});
+
+
+/**
+ * ══════════════════════════════════════════════════════════════════════════
+ * RUBRIQUE « LÉGAL » — chantier 104P (contrat site public ↔ application)
+ *
+ * | Adresse                               | Réponse                                         |
+ * | ------------------------------------- | ----------------------------------------------- |
+ * | /legal/{5 contenus}                   | 200, page pré-rendue (dist/legal/.pages/)       |
+ * | /legal/cguv/versions/{code}           | 200 si publiée, sinon 404 EXPLICITE (jamais la  |
+ * |                                       | version courante)                               |
+ * | /legal/cguv/versions/{code}.html      | texte figé OCTET POUR OCTET (aucune             |
+ * |                                       | transformation), text/html; charset=utf-8,      |
+ * |                                       | cache 1 an immutable, ETag = SHA-256            |
+ * | /legal/cguv/versions.json             | manifeste, application/json; charset=utf-8,     |
+ * |                                       | cache 5 min (contrat § 4.1)                     |
+ * | /mentions-legales, /cgu,              | 301 (table des anciennes URL, plus haut)        |
+ * | /confidentialite, /legal              |                                                 |
+ *
+ * Les pages vivent dans un dossier « point » (`dist/legal/.pages`), jamais
+ * servi par express.static : une seule URL par page.
+ * ══════════════════════════════════════════════════════════════════════════
+ */
+const legalDir = path.join(distDir, "legal");
+const legalPagesDir = path.join(legalDir, ".pages");
+const LEGAL_DOCS = new Set(["mentions-legales", "cguv", "confidentialite", "sous-traitants", "parrainage"]);
+
+/** Fichiers figés lus une fois par processus (immuables pour un déploiement donné). */
+const frozenCache = new Map();
+function readFrozen(file, cb) {
+  if (frozenCache.has(file)) return cb(null, frozenCache.get(file));
+  fs.readFile(file, (err, buf) => {
+    if (err) return cb(err);
+    const entry = { buf, sha256: crypto.createHash("sha256").update(buf).digest("hex") };
+    frozenCache.set(file, entry);
+    cb(null, entry);
+  });
+}
+
+const plainNotFound = (res) => {
+  res.setHeader("Cache-Control", CACHE.notFound);
+  res.status(404).type("text/plain").send("Not found\n");
+};
+
+/** Envoie des octets tels quels (aucune réécriture), avec ETag et 304. */
+function sendExactBytes(req, res, entry, headers) {
+  const etag = `"sha256-${entry.sha256}"`;
+  for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
+  res.setHeader("ETag", etag);
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  if (req.headers["if-none-match"] === etag) return res.status(304).end();
+  res.setHeader("Content-Length", entry.buf.length);
+  res.status(200).end(entry.buf);
+}
+
+function sendLegalPage(res, rel, status, fallback) {
+  const full = path.join(legalPagesDir, rel);
+  if (!full.startsWith(legalPagesDir + path.sep)) return notFoundShell(res);
+  fs.access(full, fs.constants.R_OK, (err) => {
+    if (err) return fallback(res);
+    res.setHeader("Cache-Control", status === 200 ? CACHE.html : CACHE.notFound);
+    // `dotfiles: "allow"` : le dossier `.pages` est servi ICI seulement, sous l'URL stable.
+    res.status(status).sendFile(full, { dotfiles: "allow" }, (e) => { if (e && !res.headersSent) fallback(res); });
+  });
+}
+
+/** 404 explicite d'une version inconnue des CGUV : jamais une redirection vers la version courante. */
+const unknownCguvVersion = (res) =>
+  sendLegalPage(res, path.join("cguv", "version-inconnue.html"), 404, notFoundShell);
+
+app.get(/^\/legal(\/.*)?$/i, (req, res) => {
+  if (req.path.includes("..") || /\/\./.test(req.path)) return notFoundShell(res);
+
+  if (req.path === CGUV_MANIFEST_PATH) {
+    // Petit fichier (< 1 Mo, aucun texte juridique) : relu à chaque requête.
+    return fs.readFile(path.join(legalDir, "cguv", "versions.json"), (err, buf) => {
+      if (err) return plainNotFound(res);
+      const entry = { buf, sha256: crypto.createHash("sha256").update(buf).digest("hex") };
+      sendExactBytes(req, res, entry, {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "public, max-age=300",
+      });
+    });
+  }
+
+  const text = CGUV_TEXT_PATH.exec(req.path);
+  if (text) {
+    return readFrozen(path.join(legalDir, "cguv", "versions", `${text[1]}.html`), (err, entry) => {
+      if (err) return plainNotFound(res);
+      sendExactBytes(req, res, entry, {
+        "Content-Type": "text/html; charset=utf-8",
+        // Octets immuables (une version publiée ne change jamais) : cache long, partageable.
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Legal-Version": text[1],
+        // Le permalien lisible est /legal/cguv/versions/{code} ; le fichier n'est pas indexé.
+        "X-Robots-Tag": res.getHeader("X-Robots-Tag") || "noindex",
+        "Content-Security-Policy": `default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; frame-ancestors 'self'${appOrigin ? ` ${appOrigin}` : ""}`,
+      });
+    });
+  }
+
+  // Autre fichier sous /legal : 404 franche (jamais la coquille HTML).
+  if (/\/[^/]*\.[a-z0-9]+$/i.test(req.path)) return plainNotFound(res);
+
+  // Une URL par page : minuscules, sans slash final, en UNE 301.
+  const trimmed = req.path.replace(/\/+$/, "") || "/";
+  const p = trimmed.toLowerCase();
+  if (p !== req.path) return res.redirect(301, p + queryOf(req));
+
+  const doc = /^\/legal\/([a-z-]+)$/.exec(p);
+  if (doc && LEGAL_DOCS.has(doc[1])) {
+    return sendLegalPage(res, `${doc[1]}.html`, 200, (r) => sendHtml(r, SPA_SHELL));
+  }
+  const version = /^\/legal\/cguv\/versions\/([^/]+)$/.exec(p);
+  if (version) {
+    if (!CGUV_CODE.test(version[1])) return unknownCguvVersion(res);
+    return sendLegalPage(res, path.join("cguv", "versions", `${version[1]}.html`), 200, unknownCguvVersion);
+  }
+  return notFoundShell(res);
 });
 
 /**
@@ -436,6 +625,9 @@ app.use(
  */
 const FILE_PATH = /\/[^/]*\.[a-z0-9]+$/i;
 
+/** Pages simples pré-rendues (chantier 105Q) : dossier « point », jamais servi par express.static. */
+const sitePagesDir = path.join(distDir, ".pages");
+
 app.get("/{*splat}", (req, res) => {
   if (FILE_PATH.test(req.path)) {
     // Chunk d'une version précédente compris (PUB-PERF-04) : vrai 404, jamais
@@ -452,13 +644,36 @@ app.get("/{*splat}", (req, res) => {
     if (siteRoutes.retired.has(p) || !siteRoutes.staticRoutes.has(p)) return notFoundShell(res);
   }
   // `/` est servi par express.static (dist/index.html : accueil pré-rendu).
+  // Chantier 105Q : une route simple pré-rendue (`dist/.pages/<nom>.html`,
+  // ex. /contact) est servie avec son H1, son titre et son canonical.
   // Toute autre route reçoit la coquille SPA, sans le contenu ni le titre de
   // l'accueil. Repli sur index.html si le pré-rendu n'a pas été exécuté.
-  sendHtml(res, SPA_SHELL, (err) => {
+  const shell = () => sendHtml(res, SPA_SHELL, (err) => {
     if (err) sendHtml(res, path.join(distDir, "index.html"));
+  });
+  const simple = /^\/([a-z0-9-]+)$/.exec(normalizeSitePath(req.path));
+  if (!simple || normalizeSitePath(req.path) !== req.path) return shell();
+  const page = path.join(sitePagesDir, `${simple[1]}.html`);
+  fs.access(page, fs.constants.R_OK, (err) => {
+    if (err) return shell();
+    res.setHeader("Cache-Control", CACHE.html);
+    res.sendFile(page, { dotfiles: "allow" }, (e) => { if (e && !res.headersSent) shell(); });
   });
 });
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
+  const container = process.env.CONTAINER;
+  if (!indexNowState.enabled || indexNowPending.size === 0) return;
+  if (container && container !== "web-1") {
+    console.log(`[indexnow] conteneur ${container} : notification laissée à web-1`);
+    return;
+  }
+  const delay = Math.max(0, Number(process.env.INDEXNOW_DELAY_SECONDS || 120)) * 1000;
+  const host = new URL((siteEnv && siteEnv.siteOrigin) || "https://www.verebona.fr").host;
+  setTimeout(async () => {
+    const urls = [...indexNowPending];
+    const r = await indexNow.submitIndexNow({ host, key: indexNowState.key, urls });
+    if (r.failed === 0) urls.forEach((u) => indexNowPending.delete(u));
+  }, delay).unref();
 });

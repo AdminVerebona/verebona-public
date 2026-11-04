@@ -23,15 +23,15 @@ synonyms: [récupération, compte restreint, récupérer, données, compte, est,
 status: blocked
 appVersion: V1
 blocker: Le cycle général d’impayé à 90 jours n’est pas entièrement reflété dans l’implémentation actuelle.
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Lorsqu’un compte ne permet plus l’ajout ou la modification, Verebona doit conserver un accès suffisant pour consulter et récupérer les données pendant la période prévue. Les droits exacts dépendent du motif de restriction : fin d’essai, résiliation, impayé ou rétractation.
 
 ## Détails et cas particuliers
 
-**Fin d’essai** — Le compte passe en lecture/export : choisissez une offre pour reprendre l’écriture.
+**Fin d’essai** — Le compte passe en lecture seule : vous pouvez consulter et exporter vos données pendant 90 jours. Choisissez une offre pour reprendre l’écriture ; sans souscription, les données sont supprimées au terme de ces 90 jours.
 
-**Rétractation** — Le parcours actuel prévoit une période de 30 jours pour exporter les données avant suppression programmée.
+**Rétractation** — L’abonnement est annulé et remboursé, le compte passe en lecture seule : vous pouvez consulter et exporter vos données pendant 90 jours. Elles sont supprimées au terme de ces 90 jours, ou plus tôt si vous le demandez.
 
 **Impayé** — La règle cible validée prévoit 90 jours pour régulariser et récupérer/transmettre les données avant suppression, mais cette règle doit être complètement alignée dans le code avant publication.

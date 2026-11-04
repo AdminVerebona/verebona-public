@@ -20,7 +20,10 @@ import type { RessourceArticle, RessourceCategory } from './types'
 
 export type RessourceHead = HelpHead
 
-export const RESSOURCES_TITLE = 'Ressources pratiques : factures, garanties, échéances et assurances | Verebona'
+// Chantier 105Q (audit Bing du 02/11/2026, libellé validé) : titre court,
+// indépendant du H1 « Ressources ». Ancien : « Ressources pratiques : factures,
+// garanties, échéances et assurances | Verebona » (78 caractères).
+export const RESSOURCES_TITLE = 'Guides : factures, garanties et échéances | Verebona'
 export const RESSOURCES_DESCRIPTION =
   'Guides pratiques pour retrouver une facture, vérifier une garantie, suivre les échéances d’une voiture ou d’un logement et préparer un dossier d’assurance.'
 export const RESSOURCES_H1 = 'Ressources'

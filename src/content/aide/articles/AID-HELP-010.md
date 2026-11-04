@@ -14,16 +14,16 @@ screens: [Invitation Duo, Page de transmission]
 objectTypes: [invitation, compte, bien]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-DUO-002, AID-DUO-003, AID-TRANSFER-004]
-seoTitle: Une invitation de transmission ou Duo ne fonctionne pas | Aide Verebona
+seoTitle: Invitation Duo ou transmission invalide | Aide Verebona
 metaDescription: Vérifier un lien d’invitation expiré, annulé, déjà utilisé ou non destiné au bon compte.
 canonical: /aide/invitation-transmission-duo-probleme
 indexable: true
 lang: fr-FR
 synonyms: [dépannage, invitation, duo, transmission, fonctionne, pas, problème, erreur, support, aide]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Les invitations sont des liens temporaires et liés à une adresse ou à un parcours précis. Elles peuvent devenir invalides après annulation, expiration, acceptation ou refus.

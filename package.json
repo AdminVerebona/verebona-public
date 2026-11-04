@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite --config vite.config.ts",
-    "build": "vue-tsc -b && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-site-routes.mjs && node scripts/check-prelaunch-prices.mjs && node scripts/check-preview-chunk.mjs",
-    "build:preprod": "vue-tsc -b && vite build --config vite.config.ts --mode preprod && vite build --config vite.config.ts --mode preprod --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-site-routes.mjs && node scripts/check-prelaunch-prices.mjs && node scripts/check-preview-chunk.mjs",
+    "build": "vue-tsc -b && vite build --config vite.config.ts && vite build --config vite.config.ts --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-site-routes.mjs && node scripts/check-seo-html.mjs && node scripts/indexnow-prepare.mjs && node scripts/check-prelaunch-prices.mjs && node scripts/publish-legal.mjs && node scripts/check-legal-texts.mjs && node scripts/check-preview-chunk.mjs",
+    "build:preprod": "vue-tsc -b && vite build --config vite.config.ts --mode preprod && vite build --config vite.config.ts --mode preprod --ssr src/entry-prerender.ts --outDir node_modules/.prerender && node scripts/prerender.mjs && node scripts/check-site-routes.mjs && node scripts/check-seo-html.mjs && node scripts/indexnow-prepare.mjs && node scripts/check-prelaunch-prices.mjs && node scripts/publish-legal.mjs && node scripts/check-legal-texts.mjs && node scripts/check-preview-chunk.mjs",
     "preview": "vite preview --config vite.config.ts",
     "start": "node server.cjs",
     "test": "vitest run",
@@ -18,7 +18,14 @@
     "check:help-dates": "node scripts/check-help-dates.mjs",
     "check:preview-chunk": "node scripts/check-preview-chunk.mjs",
     "check:site-routes": "node scripts/check-site-routes.mjs",
-    "check:prelaunch-prices": "node scripts/check-prelaunch-prices.mjs"
+    "check:prelaunch-prices": "node scripts/check-prelaunch-prices.mjs",
+    "check:legal-texts": "node scripts/check-legal-texts.mjs",
+    "check:seo-html": "node scripts/check-seo-html.mjs",
+    "indexnow:prepare": "node scripts/indexnow-prepare.mjs",
+    "legal:nouvelle-cguv": "node scripts/legal-nouvelle-cguv.mjs",
+    "legal:figer-cguv": "node scripts/legal-figer-cguv.mjs",
+    "legal:importer-archive": "node scripts/import-cguv-archive.mjs",
+    "legal:importer-textes": "node scripts/legal-importer-textes.mjs"
   },
   "dependencies": {
     "express": "^5.2.1",

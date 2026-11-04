@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [parrainage, abonnement, offre, plan, facture, paiement, Stripe]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel souscrit par un proche. » Seul le parrain reçoit la récompense. Le filleul ne reçoit pas de cadeau de parrainage spécifique.
@@ -32,13 +32,17 @@ Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel
 
 1. **Ouvrez Parrainage** — Créez votre lien si vous n’en avez pas encore.
 2. **Copiez le code ou le lien** — Ou utilisez l’invitation par e-mail.
-3. **Votre proche crée un nouveau compte depuis votre lien ou avec votre code** — C’est ce qui rattache sa future souscription à votre parrainage.
-4. **Attendez la validation** — La récompense n’est acquise qu’après paiement annuel réussi et expiration du délai de rétractation.
+3. **Votre proche crée un nouveau compte depuis votre lien ou avec votre code** — C’est ce qui rattache sa future souscription à votre parrainage. L’inscription doit avoir lieu dans les 90 jours suivant l’utilisation du lien ou du code.
+4. **Attendez la validation** — La récompense n’est acquise qu’après encaissement du premier paiement de l’abonnement annuel et expiration du délai de rétractation.
 5. **Consultez vos statistiques** — Le nombre de parrainages validés et les mois acquis sont affichés lorsqu’ils existent.
 
 ## Détails et cas particuliers
 
-**Filleul éligible** — Nouveau compte créé via le lien/code de parrainage, puis abonnement annuel avec premier paiement réussi et délai de rétractation expiré.
+**Filleul éligible** — Nouveau compte créé via le lien/code de parrainage dans les 90 jours suivant son utilisation, puis abonnement annuel avec premier paiement encaissé et délai de rétractation expiré.
+
+**Parrain** — Titulaire d’un abonnement payant en cours (Standard, Premium ou Premium Duo, mensuel ou annuel).
+
+**Auto-parrainage** — Interdit : se parrainer soi-même, par exemple avec un autre compte ou une autre adresse e-mail, ne donne droit à aucun mois offert.
 
 **Abonnement mensuel du filleul** — Ne déclenche pas de récompense.
 

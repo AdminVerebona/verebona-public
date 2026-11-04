@@ -11,11 +11,12 @@
  * ══════════════════════════════════════════════════════════════════════════
  * POURQUOI UNE LISTE EXPLICITE PLUTÔT QUE LES ROUTES DU ROUTER
  *
- * `src/router/index.ts` déclare aussi `/contact`, les trois pages légales,
- * la redirection `/inscription` et le catch-all 404. Dériver le sitemap du
- * router les ferait toutes entrer dans l'index : les pages légales sont hors
- * périmètre V1 (§4), `/inscription` est une redirection (§7), et le
- * catch-all n'est pas une page.
+ * `src/router/index.ts` déclare aussi `/contact`, la redirection
+ * `/inscription`, les permaliens de versions des CGUV et le catch-all 404.
+ * Dériver le sitemap du router les ferait tous entrer dans l'index :
+ * `/inscription` est une redirection (§7), les permaliens sont des preuves
+ * (`noindex`) et le catch-all n'est pas une page. Les cinq pages légales y
+ * entrent depuis le chantier 104P (URL stables, pré-rendues).
  *
  * La liste ci-dessous est donc tenue à la main, volontairement (§8). Son
  * coût de maintenance est documenté dans le README (« Sitemap et
@@ -46,7 +47,13 @@ export const SITEMAP_URL = `${SITE_ORIGIN}/sitemap.xml`
  * Les futures sous-pages du centre d'aide (`/aide/<id>`) s'ajoutent ici au
  * moment de leur mise en production, jamais par anticipation (§3.2).
  */
-export const INDEXABLE_PATHS = ['/', '/aide'] as const
+export const INDEXABLE_PATHS = [
+  '/', '/aide',
+  // Rubrique « Légal » (chantier 104P) : les cinq URL stables, pages pré-rendues
+  // et canoniques. Ni les anciennes adresses (301), ni `/legal` (301), ni les
+  // permaliens de versions des CGUV (preuves, `noindex`).
+  '/legal/mentions-legales', '/legal/cguv', '/legal/confidentialite', '/legal/sous-traitants', '/legal/parrainage',
+] as const
 
 export type IndexablePath = (typeof INDEXABLE_PATHS)[number]
 

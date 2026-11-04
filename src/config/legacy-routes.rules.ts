@@ -35,6 +35,18 @@
 export const LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
   // Section « Comment ça marche » intégrée à l'accueil (HowItWorksSection, id="how").
   '/comment-ca-marche': '/#how',
+  // Rubrique « Légal » (chantier 104P, contrat § 2) : anciennes adresses des
+  // trois onglets → leur URL stable ; `/legal` seul → onglet par défaut
+  // (une seule URL par contenu : pas de doublon indexable).
+  '/mentions-legales': '/legal/mentions-legales',
+  '/cgu': '/legal/cguv',
+  // Chantier 108P-L (ticket « livraison des informations légales ») : anciens
+  // noms techniques des CGUV (CGVU) et sigle seul — même destination finale,
+  // une seule 301, jamais de boucle (aucune cible n'est elle-même redirigée).
+  '/cgvu': '/legal/cguv',
+  '/cguv': '/legal/cguv',
+  '/confidentialite': '/legal/confidentialite',
+  '/legal': '/legal/mentions-legales',
 }
 
 /**

@@ -17,6 +17,7 @@ import { categoryPath, publishedArticles } from './src/help/outputs'
 import { loadRessourceCorpus } from './ressources.build'
 import { visibleArticles } from './src/ressources/outputs'
 import { CATALOG_PATH, T2_CORPUS_PATH } from './src/help/config'
+import { CGUV_MANIFEST_PATH } from './scripts/lib/legal-core.mjs'
 
 export const LINK_INVENTORY_FILE = 'link-inventory.json'
 export const HOME_VIEW = 'src/views/HomeView.vue'
@@ -65,7 +66,8 @@ export function computeLinkInventory(root: string): LinkInventory {
     retired: RETIRED_PATHS,
     appLinks: sourceFiles(root).flatMap((f) => appUrlLiterals(readFileSync(path.join(root, f), 'utf8'))),
     // Lus par l'application (« Besoin d'aide », assistant) : servis hors Basic Auth.
-    dataFiles: [CATALOG_PATH, T2_CORPUS_PATH],
+    // + manifeste des versions des CGUV (lu par l'application, chantier 104P).
+    dataFiles: [CATALOG_PATH, T2_CORPUS_PATH, CGUV_MANIFEST_PATH],
   })
 }
 

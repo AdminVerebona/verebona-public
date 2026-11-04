@@ -19,6 +19,8 @@ interface ImportMetaEnv {
    * (lot 76P). Absente/invalide = `catalog`. Lu uniquement par `src/config/site.ts`.
    */
   readonly VITE_PRICING_SOURCE?: string
+  /** Origine du site public (permaliens du manifeste des CGUV) — lue au build seulement. */
+  readonly VITE_PUBLIC_SITE_URL?: string
 }
 
 /**

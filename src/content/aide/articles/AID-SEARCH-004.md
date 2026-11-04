@@ -14,16 +14,16 @@ screens: [Recherche application, Centre d’aide]
 objectTypes: []
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-HELP-001, AID-AI-005]
-seoTitle: Différencier recherche de données et recherche dans le Centre d’aide | Aide Verebona
+seoTitle: Recherche : données ou Centre d’aide ? | Verebona
 metaDescription: Savoir où chercher selon que vous voulez retrouver vos données ou comprendre l’application.
 canonical: /aide/recherche-donnees-vs-aide
 indexable: true
 lang: fr-FR
 synonyms: [recherche, centre aide, assistant, différencier, données, centre, aide, chercher, trouver, filtre]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Verebona comporte deux usages de recherche qu’il ne faut pas confondre. La recherche de l’application porte sur vos biens, documents et échéances. La recherche du Centre d’aide porte sur la documentation du produit et sert aussi de corpus de référence pour les questions d’usage de l’assistant.

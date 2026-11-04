@@ -1,0 +1,56 @@
+{
+  "description": "Découpage de l'export du Google Doc juridique en cinq contenus (scripts/legal-importer-textes.mjs, chantier 108P-L). Un bloc commence à chaque titre du niveau « niveauBloc » (auto = le plus haut niveau de titre présent) ; son titre choisit le contenu : première règle dont l'expression « titre » correspond (majuscules indifférentes). Les parties « 1/2 » et « 2/2 » d'un même contenu sont mises bout à bout. « titreDeBloc » : retirer (le titre de la page porte déjà le nom du contenu) ou conserver (en <h2>). « preambule » / « enTetesPiedsDePage » : refuser (défaut) ou ignorer — décision à prendre en voyant le texte concerné. À ajuster après « npm run legal:importer-textes -- <export> --lister ». Aucun texte juridique ici. Section « markdown » : réglages du corpus Markdown du PO (corpus-juridique-2026-10-30.md) — blocs « ## CONTENU À INTÉGRER — ONGLET « … » [— PARTIE n/2] », titre et préambule éditoriaux du fichier non repris (décision PO du 03/11/2026).",
+  "niveauBloc": "auto",
+  "titreDeBloc": "retirer",
+  "preambule": "refuser",
+  "enTetesPiedsDePage": "refuser",
+  "blocs": [
+    {
+      "cible": "mentions-legales",
+      "titre": "^\\s*mentions\\s+l[ée]gales"
+    },
+    {
+      "cible": "sous-traitants",
+      "titre": "sous-traitants"
+    },
+    {
+      "cible": "parrainage",
+      "titre": "parrainage"
+    },
+    {
+      "cible": "confidentialite",
+      "titre": "confidentialit[ée]"
+    },
+    {
+      "cible": "cguv",
+      "titre": "(^|[^\\p{L}])(CGUV|conditions\\s+g[ée]n[ée]rales)"
+    }
+  ],
+  "markdown": {
+    "niveauBloc": "h2",
+    "titreDeBloc": "retirer",
+    "preambule": "ignorer",
+    "blocs": [
+      {
+        "cible": "mentions-legales",
+        "titre": "ONGLET\\s+«\\s*MENTIONS\\s+L[ÉE]GALES\\s*»"
+      },
+      {
+        "cible": "cguv",
+        "titre": "ONGLET\\s+«\\s*CGUV\\s*»"
+      },
+      {
+        "cible": "confidentialite",
+        "titre": "ONGLET\\s+«\\s*CONFIDENTIALIT[ÉE]\\s*»"
+      },
+      {
+        "cible": "sous-traitants",
+        "titre": "ONGLET\\s+«\\s*SOUS-TRAITANTS\\s+ET\\s+PRESTATAIRES\\s*»"
+      },
+      {
+        "cible": "parrainage",
+        "titre": "ONGLET\\s+«\\s*PARRAINAGE\\s*»"
+      }
+    ]
+  }
+}

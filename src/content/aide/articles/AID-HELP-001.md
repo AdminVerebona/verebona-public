@@ -20,10 +20,10 @@ canonical: /aide/utiliser-centre-aide
 indexable: true
 lang: fr-FR
 synonyms: [centre aide, besoin aide, centre, aide, besoin, problème, erreur, dépannage, support, incident]
-status: published
-validatedAt: 2026-09-26
+status: blocked
+blocker: Lot 105P : annonce une aide intégrée sur mobile ; l’aide s’ouvre sur le site public dans le navigateur. Texte corrigé à fournir par le PO (ticket Centre d’aide, P1).
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Le Centre d’aide public est la référence de la documentation Verebona. L’entrée « Besoin d’aide » de l’application n’a pas de contenu propre : elle affiche une recherche et des raccourcis vers les articles du Centre d’aide.

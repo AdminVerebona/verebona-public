@@ -1,4 +1,4 @@
-import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory, type RouteLocationGeneric, type RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { captureReferralCode, signupUrl } from '../config/urls'
 import { installSiteModeGuard, useSiteMode } from '../config/site'
@@ -9,6 +9,22 @@ import { installStaleChunkRecovery } from '../config/stale-chunk'
 // Lot 72 : chemins tenus dans une table pure, lue aussi par le build et
 // `server.cjs` (vraies 404) et par l'inventaire des liens de l'application.
 import { ROUTE_PATHS } from './route-paths'
+import { LEGACY_REDIRECTS } from '../config/legacy-routes.rules'
+
+const LegalView = () => import('../views/LegalView.vue')
+
+/**
+ * Anciennes adresses (chantier 104P) : la 301 est faite par `server.cjs` ; ces
+ * enregistrements couvrent la navigation interne (lien resté dans un ancien
+ * onglet, historique). Même table que le serveur, cible toujours finale
+ * (jamais une autre ancienne adresse : pas de boucle, contrôlé au build).
+ */
+const legacyRoutes: RouteRecordRaw[] = Object.entries(LEGACY_REDIRECTS).map(([from, to]) => {
+  const hashAt = to.indexOf('#')
+  const base = hashAt === -1 ? to : to.slice(0, hashAt)
+  const hash = hashAt === -1 ? '' : to.slice(hashAt)
+  return { path: from, redirect: (r: RouteLocationGeneric) => ({ path: base || '/', query: r.query, hash }) }
+})
 
 const routes = [
   { path: ROUTE_PATHS.home, name: 'home', component: HomeView },
@@ -31,9 +47,19 @@ const routes = [
   { path: ROUTE_PATHS.ressources, name: 'ressources', component: () => import('../views/ressources/RessourcesIndexView.vue') },
   { path: ROUTE_PATHS['ressources-article'], name: 'ressources-article', component: () => import('../views/ressources/RessourceArticleView.vue') },
   { path: ROUTE_PATHS.contact, name: 'contact', component: () => import('../views/ContactView.vue') },
-  { path: ROUTE_PATHS['legal-mentions'], name: 'legal-mentions', component: () => import('../views/LegalView.vue') },
-  { path: ROUTE_PATHS['legal-cgu'], name: 'legal-cgu', component: () => import('../views/LegalView.vue') },
-  { path: ROUTE_PATHS['legal-confid'], name: 'legal-confid', component: () => import('../views/LegalView.vue') },
+  // ══════════════════════════════════════════════════════════════════════════
+  // RUBRIQUE « LÉGAL » — chantier 104P (contrat site public ↔ application § 2)
+  //
+  // Une page à onglets, une URL stable par onglet ; textes lus depuis
+  // `src/content/legal/` (module `virtual:legal`), jamais en dur.
+  // ══════════════════════════════════════════════════════════════════════════
+  { path: ROUTE_PATHS['legal-mentions'], name: 'legal-mentions', component: LegalView, meta: { legalTab: 'mentions-legales' } },
+  { path: ROUTE_PATHS['legal-cguv'], name: 'legal-cguv', component: LegalView, meta: { legalTab: 'cguv' } },
+  { path: ROUTE_PATHS['legal-confid'], name: 'legal-confid', component: LegalView, meta: { legalTab: 'confidentialite' } },
+  { path: ROUTE_PATHS['legal-sous-traitants'], name: 'legal-sous-traitants', component: LegalView, meta: { legalTab: 'sous-traitants' } },
+  { path: ROUTE_PATHS['legal-parrainage'], name: 'legal-parrainage', component: LegalView, meta: { legalTab: 'parrainage' } },
+  { path: ROUTE_PATHS['legal-cguv-version'], name: 'legal-cguv-version', component: LegalView, meta: { legalTab: 'cguv' } },
+  ...legacyRoutes,
 
   // ══════════════════════════════════════════════════════════════════════════
   // POINT D'ENTREE DU PARRAINAGE — CDC parrainage §4.1

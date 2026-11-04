@@ -14,16 +14,16 @@ screens: [Fiche bien > Dossiers/Exports]
 objectTypes: [export, bien]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-DOSSIER-002, AID-HELP-009]
-seoTitle: Retrouver, télécharger, relancer ou supprimer un dossier généré | Aide Verebona
+seoTitle: Dossiers générés : historique et actions | Aide Verebona
 metaDescription: Gérer l’historique des exports créés pour un bien.
 canonical: /aide/historique-dossiers-generes
 indexable: true
 lang: fr-FR
 synonyms: [dossiers, historique, export, retrouver, télécharger, relancer, supprimer, dossier, généré, PDF]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-25
+updatedAt: 2026-11-02
 ---
 
 Verebona conserve un historique des générations réalisées sur la fiche du bien. Chaque entrée indique son type, son état et, lorsqu’elle est prête, un lien de téléchargement. Une génération en erreur peut être relancée lorsque cette action est proposée.

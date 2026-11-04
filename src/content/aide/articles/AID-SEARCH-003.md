@@ -14,17 +14,17 @@ screens: [Assistant Verebona, Recherche mobile]
 objectTypes: [bien, document, échéance]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-AI-005, AID-SEARCH-004]
-seoTitle: Interroger Verebona sur ses biens, documents et échéances | Aide Verebona
+seoTitle: Interroger ses biens et documents | Aide Verebona
 metaDescription: Poser une question en langage naturel sur les informations présentes dans votre compte.
 canonical: /aide/interroger-verebona-donnees
 indexable: true
 lang: fr-FR
 synonyms: [recherche, assistant, ia, interroger, verebona, biens, documents, échéances, chercher, trouver]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-02
 appVersion: V1
 redirectFrom: [/aide/assistant]
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.

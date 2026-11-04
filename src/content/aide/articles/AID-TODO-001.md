@@ -21,10 +21,10 @@ indexable: true
 lang: fr-FR
 synonyms: [à traiter, actions, ia, page, traiter, action, arbitrer, confirmer, rattacher, compléter]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
 redirectFrom: [/aide/traiter-documents-incomplets]
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 « À traiter » est une file unique d’actions. Chaque carte représente une décision concrète : arbitrer une valeur, rattacher un élément, confirmer une proposition ou compléter une donnée lorsqu’une règle métier le justifie. La page ne liste pas tous les champs manquants.
@@ -40,6 +40,6 @@ updatedAt: 2026-09-26
 
 **Une action, pas un objet** — Un même document peut produire plusieurs actions distinctes si plusieurs décisions différentes sont réellement nécessaires.
 
-**Pas d’onglets métier** — La V2 utilise une liste continue. La hiérarchie est portée par l’ordre et la priorité, pas par des compartiments.
+**Pas d’onglets métier** — La page utilise une liste continue. La hiérarchie est portée par l’ordre et la priorité, pas par des compartiments.
 
 **Absence normale** — Un champ facultatif vide ne génère rien sans règle explicite.

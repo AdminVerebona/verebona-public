@@ -20,10 +20,10 @@ canonical: /aide/formats-taille-documents
 indexable: true
 lang: fr-FR
 synonyms: [documents, formats, limites, acceptés, taille, maximale, document, fichier, justificatif, pièce]
-status: published
-validatedAt: 2026-10-05
+status: blocked
+blocker: Lot 105P : limite vidéo « 500 Mo » fausse. Limites réelles de l’application (upload-limits.ts) : 25 Mo par document, 100 Mo par vidéo, 10 fichiers et 100 Mo au total par dépôt. Texte corrigé à fournir par le PO (ticket Centre d’aide, P0).
 appVersion: V1
-updatedAt: 2026-10-05
+updatedAt: 2026-11-02
 ---
 
 Verebona contrôle le type réel du fichier, son extension, sa taille et son intégrité. Le contrôle ne repose pas uniquement sur le nom du fichier : des vérifications techniques empêchent l’envoi de formats dangereux ou incohérents.

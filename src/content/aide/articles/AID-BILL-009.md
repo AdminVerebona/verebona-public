@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [abonnement, rétractation, remboursement, exercer, droit, offre, plan, facture, paiement, Stripe]
 status: published
-validatedAt: 2026-09-26
+validatedAt: 2026-11-02
 appVersion: V1
-updatedAt: 2026-09-26
+updatedAt: 2026-11-02
 ---
 
 Le parcours public « Renoncer au contrat ici » permet au titulaire d’un abonnement payant d’exercer la rétractation lorsqu’il est éligible. Il s’agit d’une rétractation, pas d’une résiliation : le contrat est annulé et les paiements remboursables liés au contrat sont remboursés intégralement selon le traitement prévu.
@@ -44,4 +44,4 @@ Le parcours public « Renoncer au contrat ici » permet au titulaire d’un abon
 
 **Remboursement** — Intégral sur les montants effectivement encaissés du contrat, sans déduction des frais Stripe et en tenant compte des remboursements déjà effectués.
 
-**Données** — Après confirmation, les données restent exportables pendant 30 jours avant suppression programmée ; une nouvelle souscription peut annuler cette suppression.
+**Données** — Après confirmation, le compte passe en lecture seule : vos données restent consultables et exportables pendant 90 jours. Elles sont supprimées au terme de ces 90 jours, ou plus tôt si vous en faites la demande. Une nouvelle souscription annule cette suppression.

@@ -3,7 +3,8 @@
   <div class="vb-page-hero__inner" style="max-width:1080px">
     <PageCrumbs :current="crumbLabel" />
     <span class="vb-eyebrow">Contact</span>
-    <h1 class="vb-page-hero__title">Parlons de vos biens</h1>
+    <!-- Chantier 105Q (audit Bing) : H1 explicite, présent dans le HTML pré-rendu de /contact. -->
+    <h1 class="vb-page-hero__title">Contacter Verebona</h1>
     <p class="vb-page-hero__lead">Une question, une suggestion, un partenariat ? Écrivez-nous, nous revenons vers vous rapidement.</p>
   </div>
 </section>
