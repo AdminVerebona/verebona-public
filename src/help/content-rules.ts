@@ -108,6 +108,23 @@ export const CONTENT_RULE_EXCEPTIONS: readonly ContentRuleException[] = [
     excerpt: 'le type d’appareil/navigateur pour un problème d’affichage ou de notification',
     reason: 'Conseil au support : le navigateur sert au diagnostic d’affichage, l’appareil à celui des notifications. Aucune promesse de push Web.',
   },
+  // Lot 108P (03/11/2026, ticket TCO « Alignement documentaire ») : texte PO
+  // repris fidèlement ; « ticket » y désigne le ticket de caisse (justificatif
+  // de carburant, de péage, total d’une facture multi-articles), pas un ticket
+  // de projet.
+  ...([
+    ['AID-ASSET-009', 'distinguant le prix des articles concernés du total du ticket'],
+    ['AID-ASSET-009', 'Que se passe-t-il si j’ajoute ensuite des tickets ?'],
+    ['AID-ASSET-009', '40 € de tickets réellement enregistrés'],
+    ['AID-ASSET-009', 'Si les tickets du mois atteignent 140 €'],
+    ['AID-ASSET-009', 'Les tickets restent consultables et ne sont pas effacés.'],
+    ['AID-DOC-004', 'ne doit pas attribuer automatiquement le total du ticket à un seul objet'],
+  ] as const).map(([articleId, excerpt]): ContentRuleException => ({
+    articleId,
+    rule: 'jargon-interne',
+    excerpt,
+    reason: '« ticket » au sens de ticket de caisse (justificatif de dépense), texte du PO repris à l’identique (lot 108P).',
+  })),
 ]
 
 export interface ContentRuleFinding {

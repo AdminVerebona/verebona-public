@@ -1,6 +1,6 @@
 ---
 id: AID-AGENDA-001
-title: Comprendre et créer un élément d’agenda
+title: Comprendre et créer un événement dans l’agenda
 slug: creer-element-agenda
 category: agenda-echeances
 summary: Créer une date à suivre dans l’agenda de Verebona.
@@ -14,31 +14,31 @@ screens: [Agenda, Fiche bien > Agenda]
 objectTypes: [échéance, bien]
 permissions: Aucun prérequis pour lire l’article
 relatedArticles: [AID-AGENDA-005, AID-TODO-004]
-seoTitle: Comprendre et créer un élément d’agenda | Aide Verebona
+seoTitle: Comprendre et créer un événement dans l’agenda | Aide Verebona
 metaDescription: Créer une date à suivre dans l’agenda de Verebona.
 canonical: /aide/creer-element-agenda
 indexable: true
 lang: fr-FR
-synonyms: [agenda, échéance, création, élément, calendrier, rappel, date, événement]
+synonyms: [agenda, échéance, création, élément, élément d’agenda, calendrier, rappel, date, événement]
 status: published
-validatedAt: 2026-09-25
+validatedAt: 2026-11-05
 appVersion: V1
 redirectFrom: [/aide/ajouter-evenement-agenda]
-updatedAt: 2026-09-25
+updatedAt: 2026-11-05
 ---
 
-L’agenda centralise les événements et échéances liés à vos biens. Un élément peut être créé manuellement ou provenir d’une information détectée dans un document ou une donnée du bien.
+L’agenda centralise les événements et échéances liés à vos biens. Un événement peut être créé manuellement ou provenir d’une information détectée dans un document ou une donnée du bien.
 
 ## Procédure
 
 1. **Ouvrez « Mon agenda »** — Utilisez le bouton « Ajouter ».
 2. **Renseignez le titre** — Décrivez clairement l’action ou l’événement.
 3. **Ajoutez la date** — Renseignez la date et, si utile, l’heure ou la période.
-4. **Rattachez le bien** — Associez l’élément au bien concerné lorsque cela a du sens.
-5. **Enregistrez** — L’élément apparaît dans l’agenda et les vues correspondantes.
+4. **Rattachez le bien** — Associez l’événement au bien concerné lorsque cela a du sens.
+5. **Enregistrez** — L’événement apparaît dans l’agenda et les vues correspondantes.
 
 ## Détails et cas particuliers
 
-**Sans date** — Certains éléments peuvent exister sans date et apparaître dans un bloc dédié tant qu’ils ne sont pas complétés.
+**Sans date** — Certains événements peuvent exister sans date et apparaître dans un bloc dédié tant qu’ils ne sont pas complétés.
 
 **Origine automatique** — Une date issue d’un document reste traçable par son origine et peut nécessiter une validation si elle est ambiguë.

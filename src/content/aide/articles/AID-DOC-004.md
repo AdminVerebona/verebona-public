@@ -13,18 +13,18 @@ authState: [public_help, connected_action]
 screens: [Mes documents, Détail document, Fiche bien, À traiter, Historique des enrichissements]
 objectTypes: [document, bien, échéance]
 permissions: Aucun prérequis pour lire l’article
-relatedArticles: [AID-AI-001, AID-TODO-001, AID-HELP-005]
+relatedArticles: [AID-AI-001, AID-TODO-001, AID-HELP-005, AID-ASSET-009]
 seoTitle: Comprendre l’analyse automatique d’un document | Aide Verebona
 metaDescription: Ce que l’analyse automatique fait d’un document, ce qu’elle fait seule et quand votre décision est demandée.
 canonical: /aide/analyse-automatique-document
 indexable: true
 lang: fr-FR
-synonyms: [documents, ia, analyse, automatique, document, fichier, justificatif, pièce, upload, import]
+synonyms: [documents, ia, analyse, automatique, document, fichier, justificatif, pièce, upload, import, montant introuvable, facture en double, coût total de possession]
 status: published
-validatedAt: 2026-10-12
+validatedAt: 2026-11-03
 appVersion: V1
 redirectFrom: [/aide/comprendre-analyse-automatique, /aide/import-analyse]
-updatedAt: 2026-10-12
+updatedAt: 2026-11-03
 ---
 
 L’analyse automatique permet à Verebona de lire les documents que vous ajoutez, d’en identifier les informations utiles et de faciliter leur classement, leur rattachement à un bien et leur suivi.
@@ -39,7 +39,7 @@ Selon le document, l’application peut reconnaître sa nature, extraire certain
 
 **Comprendre le document** — Verebona tente de reconnaître la nature du fichier : facture d’achat, contrat, attestation, justificatif d’entretien, document administratif, etc.
 
-**Extraire les informations importantes** — Selon le contenu disponible et lisible, l’analyse peut retrouver une date, un montant, un fournisseur, une référence ou des renseignements relatifs à un bien ou à une garantie.
+**Extraire les informations importantes** — Selon le contenu disponible et lisible, l’analyse peut retrouver une date, un montant, un fournisseur, une référence ou des renseignements relatifs à un bien ou à une garantie. Une facture peut servir à documenter une dépense du bien. Si un montant important n’est pas exploitable, Verebona peut relancer son analyse avant de demander une vérification. Une facture comportant plusieurs articles ne doit pas attribuer automatiquement le total du ticket à un seul objet.
 
 **Proposer un nom et un classement** — Verebona peut proposer un titre compréhensible, une rubrique et un type de document adaptés à son contenu.
 

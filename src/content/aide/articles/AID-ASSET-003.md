@@ -13,18 +13,18 @@ authState: [public_help, connected_action]
 screens: [Fiche bien > Informations]
 objectTypes: [bien]
 permissions: Aucun prérequis pour lire l’article
-relatedArticles: [AID-AI-003, AID-TODO-003]
+relatedArticles: [AID-AI-003, AID-TODO-003, AID-ASSET-009]
 seoTitle: Compléter ou modifier la fiche d’un bien | Aide Verebona
 metaDescription: Mettre à jour les informations générales et les caractéristiques d’un bien.
 canonical: /aide/modifier-fiche-bien
 indexable: true
 lang: fr-FR
-synonyms: [biens, modification, compléter, fiche, bien, patrimoine, asset, objet, immobilier, véhicule]
+synonyms: [biens, modification, compléter, fiche, bien, patrimoine, asset, objet, immobilier, véhicule, prix d’achat, facture en double, coût total de possession, TCO]
 status: published
-validatedAt: 2026-10-05
+validatedAt: 2026-11-03
 appVersion: V1
 redirectFrom: [/aide/completer-fiche-bien]
-updatedAt: 2026-10-05
+updatedAt: 2026-11-03
 ---
 
 La fiche d’un bien contient des informations communes et des sections adaptées à sa catégorie. Certaines valeurs sont saisies manuellement ; d’autres peuvent être proposées ou complétées à partir de documents analysés.
@@ -37,6 +37,8 @@ La fiche d’un bien contient des informations communes et des sections adaptée
 4. **Enregistrez** — Les données sont mises à jour immédiatement si vous disposez des droits nécessaires.
 
 ## Détails et cas particuliers
+
+**Prix d’achat** — Le prix d’achat peut également figurer sur une facture associée au bien. S’il s’agit du même achat, ces deux informations ne doivent pas être additionnées dans le coût total de possession.
 
 **Valeur issue d’un document** — Verebona peut proposer une valeur détectée dans un document. Selon le niveau de confiance et les règles applicables, elle peut être appliquée automatiquement ou nécessiter votre arbitrage.
 

@@ -102,10 +102,24 @@ describe('Frontières éditoriales et contenus sensibles (§5, T21 à T29)', () 
   it('T28 — L02 : Verebona n’est jamais présenté comme un CIL certifié', () => {
     expect(texte('L02')).not.toMatch(/Verebona (est|constitue) (un|votre) (CIL|carnet)/i)
   })
-  it('T21 — O03 et C01 : aucune promesse de calcul de coût automatique livré', () => {
-    for (const id of ['O03', 'C01']) {
-      const cta = corpus.articles.find((a) => a.id === id)!.cta.map((b) => JSON.stringify(b)).join(' ')
-      expect(cta, id).toMatch(/ne sera annoncé qu’après validation|dépendra des fonctionnalités/)
+  // Lot 108P (03/11/2026) : textes appliqués après la mise en service du nouveau
+  // calcul du coût total de possession (estimations d'usage complémentaires).
+  // Plus de réserve « non livré » ; réel et estimé jamais confondus.
+  it('T21 — O03, C01, C02 : coût de possession décrit sans confondre réel, estimé et décote', () => {
+    const cta = (id: string) => corpus.articles.find((a) => a.id === id)!.cta.map((b) => JSON.stringify(b)).join(' ')
+    for (const id of ['O03', 'C01']) expect(cta(id), id).not.toMatch(/ne sera annoncé qu’après validation|dépendra des fonctionnalités/)
+    expect(texte('O03')).not.toMatch(/ne présente pas le TCO automatique Verebona comme livré|prévu dans la trajectoire/)
+    expect(corpus.articles.find((a) => a.id === 'O03')!.boundary).toBe('Le coût annuel d’entretien seul est C01.')
+    expect(texte('O03')).toContain('elles ne constituent pas des paiements prouvés')
+    expect(texte('O03')).toContain('ne se confond pas avec un calcul de décote')
+    expect(cta('O03')).toContain('elles remplacent progressivement la part estimée correspondante')
+    expect(cta('O03')).toContain('sans additionner deux fois un même achat')
+    // C01 : le carburant n'entre pas dans la définition de l'entretien.
+    expect(cta('C01')).toContain('distincts du seul entretien')
+    expect(cta('C02')).toContain('une seule acquisition, pas deux coûts distincts')
+    for (const id of ['O03', 'C01', 'C02']) {
+      expect(corpus.articles.find((a) => a.id === id)!.updatedAt, id).toBe('2026-11-03')
+      expect(corpus.articles.find((a) => a.id === id)!.revision, id).toBe(3)
     }
   })
   it('ED-04 — un exemple concret par page, rendu sous l’étiquette « Exemple illustratif »', () => {
@@ -239,7 +253,8 @@ describe('Lot 54 — révision éditoriale V7', () => {
   it('aucune date de publication anté-datée : publishedAt absent tant que la mise en ligne n’a pas eu lieu', () => {
     for (const a of corpus.articles) {
       expect(a.publishedAt, a.id).toBeNull()
-      expect(a.revision, a.id).toBe(2)
+      // Lot 108P : O03, C01, C02 en révision 3 (coût total de possession, 03/11/2026).
+      expect(a.revision, a.id).toBe(['O03', 'C01', 'C02'].includes(a.id) ? 3 : 2)
     }
   })
   it('C01 et O03 gardent leur exemple chiffré dans une section « Exemple … » ; E02 n’a plus d’exemple', () => {

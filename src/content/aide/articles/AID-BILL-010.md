@@ -21,9 +21,9 @@ indexable: true
 lang: fr-FR
 synonyms: [parrainage, abonnement, offre, plan, facture, paiement, Stripe]
 status: published
-validatedAt: 2026-11-02
+validatedAt: 2026-11-05
 appVersion: V1
-updatedAt: 2026-11-02
+updatedAt: 2026-11-05
 ---
 
 Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel souscrit par un proche. » Seul le parrain reçoit la récompense. Le filleul ne reçoit pas de cadeau de parrainage spécifique.
@@ -31,7 +31,7 @@ Le principe est simple : « 1 mois offert pour vous, à chaque abonnement annuel
 ## Procédure
 
 1. **Ouvrez Parrainage** — Créez votre lien si vous n’en avez pas encore.
-2. **Copiez le code ou le lien** — Ou utilisez l’invitation par e-mail.
+2. **Partagez votre invitation** — Utilisez « Partager mon invitation » pour l’envoyer par message, e-mail ou une autre application, ou copiez le code ou le lien.
 3. **Votre proche crée un nouveau compte depuis votre lien ou avec votre code** — C’est ce qui rattache sa future souscription à votre parrainage. L’inscription doit avoir lieu dans les 90 jours suivant l’utilisation du lien ou du code.
 4. **Attendez la validation** — La récompense n’est acquise qu’après encaissement du premier paiement de l’abonnement annuel et expiration du délai de rétractation.
 5. **Consultez vos statistiques** — Le nombre de parrainages validés et les mois acquis sont affichés lorsqu’ils existent.

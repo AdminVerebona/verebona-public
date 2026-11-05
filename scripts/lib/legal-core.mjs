@@ -113,12 +113,18 @@ function calendarDays(iso) {
 export function resolveSiteOrigin(environment, raw) {
   const v = typeof raw === 'string' ? raw.trim() : ''
   if (v) {
-    try {
-      const u = new URL(v)
-      const local = /^(localhost|127\.0\.0\.1)$/.test(u.hostname)
-      if (u.protocol === 'https:' || (local && u.protocol === 'http:')) return u.origin
-    } catch { /* valeur invalide : défaut de l'environnement */ }
-    throw new Error(`[legal] VITE_PUBLIC_SITE_URL invalide (${v}) : URL https:// attendue`)
+    let u = null
+    try { u = new URL(v) } catch { /* valeur invalide : erreur explicite ci-dessous */ }
+    const local = !!u && /^(localhost|127\.0\.0\.1)$/.test(u.hostname)
+    if (!u || !(u.protocol === 'https:' || (local && u.protocol === 'http:'))) {
+      throw new Error(`[legal] VITE_PUBLIC_SITE_URL invalide (${v}) : URL https:// attendue`)
+    }
+    // Lot 111O : une préproduction ne publie jamais un manifeste à l'origine de la production
+    // (l'application de préprod le refuserait : inscriptions bloquées le 05/11/2026). Échec explicite du build.
+    if (environment === 'preprod' && /^(www\.)?verebona\.fr$/i.test(u.hostname)) {
+      throw new Error(`[legal] VITE_PUBLIC_SITE_URL=${u.origin} alors que VITE_ENVIRONMENT=preprod : poser l'origine du site de préproduction (ex. https://preprod.verebona.fr)`)
+    }
+    return u.origin
   }
   if (environment === 'preprod') return 'https://preprod.verebona.fr'
   if (environment === 'development') return 'http://localhost:3000'

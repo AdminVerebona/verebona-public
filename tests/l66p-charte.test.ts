@@ -240,7 +240,7 @@ describe('L66P-05 — catalogue d’aide et Ressources inchangés par la migrati
   // (horodatage du commit) et ne peut pas être calculée avant lui.
   const corpus = loadCorpus(files.map((f) => ({ ...f, updatedAt: null })), categories)
 
-  it('catalogue JSON lu par l’application : contenu identique à la base lot105', () => {
+  it('catalogue JSON lu par l’application : contenu identique à la base lot108', () => {
     const at = '2026-10-16T00:00:00Z'
     const prod = buildCatalog(corpus, 'production', 'v', 'https://www.verebona.fr', at)
     const pre = buildCatalog(corpus, 'preprod', 'v', 'https://www.verebona.fr', at)
@@ -259,8 +259,15 @@ describe('L66P-05 — catalogue d’aide et Ressources inchangés par la migrati
     // le catalogue ne porte pas le seoTitle, mais leurs updatedAt et validatedAt passent au
     // 2026-11-02 (EDITOR-02 / D-O : modification datée, libellés validés au ticket) — seule
     // différence du catalogue. Anciennes empreintes : 7b548e15… (production), 1934745a… (préproduction).
-    expect(sha(prod)).toBe('d83a094c335668d7ab6530f37fd9b3a4b715587b9ca4b3023a7943b5ad9bcd91')
-    expect(sha(pre)).toBe('649b2900fafed892a9985cfcf411d104610bbbd028df33e95e9b72cae598445c')
+    // Lot 108P (03/11/2026, coût total de possession) : AID-ASSET-009 ajouté, AID-ASSET-003 et
+    // AID-DOC-004 modifiés volontairement (texte, synonymes, articles liés, dates 2026-11-03).
+    // Anciennes empreintes : d83a094c… (production), 649b2900… (préproduction).
+    // Lot 111 (05/11/2026, décision PO) : AID-BILL-010 étape 2 (plus d'invitation par e-mail), AID-AGENDA-001 et
+    // AID-AGENDA-002 (« élément d'agenda » → « événement », synonyme conservé), AID-BILL-001 (offres alignées sur les
+    // cartes tarifaires 111N), dates 2026-11-05.
+    // Anciennes empreintes : 94c34706… (production), 80e17493… (préproduction).
+    expect(sha(prod)).toBe('03af4ddcc6e5e485dce98a0913d488296ecc522eea4857810b8ce9e2b5eef8a6')
+    expect(sha(pre)).toBe('62c7236bd6967127ddcb05f9d6a32200f6d23f645eb22c80e0bd43e8d9a386f7')
   })
 
   it('Ressources : routes publiées identiques à la base lot53pv7', () => {

@@ -21,7 +21,8 @@ function withRaw(id: string, edit: (raw: string) => string) {
 describe('corpus du Centre d\'aide', () => {
   it('passe la validation de build sans aucun défaut (§16.1)', () => {
     expect(result.issues).toEqual([])
-    expect(result.articles).toHaveLength(100)
+    // Lot 108P : + AID-ASSET-009 (coût total de possession).
+    expect(result.articles).toHaveLength(101)
     expect(result.categories).toHaveLength(14)
   })
 
@@ -83,5 +84,26 @@ describe('corpus du Centre d\'aide', () => {
     const raw = files.find((f) => f.path.endsWith('/AID-ACCOUNT-006.md'))!.raw
     expect(raw).toContain('**clôturé**')
     expect(raw).toContain('**supprimé définitivement sous 24 heures**')
+  })
+
+  it('AID-ASSET-009 : coût total de possession (lot 108P, après #646) — Premium/Duo, réel et estimé distincts', () => {
+    const a = result.articles.find((x) => x.id === 'AID-ASSET-009')!
+    expect(a.status).toBe('published')
+    expect(a.category).toBe('biens')
+    expect(a.offers).toEqual(['premium', 'premium_duo'])
+    expect(a.canonical).toBe('/aide/cout-total-possession-bien')
+    const raw = files.find((f) => f.path.endsWith('/AID-ASSET-009.md'))!.raw
+    for (const s of [
+      'la rubrique reste verrouillée en Standard',
+      'l’achat est compté une fois, la facture reste consultable comme justificatif',
+      '40 € documentés et 60 € estimés', 'le TCO retient 140 € réels et aucun complément estimé',
+      '« Le coût total est calculé automatiquement à partir du prix d’achat et des dépenses associées au bien. »',
+      'Les périodes futures ne sont pas ajoutées au coût déjà cumulé.',
+    ]) expect(raw, s).toContain(s)
+    // Ancienne règle (#445/#474) : les forfaits n'étaient jamais ajoutés au coût cumulé.
+    expect(raw).not.toMatch(/jamais ajoutés au coût cumulé/)
+    for (const k of ['coût total de possession', 'TCO', 'dépenses d’usage', 'carburant', 'péages', 'recharge', 'forfait',
+      'coût estimé', 'facture en double', 'prix d’achat', 'montant introuvable']) expect(a.synonyms, k).toContain(k)
+    expect(result.articles.find((x) => x.id === 'AID-ASSET-003')!.relatedArticles).toContain('AID-ASSET-009')
   })
 })

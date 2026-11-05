@@ -89,6 +89,9 @@
     "/aide/archiver-bien",
     "/aide/supprimer-un-bien"
   ],
+  "AID-ASSET-009": [
+    "/aide/cout-total-possession-bien"
+  ],
   "AID-BILL-001": [
     "/aide/offres-tarifs"
   ],
