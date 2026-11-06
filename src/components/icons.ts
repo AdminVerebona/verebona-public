@@ -22,6 +22,7 @@ export const ICONS = {
   bell: [p('M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9'), p('M10 20a2 2 0 0 0 4 0')],
   chevronDown: [p('m6 9 6 6 6-6')],
   arrowRight: [p('M5 12h14M13 6l6 6-6 6')],
+  arrowUp: [p('M12 19V5M6 11l6-6 6 6')],
   users: [p('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'), { tag: 'circle', attrs: { cx: 9, cy: 7, r: 4 } }, p('M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75')],
   mail: [{ tag: 'rect', attrs: { x: 3, y: 5, width: 18, height: 14, rx: 2 } }, p('m3 7 9 6 9-6')],
   menu: [p('M4 7h16M4 12h16M4 17h16')],

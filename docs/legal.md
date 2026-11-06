@@ -16,6 +16,12 @@ dans quel ordre mettre en ligne.
 | `/legal/cguv/versions.json` | le manifeste `verebona-legal-cguv-versions-v1` : `application/json; charset=utf-8`, `Cache-Control: public, max-age=300` |
 | `/mentions-legales`, `/cgu`, `/cgvu`, `/cguv`, `/confidentialite`, `/legal` | **301** vers `/legal/mentions-legales`, `/legal/cguv` (×3), `/legal/confidentialite`, `/legal/mentions-legales` (query conservée, une seule redirection, aussi côté routeur) |
 
+Pied de page (lot 113, #694) : la colonne « Légal » ne montre que **Mentions
+légales**, **CGUV** et **Confidentialité** (vers `/legal/mentions-legales`,
+`/legal/cguv`, `/legal/confidentialite`). « Sous-traitants et prestataires »
+et « Parrainage » restent des onglets de la page juridique (URL directes,
+navigation interne, sitemap) ; seul leur lien de pied de page a été retiré.
+
 En préproduction protégée (`BASIC_AUTH_ENABLED=true`), le manifeste et les
 textes figés restent lisibles **sans identifiants** : l'application les lit
 de serveur à serveur. Les pages, elles, restent protégées.

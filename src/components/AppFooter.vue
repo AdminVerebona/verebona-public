@@ -28,17 +28,25 @@
         <a v-bind="link('/legal/mentions-legales')">Mentions légales</a>
         <a v-bind="link('/legal/cguv')">CGUV</a>
         <a v-bind="link('/legal/confidentialite')">Confidentialité</a>
-        <a v-bind="link('/legal/sous-traitants')">Sous-traitants et prestataires</a>
-        <a v-bind="link('/legal/parrainage')">Parrainage</a>
       </div>
+      <!--
+        Lot 113 (#694) : trois liens seulement. « Sous-traitants et
+        prestataires » et « Parrainage » restent des onglets de la page
+        juridique (/legal/sous-traitants, /legal/parrainage : URL directes,
+        navigation interne de la page, sitemap) — retirés du pied de page
+        uniquement.
+      -->
     </div>
   </div>
+  <!-- Lot 113 (#709) : dernier arrêt de tabulation de la page, après les liens du pied. -->
+  <BackToTop />
 </footer>
 </template>
 
 <script setup lang="ts">
 import { useNav } from '../composables/useNav'
 import VbLogo from './VbLogo.vue'
+import BackToTop from './BackToTop.vue'
 const { link, anchor } = useNav()
 </script>
 

@@ -165,13 +165,16 @@ describe('L104P-VIEW — termes', () => {
     }
   })
 
-  it('L104P-VIEW-09 — pied de page : les 5 contenus (Mentions légales, CGUV, Confidentialité, Sous-traitants, Parrainage) → URL stables', () => {
+  // Lot 113 (#694, décision PO) : le pied de page ne garde que 3 liens légaux ;
+  // Sous-traitants et Parrainage restent des onglets (VIEW-01/02) — voir
+  // tests/l113c-footer-legal.test.ts.
+  it('L104P-VIEW-09 — pied de page : Mentions légales, CGUV, Confidentialité → URL stables (113 : 3 liens)', () => {
     const footer = readFileSync(path.join(process.cwd(), 'src/components/AppFooter.vue'), 'utf8')
     expect(footer).toContain(`<a v-bind="link('/legal/cguv')">CGUV</a>`)
     expect(footer).toContain(`link('/legal/mentions-legales')`)
     expect(footer).toContain(`link('/legal/confidentialite')`)
-    expect(footer).toContain(`link('/legal/sous-traitants')`)
-    expect(footer).toContain(`<a v-bind="link('/legal/parrainage')">Parrainage</a>`)
+    expect(footer).not.toContain(`link('/legal/sous-traitants')`)
+    expect(footer).not.toContain(`link('/legal/parrainage')`)
     expect(footer).not.toMatch(/CGSU|CGVU|link\('\/cgu'\)|link\('\/cgvu'\)|link\('\/mentions-legales'\)|link\('\/confidentialite'\)/)
   })
 })

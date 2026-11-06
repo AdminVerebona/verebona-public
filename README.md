@@ -118,6 +118,8 @@ Retour arrière (avant l'ouverture seulement) : remettre `prelaunch_fixed`, rebu
 | `tests/sitemap.test.ts` | contenu du sitemap de production (accueil, `/aide`, thèmes et articles publiés seulement), `canonicalUrl`, `robots.txt` |
 | `tests/structured-data.test.ts` | graphe Organization + WebSite (unicité, `@id`, logo PNG ≥ 112 px, aucun placeholder, rien hors production), `TechArticle` des articles |
 | `tests/server.test.ts` | `server.cjs` lancé sur un `dist/` factice : 301 unique vers l'hôte canonique, `X-Robots-Tag` en préprod, sitemap `application/xml`, 404 sans repli HTML, redirections d'aide, `frame-ancestors`, `Cache-Control` par famille (hachés immuables, image à nom fixe courte, HTML revalidé + 304, 404 `no-store`, `private` en préprod protégée) |
+| `tests/l113c-footer-legal.test.ts` | lot 113 (#694) : colonne Légal du pied de page à 3 liens (Mentions légales, CGUV, Confidentialité), chaque lien sélectionne le bon onglet au clic (depuis une autre page ou un autre onglet) et à l'ouverture directe ; 5 onglets, URL et sitemap conservés |
+| `tests/l113c-revenir-en-haut.test.ts` | lot 113 (#709) : bouton « Revenir en haut » — absent en haut de page, apparaît après une hauteur d'écran (≥ 600 px), bouton nommé, focus rendu au logo, `prefers-reduced-motion`, dernier arrêt clavier du pied, au-dessus de la barre d'essai mobile, aplat de la charte |
 | `tests/l72p-liens-routes.test.ts` | lot 72 : routeur = table `route-paths.ts`, inventaire commité à jour, anciennes URL sans chaîne, chaque lien interne des sources (`link`, `anchor`, `router.push`, `to`, `href`) vers une route/page/ancre existante, header + menu mobile + pied de page montés depuis `/aide` avec des ancres absolues |
 | `tests/l72p-server-routes.test.ts` | lot 72 : `server.cjs` réel — `/pourquoi-verebona` 404, `/comment-ca-marche` une 301 → `/#how` (query avant le fragment, casse, slash final), adresse inconnue 404 / routes déclarées 200, aide et ressources inchangées, une seule 301 depuis l'apex en production, repli sans `.site-routes.json` |
 | `tests/stale-chunk.test.ts` | chunks obsolètes (PUB-PERF-04) : une seule reprise automatique, pas de boucle, message ensuite, saisie conservée, paramètres et parrainage conservés, erreurs d'exécution ignorées |
@@ -170,7 +172,8 @@ src/
     AppHeader.vue         header non fixe (logo 34 px) + menu mobile
     VbLogo.vue, VbIcon.vue logo (§3 de la charte) et icônes linéaires (icons.ts)
     PageCrumbs.vue        fil d'Ariane des pages contact et légales
-    AppFooter.vue         footer (Produit / Support / Légal)
+    AppFooter.vue         footer (Produit / Support / Légal — 3 liens légaux depuis le lot 113)
+    BackToTop.vue         bouton « Revenir en haut » (lot 113, règle dans back-to-top.ts)
     MobileFixedCta.vue    CTA fixe mobile (non rendu en PRELAUNCH)
     PreviewModeSwitch.vue sélecteur FULL / PRELAUNCH (préprod et local seulement)
     help/                 composants du Centre d'aide
