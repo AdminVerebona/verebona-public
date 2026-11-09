@@ -5,8 +5,8 @@ slug: assistant-aide-application
 category: ia-automatisations
 summary: Comprendre comment l’assistant utilise le Centre d’aide pour expliquer Verebona.
 tags: [assistant, centre aide]
-offers: [premium, premium_duo]
-offersNote: Premium, Premium Duo pour l’assistant dans le compte ; Centre d’aide public pour tous
+offers: [standard, premium, premium_duo]
+offersNote: Standard, Premium, Premium Duo pour l’assistant dans le compte ; Centre d’aide public pour tous
 roles: [all]
 rolesLabel: Tous
 platforms: [web, mobile]
@@ -22,9 +22,9 @@ indexable: true
 lang: fr-FR
 synonyms: [assistant, centre aide, verebona, répond, questions, application, IA, intelligence artificielle, automatique]
 status: published
-validatedAt: 2026-11-02
+validatedAt: 2026-11-09
 appVersion: V1
-updatedAt: 2026-11-02
+updatedAt: 2026-11-09
 ---
 
 Pour les questions portant sur l’utilisation de Verebona, l’assistant s’appuie uniquement sur le Centre d’aide. Il peut reformuler et combiner plusieurs articles, mais il n’invente pas de règle absente de la documentation.

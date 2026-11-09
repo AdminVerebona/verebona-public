@@ -5,7 +5,7 @@ slug: interroger-verebona-donnees
 category: recherche
 summary: Poser une question en langage naturel sur les informations présentes dans votre compte.
 tags: [recherche, assistant, ia]
-offers: [premium, premium_duo]
+offers: [standard, premium, premium_duo]
 roles: [all]
 rolesLabel: Tous
 platforms: [web, mobile]
@@ -21,13 +21,13 @@ indexable: true
 lang: fr-FR
 synonyms: [recherche, assistant, ia, interroger, verebona, biens, documents, échéances, chercher, trouver]
 status: published
-validatedAt: 2026-11-02
+validatedAt: 2026-11-09
 appVersion: V1
 redirectFrom: [/aide/assistant]
-updatedAt: 2026-11-02
+updatedAt: 2026-11-09
 ---
 
-Avec Premium ou Premium Duo, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.
+Avec une offre active (Standard, Premium ou Premium Duo) ou pendant l’essai, vous pouvez demander à Verebona de retrouver et synthétiser des informations à partir de vos biens, documents et échéances. L’assistant s’appuie sur les sources accessibles à votre compte et indique les références utilisées.
 
 ## Procédure
 

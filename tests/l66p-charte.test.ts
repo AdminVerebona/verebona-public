@@ -266,8 +266,11 @@ describe('L66P-05 — catalogue d’aide et Ressources inchangés par la migrati
     // AID-AGENDA-002 (« élément d'agenda » → « événement », synonyme conservé), AID-BILL-001 (offres alignées sur les
     // cartes tarifaires 111N), dates 2026-11-05.
     // Anciennes empreintes : 94c34706… (production), 80e17493… (préproduction).
-    expect(sha(prod)).toBe('03af4ddcc6e5e485dce98a0913d488296ecc522eea4857810b8ce9e2b5eef8a6')
-    expect(sha(pre)).toBe('62c7236bd6967127ddcb05f9d6a32200f6d23f645eb22c80e0bd43e8d9a386f7')
+    // Lot 113-27 (09/11/2026, Trello #728) : AID-SEARCH-003 et AID-AI-005 ouverts à l'offre Standard
+    // (questions à Verebona incluses en Standard, décision produit du ticket), updatedAt et validatedAt 2026-11-09.
+    // Anciennes empreintes : 03af4ddc… (production), 62c7236b… (préproduction).
+    expect(sha(prod)).toBe('3f425eef6929e9be07805d0e465b178db78bd9c38326b6bc9a0a1c058afa39ae')
+    expect(sha(pre)).toBe('97b0e40bab2d84933c820bd111cfcd770306cdf547bce5a17accf8ddec570281')
   })
 
   it('Ressources : routes publiées identiques à la base lot53pv7', () => {

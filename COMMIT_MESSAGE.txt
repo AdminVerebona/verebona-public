@@ -1,0 +1,11 @@
+Site public — lot 113-27 (Trello #728) : questions à Verebona incluses dans l'offre Standard
+
+- Centre d'aide : AID-SEARCH-003 (poser une question en langage naturel) et
+  AID-AI-005 (l'assistant et le Centre d'aide) ouverts à l'offre Standard
+  (offers + offersNote) ; updatedAt et validatedAt 2026-11-09 (décision
+  produit du ticket #728). Aucun autre texte modifié.
+- Tests : empreintes du catalogue (l66p) mises à jour avec l'historique ;
+  l105q accepte une retouche postérieure datée et validée.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01CVhHDwBGz4DhPUAphwUTE2

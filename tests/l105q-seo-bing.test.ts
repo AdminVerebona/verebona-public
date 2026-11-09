@@ -126,11 +126,16 @@ describe('L105Q-01 — §2 : les 13 <title> de l’audit Bing', () => {
     expect(hasDoubledSuffix('Verebona | Contact | Verebona')).toBe(true)
   })
 
-  it('dates : les 12 articles retouchés portent updatedAt = validatedAt = 2026-11-02 (EDITOR-02, D-O)', () => {
+  // Lot 113-27 (Trello #728) : AID-SEARCH-003 et AID-AI-005 retouchés ensuite (offre Standard) — une
+  // modification postérieure, datée et validée, reste conforme (updatedAt = validatedAt ≥ 2026-11-02).
+  it('dates : les 12 articles retouchés portent updatedAt = validatedAt ≥ 2026-11-02 (EDITOR-02, D-O)', () => {
     for (const slug of Object.keys(H1)) {
       const raw = files.find((f) => f.path.endsWith(`/${bySlug.get(slug)!.id}.md`))!.raw
-      expect(raw, slug).toMatch(/^updatedAt: 2026-11-02$/m)
-      expect(raw, slug).toMatch(/^validatedAt: 2026-11-02$/m)
+      const updated = /^updatedAt: (\d{4}-\d{2}-\d{2})$/m.exec(raw)?.[1]
+      const validated = /^validatedAt: (\d{4}-\d{2}-\d{2})$/m.exec(raw)?.[1]
+      expect(updated, slug).toBeDefined()
+      expect(validated, slug).toBe(updated)
+      expect(updated! >= '2026-11-02', slug).toBe(true)
       expect(bySlug.get(slug)!.status).toBe('published')
     }
   })
